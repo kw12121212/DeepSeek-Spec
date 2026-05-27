@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: wire-lifecycle-guards
   milestone: 0002-change-lifecycle
-status: planned
+status: complete
 summary: Wire lifecycle guards into each strict tool dispatch
 details: >-
   Create src/strict/guard.ts with requireState(changeName, requiredState). Each strict tool calls it

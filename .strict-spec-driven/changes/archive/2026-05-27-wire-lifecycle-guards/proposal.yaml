@@ -1,0 +1,30 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: wire-lifecycle-guards
+  status: proposed
+summary:
+  what:
+    - >-
+      Wire lifecycle state guards into each strict tool dispatch handler so tools reject calls when
+      the change is not in the required state
+  why:
+    - >-
+      Without guards, strict tools can be invoked in any state, allowing invalid operations like
+      archiving a change that has not been reviewed
+scope:
+  in:
+    - src/strict/strict-tools.ts (tool handlers), src/strict/lifecycle.ts (readCurrentState)
+  out:
+    - >-
+      src/strict/guard.ts (new guard module), src/strict/strict-tools.ts (guard integration in each
+      handler)
+unchanged_behavior:
+  - >-
+    src/strict/invoker.ts, src/strict/engine-path.ts, src/strict/config-reader.ts,
+    src/strict/lifecycle.ts (no changes to transition logic)
+roadmap:
+  milestone: 0002-change-lifecycle
+  planned_change: wire-lifecycle-guards

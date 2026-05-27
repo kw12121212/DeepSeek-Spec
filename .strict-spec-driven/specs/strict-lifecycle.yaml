@@ -47,6 +47,37 @@ requirements:
         - GIVEN: 'a change directory with a proposal.yaml containing change.status: applied'
         - WHEN: readCurrentState('my-change') is called
         - THEN: the value 'applied' is returned as a typed ChangeState
+  require-state-guard:
+    strength: MUST
+    statement: >-
+      requireState(changeName, ...requiredStates) MUST read the current change state via
+      ChangeLifecycle.readCurrentState and return an error string if the state does not match any of
+      the required states, or undefined if the state is valid
+    scenarios:
+      state-mismatch:
+        - GIVEN: a change named my-change is in proposed state
+        - WHEN: requireState('my-change', 'applied') is called
+        - THEN: an error string describing the mismatch is returned and the tool does not execute
+  multi-state-guard:
+    strength: MUST
+    statement: >-
+      requireState(changeName, ...requiredStates) MUST accept multiple required states and return
+      undefined only if the current state matches at least one of them
+    scenarios:
+      multi-state-match:
+        - GIVEN: a change named my-change is in applied state
+        - WHEN: requireState('my-change', 'proposed', 'applied') is called
+        - THEN: undefined is returned indicating the guard passed
+  tool-dispatch-guarded:
+    strength: MUST
+    statement: >-
+      Each strict tool dispatch handler MUST call requireState before invoking the CLI subcommand
+      and return the error string as the tool result if the guard rejects the call
+    scenarios:
+      guarded-tool-call:
+        - GIVEN: a change named my-change is in proposed state
+        - WHEN: strict_verify tool is invoked with changeName my-change
+        - THEN: the tool returns the guard error string without invoking the verify CLI subcommand
 mapping:
   implementation:
     - src/strict/lifecycle.ts

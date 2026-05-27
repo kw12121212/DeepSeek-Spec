@@ -69,6 +69,10 @@ vi.mock("../src/strict/invoker", () => ({
   invokeStrict: vi.fn(),
 }));
 
+vi.mock("../src/strict/guard", () => ({
+  requireState: vi.fn().mockReturnValue(undefined),
+}));
+
 describe("strict tool handlers", () => {
   it("invokes invokeStrict with correct subcommand and args", async () => {
     const { invokeStrict } = await import("../src/strict/invoker");

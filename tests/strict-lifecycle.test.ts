@@ -2,6 +2,7 @@ import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
+import { requireState } from "../src/strict/guard.js";
 import { attemptTransition, readCurrentState } from "../src/strict/lifecycle.js";
 
 let fixtureDir: string;
@@ -131,5 +132,44 @@ describe("attemptTransition — terminal states", () => {
       /terminal state/,
     );
     expect(readCurrentState(root, "test-change")).toBe("canceled");
+  });
+});
+
+describe("requireState — state match", () => {
+  afterEach(cleanup);
+
+  it("returns undefined when current state matches required state", () => {
+    const root = makeFixture("proposed");
+    expect(requireState(root, "test-change", "proposed")).toBeUndefined();
+  });
+
+  it("returns undefined when current state matches one of multiple required states", () => {
+    const root = makeFixture("applied");
+    expect(requireState(root, "test-change", "proposed", "applied")).toBeUndefined();
+  });
+});
+
+describe("requireState — state mismatch", () => {
+  afterEach(cleanup);
+
+  it("returns error string when state does not match", () => {
+    const root = makeFixture("proposed");
+    const result = requireState(root, "test-change", "applied");
+    expect(result).toContain("'proposed'");
+    expect(result).toContain("'applied'");
+  });
+
+  it("returns error string with all required states listed", () => {
+    const root = makeFixture("verified");
+    const result = requireState(root, "test-change", "proposed", "applied");
+    expect(result).toContain("'proposed'");
+    expect(result).toContain("'applied'");
+    expect(result).toContain("test-change");
+  });
+
+  it("throws when proposal.yaml does not exist", () => {
+    fixtureDir = join(tmpdir(), `lifecycle-test-${Date.now()}`);
+    mkdirSync(fixtureDir, { recursive: true });
+    expect(() => requireState(fixtureDir, "nonexistent", "proposed")).toThrow();
   });
 });

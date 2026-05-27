@@ -1,6 +1,8 @@
 import type { ToolRegistry } from "../tools.js";
 import type { JSONSchema } from "../types.js";
+import { requireState } from "./guard.js";
 import { type Subcommand, invokeStrict } from "./invoker.js";
+import type { ChangeState } from "./lifecycle.js";
 
 interface StrictToolArgs {
   changeName?: string;
@@ -99,8 +101,22 @@ function buildCliArgs(args: StrictToolArgs): string[] {
   return cliArgs;
 }
 
+const STATE_GUARDS: Partial<Record<Subcommand, ChangeState[]>> = {
+  apply: ["proposed"],
+  generate: ["proposed"],
+  verify: ["applied"],
+  archive: ["reviewed"],
+  ship: ["archived"],
+  cancel: ["proposed", "applied"],
+};
+
 function makeHandler(subcommand: Subcommand) {
+  const requiredStates = STATE_GUARDS[subcommand];
   return async (args: StrictToolArgs): Promise<unknown> => {
+    if (requiredStates && args.changeName) {
+      const error = requireState(process.cwd(), args.changeName, ...requiredStates);
+      if (error) return { ok: false, error };
+    }
     const cliArgs = buildCliArgs(args);
     return invokeStrict(subcommand, { args: cliArgs });
   };

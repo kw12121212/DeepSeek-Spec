@@ -1,0 +1,43 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: wire-lifecycle-guards
+sections:
+  Implementation:
+    create-guard-module:
+      text: >-
+        Create src/strict/guard.ts with requireState(changeName, ...requiredStates) that reads state
+        via ChangeLifecycle.readCurrentState and returns an error string if mismatch
+      status: complete
+    wire-tool-guards:
+      text: >-
+        Wire requireState into each strict tool handler in src/strict/strict-tools.ts
+        (strict_apply->proposed, strict_verify->applied, strict_review->verified,
+        strict_archive->reviewed, strict_ship->archived, strict_cancel->proposed|applied)
+      status: complete
+  Testing:
+    guard-unit-tests:
+      text: >-
+        Add unit tests for requireState covering state match, state mismatch, and multi-state
+        (cancel) scenarios
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

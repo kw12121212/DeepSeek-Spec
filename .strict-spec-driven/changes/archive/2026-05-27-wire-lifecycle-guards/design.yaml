@@ -1,0 +1,22 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: wire-lifecycle-guards
+approach:
+  - >-
+    Create a guard module (src/strict/guard.ts) exporting requireState(changeName,
+    ...requiredStates). Each strict tool handler in strict-tools.ts calls requireState before
+    dispatching the CLI subcommand. If the current state does not match any of the required states,
+    the guard returns a descriptive error message and the handler short-circuits without invoking
+    the CLI. State is read via ChangeLifecycle.readCurrentState.
+decisions:
+  guard-location:
+    decision: >-
+      Guard logic lives in src/strict/guard.ts, separate from lifecycle.ts, because lifecycle.ts
+      owns state transitions while guard.ts owns pre-dispatch validation
+    rationale: >-
+      Separating guard logic from transition logic keeps lifecycle.ts focused on the state machine
+      and makes guard testable independently
+alternatives: []
+risks: []
