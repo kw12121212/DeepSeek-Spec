@@ -1,0 +1,23 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: config-reader
+approach:
+  - >-
+    Create a ConfigReader class that reads .strict-spec-driven/config.yaml from the project root
+    using the existing resolveEnginePath utilities for path resolution. Parse YAML, cache the result
+    for the session lifetime, and expose getContext(), getRules(), and getReviewEvidence()
+    accessors. Return typed defaults when the file or individual fields are missing. Export as a
+    singleton via a factory function that accepts the project root path.
+decisions:
+  module-location:
+    decision: >-
+      Place ConfigReader in src/strict/config-reader.ts alongside the existing engine-path.ts to
+      keep all strict infrastructure co-located.
+    rationale: >-
+      Co-location with engine-path.ts keeps the strict module boundary clean. A singleton factory
+      avoids global mutable state while still caching for session lifetime. Using the same YAML
+      parsing approach as the existing codebase ensures consistency.
+alternatives: []
+risks: []

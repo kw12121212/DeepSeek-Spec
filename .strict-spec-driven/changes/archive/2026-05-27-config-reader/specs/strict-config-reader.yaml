@@ -1,0 +1,57 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-config-reader
+mapping:
+  implementation:
+    - src/strict/config-reader.ts
+  tests:
+    - tests/strict-config-reader.test.ts
+operations:
+  ADDED:
+    parse-config-yaml:
+      strength: MUST
+      statement: >-
+        ConfigReader MUST read and parse .strict-spec-driven/config.yaml from the project root and
+        cache the parsed result for the session lifetime.
+      scenarios:
+        parse-happy-path:
+          - GIVEN: a valid .strict-spec-driven/config.yaml file exists in the project root
+          - WHEN: createConfigReader(projectRoot).getConfig() is called
+          - THEN: the parsed config object is returned with context, rules, and review_evidence fields
+    missing-file-defaults:
+      strength: MUST
+      statement: >-
+        When .strict-spec-driven/config.yaml does not exist, ConfigReader MUST return sensible
+        defaults: empty string for context, spec/change/code/test rules from config.yaml rules
+        section as defaults, and empty review_evidence.
+      scenarios:
+        file-missing:
+          - GIVEN: no .strict-spec-driven/config.yaml file exists in the project root
+          - WHEN: createConfigReader(projectRoot).getContext() is called
+          - THEN: a default empty string is returned without throwing
+    typed-accessors:
+      strength: MUST
+      statement: >-
+        ConfigReader MUST expose getContext(): string, getRules(): StrictRules, and
+        getReviewEvidence(): ReviewEvidence typed accessors.
+      scenarios:
+        accessor-types:
+          - GIVEN: a ConfigReader instance created with a valid project root
+          - WHEN: each accessor method is called
+          - THEN: >-
+              the return type matches the expected TypeScript interface at compile time and the
+              values are populated from config.yaml
+    session-cache:
+      strength: MUST
+      statement: >-
+        ConfigReader MUST cache the parsed config on first read and return the cached object on
+        subsequent calls within the same session.
+      scenarios:
+        cache-hit:
+          - GIVEN: a ConfigReader instance has already parsed config.yaml once
+          - WHEN: any accessor is called again
+          - THEN: the same object reference is returned without re-reading the file
+  MODIFIED: {}
+  REMOVED: {}

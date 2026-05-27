@@ -1,0 +1,28 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: config-reader
+  status: proposed
+summary:
+  what:
+    - >-
+      Create src/strict/config-reader.ts — a ConfigReader module that parses
+      .strict-spec-driven/config.yaml and exposes typed accessors for context, rules, and
+      review_evidence settings.
+  why:
+    - >-
+      All strict tools currently read config.yaml ad-hoc or not at all. A single typed reader with
+      caching and sensible defaults is the foundation for M2 lifecycle guards and all downstream
+      strict tool dispatch.
+scope:
+  in:
+    - .strict-spec-driven/config.yaml, src/strict/
+  out:
+    - src/strict/config-reader.ts
+unchanged_behavior:
+  - src/strict/engine-path.ts, vendor/strict-spec-driven.js, src/tools/
+roadmap:
+  milestone: 0002-change-lifecycle
+  planned_change: config-reader
