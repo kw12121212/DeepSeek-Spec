@@ -2,6 +2,9 @@ schema: strict-spec-driven/spec-index/v1
 schema_version: 1
 artifact_type: spec_index
 specs:
+  - id: strict-brainstorm
+    title: Strict Brainstorm Tool
+    path: .strict-spec-driven/specs/strict-brainstorm.yaml
   - id: strict-config-reader
     title: Strict Config Reader
     path: .strict-spec-driven/specs/strict-config-reader.yaml

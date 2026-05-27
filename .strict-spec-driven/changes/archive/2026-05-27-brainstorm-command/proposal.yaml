@@ -1,0 +1,28 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: brainstorm-command
+  status: proposed
+summary:
+  what:
+    - >-
+      Create src/strict/brainstorm.ts implementing an interactive brainstorming tool that refines a
+      rough idea into a structured change proposal
+  why:
+    - >-
+      Free-form workflow needs an idea refinement step before automatic proposal scaffolding — users
+      describe changes ad-hoc and need structured guidance
+scope:
+  in:
+    - Rough free-text idea from the user
+  out:
+    - >-
+      Structured summary (title, goal, scope.in, scope.out, done_criteria) that auto-scaffolds via
+      strict_propose on user confirmation
+unchanged_behavior:
+  - Existing strict tools (propose, apply, verify, etc.), tool registry, lifecycle state machine
+roadmap:
+  milestone: 0004-freeform-workflow
+  planned_change: brainstorm-command

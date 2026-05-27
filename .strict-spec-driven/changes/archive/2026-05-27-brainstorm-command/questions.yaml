@@ -1,0 +1,21 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: brainstorm-command
+open: []
+resolved:
+  - id: qa-integration
+    question: >-
+      How should the brainstorm Q&A cycle integrate with the agent loop? Should the tool return
+      intermediate questions as structured output for the agent to relay, or should it manage its
+      own I/O cycle?
+    context: >-
+      The planned change says 'Uses existing agent loop chat for Q&A' but strict tools are
+      single-invocation handlers. The brainstorm needs multi-turn interaction.
+    answer: >-
+      Multi-call protocol: brainstorm tool accepts accumulated context (initial idea + Q&A pairs)
+      and returns either phase=questions with follow-ups for the agent to relay, or phase=summary
+      with structured output (title, goal, scope.in, scope.out, done_criteria) for user confirmation
+      before auto-scaffolding via strict_propose.
+    status: resolved

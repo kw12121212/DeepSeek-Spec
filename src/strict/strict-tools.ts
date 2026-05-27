@@ -1,5 +1,6 @@
 import type { ToolRegistry } from "../tools.js";
 import type { JSONSchema } from "../types.js";
+import { brainstorm } from "./brainstorm.js";
 import { requireState } from "./guard.js";
 import { type Subcommand, invokeStrict } from "./invoker.js";
 import type { ChangeState } from "./lifecycle.js";
@@ -83,6 +84,12 @@ const STRICT_TOOLS: StrictToolDef[] = [
       "Recommend the next strict roadmap-backed change based on dependency analysis and completion state.",
     requiresChangeName: false,
   },
+  {
+    subcommand: "brainstorm",
+    description:
+      "Interactive brainstorming tool that refines a rough idea into a structured change summary. Multi-call protocol: returns questions for the agent to relay, or a structured summary for user confirmation.",
+    requiresChangeName: false,
+  },
 ];
 
 function buildCliArgs(args: StrictToolArgs): string[] {
@@ -121,6 +128,13 @@ function makeHandler(subcommand: Subcommand) {
     if (subcommand === "roadmap-recommend") {
       return roadmapRecommend(process.cwd());
     }
+    if (subcommand === "brainstorm") {
+      return brainstorm({
+        idea: typeof args.idea === "string" ? args.idea : undefined,
+        history: Array.isArray(args.history) ? args.history : undefined,
+        summary: args.summary,
+      });
+    }
     const cliArgs = buildCliArgs(args);
     return invokeStrict(subcommand, { args: cliArgs });
   };
@@ -146,6 +160,40 @@ export function registerStrictTools(registry: ToolRegistry): ToolRegistry {
         description: "Artifact type to generate: proposal, design, questions, or delta-spec.",
       };
       required.push("artifact");
+    }
+
+    if (def.subcommand === "brainstorm") {
+      properties.idea = {
+        type: "string",
+        description: "Rough free-text idea to refine.",
+      };
+      properties.history = {
+        type: "array",
+        description: "Accumulated Q&A pairs from previous brainstorm turns.",
+        items: {
+          type: "object",
+          properties: {
+            question: { type: "string" },
+            answer: { type: "string" },
+          },
+        },
+      };
+      properties.summary = {
+        type: "object",
+        description: "Partial or complete structured summary for validation.",
+        properties: {
+          title: { type: "string" },
+          goal: { type: "string" },
+          scope: {
+            type: "object",
+            properties: {
+              in: { type: "array", items: { type: "string" } },
+              out: { type: "array", items: { type: "string" } },
+            },
+          },
+          done_criteria: { type: "array", items: { type: "string" } },
+        },
+      };
     }
 
     const parameters: JSONSchema = {

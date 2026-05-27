@@ -1,0 +1,46 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-brainstorm
+mapping:
+  implementation:
+    - src/strict/brainstorm.ts
+  tests:
+    - tests/strict-brainstorm.test.ts
+operations:
+  ADDED:
+    structured-output:
+      strength: MUST
+      statement: >-
+        The brainstorm tool MUST return a structured summary object containing title, goal,
+        scope.in, scope.out, and done_criteria fields
+      scenarios:
+        happy-path:
+          - GIVEN: a rough free-text idea describing a desired change
+          - WHEN: the brainstorm tool is invoked with that idea
+          - THEN: it returns a structured summary with all five fields populated
+    no-side-effects:
+      strength: MUST
+      statement: >-
+        The brainstorm tool MUST NOT create or modify any files until the user explicitly confirms
+        the structured summary
+      scenarios:
+        reject-summary:
+          - GIVEN: a brainstorm session that produces a structured summary
+          - WHEN: the user rejects or does not confirm the summary
+          - THEN: no files are created or modified in the project
+    tool-registration:
+      strength: MUST
+      statement: >-
+        The brainstorm subcommand MUST be registered as a dispatchable agent tool named
+        strict_brainstorm with no required parameters
+      scenarios:
+        tool-dispatch:
+          - GIVEN: the strict tool registry is initialized
+          - WHEN: registerStrictTools is called
+          - THEN: >-
+              a tool named strict_brainstorm is available with parallelSafe=false and no required
+              changeName
+  MODIFIED: {}
+  REMOVED: {}

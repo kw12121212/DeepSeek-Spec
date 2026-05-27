@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: brainstorm-command
   milestone: 0004-freeform-workflow
-status: planned
+status: complete
 summary: Implement /strict-brainstorm for interactive idea refinement
 details: >-
   Create src/strict/brainstorm.ts. Interactive Q&A: (1) accept rough idea as free text, (2) generate

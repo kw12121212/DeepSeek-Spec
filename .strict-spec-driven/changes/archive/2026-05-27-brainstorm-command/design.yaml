@@ -1,0 +1,22 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: brainstorm-command
+approach:
+  - >-
+    Create a brainstorm.ts module exporting a brainstorm() function that acts as a conversation
+    guide. The tool accepts initial free text, generates clarifying questions about
+    scope/requirements/constraints, presents them one at a time via the agent loop, collects
+    answers, and produces a structured summary object. On user confirmation, it delegates to the
+    existing strict_propose tool handler. The module is registered as a new entry in STRICT_TOOLS
+    with a brainstorm subcommand. No files are written until the user explicitly confirms.
+decisions:
+  agent-loop-qa:
+    decision: Use the agent loop chat for Q&A rather than a custom readline interface
+    rationale: >-
+      The brainstorm tool is invoked within the agent loop context. Reusing the existing chat loop
+      for question-answer cycles avoids duplicating I/O handling and integrates naturally with the
+      agent's conversation model.
+alternatives: []
+risks: []

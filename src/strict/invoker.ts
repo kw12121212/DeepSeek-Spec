@@ -13,7 +13,8 @@ export type Subcommand =
   | "cancel"
   | "roadmap-status"
   | "roadmap-sync"
-  | "roadmap-recommend";
+  | "roadmap-recommend"
+  | "brainstorm";
 
 export interface InvokeResult {
   ok: boolean;
