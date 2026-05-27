@@ -1,0 +1,68 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: lifecycle-tests
+sections:
+  Implementation:
+    lifecycle-transitions:
+      text: >-
+        Test all 6 valid state transitions (proposed->applied, proposed->canceled,
+        applied->verified, verified->reviewed, reviewed->archived, archived->shipped) succeed and
+        write correct status
+      status: complete
+    invalid-transitions:
+      text: Test that invalid transitions throw descriptive errors and do not change state
+      status: complete
+    terminal-state-rejection:
+      text: Test that shipped and canceled states reject all transition attempts with descriptive errors
+      status: complete
+    read-current-state:
+      text: >-
+        Test readCurrentState returns typed ChangeState from proposal.yaml, returns null for
+        nonexistent changes
+      status: complete
+    require-state-guard:
+      text: >-
+        Test requireState single and multi-state guards return undefined on match, error string on
+        mismatch
+      status: complete
+    tool-dispatch-guard:
+      text: >-
+        Test that strict tool dispatch returns guard error string without invoking CLI subcommand
+        when guard rejects
+      status: complete
+    config-parse-happy:
+      text: Test ConfigReader parses full config.yaml with context, rules, and review_evidence fields
+      status: complete
+    config-missing-defaults:
+      text: Test ConfigReader returns sensible defaults when config.yaml is missing
+      status: complete
+    config-typed-accessors:
+      text: Test getContext, getRules, getReviewEvidence return correct typed values
+      status: complete
+    config-session-cache:
+      text: >-
+        Test ConfigReader caches parsed config on first read and returns same reference on
+        subsequent calls
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

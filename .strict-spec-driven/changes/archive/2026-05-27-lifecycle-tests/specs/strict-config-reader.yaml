@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-config-reader
+mapping:
+  implementation:
+    - tests/strict-config-reader.test.ts
+  tests:
+    - tests/strict-config-reader.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    parse-config-yaml:
+      strength: MUST
+      statement: >-
+        ConfigReader MUST read and parse .strict-spec-driven/config.yaml from the project root and
+        cache the parsed result for the session lifetime.
+      scenarios:
+        parse-happy-path:
+          - GIVEN: a valid config.yaml in project root
+          - WHEN: createConfigReader(projectRoot).getConfig() is called
+          - THEN: the parsed config object is returned with context, rules, and review_evidence fields
+  REMOVED: {}

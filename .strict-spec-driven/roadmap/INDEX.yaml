@@ -10,7 +10,7 @@ milestones:
   0002-change-lifecycle:
     title: 'M2: Change Lifecycle State Machine'
     path: roadmap/milestones/0002-change-lifecycle.yaml
-    status: proposed
+    status: complete
   0003-roadmap-workflow:
     title: 'M3: Roadmap-Driven Auto Workflow'
     path: roadmap/milestones/0003-roadmap-workflow.yaml

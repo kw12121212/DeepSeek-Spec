@@ -32,7 +32,7 @@ dependencies:
   - 0001-strict-engine-embed
 risks:
   - State file format must stay compatible with external strict-spec-driven.js expectations
-status: proposed
+status: complete
 notes:
   - The lifecycle states and config reader are the shared backbone of both workflow paths
   - TUI display of lifecycle state is deferred to M5 to keep this milestone focused on logic

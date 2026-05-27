@@ -1,9 +1,11 @@
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { requireState } from "../src/strict/guard.js";
 import { attemptTransition, readCurrentState } from "../src/strict/lifecycle.js";
+import { registerStrictTools } from "../src/strict/strict-tools.js";
+import { ToolRegistry } from "../src/tools.js";
 
 let fixtureDir: string;
 
@@ -171,5 +173,23 @@ describe("requireState — state mismatch", () => {
     fixtureDir = join(tmpdir(), `lifecycle-test-${Date.now()}`);
     mkdirSync(fixtureDir, { recursive: true });
     expect(() => requireState(fixtureDir, "nonexistent", "proposed")).toThrow();
+  });
+});
+
+describe("tool dispatch — state guard integration", () => {
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
+
+  it("strict_verify returns guard error when change is in proposed state", async () => {
+    const root = makeFixture("proposed");
+    const registry = new ToolRegistry();
+    registerStrictTools(registry);
+    const cwdSpy = vi.spyOn(process, "cwd").mockReturnValue(root);
+    const tool = registry.get("strict_verify");
+    const result = await tool!.fn({ changeName: "test-change" });
+    expect(result).toEqual({ ok: false, error: expect.stringContaining("'proposed'") });
+    cwdSpy.mockRestore();
   });
 });

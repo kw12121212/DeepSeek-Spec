@@ -1,0 +1,19 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: lifecycle-tests
+approach:
+  - >-
+    Create two flat vitest test files matching the existing test layout.
+    tests/strict-lifecycle.test.ts covers all 6 valid transitions, invalid transition rejection,
+    terminal state immutability, readCurrentState, requireState single and multi-state guards, and
+    tool dispatch guarding. tests/strict-config-reader.test.ts covers parse happy path, missing file
+    defaults, typed accessors, and session cache behavior. Both files use real module imports with
+    minimal fs fixtures.
+decisions:
+  test-layout:
+    decision: Flat test files in tests/ matching existing convention, not nested under tests/strict/
+    rationale: CLAUDE.md specifies flat *.test.ts in tests/, named after the module they test
+alternatives: []
+risks: []

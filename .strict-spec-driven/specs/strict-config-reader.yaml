@@ -12,7 +12,7 @@ requirements:
       cache the parsed result for the session lifetime.
     scenarios:
       parse-happy-path:
-        - GIVEN: a valid .strict-spec-driven/config.yaml file exists in the project root
+        - GIVEN: a valid config.yaml in project root
         - WHEN: createConfigReader(projectRoot).getConfig() is called
         - THEN: the parsed config object is returned with context, rules, and review_evidence fields
   missing-file-defaults:

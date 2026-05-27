@@ -1,0 +1,25 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-lifecycle
+mapping:
+  implementation:
+    - tests/strict-lifecycle.test.ts
+  tests:
+    - tests/strict-lifecycle.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    valid-transitions:
+      strength: MUST
+      statement: >-
+        ChangeLifecycle MUST allow only the defined valid transitions: proposed->applied,
+        proposed->canceled, applied->verified, verified->reviewed, reviewed->archived,
+        archived->shipped.
+      scenarios:
+        valid-forward:
+          - GIVEN: a change in proposed state
+          - WHEN: attemptTransition('proposed', 'applied') is called
+          - THEN: the state is written to proposal.yaml change.status as applied and no error is thrown
+  REMOVED: {}
