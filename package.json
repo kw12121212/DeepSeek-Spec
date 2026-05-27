@@ -24,6 +24,7 @@
     "dashboard/dist",
     "patches",
     "scripts/postinstall.mjs",
+    "vendor/strict-spec-driven.js",
     "README.md",
     "LICENSE"
   ],

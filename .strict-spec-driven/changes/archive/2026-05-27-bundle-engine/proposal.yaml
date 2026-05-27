@@ -1,0 +1,32 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: bundle-engine
+  status: proposed
+summary:
+  what:
+    - >-
+      Copy strict-spec-driven.js into vendor/strict-spec-driven.js and add it to the package.json
+      files array so it ships with every npm install.
+  why:
+    - >-
+      Foundation for all strict-spec features. Later milestones (engine-invoker, slash commands,
+      lifecycle guards) all depend on the engine being bundled and accessible at runtime.
+scope:
+  in:
+    - >-
+      The strict-spec-driven.js engine currently lives only in external Claude Code skill
+      directories. It is not included in the published npm package.
+  out:
+    - >-
+      vendor/strict-spec-driven.js exists in the package, package.json files array includes vendor/,
+      and the file is resolvable at runtime from dist/ output.
+unchanged_behavior:
+  - >-
+    All existing Reasonix functionality. No changes to the agent loop, tools, TUI, or CLI beyond
+    adding the vendor file.
+roadmap:
+  milestone: 0001-strict-engine-embed
+  planned_change: bundle-engine

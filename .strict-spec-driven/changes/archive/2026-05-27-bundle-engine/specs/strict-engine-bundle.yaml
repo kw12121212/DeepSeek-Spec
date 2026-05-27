@@ -1,0 +1,35 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-engine-bundle
+mapping:
+  implementation:
+    - vendor/strict-spec-driven.js
+    - src/strict/engine-path.ts
+  tests:
+    - tests/strict-engine-bundle.test.ts
+operations:
+  ADDED:
+    engine-shipped:
+      strength: MUST
+      statement: >-
+        The published npm package MUST include vendor/strict-spec-driven.js in its files array so
+        the engine is available after install.
+      scenarios:
+        engine-resolvable:
+          - GIVEN: the package is installed via npm
+          - WHEN: runtime code resolves vendor/strict-spec-driven.js relative to dist/
+          - THEN: the file exists and is a valid CommonJS module
+    engine-path-resolver:
+      strength: MUST
+      statement: >-
+        A runtime resolver MUST locate the engine file at vendor/strict-spec-driven.js relative to
+        the package root.
+      scenarios:
+        path-resolution:
+          - GIVEN: the package is installed
+          - WHEN: resolveEnginePath() is called
+          - THEN: it returns an absolute path to vendor/strict-spec-driven.js that exists on disk
+  MODIFIED: {}
+  REMOVED: {}

@@ -1,0 +1,49 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: bundle-engine
+sections:
+  Implementation:
+    copy-engine:
+      text: Copy strict-spec-driven.js to vendor/strict-spec-driven.js.
+      status: complete
+    update-package-json:
+      text: Add vendor/strict-spec-driven.js to the package.json files array.
+      status: complete
+    create-engine-path:
+      text: >-
+        Create src/strict/engine-path.ts with resolveEnginePath() that locates the engine relative
+        to dist/.
+      status: complete
+    update-gitignore:
+      text: >-
+        Ensure vendor/ is not gitignored (or add an explicit negation for
+        vendor/strict-spec-driven.js).
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run type checking.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run unit tests including new strict-engine-bundle tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — engine is in vendor/, package.json lists it,
+        resolver works.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

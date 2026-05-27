@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: bundle-engine
   milestone: 0001-strict-engine-embed
-status: planned
+status: complete
 summary: Bundle strict-spec-driven.js into vendor/ and register in package.json
 details: >-
   Copy strict-spec-driven.js to vendor/strict-spec-driven.js. Add 'vendor/strict-spec-driven.js' to

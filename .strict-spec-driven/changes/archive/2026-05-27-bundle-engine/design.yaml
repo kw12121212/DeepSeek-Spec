@@ -1,0 +1,21 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: bundle-engine
+approach:
+  - >-
+    Copy the strict-spec-driven.js file from the external skill directory into vendor/ at build
+    time. Add vendor/strict-spec-driven.js to the package.json files array. Create a small runtime
+    resolver module (src/strict/engine-path.ts) that locates the engine file relative to dist/ so
+    downstream consumers (engine-invoker, tool registry) can import it deterministically. Add a
+    build step that validates the file exists after tsup completes.
+decisions:
+  lazy-bundle:
+    decision: Include the full engine in the package rather than lazy-loading from a remote source
+    rationale: >-
+      The engine is 715 KB which is modest compared to existing bundled assets (tree-sitter
+      grammars, dashboard HTML). Lazy-loading from a remote source would require network access and
+      adds failure modes. Simpler to bundle and ship.
+alternatives: []
+risks: []

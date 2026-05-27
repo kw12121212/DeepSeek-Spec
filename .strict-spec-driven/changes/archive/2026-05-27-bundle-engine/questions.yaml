@@ -1,0 +1,16 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: bundle-engine
+open: []
+resolved:
+  - id: engine-version
+    question: >-
+      Should the vendored strict-spec-driven.js be pinned to a specific version, or should we always
+      copy the latest from the skill directory?
+    context: >-
+      The engine file evolves independently. Pinning gives reproducibility but requires manual
+      updates.
+    answer: Always copy latest from the skill directory. No version pinning at this stage.
+    status: resolved
