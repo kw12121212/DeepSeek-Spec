@@ -1,0 +1,32 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: roadmap-tools
+  status: proposed
+summary:
+  what:
+    - Register roadmap-sync and roadmap-status as dispatchable agent tools in the ToolRegistry
+  why:
+    - >-
+      M3 auto-pipeline needs roadmap-sync and roadmap-status as first-class dispatchable tools so
+      the agent can query and reconcile roadmap state without external skill invocations
+scope:
+  in:
+    - >-
+      strict-engine-bundle spec tool-registry-entries requirement already lists these tools as
+      expected; implementation in src/strict/strict-tools.ts has the registrations but they may lack
+      dedicated test coverage
+  out:
+    - >-
+      Two fully tested dispatchable agent tools (strict_roadmap_sync, strict_roadmap_status)
+      registered in the ToolRegistry with correct parallelSafe=false and no extra parameters beyond
+      cwd-resolved project root
+unchanged_behavior:
+  - >-
+    All other strict tools, the brainstorm tool, slash commands, skill registrations, and lifecycle
+    guards
+roadmap:
+  milestone: 0003-roadmap-workflow
+  planned_change: roadmap-tools

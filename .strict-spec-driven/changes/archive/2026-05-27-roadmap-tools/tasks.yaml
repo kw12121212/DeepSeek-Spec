@@ -1,0 +1,42 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: roadmap-tools
+sections:
+  Implementation:
+    verify-roadmap-status-tool:
+      text: >-
+        Verify strict_roadmap_status tool registration in STRICT_TOOLS has correct subcommand,
+        parallelSafe=false, requiresChangeName=false.
+      status: complete
+    verify-roadmap-sync-tool:
+      text: >-
+        Verify strict_roadmap_sync tool registration in STRICT_TOOLS has correct subcommand,
+        parallelSafe=false, requiresChangeName=false.
+      status: complete
+    add-tool-tests:
+      text: >-
+        Add unit tests for strict_roadmap_status and strict_roadmap_sync confirming invokeStrict
+        dispatch, parallelSafe, and no changeName requirement.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

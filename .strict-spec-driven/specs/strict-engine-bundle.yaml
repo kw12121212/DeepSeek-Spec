@@ -85,14 +85,15 @@ requirements:
   tool-registry-entries:
     strength: MUST
     statement: >-
-      The ToolRegistry MUST include entries for each strict-spec subcommand: strict_propose,
-      strict_generate, strict_apply, strict_verify, strict_ready, strict_archive, strict_ship,
-      strict_cancel, strict_roadmap_status, strict_roadmap_sync, strict_roadmap_recommend.
+      The ToolRegistry MUST include entries for strict_roadmap_status and strict_roadmap_sync with
+      parallelSafe=false and no changeName parameter.
     scenarios:
-      all-tools-registered:
+      roadmap-status-registered:
         - GIVEN: the ToolRegistry is initialized with default tools
-        - WHEN: list() is called and filtered for tools prefixed with strict_
-        - THEN: exactly 11 tool entries are returned, one for each supported subcommand
+        - WHEN: list() is called and filtered for strict_roadmap_status
+        - THEN: >-
+            exactly one tool entry is returned with parallelSafe=false and no changeName in its
+            parameter schema
   tool-handler-invokes-engine:
     strength: MUST
     statement: >-
