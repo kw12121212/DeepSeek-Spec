@@ -1,0 +1,49 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: add-slash-commands
+sections:
+  Implementation:
+    add-strict-slash-group:
+      text: >-
+        Add 'strict' to SlashGroup union type in types.ts and to SLASH_GROUP_ORDER/SLASH_GROUP_LABEL
+        in commands.ts
+      status: complete
+    add-strict-slash-commands:
+      text: >-
+        Add 12 /strict-* slash command entries to SLASH_COMMANDS array: /strict-init,
+        /strict-propose, /strict-apply, /strict-verify, /strict-review, /strict-archive,
+        /strict-ship, /strict-cancel, /strict-brainstorm, /strict-modify, /strict-roadmap-recommend,
+        /strict-auto
+      status: complete
+    add-slash-dispatch:
+      text: >-
+        Wire slash command dispatch so each /strict-* command invokes the matching built-in skill
+        via the existing skill dispatch path
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+    test-slash-commands-registered:
+      text: >-
+        Verify all 12 /strict-* commands appear in SLASH_COMMANDS and suggestSlashCommands
+        autocomplete results
+      status: complete
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

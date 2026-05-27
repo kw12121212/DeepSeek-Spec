@@ -163,8 +163,9 @@ export type SlashGroup =
   | "chat"
   | "setup"
   | "info"
-  | "session"
   | "extend"
+  | "strict"
+  | "session"
   | "code"
   | "jobs"
   | "advanced";

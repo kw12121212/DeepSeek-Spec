@@ -70,6 +70,18 @@ requirements:
         - THEN: >-
             the result includes 13 strict-spec skill entries with scope=builtin and names prefixed
             with strict-
+  slash-commands-registered:
+    strength: MUST
+    statement: >-
+      The SLASH_COMMANDS array MUST include entries for each /strict-* command: /strict-init,
+      /strict-propose, /strict-apply, /strict-verify, /strict-review, /strict-archive, /strict-ship,
+      /strict-cancel, /strict-brainstorm, /strict-modify, /strict-roadmap-recommend, /strict-auto.
+      Each entry MUST have group='strict' and dispatch to the corresponding built-in skill.
+    scenarios:
+      all-strict-commands-visible:
+        - GIVEN: the SLASH_COMMANDS array is loaded
+        - WHEN: suggestSlashCommands('/strict') is called
+        - THEN: all 12 /strict-* commands are returned with group 'strict'
 mapping:
   implementation:
     - vendor/strict-spec-driven.js

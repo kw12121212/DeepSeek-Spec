@@ -411,6 +411,49 @@ export const zhCN: TranslationSchema = {
         "切换网络搜索后端 — bing（默认，国内裸 IP 直连）、searxng（自托管）、metaso（每日 100 次）、tavily（每月 1000 次免费）、perplexity（AI 直接回答）、exa（AI 直接回答）或 ollama（Ollama 云端搜索）",
       argsHint: "<bing|searxng|metaso|tavily|perplexity|exa|brave|ollama> [<key>]",
     },
+    "strict-init": { description: "在当前项目中初始化 .strict-spec-driven/" },
+    "strict-propose": {
+      description: "创建新的 strict 变更提案",
+      argsHint: "[<name>]",
+    },
+    "strict-apply": {
+      description: "标记 strict 变更中的下一个待办任务为完成",
+      argsHint: "[<name>]",
+    },
+    "strict-verify": {
+      description: "验证 strict 变更是否完整且一致",
+      argsHint: "[<name>]",
+    },
+    "strict-review": {
+      description: "对照规范和质量门禁审查 strict 变更",
+      argsHint: "[<name>]",
+    },
+    "strict-archive": {
+      description: "归档已验证的 strict 变更",
+      argsHint: "[<name>]",
+    },
+    "strict-ship": {
+      description: "为已归档的 strict 变更创建聚焦的 git 提交",
+      argsHint: "[<name>]",
+    },
+    "strict-cancel": {
+      description: "中止处于 proposed 或 applied 状态的 strict 变更",
+      argsHint: "[<name>]",
+    },
+    "strict-brainstorm": {
+      description: "从粗略想法讨论并构建 strict YAML 变更",
+    },
+    "strict-modify": {
+      description: "调整进行中的 strict 变更范围",
+      argsHint: "[<name>]",
+    },
+    "strict-roadmap-recommend": {
+      description: "推荐并搭建下一个路线图支持的 strict 变更",
+    },
+    "strict-auto": {
+      description: "端到端运行 strict 完整生命周期",
+      argsHint: "[<name>]",
+    },
   },
   wizard: {
     languageTitle: "选择语言",
@@ -1389,6 +1432,7 @@ export const zhCN: TranslationSchema = {
     groupInfo: "信息",
     groupSession: "会话",
     groupExtend: "扩展",
+    groupStrict: "规范",
     groupCode: "代码",
     groupJobs: "任务",
     groupAdvanced: "高级",
@@ -1396,6 +1440,7 @@ export const zhCN: TranslationSchema = {
     groupDetailInfo: "当前状态",
     groupDetailChat: "日常聊天操作",
     groupDetailExtend: "MCP, 记忆, 技能",
+    groupDetailStrict: "strict-spec 工作流",
     groupDetailSession: "已保存的会话",
     groupDetailCode: "编辑 + 计划 (代码模式)",
     groupDetailJobs: "后台进程 (代码模式)",

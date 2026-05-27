@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: add-slash-commands
   milestone: 0001-strict-engine-embed
-status: planned
+status: complete
 summary: Add /strict-* slash commands to the Reasonix CLI with step-by-step dispatch
 details: >-
   Add entries to SLASH_COMMANDS in src/cli/ui/slash/commands.ts under a new group 'strict'.

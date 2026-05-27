@@ -423,6 +423,49 @@ export const de: TranslationSchema = {
       description: "Terminal-Theme anzeigen oder speichern. Ohne Argument öffnet die Auswahl.",
     },
     exit: { ...EN.slash.exit, description: "TUI beenden" },
+    "strict-init": { description: ".strict-spec-driven/ im aktuellen Projekt initialisieren" },
+    "strict-propose": {
+      description: "Neuen Strict-Change-Vorschlag erstellen",
+      argsHint: "[<name>]",
+    },
+    "strict-apply": {
+      description: "Nächste ausstehende Aufgabe im Strict-Change als erledigt markieren",
+      argsHint: "[<name>]",
+    },
+    "strict-verify": {
+      description: "Strict-Change auf Vollständigkeit und Konsistenz prüfen",
+      argsHint: "[<name>]",
+    },
+    "strict-review": {
+      description: "Strict-Change gegen Spezifikationen und Qualitätskriterien prüfen",
+      argsHint: "[<name>]",
+    },
+    "strict-archive": {
+      description: "Verifizierten Strict-Change archivieren",
+      argsHint: "[<name>]",
+    },
+    "strict-ship": {
+      description: "Fokussierten Git-Commit aus archiviertem Strict-Change erstellen",
+      argsHint: "[<name>]",
+    },
+    "strict-cancel": {
+      description: "Strict-Change im proposed- oder applied-Zustand abbrechen",
+      argsHint: "[<name>]",
+    },
+    "strict-brainstorm": {
+      description: "Strict-YAML-Change aus einer groben Idee diskutieren und formulieren",
+    },
+    "strict-modify": {
+      description: "Umfang eines laufenden Strict-Change anpassen",
+      argsHint: "[<name>]",
+    },
+    "strict-roadmap-recommend": {
+      description: "Nächsten Roadmap-gestützten Strict-Change empfehlen und Gerüst erstellen",
+    },
+    "strict-auto": {
+      description: "Vollständigen Strict-Lebenszyklus Ende-zu-Ende ausführen",
+      argsHint: "[<name>]",
+    },
   },
   wizard: {
     ...EN.wizard,
@@ -1555,6 +1598,7 @@ export const de: TranslationSchema = {
     groupInfo: "INFO",
     groupSession: "SITZUNG",
     groupExtend: "ERWEITERN",
+    groupStrict: "STRICT",
     groupCode: "CODE",
     groupJobs: "JOBS",
     groupAdvanced: "ERWEITERT",
@@ -1562,6 +1606,7 @@ export const de: TranslationSchema = {
     groupDetailInfo: "Aktueller Zustand",
     groupDetailChat: "Tägliche Turn-Operationen",
     groupDetailExtend: "MCP, Memory, Skills",
+    groupDetailStrict: "Strict-Spec-Workflows",
     groupDetailSession: "Gespeicherte Sitzungen",
     groupDetailCode: "Edits + Pläne (Code-Modus)",
     groupDetailJobs: "Hintergrundprozesse (Code-Modus)",

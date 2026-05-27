@@ -427,6 +427,49 @@ export const EN: TranslationSchema = {
         "switch web search backend — bing (default, works from CN without proxy), searxng (self-hosted), metaso (free 100/d), tavily (free 1000/mo), perplexity (AI-native), exa (AI-native), or ollama (Ollama cloud web search)",
       argsHint: "<bing|searxng|metaso|tavily|perplexity|exa|brave|ollama> [<key>]",
     },
+    "strict-init": { description: "initialize .strict-spec-driven/ in the current project" },
+    "strict-propose": {
+      description: "scaffold a new strict change proposal",
+      argsHint: "[<name>]",
+    },
+    "strict-apply": {
+      description: "mark the next pending task done in a strict change",
+      argsHint: "[<name>]",
+    },
+    "strict-verify": {
+      description: "verify a strict change is complete and consistent",
+      argsHint: "[<name>]",
+    },
+    "strict-review": {
+      description: "review a strict change against specs and quality gates",
+      argsHint: "[<name>]",
+    },
+    "strict-archive": {
+      description: "archive a verified strict change",
+      argsHint: "[<name>]",
+    },
+    "strict-ship": {
+      description: "create a focused git commit from an archived strict change",
+      argsHint: "[<name>]",
+    },
+    "strict-cancel": {
+      description: "abort a strict change in proposed or applied state",
+      argsHint: "[<name>]",
+    },
+    "strict-brainstorm": {
+      description: "discuss and shape a strict YAML change from a rough idea",
+    },
+    "strict-modify": {
+      description: "adjust the scope of an in-flight strict change",
+      argsHint: "[<name>]",
+    },
+    "strict-roadmap-recommend": {
+      description: "recommend and scaffold the next roadmap-backed strict change",
+    },
+    "strict-auto": {
+      description: "run the full strict lifecycle end to end for a change",
+      argsHint: "[<name>]",
+    },
   },
   wizard: {
     languageTitle: "Choose your language",
@@ -1470,6 +1513,7 @@ export const EN: TranslationSchema = {
     groupInfo: "INFO",
     groupSession: "SESSION",
     groupExtend: "EXTEND",
+    groupStrict: "STRICT",
     groupCode: "CODE",
     groupJobs: "JOBS",
     groupAdvanced: "ADVANCED",
@@ -1477,6 +1521,7 @@ export const EN: TranslationSchema = {
     groupDetailInfo: "current state",
     groupDetailChat: "daily turn ops",
     groupDetailExtend: "MCP, memory, skills",
+    groupDetailStrict: "strict-spec workflows",
     groupDetailSession: "saved sessions",
     groupDetailCode: "edits + plans (code mode)",
     groupDetailJobs: "background processes (code mode)",

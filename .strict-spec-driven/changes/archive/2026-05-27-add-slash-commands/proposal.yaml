@@ -1,0 +1,24 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: add-slash-commands
+  status: proposed
+summary:
+  what:
+    - Add /strict-* slash commands to the Reasonix CLI
+  why:
+    - >-
+      Users need top-level /strict-* slash commands for discoverability and quick access to
+      strict-spec workflows, rather than going through /skill strict-* each time
+scope:
+  in:
+    - src/cli/ui/slash/commands.ts, src/cli/ui/slash/types.ts
+  out:
+    - src/cli/ui/slash/commands.ts, src/cli/ui/slash/types.ts
+unchanged_behavior:
+  - src/skills.ts, src/strict/, vendor/
+roadmap:
+  milestone: 0001-strict-engine-embed
+  planned_change: add-slash-commands

@@ -5,6 +5,7 @@ export const SLASH_GROUP_ORDER = [
   "info",
   "chat",
   "extend",
+  "strict",
   "session",
   "code",
   "jobs",
@@ -16,6 +17,7 @@ export const SLASH_GROUP_LABEL: Record<SlashGroup, string> = {
   info: "INFO",
   chat: "CHAT",
   extend: "EXTEND",
+  strict: "STRICT",
   session: "SESSION",
   code: "CODE",
   jobs: "JOBS",
@@ -182,6 +184,76 @@ export const SLASH_COMMANDS: readonly SlashCommandSpec[] = [
     argsHint: "<connect|status|disconnect>",
     summary: "connect, inspect, or disconnect the QQ channel",
     argCompleter: ["connect", "status", "disconnect"],
+  },
+
+  {
+    cmd: "strict-init",
+    group: "strict",
+    summary: "initialize .strict-spec-driven/ in the current project",
+  },
+  {
+    cmd: "strict-propose",
+    group: "strict",
+    argsHint: "[<name>]",
+    summary: "scaffold a new strict change proposal",
+  },
+  {
+    cmd: "strict-apply",
+    group: "strict",
+    argsHint: "[<name>]",
+    summary: "mark the next pending task done in a strict change",
+  },
+  {
+    cmd: "strict-verify",
+    group: "strict",
+    argsHint: "[<name>]",
+    summary: "verify a strict change is complete and consistent",
+  },
+  {
+    cmd: "strict-review",
+    group: "strict",
+    argsHint: "[<name>]",
+    summary: "review a strict change against specs and quality gates",
+  },
+  {
+    cmd: "strict-archive",
+    group: "strict",
+    argsHint: "[<name>]",
+    summary: "archive a verified strict change",
+  },
+  {
+    cmd: "strict-ship",
+    group: "strict",
+    argsHint: "[<name>]",
+    summary: "create a focused git commit from an archived strict change",
+  },
+  {
+    cmd: "strict-cancel",
+    group: "strict",
+    argsHint: "[<name>]",
+    summary: "abort a strict change in proposed or applied state",
+  },
+  {
+    cmd: "strict-brainstorm",
+    group: "strict",
+    summary: "discuss and shape a strict YAML change from a rough idea",
+  },
+  {
+    cmd: "strict-modify",
+    group: "strict",
+    argsHint: "[<name>]",
+    summary: "adjust the scope of an in-flight strict change",
+  },
+  {
+    cmd: "strict-roadmap-recommend",
+    group: "strict",
+    summary: "recommend and scaffold the next roadmap-backed strict change",
+  },
+  {
+    cmd: "strict-auto",
+    group: "strict",
+    argsHint: "[<name>]",
+    summary: "run the full strict lifecycle end to end for a change",
   },
 
   {

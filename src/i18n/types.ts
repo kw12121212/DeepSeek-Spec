@@ -633,6 +633,7 @@ export interface TranslationSchema {
     groupInfo: string;
     groupSession: string;
     groupExtend: string;
+    groupStrict: string;
     groupCode: string;
     groupJobs: string;
     groupAdvanced: string;
@@ -640,6 +641,7 @@ export interface TranslationSchema {
     groupDetailInfo: string;
     groupDetailChat: string;
     groupDetailExtend: string;
+    groupDetailStrict: string;
     groupDetailSession: string;
     groupDetailCode: string;
     groupDetailJobs: string;

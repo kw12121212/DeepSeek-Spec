@@ -1,0 +1,27 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-engine-bundle
+mapping:
+  implementation:
+    - src/cli/ui/slash/commands.ts, src/cli/ui/slash/types.ts
+  tests:
+    - tests/strict-slash-commands.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    slash-commands-registered:
+      strength: MUST
+      statement: >-
+        The SLASH_COMMANDS array MUST include entries for each /strict-* command: /strict-init,
+        /strict-propose, /strict-apply, /strict-verify, /strict-review, /strict-archive,
+        /strict-ship, /strict-cancel, /strict-brainstorm, /strict-modify, /strict-roadmap-recommend,
+        /strict-auto. Each entry MUST have group='strict' and dispatch to the corresponding built-in
+        skill.
+      scenarios:
+        all-strict-commands-visible:
+          - GIVEN: the SLASH_COMMANDS array is loaded
+          - WHEN: suggestSlashCommands('/strict') is called
+          - THEN: all 12 /strict-* commands are returned with group 'strict'
+  REMOVED: {}
