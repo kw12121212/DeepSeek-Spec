@@ -1,0 +1,43 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: cancel-command
+sections:
+  Implementation:
+    create-cancel-module:
+      text: >-
+        Create src/strict/cancel.ts with cancelChange function that reads state, validates via
+        requireState for proposed or applied, transitions to canceled, and optionally removes the
+        change directory
+      status: complete
+    wire-cancel-tool:
+      text: >-
+        Wire /strict-cancel as a dispatchable tool in the tool registry, reusing the existing
+        requireState guard pattern
+      status: complete
+    register-slash-command:
+      text: Register /strict-cancel in the slash command dispatch map alongside existing strict commands
+      status: complete
+  Testing:
+    unit-tests:
+      text: >-
+        Write unit tests covering valid cancel from proposed, valid cancel from applied, reject from
+        terminal states, reject from canceled, directory removal flag
+      status: complete
+      command: bun run test
+    run-build:
+      text: Run build validation
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks
+      status: complete
+      command: bun run lint
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: unit-tests

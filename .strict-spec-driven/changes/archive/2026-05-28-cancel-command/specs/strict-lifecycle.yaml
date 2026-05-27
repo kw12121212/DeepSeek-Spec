@@ -1,0 +1,46 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-lifecycle
+mapping:
+  implementation:
+    - src/strict/cancel.ts
+  tests:
+    - tests/strict-cancel.test.ts
+operations:
+  ADDED:
+    cancel-state-guard:
+      strength: MUST
+      statement: >-
+        cancelChange MUST reject cancellation of changes not in proposed or applied state by
+        returning the requireState error
+      scenarios:
+        reject-canceled-state:
+          - GIVEN: a change already in canceled state
+          - WHEN: cancelChange is called
+          - THEN: the function returns an error string from requireState without attempting a transition
+    cancel-transition:
+      strength: MUST
+      statement: >-
+        cancelChange MUST call attemptTransition(changeName, 'canceled') for changes in proposed or
+        applied state
+      scenarios:
+        valid-cancel-proposed:
+          - GIVEN: a change in proposed state
+          - WHEN: cancelChange is called
+          - THEN: the change status is transitioned to canceled in proposal.yaml
+    cancel-directory-removal:
+      strength: SHOULD
+      statement: >-
+        cancelChange SHOULD remove the change directory when removeDir is true and the transition
+        succeeds
+      scenarios:
+        directory-removed:
+          - GIVEN: a change in proposed state and removeDir is true
+          - WHEN: cancelChange is called
+          - THEN: >-
+              the .strict-spec-driven/changes/<name> directory is removed after the state transition
+              completes
+  MODIFIED: {}
+  REMOVED: {}

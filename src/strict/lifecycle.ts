@@ -15,7 +15,7 @@ const TERMINAL_STATES: ReadonlySet<ChangeState> = new Set(["shipped", "canceled"
 
 const VALID_TRANSITIONS = new Map<ChangeState, Set<ChangeState>>([
   ["proposed", new Set(["applied", "canceled"])],
-  ["applied", new Set(["verified"])],
+  ["applied", new Set(["verified", "canceled"])],
   ["verified", new Set(["reviewed"])],
   ["reviewed", new Set(["archived"])],
   ["archived", new Set(["shipped"])],

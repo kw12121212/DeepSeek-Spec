@@ -2,6 +2,7 @@ import type { ToolRegistry } from "../tools.js";
 import type { JSONSchema } from "../types.js";
 import { type PipelineStep, runAutoPipeline } from "./auto-pipeline.js";
 import { brainstorm } from "./brainstorm.js";
+import { cancelChange } from "./cancel.js";
 import { requireState } from "./guard.js";
 import { type Subcommand, invokeStrict } from "./invoker.js";
 import type { ChangeState } from "./lifecycle.js";
@@ -132,6 +133,9 @@ function makeHandler(subcommand: Subcommand) {
       const error = requireState(process.cwd(), args.changeName, ...requiredStates);
       if (error) return { ok: false, error };
     }
+    if (subcommand === "cancel") {
+      return cancelChange(process.cwd(), args.changeName ?? "", args.removeDir === true);
+    }
     if (subcommand === "roadmap-recommend") {
       return roadmapRecommend(process.cwd());
     }
@@ -214,6 +218,13 @@ export function registerStrictTools(registry: ToolRegistry): ToolRegistry {
         type: "string",
         description:
           "Resume from a specific pipeline step (recommend, apply, verify, review, archive, ship). Default starts from recommend.",
+      };
+    }
+
+    if (def.subcommand === "cancel") {
+      properties.removeDir = {
+        type: "boolean",
+        description: "Remove the change directory after cancellation. Defaults to false.",
       };
     }
 

@@ -1,0 +1,16 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: cancel-command
+open: []
+resolved:
+  - id: directory-cleanup-default
+    question: Should the cancel command default to removing the change directory, or default to keeping it?
+    context: >-
+      The planned change says optionally removes change directory if user confirms. Need to decide
+      if the default behavior is destructive (remove) or conservative (keep).
+    answer: >-
+      Default to keeping the change directory. The removeDir parameter defaults to false. Removal is
+      opt-in, matching the planned change language of optionally removes if user confirms.
+    status: resolved

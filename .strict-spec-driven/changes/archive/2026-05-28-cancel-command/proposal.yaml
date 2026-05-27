@@ -1,0 +1,28 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: cancel-command
+  status: proposed
+summary:
+  what:
+    - >-
+      Implement /strict-cancel slash command that aborts a strict change in proposed or applied
+      state
+  why:
+    - >-
+      Users need a way to abandon a change that is no longer wanted before it reaches terminal
+      states. Cancel provides a clean exit path with optional directory cleanup.
+scope:
+  in:
+    - src/strict/cancel.ts, src/tools/ dispatch registry
+  out:
+    - >-
+      A new /strict-cancel tool that validates change state, transitions to canceled, and optionally
+      removes the change directory
+unchanged_behavior:
+  - Existing lifecycle transitions, other strict tools, roadmap logic
+roadmap:
+  milestone: 0004-freeform-workflow
+  planned_change: cancel-command

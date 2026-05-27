@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: cancel-command
   milestone: 0004-freeform-workflow
-status: planned
+status: complete
 summary: Implement /strict-cancel to abort a change in proposed or applied state
 details: >-
   Create src/strict/cancel.ts. Accepts change name. Validates change exists and is in proposed or
