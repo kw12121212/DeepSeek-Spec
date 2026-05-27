@@ -1,0 +1,45 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-engine-bundle
+mapping:
+  implementation:
+    - src/strict/invoker.ts
+  tests:
+    - tests/strict-invoker.test.ts
+operations:
+  ADDED:
+    invoker-wraps-subcommands:
+      strength: MUST
+      statement: >-
+        invokeStrict(subcommand, args) MUST spawn the bundled engine with the given subcommand and
+        args, capture stdout and stderr, parse JSON output when present, and return { ok, data?,
+        error? }.
+      scenarios:
+        happy-path-json:
+          - GIVEN: a valid subcommand that returns JSON on stdout
+          - WHEN: invokeStrict('roadmap-status', []) is called
+          - THEN: the result has ok=true and data contains the parsed JSON object
+    invoker-error-handling:
+      strength: MUST
+      statement: >-
+        When the child process exits non-zero, invokeStrict MUST return { ok: false, error: <stderr
+        or last error line> } without throwing.
+      scenarios:
+        non-zero-exit:
+          - GIVEN: the engine subprocess exits with code 1 and writes an error to stderr
+          - WHEN: invokeStrict is called
+          - THEN: the result has ok=false and error contains the stderr message
+    invoker-subcommand-coverage:
+      strength: MUST
+      statement: >-
+        The Subcommand type MUST include all supported subcommands: init, propose, generate, apply,
+        verify, ready, archive, ship, cancel, roadmap-status, roadmap-sync, roadmap-recommend.
+      scenarios:
+        all-subcommands-accepted:
+          - GIVEN: the Subcommand union type is defined
+          - WHEN: each supported subcommand string is passed to invokeStrict
+          - THEN: TypeScript accepts it at compile time and the function dispatches correctly at runtime
+  MODIFIED: {}
+  REMOVED: {}

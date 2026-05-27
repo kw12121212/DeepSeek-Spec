@@ -1,0 +1,28 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: provider-registry
+  milestone: 0007-multi-provider-api
+status: planned
+summary: Create provider registry and align ModelClient port with actual usage
+details: >-
+  Two-part change:
+
+  Part A — Align the ModelClient port (src/ports/model-client.ts) with reality. The current port
+  defines chatStream() but DeepSeekClient implements stream() and chat() with different signatures
+  and return types. The port does not match any real usage. Update the port to reflect what the
+  system actually needs: a unified client interface with both streaming and non-streaming methods,
+  typed so that CacheFirstLoop and all 6 chat() call sites can depend on the port instead of the
+  concrete DeepSeekClient class. The port must carry provider capability metadata (supportsThinking,
+  supportsReasoningContent) so callers can conditionally enable DeepSeek-specific features.
+
+  Part B — Create src/providers/registry.ts exporting a ProviderRegistry class. The registry maps a
+  provider ID string ("deepseek", "glm") to a factory that produces a client instance. It reads the
+  active provider from config (resolved by config-provider-selection) and returns the correct client
+  typed against the updated port interface. Each provider registers its supported model IDs so the
+  CLI can validate model names. Export resolveModelClient() that replaces direct DeepSeekClient
+  construction in loop.ts and all other call sites.
+depends_on:
+  - config-provider-selection

@@ -27,3 +27,7 @@ milestones:
     title: 'M6: Native Executable Packaging and Distribution'
     path: roadmap/milestones/0006-native-executable.yaml
     status: proposed
+  0007-multi-provider-api:
+    title: 'M7: GLM Provider Compatibility'
+    path: roadmap/milestones/0007-multi-provider-api.yaml
+    status: proposed

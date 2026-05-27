@@ -1,0 +1,37 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: refactor-openai-base
+  milestone: 0007-multi-provider-api
+status: planned
+summary: Extract OpenAICompatClient base from DeepSeekClient with both chat() and stream()
+details: >-
+  Refactor src/client.ts by extracting a new OpenAICompatClient base class into
+  src/adapters/model-openai-compat.ts. The base class must include BOTH the non-streaming chat()
+  path and the streaming stream() path, because 6 call sites across the codebase use chat() directly
+  (loop.ts, desktop.ts, commit.ts, session-title.ts, force-summary.ts, context-manager.ts).
+
+  What the base class owns (generic OpenAI /chat/completions logic): - HTTP request construction
+  (POST to baseUrl/chat/completions with JSON body) - Authorization header injection (Bearer apiKey)
+  - Retry logic with configurable RetryOptions - Rate limiting (RPM throttling) - Timeout handling
+  and AbortSignal propagation - SSE response parsing for streaming (eventsource-parser, [DONE]
+  termination) - Non-streaming response parsing (choices[0].message) - Usage accumulation
+  (prompt_tokens, completion_tokens, total_tokens) - Standard OpenAI delta parsing
+  (choices[0].delta.content,
+    choices[0].delta.tool_calls with index-based accumulation)
+  - Standard error parsing (HTTP status → structured error)
+
+  What DeepSeekClient adds as a thin subclass: - Default baseUrl to https://api.deepseek.com -
+  thinking mode: adds extra_body.thinking to request body when model supports it -
+  reasoning_content: parses the DeepSeek-specific reasoning_content field from stream deltas -
+  Surrogate sanitization for DeepSeek's strict JSON parser - Extended 11-minute timeout for
+  DeepSeek's load balancer queue - Azure OpenAI hostname detection (skips extra_body.thinking for
+  Azure) - getBalance() and listModels() methods (DeepSeek-specific endpoints)
+
+  The base class must NOT reference DeepSeek-specific fields or behavior. Method signatures stay as
+  chat(opts: ChatRequestOptions): Promise<ChatResponse> and stream(opts: ChatRequestOptions):
+  AsyncGenerator<StreamChunk> to preserve all existing call sites. This refactoring must be
+  invisible to users — zero behavioral change for the DeepSeek path.
+depends_on: []

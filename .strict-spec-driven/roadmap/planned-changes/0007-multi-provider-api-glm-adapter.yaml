@@ -1,0 +1,34 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: glm-adapter
+  milestone: 0007-multi-provider-api
+status: planned
+summary: Create GLM adapter extending OpenAICompatClient for Zhipu AI
+details: >-
+  Create src/adapters/model-glm.ts implementing a GLMClient that extends OpenAICompatClient (from
+  refactor-openai-base).
+
+  Configuration: - Default baseUrl: https://open.bigmodel.cn/api/paas/v4 - API key: ZHIPU_API_KEY
+  env var → config.json glm.apiKey → error - Supported model IDs: glm-4.7, glm-5.1, glm-5-turbo
+
+  Key considerations for GLM's OpenAI compatibility: - Zhipu uses JWT token auth, not raw API key.
+  The adapter must generate a short-lived JWT from the API key (Zhipu's key format is id.secret).
+  Override the base class auth header injection to produce "Bearer <jwt>" instead of "Bearer
+  <raw-key>". The JWT payload is { api_key: id, exp: timestamp + 3600, timestamp: timestamp } signed
+  with HS256 using the secret portion. - Tool-call streaming should follow the standard OpenAI
+  format, but verify: does GLM emit tool_calls in choices[0].delta the same way? If GLM returns tool
+  calls in choices[0].delta.tool_calls with incremental arguments, the base class handles it. If the
+  format differs, override stream() locally. - GLM may not support thinking/reasoning mode. The
+  adapter must NOT send extra_body.thinking or reasoning_effort. Override the method that adds these
+  fields to be a no-op. - GLM error format may differ from OpenAI's { error: { message, type, code }
+  } structure. Override error parsing if needed. - GLM usage stats field names should be verified
+  (prompt_tokens, completion_tokens, total_tokens vs GLM-specific names).
+
+  Register the adapter in the provider registry with ID "glm" and the three model IDs. Add
+  ZHIPU_API_KEY and ZHIPU_BASE_URL to .env.example.
+depends_on:
+  - provider-registry
+  - refactor-openai-base

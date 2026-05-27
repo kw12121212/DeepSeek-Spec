@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: engine-invoker
   milestone: 0001-strict-engine-embed
-status: planned
+status: complete
 summary: Create a typed invoker wrapper for strict-spec-driven.js subcommands
 details: >-
   Create src/strict/invoker.ts with invokeStrict(subcommand, args) that: (1) spawns 'node

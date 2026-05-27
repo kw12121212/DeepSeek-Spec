@@ -1,0 +1,42 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: provider-integration-tests
+  milestone: 0007-multi-provider-api
+status: planned
+summary: Comprehensive GLM compatibility test matrix using recorded fixtures
+details: >-
+  Create tests/provider/ with fixture-based integration tests. All tests use pre-recorded HTTP
+  fixtures (no live API calls in CI). Fixtures are stored as raw SSE text files in
+  tests/provider/fixtures/glm/.
+
+  tests/provider/glm.test.ts — GLM compatibility matrix: - Basic chat: single-turn, streaming
+  content deltas, final assembled content - Streaming fidelity: delta chunk boundaries match
+  recorded fixture - Tool-call invocation: model emits tool_calls, correct name and JSON args -
+  Tool-call streaming: arguments assembled across incremental delta chunks - Multi-turn: assistant
+  tool-call → tool result → assistant final answer - Parallel tool calls: multiple tool_calls in a
+  single response - Stop reasons: "stop" and "tool_calls", verify GLM-specific values if any - Empty
+  content: tool-call-only turn with no content field - Long response: multi-KB content streamed in
+  full - JWT auth: verify adapter generates valid JWT from id.secret key format - Error responses:
+  401 (auth), 429 (rate limit), context-length exceeded,
+    malformed JSON chunk mid-stream
+  - Usage tracking: prompt_tokens, completion_tokens, total_tokens present - No thinking params:
+  verify request body does not contain thinking or
+    reasoning_effort fields
+
+  tests/provider/openai-compat.test.ts — Refactor regression: - DeepSeek path unchanged: streaming
+  output identical to pre-refactor behavior - OpenAICompatClient base handles standard OpenAI SSE
+  format correctly - DeepSeekClient subclass still adds thinking/reasoning as before
+
+  tests/provider/registry.test.ts — Provider resolution: - REASONIX_PROVIDER=glm resolves to
+  GLMClient - REASONIX_PROVIDER=deepseek resolves to DeepSeekClient - Unset env falls back to
+  config.json provider field - config.json unset defaults to "deepseek" - modelToProvider("glm-5.1")
+  === "glm" - modelToProvider("deepseek-v4-flash") === "deepseek" - modelToProvider("unknown-model")
+  falls back to active provider - Capability flags: deepseek supportsThinking=true, glm
+  supportsThinking=false
+depends_on:
+  - provider-registry
+  - glm-adapter
+  - refactor-openai-base

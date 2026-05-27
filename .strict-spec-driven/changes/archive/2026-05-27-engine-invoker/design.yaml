@@ -1,0 +1,19 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: engine-invoker
+approach:
+  - >-
+    Spawn node vendor/strict-spec-driven.js <subcommand> as a child process using Node's
+    child_process.execFile. Parse JSON stdout when structured data is expected. Return { ok:
+    boolean, data?: unknown, error?: string }. Use engine-path.ts to resolve the binary path. Define
+    a Subcommand union type covering all supported subcommands.
+decisions:
+  subcommand-exec:
+    decision: Use execFile rather than fork/worker to match the existing CLI invocation pattern
+    rationale: >-
+      strict-spec-driven.js is a CLI script with JSON stdout; execFile is the simplest correct
+      bridge
+alternatives: []
+risks: []

@@ -1,0 +1,37 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: provider-aware-loop
+  milestone: 0007-multi-provider-api
+status: planned
+summary: Retype loop, streaming, and all chat() call sites to use the provider port
+details: >-
+  Replace all direct DeepSeekClient type references with the updated provider port interface so that
+  any registered provider's client works everywhere.
+
+  Changes by file:
+
+  src/loop.ts: - Retype CacheFirstLoopOptions.client and CacheFirstLoop.client from
+    DeepSeekClient to the updated port interface
+  - Replace resolveModelClient() call at construction - Guard thinkingModeForModel() call: only pass
+  thinking param when the active
+    provider's capability flag supportsThinking is true
+  - Guard reasoning_content handling: only parse when supportsReasoningContent
+    is true
+
+  src/loop/streaming.ts: - Retype StreamModelOptions.client from DeepSeekClient to the port
+  interface - Guard thinkingModeForModel() the same way as loop.ts - Guard reasoning_content delta
+  parsing behind provider capability check
+
+  6 non-streaming chat() call sites (all import DeepSeekClient for the type): -
+  src/cli/commands/desktop.ts — retype local client reference - src/cli/commands/commit.ts — retype
+  local client reference - src/session-title.ts — update SessionTitleClient interface to match port
+  - src/loop/force-summary.ts — retype local client reference - src/context-manager.ts — retype
+  local client reference - src/loop.ts (non-streaming path) — already covered above
+
+  All changes are type-level retyping. No behavioral change for DeepSeek.
+depends_on:
+  - provider-registry
+  - glm-adapter

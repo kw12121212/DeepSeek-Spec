@@ -1,0 +1,65 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0007-multi-provider-api:
+    title: 'M7: GLM Provider Compatibility'
+goal: |
+  Add GLM (智谱 Zhipu AI) as a second provider by connecting to its
+  OpenAI-compatible endpoint. The work starts by extracting a shared
+  OpenAICompatClient base from DeepSeekClient and aligning the ModelClient
+  port with actual usage (the port currently defines chatStream() but
+  DeepSeekClient implements stream() and chat() with different signatures).
+  Then build the GLM adapter, rigorously test compatibility, and retype all
+  call sites to depend on the provider port instead of DeepSeekClient directly.
+scope:
+  in:
+    - Extract OpenAICompatClient base from DeepSeekClient covering both chat() and stream() methods
+    - 'Align ModelClient port with reality: add chat(), stream(), provider capability flags'
+    - Create GLM adapter with JWT auth (Zhipu uses id.secret key → HS256 JWT, not raw Bearer token)
+    - Provider registry resolving provider ID to client instance
+    - 'Config extension: REASONIX_PROVIDER, glm section in config.json'
+    - >-
+      Retype all 8 call sites (loop.ts, streaming.ts, desktop.ts, commit.ts, session-title.ts,
+      force-summary.ts, context-manager.ts, loop non-streaming path) to use port interface
+    - Comprehensive GLM compatibility test matrix with recorded SSE fixtures
+  out:
+    - Claude / Anthropic Messages API support
+    - Provider-specific features beyond basic chat + tool-use (GLM web search, knowledge base)
+    - Billing or account management UI
+done_criteria:
+  - OpenAICompatClient base extracted; DeepSeekClient is thin subclass with zero behavioral change
+  - ModelClient port updated to include chat() and stream() with provider capability metadata
+  - GLM adapter connects to Zhipu AI with JWT auth and passes chat + tool-use streaming end-to-end
+  - All 8 call sites retyped to depend on port interface, not DeepSeekClient
+  - Provider selected via REASONIX_PROVIDER env or config.json, defaults to deepseek
+  - >-
+    Compatibility test matrix passes: streaming, tool-call, multi-turn, errors, JWT auth,
+    no-thinking-params
+  - 'DeepSeek regression: existing behavior identical to pre-refactor'
+  - npm run verify passes
+planned_changes: {}
+dependencies:
+  - 0001-strict-engine-embed
+risks:
+  - >-
+    Zhipu JWT auth (id.secret → HS256) is different from DeepSeek's raw Bearer token — adapter must
+    handle this
+  - >-
+    GLM tool-call streaming format may diverge from standard OpenAI in subtle ways (argument
+    encoding, stop reasons)
+  - >-
+    6 non-streaming chat() call sites must all be retyped — missing any breaks at runtime when using
+    GLM
+  - >-
+    thinkingModeForModel() and reasoning_content parsing are woven into loop.ts and streaming.ts —
+    must be guarded by capability flags
+status: proposed
+notes:
+  - >-
+    DeepSeekClient does NOT currently implement ModelClient port — the port method name (chatStream)
+    doesn't match the implementation (stream)
+  - CacheFirstLoop.client is typed as DeepSeekClient, not ModelClient — full retyping needed
+  - Both DeepSeek and GLM use OpenAI-compatible /chat/completions protocol — no protocol divergence
+  - Priority is compatibility testing over feature breadth

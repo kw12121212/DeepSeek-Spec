@@ -1,0 +1,32 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: config-provider-selection
+  milestone: 0007-multi-provider-api
+status: planned
+summary: Extend config.ts with provider selection and per-provider settings
+details: >-
+  Extend src/config.ts to support multi-provider configuration.
+
+  Add to the config type: - provider: string (one of "deepseek" | "glm", default "deepseek") - glm:
+  { apiKey?: string, baseUrl?: string } (per-provider section)
+
+  Resolution order for active provider: REASONIX_PROVIDER env var → config.json provider field →
+  "deepseek" default.
+
+  API key resolution per provider: - deepseek: DEEPSEEK_API_KEY env → config.json deepseek.apiKey
+  (existing) → error - glm: ZHIPU_API_KEY env → config.json glm.apiKey → error
+
+  Update SUPPORTED_OFFICIAL_MODELS to include GLM models: glm-4.7, glm-5.1, glm-5-turbo.
+
+  Add modelToProvider(modelId: string): string helper that maps model ID prefix to provider ID
+  (deepseek-v4-* → "deepseek", glm-* → "glm"). Unknown prefix falls back to the active provider from
+  config (trusts custom-endpoint users).
+
+  Update CLI /model command to show provider name alongside model in the list.
+
+  Keep DEEPSEEK_API_KEY, DEEPSEEK_BASE_URL, DEEPSEEK_API_BASE_URL as backward-compatible aliases.
+  Add ZHIPU_API_KEY and ZHIPU_BASE_URL to .env.example.
+depends_on: []
