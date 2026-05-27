@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: milestone-advance
   milestone: 0003-roadmap-workflow
-status: planned
+status: complete
 summary: Auto-advance roadmap milestone status after all planned changes complete
 details: >-
   After a change is archived, check parent milestone: if all planned_changes have status 'complete',

@@ -1,5 +1,6 @@
 import { execFile } from "node:child_process";
 import { type InvokeResult, type Subcommand, invokeStrict } from "./invoker.js";
+import { milestoneAdvance } from "./milestone-advance.js";
 
 export type PipelineStep = "recommend" | "apply" | "verify" | "review" | "archive" | "ship";
 
@@ -119,6 +120,11 @@ export async function runAutoPipeline(options: PipelineOptions): Promise<Pipelin
     if (step === "archive") {
       const syncResult = await invokeStrict("roadmap-sync", { cwd });
       synced = syncResult.ok;
+      const advance = milestoneAdvance(cwd, changeName);
+      if (advance.advanced) {
+        const reSync = await invokeStrict("roadmap-sync", { cwd });
+        synced = reSync.ok;
+      }
     }
   }
 

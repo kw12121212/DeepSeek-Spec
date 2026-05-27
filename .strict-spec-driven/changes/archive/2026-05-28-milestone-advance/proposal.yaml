@@ -1,0 +1,32 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: milestone-advance
+  status: proposed
+summary:
+  what:
+    - >-
+      Add milestone auto-advance logic that checks, after a change is archived, whether all planned
+      changes in the parent milestone are complete and updates the milestone status to complete if
+      so
+  why:
+    - >-
+      M3 requires automatic milestone status advancement so the roadmap reflects progress without
+      manual intervention. This is the last remaining M3 planned change.
+scope:
+  in:
+    - >-
+      .strict-spec-driven/roadmap/milestones/*.yaml,
+      .strict-spec-driven/roadmap/planned-changes/*.yaml, .strict-spec-driven/roadmap/INDEX.yaml,
+      src/strict/
+  out:
+    - >-
+      src/strict/milestone-advance.ts, tests/strict-milestone-advance.test.ts,
+      src/strict/lifecycle.ts (modified)
+unchanged_behavior:
+  - src/strict/config-reader.ts, src/strict/engine-invoker.ts, src/tools/
+roadmap:
+  milestone: 0003-roadmap-workflow
+  planned_change: milestone-advance

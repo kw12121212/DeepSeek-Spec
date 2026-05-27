@@ -1,0 +1,39 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: milestone-advance
+sections:
+  Implementation:
+    create-milestone-advance-module:
+      text: Create src/strict/milestone-advance.ts with milestoneAdvance(changeName) function
+      status: complete
+    scan-planned-changes:
+      text: Implement planned-change status scanning under a milestone
+      status: complete
+    update-milestone-status:
+      text: Implement milestone YAML status update and roadmap-sync invocation
+      status: complete
+  Testing:
+    write-unit-tests:
+      text: Write unit tests for all-complete and incomplete-milestone scenarios
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

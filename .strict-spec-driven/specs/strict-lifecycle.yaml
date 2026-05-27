@@ -88,6 +88,33 @@ requirements:
         - GIVEN: a planned change with depends_on referencing a change that has not been archived
         - WHEN: roadmapRecommend scans the planned change
         - THEN: the planned change is skipped and not recommended
+  milestone-advance-check:
+    strength: MUST
+    statement: >-
+      milestoneAdvance(changeName) MUST read the change's planned-change id and milestone, scan all
+      planned changes under that milestone, and if all are complete update the milestone status to
+      complete
+    scenarios:
+      all-complete:
+        - GIVEN: >-
+            a change with milestone 0003-roadmap-workflow is archived and all other planned changes
+            under that milestone have status complete
+        - WHEN: milestoneAdvance is called with the change name
+        - THEN: >-
+            the milestone YAML status is updated to complete and INDEX.yaml is regenerated via
+            roadmap-sync
+  milestone-advance-incomplete-skip:
+    strength: MUST
+    statement: >-
+      milestoneAdvance(changeName) MUST NOT change milestone status if any planned change under the
+      milestone has a status other than complete
+    scenarios:
+      incomplete-milestone:
+        - GIVEN: >-
+            a change with milestone 0003-roadmap-workflow is archived but at least one other planned
+            change under that milestone has status planned or active
+        - WHEN: milestoneAdvance is called with the change name
+        - THEN: the milestone status is not changed and no roadmap-sync is performed
 mapping:
   implementation:
     - src/strict/lifecycle.ts

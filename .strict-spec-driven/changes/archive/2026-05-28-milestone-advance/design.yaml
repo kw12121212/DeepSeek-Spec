@@ -1,0 +1,22 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: milestone-advance
+approach:
+  - >-
+    Create a milestoneAdvance(changeName) function in src/strict/milestone-advance.ts. After
+    archiving a change, read its proposal.yaml to get the planned-change id and milestone. Scan all
+    planned changes under that milestone. If all are complete, update the milestone YAML status to
+    complete and run roadmap-sync to regenerate INDEX.yaml. Wire it as a post-archive step in the
+    auto-pipeline.
+decisions:
+  post-archive-hook:
+    decision: >-
+      Implement milestone-advance as a standalone function called after archive, not as part of the
+      archive transition itself
+    rationale: >-
+      Keeps the archive transition focused on change-level state. Milestone advancement is a
+      separate concern that may also be invoked manually.
+alternatives: []
+risks: []

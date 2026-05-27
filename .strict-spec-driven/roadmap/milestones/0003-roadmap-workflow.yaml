@@ -43,7 +43,7 @@ dependencies:
 risks:
   - Long-running auto sessions may hit context limits even with compaction
   - Roadmap recommend may pick a blocked change if dependency graph is stale
-status: proposed
+status: complete
 notes:
   - This is workflow path 1 for planned work
   - >-

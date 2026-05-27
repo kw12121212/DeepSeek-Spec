@@ -14,7 +14,7 @@ milestones:
   0003-roadmap-workflow:
     title: 'M3: Roadmap-Driven Auto Workflow'
     path: roadmap/milestones/0003-roadmap-workflow.yaml
-    status: proposed
+    status: complete
   0004-freeform-workflow:
     title: 'M4: Free-Form Auto Workflow'
     path: roadmap/milestones/0004-freeform-workflow.yaml
