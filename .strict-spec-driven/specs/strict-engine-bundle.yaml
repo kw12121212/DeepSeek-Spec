@@ -82,6 +82,39 @@ requirements:
         - GIVEN: the SLASH_COMMANDS array is loaded
         - WHEN: suggestSlashCommands('/strict') is called
         - THEN: all 12 /strict-* commands are returned with group 'strict'
+  tool-registry-entries:
+    strength: MUST
+    statement: >-
+      The ToolRegistry MUST include entries for each strict-spec subcommand: strict_propose,
+      strict_generate, strict_apply, strict_verify, strict_ready, strict_archive, strict_ship,
+      strict_cancel, strict_roadmap_status, strict_roadmap_sync, strict_roadmap_recommend.
+    scenarios:
+      all-tools-registered:
+        - GIVEN: the ToolRegistry is initialized with default tools
+        - WHEN: list() is called and filtered for tools prefixed with strict_
+        - THEN: exactly 11 tool entries are returned, one for each supported subcommand
+  tool-handler-invokes-engine:
+    strength: MUST
+    statement: >-
+      Each strict tool handler MUST call invokeStrict() with the corresponding subcommand name and
+      the tool's input args, and return the structured result.
+    scenarios:
+      handler-dispatch:
+        - GIVEN: a strict tool is invoked with a valid changeName and subcommand-specific fields
+        - WHEN: the tool handler runs
+        - THEN: >-
+            invokeStrict is called with the correct subcommand and the result is returned to the
+            caller
+  tool-parallel-safety:
+    strength: MUST
+    statement: >-
+      All strict tool definitions MUST have parallelSafe set to false since they mutate filesystem
+      state under .strict-spec-driven/.
+    scenarios:
+      no-concurrent-strict-ops:
+        - GIVEN: a strict tool is registered in the ToolRegistry
+        - WHEN: its parallelSafe field is inspected
+        - THEN: it is false for every strict tool
 mapping:
   implementation:
     - vendor/strict-spec-driven.js

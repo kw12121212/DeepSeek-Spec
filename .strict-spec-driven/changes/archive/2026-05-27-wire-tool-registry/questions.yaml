@@ -1,0 +1,27 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: wire-tool-registry
+open: []
+resolved:
+  - id: tool-input-schema
+    question: >-
+      Should each tool accept a flat JSON object with subcommand-specific fields, or a single JSON
+      string argument that gets parsed?
+    context: >-
+      The planned-change says each tool accepts a JSON object with changeName and
+      subcommand-specific fields. invokeStrict already handles structured args.
+    answer: >-
+      Flat JSON object with subcommand-specific fields; each field becomes a named parameter in the
+      tool input schema.
+    status: resolved
+  - id: registration-timing
+    question: >-
+      Should strict tools be registered alongside existing tools in ToolRegistry at init, or lazily
+      on first /strict-* command invocation?
+    context: Existing built-in skills and slash commands are registered eagerly during bootstrap.
+    answer: >-
+      Eager registration at init alongside existing tools, consistent with built-in skills and slash
+      commands.
+    status: resolved

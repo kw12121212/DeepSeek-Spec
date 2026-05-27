@@ -1,0 +1,29 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: wire-tool-registry
+  status: proposed
+summary:
+  what:
+    - >-
+      Register each strict-spec subcommand as a dispatchable tool in ToolRegistry so the agent can
+      invoke strict workflows during a session
+  why:
+    - >-
+      M1 foundation milestone requires tool registry entries for all strict-spec subcommands; this
+      is the last remaining M1 planned change and its dependency (engine-invoker) is archived
+scope:
+  in:
+    - ToolRegistry dispatch, src/tools/
+  out:
+    - >-
+      New tool definitions for strict_propose, strict_apply, strict_verify, strict_ready,
+      strict_archive, strict_ship, strict_cancel, strict_roadmap_status, strict_roadmap_sync,
+      strict_roadmap_recommend
+unchanged_behavior:
+  - vendor/strict-spec-driven.js, src/strict/engine-path.ts, src/skills.ts, slash commands
+roadmap:
+  milestone: 0001-strict-engine-embed
+  planned_change: wire-tool-registry

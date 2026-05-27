@@ -32,7 +32,7 @@ dependencies: []
 risks:
   - strict-spec-driven.js is 715 KB and may bloat the install
   - Skill manifest format differs between Claude Code and Reasonix SkillStore
-status: proposed
+status: complete
 notes:
   - Foundation milestone. All later milestones depend on the engine being available
   - Two workflow paths share this foundation. Roadmap-driven is M3, free-form is M4

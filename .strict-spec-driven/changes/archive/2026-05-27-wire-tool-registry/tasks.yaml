@@ -1,0 +1,47 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: wire-tool-registry
+sections:
+  Implementation:
+    create-strict-tools-module:
+      text: >-
+        Create src/strict/strict-tools.ts with a StrictToolSpec array defining one tool per
+        subcommand (propose, generate, apply, verify, ready, archive, ship, cancel, roadmap-status,
+        roadmap-sync, roadmap-recommend). Each tool has name, description, inputSchema, handler that
+        calls invokeStrict(), and parallelSafe=false.
+      status: complete
+    register-tools-in-bootstrap:
+      text: >-
+        Wire strictTools into ToolRegistry during app bootstrap so the tools are available to the
+        agent loop.
+      status: complete
+    export-from-strict-index:
+      text: Export the strict tool definitions from src/strict/index.ts barrel.
+      status: complete
+  Testing:
+    write-unit-tests:
+      text: >-
+        Write tests/strict-tools.test.ts covering tool registration, handler invocation via
+        invokeStrict mock, error propagation, and parallelSafe flag.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify all 11 tool definitions are registered and dispatch correctly.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

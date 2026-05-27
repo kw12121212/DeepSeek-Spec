@@ -13,6 +13,7 @@ import {
   searchEnabled,
 } from "../config.js";
 import { bootstrapSemanticSearchInCodeMode } from "../index/semantic/tool.js";
+import { registerStrictTools } from "../strict/strict-tools.js";
 import { ToolRegistry } from "../tools.js";
 import { registerChoiceTool } from "../tools/choice.js";
 import { registerCodeQueryTools } from "../tools/code-query.js";
@@ -89,6 +90,7 @@ export async function buildCodeToolset(opts: CodeToolsetOpts): Promise<CodeTools
   registerPlanTool(tools);
   registerChoiceTool(tools);
   registerTodoTool(tools);
+  registerStrictTools(tools);
   registerScaffoldTools(tools, { projectRoot: opts.rootDir });
   if (searchEnabled()) {
     registerWebTools(tools);

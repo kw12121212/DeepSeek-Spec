@@ -6,7 +6,7 @@ milestones:
   0001-strict-engine-embed:
     title: 'M1: Embed Strict-Spec Engine and Skills'
     path: roadmap/milestones/0001-strict-engine-embed.yaml
-    status: proposed
+    status: complete
   0002-change-lifecycle:
     title: 'M2: Change Lifecycle State Machine'
     path: roadmap/milestones/0002-change-lifecycle.yaml

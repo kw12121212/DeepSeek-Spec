@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: wire-tool-registry
   milestone: 0001-strict-engine-embed
-status: planned
+status: complete
 summary: Wire strict-spec subcommands as dispatchable agent tools
 details: >-
   Register each strict-spec subcommand as a tool in ToolRegistry (src/tools.ts). Tool names follow
