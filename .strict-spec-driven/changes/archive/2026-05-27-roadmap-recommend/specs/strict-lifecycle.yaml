@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-lifecycle
+mapping:
+  implementation:
+    - src/strict/roadmap-recommend.ts
+  tests:
+    - tests/strict-roadmap-recommend.test.ts
+operations:
+  ADDED:
+    roadmap-recommend-ignores-completed:
+      strength: MUST
+      statement: >-
+        roadmapRecommend() MUST skip planned changes whose depends_on entries are not found in
+        archived strict changes with shipped status.
+      scenarios:
+        dependency-not-resolved:
+          - GIVEN: a planned change with depends_on referencing a change that has not been archived
+          - WHEN: roadmapRecommend scans the planned change
+          - THEN: the planned change is skipped and not recommended
+  MODIFIED: {}
+  REMOVED: {}

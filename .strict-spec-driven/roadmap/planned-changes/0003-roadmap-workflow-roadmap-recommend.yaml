@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: roadmap-recommend
   milestone: 0003-roadmap-workflow
-status: planned
+status: complete
 summary: Implement roadmap recommend logic and /strict-roadmap-recommend command
 details: >-
   Create src/strict/roadmap-recommend.ts. Algorithm: (1) read INDEX.yaml, (2) iterate milestones in

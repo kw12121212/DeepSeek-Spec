@@ -3,6 +3,7 @@ import type { JSONSchema } from "../types.js";
 import { requireState } from "./guard.js";
 import { type Subcommand, invokeStrict } from "./invoker.js";
 import type { ChangeState } from "./lifecycle.js";
+import { roadmapRecommend } from "./roadmap-recommend.js";
 
 interface StrictToolArgs {
   changeName?: string;
@@ -116,6 +117,9 @@ function makeHandler(subcommand: Subcommand) {
     if (requiredStates && args.changeName) {
       const error = requireState(process.cwd(), args.changeName, ...requiredStates);
       if (error) return { ok: false, error };
+    }
+    if (subcommand === "roadmap-recommend") {
+      return roadmapRecommend(process.cwd());
     }
     const cliArgs = buildCliArgs(args);
     return invokeStrict(subcommand, { args: cliArgs });

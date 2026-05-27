@@ -1,0 +1,29 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: roadmap-recommend
+  status: proposed
+summary:
+  what:
+    - >-
+      Implement roadmap recommend logic in src/strict/roadmap-recommend.ts that reads INDEX.yaml,
+      iterates milestones in order, scans planned changes for unblocked items, and returns the first
+      eligible candidate.
+  why:
+    - >-
+      The roadmap-recommend logic is the foundation for the M3 auto pipeline. auto-pipeline depends
+      on it. Config-reader (its only dependency) is complete.
+scope:
+  in:
+    - src/strict/roadmap-recommend.ts (new), src/strict/strict-tools.ts (minor update if needed)
+  out:
+    - >-
+      A roadmapRecommend() function that returns the first eligible planned change or a no-eligible
+      result.
+unchanged_behavior:
+  - src/strict/invoker.ts, src/strict/guard.ts, src/strict/lifecycle.ts
+roadmap:
+  milestone: 0003-roadmap-workflow
+  planned_change: roadmap-recommend

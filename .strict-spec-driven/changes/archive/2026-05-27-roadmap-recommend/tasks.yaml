@@ -1,0 +1,48 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: roadmap-recommend
+sections:
+  Implementation:
+    create-roadmap-recommend-module:
+      text: Create src/strict/roadmap-recommend.ts with roadmapRecommend(projectRoot) function.
+      status: complete
+    implement-milestone-scanning:
+      text: >-
+        Implement INDEX.yaml parsing, milestone iteration (skip complete), and planned-change
+        scanning.
+      status: complete
+    implement-dependency-check:
+      text: Implement depends_on resolution by checking archived change directories for completion.
+      status: complete
+    wire-tool-dispatch:
+      text: >-
+        Update strict-tools.ts handler for roadmap-recommend to call roadmapRecommend() and return
+        structured result.
+      status: complete
+  Testing:
+    unit-tests:
+      text: >-
+        Write tests/strict-roadmap-recommend.test.ts covering milestone order, dependency blocking,
+        and no-eligible case.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

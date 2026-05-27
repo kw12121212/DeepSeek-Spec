@@ -1,0 +1,26 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-config-reader
+mapping:
+  implementation:
+    - src/strict/roadmap-recommend.ts
+  tests:
+    - tests/strict-roadmap-recommend.test.ts
+operations:
+  ADDED:
+    roadmap-recommend-uses-config:
+      strength: MUST
+      statement: >-
+        roadmapRecommend() MUST use the project root to locate .strict-spec-driven/ directory for
+        reading roadmap YAML files.
+      scenarios:
+        config-path-resolution:
+          - GIVEN: a project root with a valid .strict-spec-driven/ directory
+          - WHEN: roadmapRecommend(projectRoot) is called
+          - THEN: >-
+              the function resolves INDEX.yaml and milestone files relative to
+              projectRoot/.strict-spec-driven/
+  MODIFIED: {}
+  REMOVED: {}
