@@ -1,0 +1,29 @@
+schema: strict-spec-driven/roadmap-index/v2
+schema_version: 2
+artifact_type: roadmap_index
+schema_file: ../schemas/roadmap-index.yaml
+milestones:
+  0001-strict-engine-embed:
+    title: 'M1: Embed Strict-Spec Engine and Skills'
+    path: roadmap/milestones/0001-strict-engine-embed.yaml
+    status: proposed
+  0002-change-lifecycle:
+    title: 'M2: Change Lifecycle State Machine'
+    path: roadmap/milestones/0002-change-lifecycle.yaml
+    status: proposed
+  0003-roadmap-workflow:
+    title: 'M3: Roadmap-Driven Auto Workflow'
+    path: roadmap/milestones/0003-roadmap-workflow.yaml
+    status: proposed
+  0004-freeform-workflow:
+    title: 'M4: Free-Form Auto Workflow'
+    path: roadmap/milestones/0004-freeform-workflow.yaml
+    status: proposed
+  0005-e2e-hardening:
+    title: 'M5: E2E Testing and TUI Hardening'
+    path: roadmap/milestones/0005-e2e-hardening.yaml
+    status: proposed
+  0006-native-executable:
+    title: 'M6: Native Executable Packaging and Distribution'
+    path: roadmap/milestones/0006-native-executable.yaml
+    status: proposed

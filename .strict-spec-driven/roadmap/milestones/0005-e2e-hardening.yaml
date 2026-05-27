@@ -1,0 +1,37 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0005-e2e-hardening:
+    title: 'M5: E2E Testing and TUI Hardening'
+goal: |
+  End-to-end validation of both workflow paths, TUI polish, and documentation
+  so the strict-spec workflow is production-ready.
+scope:
+  in:
+    - E2E test for roadmap-driven full cycle against a fixture project
+    - E2E test for free-form full cycle against a fixture project
+    - TUI strict status indicator showing active change name and lifecycle state
+    - Slash autocomplete for all /strict-* commands
+    - README section documenting strict-spec workflows
+  out:
+    - New workflow logic (all in M1-M4)
+done_criteria:
+  - E2E roadmap test verifies all 6 transitions, INDEX.yaml updates, and gate checks
+  - E2E freeform test verifies propose, modify, cancel, and full pipeline
+  - TUI top bar shows change name and lifecycle state when a strict change is active
+  - All /strict-* commands appear in slash autocomplete
+  - README includes init, roadmap-plan, propose, and auto usage examples
+  - npm run verify passes with zero regressions
+planned_changes: {}
+dependencies:
+  - 0003-roadmap-workflow
+  - 0004-freeform-workflow
+risks:
+  - E2E tests may be flaky if they depend on model responses. Use recorded fixtures
+  - TUI top bar may conflict with existing layout on narrow terminals
+status: proposed
+notes:
+  - Polish milestone with no new workflow logic
+  - TUI status indicator was originally in M2 but moved here to keep M2 focused on logic

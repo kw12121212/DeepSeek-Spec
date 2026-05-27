@@ -1,0 +1,18 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: register-builtin-skills
+  milestone: 0001-strict-engine-embed
+status: planned
+summary: Register core strict-spec skills as built-in Reasonix skills
+details: >-
+  In src/skills.ts, add a builtin skill root for strict-spec skills. Create skill manifests for each
+  core workflow step: init, propose, apply, verify, review, archive, ship, cancel, brainstorm,
+  modify, roadmap-recommend, roadmap-plan, auto. Each manifest is a markdown file with frontmatter
+  specifying name, trigger, description, and the invoker subcommand. Place manifests under
+  src/strict/skills/ or data/strict-skills/. The SkillStore.load() path must pick them up alongside
+  existing builtins.
+depends_on:
+  - engine-invoker

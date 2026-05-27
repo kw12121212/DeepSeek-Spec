@@ -1,0 +1,16 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: bundle-engine
+  milestone: 0001-strict-engine-embed
+status: planned
+summary: Bundle strict-spec-driven.js into vendor/ and register in package.json
+details: >-
+  Copy strict-spec-driven.js to vendor/strict-spec-driven.js. Add 'vendor/strict-spec-driven.js' to
+  the package.json files array so it ships with every install. Verify the file is accessible at
+  runtime via path.resolve(__dirname, '../vendor/strict-spec-driven.js') from the dist output. The
+  file is 715 KB; if install size is a concern, add a lazy-load wrapper that only requires it when a
+  strict command is invoked.
+depends_on: []

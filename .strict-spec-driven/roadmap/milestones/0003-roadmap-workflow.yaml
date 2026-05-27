@@ -1,0 +1,51 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0003-roadmap-workflow:
+    title: 'M3: Roadmap-Driven Auto Workflow'
+goal: |
+  Implement the roadmap-driven auto pipeline: roadmap recommend -> apply ->
+  verify -> review -> archive -> ship. The agent selects the next change from
+  the roadmap, implements it, and advances through all lifecycle states
+  automatically, pausing only for human checkpoints when verification fails
+  or requirements are ambiguous.
+scope:
+  in:
+    - >-
+      Implement roadmap recommend logic that reads INDEX.yaml and picks the first unblocked planned
+      change
+    - >-
+      Add /strict-roadmap-recommend slash command that scaffolds the recommended change as a full
+      proposal
+    - >-
+      Add /strict-auto slash command for the full pipeline in one session with context compaction
+      between gates
+    - Register roadmap-sync and roadmap-status as dispatchable agent tools
+    - Auto-advance roadmap milestone status after a change is archived
+  out:
+    - Free-form propose logic (M4)
+    - E2E testing and TUI (M5)
+done_criteria:
+  - >-
+    /strict-roadmap-recommend reads the roadmap and scaffolds a change from the first planned item
+    with no unresolved depends_on
+  - /strict-auto runs the full recommend -> apply -> verify -> review -> archive -> ship pipeline
+  - Context is summarized between lifecycle gates to avoid context window overflow
+  - Roadmap INDEX.yaml is synced after each completed change
+  - npm run verify passes at each lifecycle gate
+  - Integration test demonstrates a full roadmap-driven cycle against a fixture project
+planned_changes: {}
+dependencies:
+  - 0001-strict-engine-embed
+  - 0002-change-lifecycle
+risks:
+  - Long-running auto sessions may hit context limits even with compaction
+  - Roadmap recommend may pick a blocked change if dependency graph is stale
+status: proposed
+notes:
+  - This is workflow path 1 for planned work
+  - >-
+    The auto pipeline compacts context at each gate by summarizing completed steps into a compact
+    running note

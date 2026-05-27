@@ -1,0 +1,19 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: install-scripts
+  milestone: 0006-native-executable
+status: planned
+summary: Platform-specific install scripts and smoke test for native binary
+details: >-
+  Create scripts/install.sh for Linux/macOS: detect platform+arch, download the correct binary from
+  GitHub Releases latest, install to ~/.local/bin (or --prefix path), verify SHA256, make
+  executable. Create scripts/install.ps1 for Windows: download to %USERPROFILE%\bin, add to PATH.
+  Add scripts/smoke-native.mjs that runs the compiled binary and verifies --version output matches
+  package.json version, --help exits 0, and tokenizer loads without error. Add smoke-native to
+  package.json scripts.
+depends_on:
+  - native-runtime-paths
+  - cross-platform-ci

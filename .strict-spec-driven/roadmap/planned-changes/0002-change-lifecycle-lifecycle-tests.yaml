@@ -1,0 +1,19 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: lifecycle-tests
+  milestone: 0002-change-lifecycle
+status: planned
+summary: Unit tests for lifecycle transitions, guards, and config reader
+details: >-
+  Create tests/strict/lifecycle.test.ts and tests/strict/config-reader.test.ts with vitest.
+  Lifecycle: all 6 valid transitions succeed, all invalid throw with descriptive error, terminal
+  states reject all, readCurrentState returns null for nonexistent changes. Guards: each passes for
+  correct state, fails for wrong state with clear error. Config: parse full config, minimal config,
+  missing config returns defaults, cache behavior.
+depends_on:
+  - lifecycle-module
+  - config-reader
+  - wire-lifecycle-guards

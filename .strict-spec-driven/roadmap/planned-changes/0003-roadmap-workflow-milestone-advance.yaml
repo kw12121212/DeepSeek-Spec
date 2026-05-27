@@ -1,0 +1,16 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: milestone-advance
+  milestone: 0003-roadmap-workflow
+status: planned
+summary: Auto-advance roadmap milestone status after all planned changes complete
+details: >-
+  After a change is archived, check parent milestone: if all planned_changes have status 'complete',
+  update milestone status from 'active' to 'complete' in the YAML file. Then call roadmap-sync to
+  regenerate INDEX.yaml. Runs automatically as post-archive hook in auto-pipeline. Can also be
+  invoked manually via strict_roadmap_sync.
+depends_on:
+  - roadmap-tools

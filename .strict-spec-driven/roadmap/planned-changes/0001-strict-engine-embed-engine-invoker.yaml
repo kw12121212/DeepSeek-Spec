@@ -1,0 +1,17 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: engine-invoker
+  milestone: 0001-strict-engine-embed
+status: planned
+summary: Create a typed invoker wrapper for strict-spec-driven.js subcommands
+details: >-
+  Create src/strict/invoker.ts with invokeStrict(subcommand, args) that: (1) spawns 'node
+  vendor/strict-spec-driven.js <subcommand>' with args as CLI flags, (2) captures stdout and stderr,
+  (3) parses JSON output when the subcommand returns structured data, (4) returns { ok, data?,
+  error? }. Cover all subcommands: init, propose, generate, apply, verify, ready, archive, ship,
+  cancel, roadmap-status, roadmap-sync, roadmap-recommend.
+depends_on:
+  - bundle-engine

@@ -1,0 +1,17 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: wire-tool-registry
+  milestone: 0001-strict-engine-embed
+status: planned
+summary: Wire strict-spec subcommands as dispatchable agent tools
+details: >-
+  Register each strict-spec subcommand as a tool in ToolRegistry (src/tools.ts). Tool names follow
+  the pattern strict_propose, strict_apply, etc. Each tool accepts a JSON object with changeName and
+  subcommand-specific fields. The handler calls invokeStrict() and returns structured results. Tools
+  are parallelSafe: false since they mutate filesystem state. Register tools for: propose, generate,
+  apply, verify, ready, archive, ship, cancel, roadmap-status, roadmap-sync, roadmap-recommend.
+depends_on:
+  - engine-invoker

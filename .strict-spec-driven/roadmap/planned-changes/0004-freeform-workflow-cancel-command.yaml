@@ -1,0 +1,17 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: cancel-command
+  milestone: 0004-freeform-workflow
+status: planned
+summary: Implement /strict-cancel to abort a change in proposed or applied state
+details: >-
+  Create src/strict/cancel.ts. Accepts change name. Validates change exists and is in proposed or
+  applied state (reject if verified or later). Transitions to canceled state via ChangeLifecycle.
+  Optionally removes change directory if user confirms. Reports canceled change. Wired as
+  /strict-cancel slash command.
+depends_on:
+  - lifecycle-module
+  - add-slash-commands

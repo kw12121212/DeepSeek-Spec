@@ -36,23 +36,21 @@ MIT-licensed. Node ≥22 required.
 | `dashboard/` | Compiled dashboard SPA assets |
 | `data/` | Tokenizer data (`deepseek-tokenizer.json.gz`) |
 | `dist/` | Build output — **do not edit** |
-| `.github/` | CI + issue / PR templates |
+| `.github/` | Issue / PR templates |
 
 ## Commands
 
 ```sh
-npm run build       # tsup → dist/
-npm run dev         # tsx src/cli/index.ts
-npm run chat        # tsx src/cli/index.ts chat
-npm run test        # vitest run
-npm run test:watch  # vitest
-npm run lint        # biome check src tests
-npm run lint:fix    # biome check --write src tests
-npm run format      # biome format --write src tests
-npm run typecheck   # tsc --noEmit
+bun run build       # tsup → dist/
+bun run dev         # tsx src/cli/index.ts
+bun run chat        # tsx src/cli/index.ts chat
+bun run test        # vitest run
+bun run test:watch  # vitest
+bun run lint        # biome check src tests
+bun run lint:fix    # biome check --write src tests
+bun run format      # biome format --write src tests
+bun run typecheck   # tsc --noEmit
 ```
-
-`prepublishOnly`: lint → typecheck → test → build.
 
 ## Conventions
 

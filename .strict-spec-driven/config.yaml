@@ -1,0 +1,44 @@
+schema: strict-spec-driven/config/v1
+schema_version: 1
+artifact_type: workflow_config
+context: |
+  Reasonix (npm: reasonix) — a DeepSeek-native AI coding agent for the terminal.
+  TypeScript monorepo (Node ≥22, tsup, vitest, biome, ink/React TUI).
+  Four pillars: cache-first loop (prefix-cache hit ≈99%), flash-first cost control,
+  tool-call repair, and R1 thought distillation. Key domains: agent loop (src/loop.ts),
+  tools (src/tools/), TUI (ink), desktop (Electron), QQ/WeChat adapters, MCP server,
+  Java trace, i18n. Builds via `npm run build`, tests via `vitest run`, lint via `biome`.
+rules:
+  specs:
+    - Describe observable behavior only — no implementation details, technology choices, or internal structure
+    - MUST = required with no exceptions; SHOULD = default unless explicitly justified; MAY = genuinely optional
+    - Each requirement must be independently verifiable from outside the system
+  change:
+    - Implement only what is in scope in proposal.yaml — if scope needs to expand, use strict-spec-modify first, never expand silently
+    - When a requirement or task is ambiguous, ask the user before proceeding — do not assume or guess
+    - Delta specs must reflect what was actually built, not the original plan
+    - Mark tasks done immediately upon completion — never batch at the end
+    - Every change must include test tasks (validation + unit tests at minimum)
+  code:
+    - Read existing code before modifying it
+    - Implement only what the current task requires — no speculative features
+    - No abstractions for hypothetical future needs (YAGNI)
+  test:
+    - Tests must verify observable behavior described in specs, not internal implementation details
+    - Each test must be independent — no shared mutable state between tests
+    - Prefer real dependencies over mocks for code the project owns
+review_evidence:
+  project_regression:
+    method: complete_project_regression
+    command: npm run verify
+    meaning: >-
+      Passing this command is required review evidence before strict-spec-review recommends archive
+      or strict-spec-auto performs archive. This command represents the complete project-level
+      regression suite, not only the Testing section tasks for an individual change.
+    unavailable_behavior: >-
+      If the command cannot run because required dependencies, services, credentials, fixtures, or
+      other test conditions are unavailable, review or auto archive is blocked until a human
+      prepares the environment or explicitly provides the missing evidence.
+# maintenance:
+#   checks:
+#     - type: roadmap-sync-check

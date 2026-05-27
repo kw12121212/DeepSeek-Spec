@@ -9,8 +9,8 @@ PRs are welcome, but read this first so the round-trip is short.
 ```sh
 git clone https://github.com/esengine/reasonix
 cd reasonix
-npm install
-npm run dev          # tsx src/cli/index.ts — live source
+bun install
+bun run dev          # tsx src/cli/index.ts — live source
 ```
 
 Node ≥ 22. No global install needed during development.
@@ -30,7 +30,7 @@ For stack, layout, scripts, see [`REASONIX.md`](./REASONIX.md).
 ## Code rules
 
 These are enforced by review and (where possible) by
-`tests/comment-policy.test.ts` — which runs under `npm run verify`
+`tests/comment-policy.test.ts` — which runs under `bun run verify`
 and gates pre-push.
 
 ### Comments — default is none
@@ -68,7 +68,7 @@ clearer (rename, extract, simplify) before any comment is added.
 
 ### Libraries over hand-rolled
 
-If a problem has a well-maintained npm library, use it. Specific
+If a problem has a well-maintained package library, use it. Specific
 landmines this project has hit:
 
 - Visual width / unicode width → `string-width`
@@ -118,9 +118,8 @@ wrapper — don't fork a local table.
 ## PR expectations
 
 - Branch off `main`. One logical change per PR.
-- `npm run verify` must pass locally (lint + typecheck + tests +
-  comment-policy gate). Pre-push hook runs this; CI runs it on
-  Node 22.
+- `bun run verify` must pass locally (lint + typecheck + tests +
+  comment-policy gate).
 - Don't touch `CHANGELOG.md` — release notes are written by the
   maintainer at release time, drawn from commit history. PR
   descriptions are the authoritative record while the work is in
@@ -134,18 +133,9 @@ Reasonix prefers blunt, fast review. Expect:
 - Pushback on new abstractions / flags introduced before there are
   two real call sites.
 - Pushback on hand-rolled implementations of problems a maintained
-  npm library already solves.
+  package library already solves.
 
 None of this is personal — it's how the codebase stays small.
-
-## Releasing (maintainers)
-
-1. Bump `package.json` version.
-2. Add `## [X.Y.Z] — <date>` to `CHANGELOG.md` with a hand-written
-   summary drawn from `git log` since the prior tag.
-3. `chore(release): X.Y.Z — <one-line summary>` commit.
-4. `git tag -a vX.Y.Z -m "..."`, push commit + tag.
-5. Wait for CI green, then `npm publish`.
 
 ## Reporting security issues
 

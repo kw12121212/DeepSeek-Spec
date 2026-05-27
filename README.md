@@ -20,7 +20,6 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/reasonix"><img src="https://img.shields.io/npm/v/reasonix.svg?style=flat-square&color=cb3837&labelColor=161b22&logo=npm&logoColor=white" alt="npm version"/></a>
-  <a href="https://github.com/esengine/reasonix/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/esengine/reasonix/ci.yml?style=flat-square&label=ci&labelColor=161b22&logo=githubactions&logoColor=white" alt="CI"/></a>
   <a href="./LICENSE"><img src="https://img.shields.io/npm/l/reasonix.svg?style=flat-square&color=8b949e&labelColor=161b22" alt="license"/></a>
   <a href="https://www.npmjs.com/package/reasonix"><img src="https://img.shields.io/npm/dm/reasonix.svg?style=flat-square&color=3fb950&labelColor=161b22&label=downloads" alt="downloads"/></a>
   <a href="./package.json"><img src="https://img.shields.io/node/v/reasonix.svg?style=flat-square&color=5fa04e&labelColor=161b22&logo=nodedotjs&logoColor=white" alt="node"/></a>
@@ -68,7 +67,7 @@ Requires Node ≥ 22. Works on macOS · Linux · Windows (PowerShell · Git Bash
 Install Reasonix globally if you want the `reasonix` command available on your `PATH`:
 
 ~~~bash
-npm install -g reasonix
+bun add -g reasonix
 reasonix code my-project   # paste a DeepSeek API key on first run; persists after
 ~~~
 
@@ -76,21 +75,21 @@ Or run it once without installing globally:
 
 ~~~bash
 cd my-project
-npx reasonix code          # always uses the latest package by default
+bunx reasonix code          # always uses the latest package by default
 ~~~
 
 Grab a [DeepSeek API key →](https://platform.deepseek.com/api_keys) · `reasonix code --help` for flags.
 
-If you use Reasonix daily, global install is the simplest path. If you just want to try it, use `npx`.
+If you use Reasonix daily, global install is the simplest path. If you just want to try it, use `bunx`.
 
 **Prefer fewer keystrokes?** The shorter `dsnix` alias resolves to the same CLI:
 
 ~~~bash
-npm install -g dsnix       # exposes `dsnix` on PATH, depends on reasonix
-npx dsnix@latest code      # one-shot via the shorter command
+bun add -g dsnix       # exposes `dsnix` on PATH, depends on reasonix
+bunx dsnix@latest code      # one-shot via the shorter command
 ~~~
 
-A global `npm install -g reasonix` also drops a `dsnix` shim on PATH, so the two are interchangeable.
+A global `bun add -g reasonix` also drops a `dsnix` shim on PATH, so the two are interchangeable.
 
 Bare `reasonix` (no subcommand) launches `code` in the current directory — typing `reasonix` and `reasonix code` are equivalent.
 
@@ -117,7 +116,7 @@ For full setup, desktop quick start, and troubleshooting, see [QQ channel setup]
 
 ### Desktop client (prerelease)
 
-A native Tauri client for users who want a GUI over the same loop. Multi-tab, the right-panel shows files the agent has read or edited this session, the same cost / cache / token meters live at the bottom. Same DeepSeek API key, same `~/.reasonix` config — the desktop bundles its own Node runtime, no separate `npm install` step.
+A native Tauri client for users who want a GUI over the same loop. Multi-tab, the right-panel shows files the agent has read or edited this session, the same cost / cache / token meters live at the bottom. Same DeepSeek API key, same `~/.reasonix` config — the desktop bundles its own Node runtime, no separate install step.
 
 Download platform installers from [GitHub Releases](https://github.com/esengine/DeepSeek-Reasonix/releases). The desktop ships as a **prerelease**: the loop and protocol are the same as the CLI, but the UI is still being polished and the installers aren't code-signed yet.
 
@@ -133,7 +132,7 @@ The CLI remains the canonical surface. Anything that lands in the CLI is also av
 **Working in a different folder.** Reasonix scopes filesystem tools to the launch directory; pass `--dir` to retarget. Mid-session switching isn't supported by design (memory paths would tangle with stale roots) — quit and relaunch.
 
 ~~~bash
-npx reasonix code --dir /path/to/project
+bunx reasonix code --dir /path/to/project
 ~~~
 
 **Picking `chat` vs `code`.** `code` is the default and the only mode with filesystem / shell tools and SEARCH/REPLACE review. `chat` is the lighter, tools-off shell — reach for it when you want a thinking partner with MCP attached but no disk access.
@@ -159,7 +158,7 @@ npx reasonix code --dir /path/to/project
 **Claude-format skills also load.** `<project>/.claude/skills/<name>/SKILL.md` and `~/.claude/skills/` are read alongside Reasonix's native paths, so tooling that emits Claude-format skills works out of the box. Example — drop OpenSpec workflows in without an upstream adapter:
 
 ~~~bash
-npx openspec init --tools claude    # writes .claude/skills/openspec-*/SKILL.md
+bunx openspec init --tools claude    # writes .claude/skills/openspec-*/SKILL.md
 /skill openspec-propose <task>      # then invoke from Reasonix
 ~~~
 
@@ -257,7 +256,7 @@ Scoped starter tickets — each with background, code pointers, acceptance crite
   </a>
 </p>
 
-**Before your first PR**: read [`CONTRIBUTING.md`](./CONTRIBUTING.md) — short, strict rules (comments, errors, libraries-over-hand-rolled). `tests/comment-policy.test.ts` enforces the comment ones; `npm run verify` is the pre-push gate. By participating you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md). Security issues → [SECURITY.md](./SECURITY.md).
+**Before your first PR**: read [`CONTRIBUTING.md`](./CONTRIBUTING.md) — short, strict rules (comments, errors, libraries-over-hand-rolled). `tests/comment-policy.test.ts` enforces the comment ones; `bun run verify` is the pre-push gate. By participating you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md). Security issues → [SECURITY.md](./SECURITY.md).
 
 <br/>
 

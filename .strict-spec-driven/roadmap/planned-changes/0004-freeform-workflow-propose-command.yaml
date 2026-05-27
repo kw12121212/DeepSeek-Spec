@@ -1,0 +1,17 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: propose-command
+  milestone: 0004-freeform-workflow
+status: planned
+summary: Implement /strict-propose command that scaffolds a change from free text
+details: >-
+  Create src/strict/propose.ts. Accepts free-text description and change name. Calls
+  invokeStrict('propose', { changeName, description }) to scaffold proposal.yaml, design.yaml,
+  tasks.yaml, questions.yaml, and specs/ under .strict-spec-driven/changes/<name>/. Validates
+  scaffold was created. If change name already exists, error with 'change already exists, use
+  /strict-modify to update or /strict-cancel to remove'.
+depends_on:
+  - add-slash-commands

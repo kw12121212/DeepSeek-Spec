@@ -1,0 +1,17 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: embed-static-assets
+  milestone: 0006-native-executable
+status: planned
+summary: Embed data files, tree-sitter grammars, and dashboard into the compiled binary
+details: >-
+  Convert static assets to embeddable form for bun compile. Use Bun.file() and import attributes to
+  embed: (1) data/deepseek-tokenizer.json.gz, (2) tree-sitter WASM grammars from dist/grammars/, (3)
+  dashboard/ static files (index.html, app.css, dist/). Create src/cli/assets.ts as a registry
+  mapping asset names to embedded blobs. The registry must work in both Node (tsup) and Bun compile
+  contexts — use a factory that reads from disk in Node and from embedded blobs in compiled mode.
+depends_on:
+  - native-build-script

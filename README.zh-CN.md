@@ -20,7 +20,6 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/reasonix"><img src="https://img.shields.io/npm/v/reasonix.svg?style=flat-square&color=cb3837&labelColor=161b22&logo=npm&logoColor=white" alt="npm version"/></a>
-  <a href="https://github.com/esengine/reasonix/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/esengine/reasonix/ci.yml?style=flat-square&label=ci&labelColor=161b22&logo=githubactions&logoColor=white" alt="CI"/></a>
   <a href="./LICENSE"><img src="https://img.shields.io/npm/l/reasonix.svg?style=flat-square&color=8b949e&labelColor=161b22" alt="license"/></a>
   <a href="https://www.npmjs.com/package/reasonix"><img src="https://img.shields.io/npm/dm/reasonix.svg?style=flat-square&color=3fb950&labelColor=161b22&label=downloads" alt="downloads"/></a>
   <a href="./package.json"><img src="https://img.shields.io/node/v/reasonix.svg?style=flat-square&color=5fa04e&labelColor=161b22&logo=nodedotjs&logoColor=white" alt="node"/></a>
@@ -62,12 +61,12 @@
 
 ~~~bash
 cd my-project
-npx reasonix code   # 首次运行粘贴 DeepSeek API Key，之后会记住
+bunx reasonix code   # 首次运行粘贴 DeepSeek API Key，之后会记住
 ~~~
 
 要求 Node ≥ 22。在 macOS · Linux · Windows（PowerShell · Git Bash · Windows Terminal）都跑得顺。[去拿 DeepSeek API Key →](https://platform.deepseek.com/api_keys) · 完整 flag 看 `reasonix code --help`。
 
-`npx` 是推荐路径 —— 不用全局安装，每次都拿最新版。如果你天天用、想把 `reasonix` 装到 `PATH`，跑一次 `reasonix update`。
+`bunx` 是推荐路径 —— 不用全局安装，每次都拿最新版。如果你天天用、想把 `reasonix` 装到 `PATH`，跑一次 `reasonix update`。
 
 | 命令 | 何时用 |
 |---|---|
@@ -96,7 +95,7 @@ Reasonix 可以把现有的 `chat`、`code` 或桌面端会话延伸到 QQ 上�
 **切换工作区。** Reasonix 把文件系统工具作用域绑定在启动目录，传 `--dir` 可以指别处。中途切换是有意不支持的（消息日志和 memory 路径会和旧根目录混在一起）—— 退出再启动。
 
 ~~~bash
-npx reasonix code --dir /path/to/project
+bunx reasonix code --dir /path/to/project
 ~~~
 
 **`chat` 还是 `code`？** `code` 是默认入口、唯一带文件系统 / shell 工具和 SEARCH/REPLACE 审阅的模式。`chat` 是更轻量的纯对话壳——想要一个挂着 MCP 但没有磁盘权限的“思路助手”时用它。
@@ -211,7 +210,7 @@ npx reasonix code --dir /path/to/project
   </a>
 </p>
 
-**第一次提 PR 之前**：先读 [`CONTRIBUTING.md`](./CONTRIBUTING.md) —— 短小、严格的项目规则（注释、错误处理、用现成库不手写）。`tests/comment-policy.test.ts` 静态强制执行注释那部分，`npm run verify` 是 push 前的闸。参与本项目即同意 [行为准则](./CODE_OF_CONDUCT.md)。安全相关问题请走 [SECURITY.md](./SECURITY.md)。
+**第一次提 PR 之前**：先读 [`CONTRIBUTING.md`](./CONTRIBUTING.md) —— 短小、严格的项目规则（注释、错误处理、用现成库不手写）。`tests/comment-policy.test.ts` 静态强制执行注释那部分，`bun run verify` 是 push 前的闸。参与本项目即同意 [行为准则](./CODE_OF_CONDUCT.md)。安全相关问题请走 [SECURITY.md](./SECURITY.md)。
 
 <br/>
 

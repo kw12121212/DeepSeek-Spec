@@ -1,0 +1,15 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: config-reader
+  milestone: 0002-change-lifecycle
+status: planned
+summary: Create src/strict/config-reader.ts to parse .strict-spec-driven/config.yaml
+details: >-
+  Implement ConfigReader. Reads .strict-spec-driven/config.yaml from project root. Exposes typed
+  accessors: getContext(), getRules(), getReviewEvidence(). Returns sensible defaults if file or
+  fields are missing. Cache parsed result for session lifetime. All strict tools use this reader
+  instead of reading the file directly.
+depends_on: []

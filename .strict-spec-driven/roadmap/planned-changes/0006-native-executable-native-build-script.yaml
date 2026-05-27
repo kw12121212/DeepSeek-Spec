@@ -1,0 +1,17 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: native-build-script
+  milestone: 0006-native-executable
+status: planned
+summary: Create scripts/build-native.mjs that compiles per-target native executables
+details: >-
+  Create scripts/build-native.mjs that wraps `bun build --compile` to produce standalone
+  executables. Accept --target flag (linux-x64, linux-arm64, darwin-x64, darwin-arm64, windows-x64).
+  Entry point is dist/cli/index.js from the existing tsup build. Output goes to
+  dist/native/<target>/reasonix[.exe]. Must run after `bun run build` to ensure tsup output is
+  fresh. Include --all flag to build all targets sequentially. Add `build:native` and
+  `build:native:all` scripts to package.json.
+depends_on: []

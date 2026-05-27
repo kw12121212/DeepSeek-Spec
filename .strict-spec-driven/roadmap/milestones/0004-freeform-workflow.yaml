@@ -1,0 +1,42 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0004-freeform-workflow:
+    title: 'M4: Free-Form Auto Workflow'
+goal: |
+  Implement the free-form auto pipeline: propose -> apply -> verify -> review ->
+  archive -> ship. The user describes a change ad-hoc; the agent scaffolds the
+  proposal and drives it through all lifecycle states. Individual step commands
+  already registered in M1 allow manual control at any point.
+scope:
+  in:
+    - Add /strict-propose command that scaffolds a full change from a free-text description
+    - Add /strict-brainstorm command for interactive idea refinement before scaffolding
+    - Add /strict-auto free-form variant that runs propose -> ship from a user prompt
+    - Add /strict-modify to expand or adjust scope mid-flight with user confirmation
+    - Add /strict-cancel to abort a change in proposed or applied state
+  out:
+    - Roadmap recommend logic (M3)
+    - E2E testing and TUI (M5)
+done_criteria:
+  - /strict-propose creates a valid change scaffold from free text
+  - /strict-brainstorm produces a structured summary the user confirms before scaffolding
+  - /strict-auto runs the full free-form pipeline with human checkpoints
+  - /strict-modify updates proposal and design with user confirmation
+  - /strict-cancel transitions a change to canceled state with cleanup
+  - Unit tests cover propose, modify, and cancel flows
+planned_changes: {}
+dependencies:
+  - 0001-strict-engine-embed
+  - 0002-change-lifecycle
+risks:
+  - LLM-generated proposals may need human review before apply
+  - Scope creep during modify must be bounded by explicit user confirmation
+status: proposed
+notes:
+  - This is workflow path 2 for unplanned or exploratory work
+  - >-
+    Individual step commands are registered in M1. M4 only adds propose, brainstorm, modify, cancel,
+    and the free-form auto variant

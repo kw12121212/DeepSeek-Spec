@@ -34,8 +34,8 @@ sessions/
 .reasonix/truncated-results/
 # Scratch entry regenerated each time scripts/bundle-codemirror.mjs runs.
 scripts/.cm-entry.mjs
-# Personal bun lockfile — project uses npm officially.
-bun.lock
+# npm lockfile — project uses bun officially.
+package-lock.json
 
 # Local portable Node/npm used for development on machines without npm.
 .tools/

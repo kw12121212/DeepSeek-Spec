@@ -1,0 +1,19 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: auto-pipeline
+  milestone: 0003-roadmap-workflow
+status: planned
+summary: Implement /strict-auto for the full roadmap-driven pipeline with context compaction
+details: >-
+  Create src/strict/auto-pipeline.ts. Step runner: recommend->apply->verify->review->archive->ship.
+  At each step: (1) run corresponding tool, (2) run npm run verify as gate check, (3) if gate fails
+  pause and report to user, (4) if gate passes summarize completed step into compact running note
+  and compact context, (5) proceed. After archive call roadmap-sync. Accept optional --from flag to
+  start from a specific step. Default starts from recommend.
+depends_on:
+  - roadmap-recommend
+  - roadmap-tools
+  - wire-lifecycle-guards

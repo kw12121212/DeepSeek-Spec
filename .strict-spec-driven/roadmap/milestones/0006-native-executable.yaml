@@ -1,0 +1,50 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0006-native-executable:
+    title: 'M6: Native Executable Packaging and Distribution'
+goal: |
+  Compile Reasonix as a standalone native executable for linux (x64, arm64),
+  macOS (x64, arm64), and Windows (x64) using `bun build --compile`. Users can
+  download a single binary with zero runtime dependencies — no Node.js or Bun
+  install required. Provide curl-to-shell installers for Unix and a PowerShell
+  script for Windows. Publish release artifacts via GitHub Releases.
+scope:
+  in:
+    - Build script (scripts/build-native.mjs) that compiles per-target native executables
+    - Static asset embedding (tokenizer JSON, tree-sitter WASM grammars, dashboard HTML/CSS/JS)
+    - Runtime path resolution that detects native executable context and loads embedded assets
+    - Cross-platform CI workflow producing release artifacts on tag push
+    - 'Install scripts: curl | sh for Linux/macOS, PowerShell for Windows'
+    - Smoke test that verifies the compiled binary starts and responds to --version
+  out:
+    - Auto-update mechanism (can be deferred to a later milestone)
+    - Code signing and notarization (deferred; out of scope for initial release)
+    - Package manager integration (brew cask, scoop, apt repo — future work)
+done_criteria:
+  - bun run build:native --target linux-x64 produces a single reasonix binary under dist/native/
+  - The compiled binary starts without Node.js or Bun installed and prints version via --version
+  - Tree-sitter grammars load correctly from embedded assets in the native binary
+  - Dashboard serves from embedded assets when --dashboard flag is used
+  - GitHub Actions workflow builds all 5 targets on tag push and uploads as release assets
+  - curl | sh installer installs reasonix to ~/.local/bin on Linux and macOS
+  - PowerShell installer installs reasonix to the user bin directory on Windows
+  - Smoke test runs the native binary and verifies --version, --help, and tokenizer load
+  - npm run verify passes with zero regressions
+planned_changes: {}
+dependencies:
+  - 0005-e2e-hardening
+risks:
+  - >-
+    bun build --compile may not handle all import patterns (dynamic imports, require fallbacks) —
+    may need bundler pre-processing
+  - Tree-sitter WASM loading path differs in compiled binary; may need asset path rewriting
+  - Cross-compilation from linux-arm64 CI runners is limited; may need separate runners per target
+  - Binary size may be large (>80MB) due to embedded Bun runtime + assets — acceptable for v1
+status: proposed
+notes:
+  - Bun compile is the natural choice since the project already uses Bun as package manager
+  - Asset embedding uses Bun.file() / import attributes to bundle static data at compile time
+  - The existing tsup build remains the primary npm distribution; native binary is a parallel track

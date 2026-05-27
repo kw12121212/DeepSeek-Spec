@@ -1,0 +1,38 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0002-change-lifecycle:
+    title: 'M2: Change Lifecycle State Machine'
+goal: |
+  Implement the strict change lifecycle as a Reasonix-native module so the
+  agent can track, validate, and transition changes through the canonical
+  states: proposed -> applied -> verified -> reviewed -> archived -> shipped.
+  Also provide a config reader that parses .strict-spec-driven/config.yaml
+  for use by all strict tools.
+scope:
+  in:
+    - Create src/strict/ directory with ChangeLifecycle and ConfigReader modules
+    - Define state model with transition guards and a typed state enum
+    - Wire lifecycle validation into each strict tool dispatch in M1
+    - Add config reader to parse project-level strict-spec-driven settings
+  out:
+    - TUI status indicator (moved to M5 to keep M2 focused on logic)
+    - Auto pipeline orchestration (M3, M4)
+done_criteria:
+  - ChangeLifecycle enforces valid state transitions with clear error messages on invalid attempts
+  - ConfigReader parses config.yaml and exposes context, rules, and review_evidence settings
+  - Each strict tool checks lifecycle state before acting via a shared guard function
+  - >-
+    Unit tests cover all 6 valid transitions, all invalid transitions, terminal states, and config
+    parsing
+planned_changes: {}
+dependencies:
+  - 0001-strict-engine-embed
+risks:
+  - State file format must stay compatible with external strict-spec-driven.js expectations
+status: proposed
+notes:
+  - The lifecycle states and config reader are the shared backbone of both workflow paths
+  - TUI display of lifecycle state is deferred to M5 to keep this milestone focused on logic

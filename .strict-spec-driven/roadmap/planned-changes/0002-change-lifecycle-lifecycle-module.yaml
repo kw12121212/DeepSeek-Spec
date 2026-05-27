@@ -1,0 +1,17 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: lifecycle-module
+  milestone: 0002-change-lifecycle
+status: planned
+summary: Create src/strict/lifecycle.ts with ChangeLifecycle class
+details: >-
+  Implement a state machine. States: proposed, applied, verified, reviewed, archived, shipped,
+  canceled. Transitions: proposed->applied|canceled, applied->verified, verified->reviewed,
+  reviewed->archived, archived->shipped. shipped and canceled are terminal. Read state from
+  .strict-spec-driven/changes/<name>/status.yaml. Method attemptTransition(from, to) validates and
+  writes new state. Invalid transitions throw descriptive error. Expose readCurrentState(changeName)
+  static method.
+depends_on: []

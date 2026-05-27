@@ -1,0 +1,17 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: native-runtime-paths
+  milestone: 0006-native-executable
+status: planned
+summary: Update runtime asset resolution to work from the compiled executable context
+details: >-
+  Create src/cli/native-detect.ts that detects whether Reasonix is running as a native compiled
+  binary (check process.isBun && process.execPath matches the binary name). When native, resolve
+  assets from the embedded asset registry instead of __dirname/../.. paths. Update all callers that
+  read data files, grammars, and dashboard assets to go through the detection layer. Must not break
+  the existing Node/tsup path — only change behavior when native detection is positive.
+depends_on:
+  - embed-static-assets

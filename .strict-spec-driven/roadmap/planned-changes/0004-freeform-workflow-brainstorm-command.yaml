@@ -1,0 +1,17 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: brainstorm-command
+  milestone: 0004-freeform-workflow
+status: planned
+summary: Implement /strict-brainstorm for interactive idea refinement
+details: >-
+  Create src/strict/brainstorm.ts. Interactive Q&A: (1) accept rough idea as free text, (2) generate
+  clarifying questions about scope, requirements, constraints, (3) present questions one at a time,
+  (4) produce structured summary with title, goal, scope.in, scope.out, done_criteria, (5) user
+  confirms then /strict-propose is called automatically. Uses existing agent loop chat for Q&A.
+  Creates no files until user confirms.
+depends_on:
+  - add-slash-commands

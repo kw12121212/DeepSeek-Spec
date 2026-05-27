@@ -1,0 +1,18 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: roadmap-recommend
+  milestone: 0003-roadmap-workflow
+status: planned
+summary: Implement roadmap recommend logic and /strict-roadmap-recommend command
+details: >-
+  Create src/strict/roadmap-recommend.ts. Algorithm: (1) read INDEX.yaml, (2) iterate milestones in
+  order, (3) for each proposed/active milestone read the milestone file, (4) scan planned_changes
+  for status 'planned' with all depends_on resolved, (5) pick the first unblocked item, (6) call
+  invokeStrict('propose') to scaffold it. The /strict-roadmap-recommend command calls this and
+  reports the result. If no unblocked change exists, report that all are blocked or milestones are
+  complete.
+depends_on:
+  - config-reader

@@ -1,0 +1,15 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: tui-strict-status
+  milestone: 0005-e2e-hardening
+status: planned
+summary: TUI strict status indicator in top bar and slash autocomplete
+details: >-
+  Add strict status cell to TUI top bar. When a strict change is active (detected by scanning
+  .strict-spec-driven/changes/ for directories with proposal.yaml), display 'strict: <change-name>
+  [<state>]'. When no change is active, display nothing. Also ensure all /strict-* commands are in
+  slash autocomplete under 'strict' group in src/cli/ui/slash/commands.ts.
+depends_on: []

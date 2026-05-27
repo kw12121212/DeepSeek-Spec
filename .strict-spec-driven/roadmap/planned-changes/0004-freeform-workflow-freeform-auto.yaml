@@ -1,0 +1,18 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: freeform-auto
+  milestone: 0004-freeform-workflow
+status: planned
+summary: Implement /strict-auto free-form variant (propose -> ship from user prompt)
+details: >-
+  Extend src/strict/auto-pipeline.ts with free-form entry point. Accepts user prompt. Runs
+  propose->apply->verify->review->archive->ship. Differs from roadmap variant: calls propose-command
+  first with user text instead of roadmap-recommend. Same gate-check and context compaction logic.
+  /strict-auto detects variant: if description provided use free-form, if no arguments use
+  roadmap-driven.
+depends_on:
+  - propose-command
+  - auto-pipeline
