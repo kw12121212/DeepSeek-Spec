@@ -8,3 +8,6 @@ specs:
   - id: strict-engine-bundle
     title: Strict Spec Engine Bundle
     path: .strict-spec-driven/specs/strict-engine-bundle.yaml
+  - id: strict-lifecycle
+    title: Strict Change Lifecycle
+    path: .strict-spec-driven/specs/strict-lifecycle.yaml

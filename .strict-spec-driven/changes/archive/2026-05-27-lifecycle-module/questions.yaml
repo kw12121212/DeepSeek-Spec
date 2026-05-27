@@ -1,0 +1,19 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: lifecycle-module
+open: []
+resolved:
+  - id: state-file-format
+    question: >-
+      What fields does status.yaml contain beyond the state value? The lifecycle module needs to
+      know the exact schema to read/write state compatibly with strict-spec-driven.js.
+    context: >-
+      The planned change says to read state from .strict-spec-driven/changes/<name>/status.yaml.
+      Need to confirm the exact YAML structure expected by the external engine.
+    answer: >-
+      The engine stores change status in proposal.yaml under the change.status field, not in a
+      separate status.yaml file. The lifecycle module should read/write proposal.yaml's
+      change.status field.
+    status: resolved

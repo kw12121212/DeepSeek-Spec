@@ -1,0 +1,36 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: lifecycle-module
+  status: proposed
+summary:
+  what:
+    - >-
+      Create src/strict/lifecycle.ts with a ChangeLifecycle class implementing a state machine for
+      strict change lifecycle states
+  why:
+    - >-
+      M2 requires a native Reasonix lifecycle module to track, validate, and transition strict
+      changes through canonical states (proposed->applied->verified->reviewed->archived->shipped).
+      This module is the backbone shared by all strict tool dispatch guards and blocks
+      lifecycle-tests and wire-lifecycle-guards.
+scope:
+  in:
+    - >-
+      No existing lifecycle validation. strict-spec-driven.js handles lifecycle externally but has
+      no Reasonix-native guard.
+  out:
+    - >-
+      src/strict/lifecycle.ts exports ChangeLifecycle class with attemptTransition(from, to) and
+      readCurrentState(changeName). State read from .strict-spec-driven/changes/<name>/status.yaml.
+      Invalid transitions throw descriptive errors. Terminal states (shipped, canceled) reject
+      further transitions.
+unchanged_behavior:
+  - >-
+    src/strict/config-reader.ts, src/strict/invoker.ts, src/strict/strict-tools.ts,
+    src/strict/engine-path.ts
+roadmap:
+  milestone: 0002-change-lifecycle
+  planned_change: lifecycle-module

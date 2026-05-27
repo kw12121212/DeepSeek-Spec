@@ -1,0 +1,55 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-lifecycle
+mapping:
+  implementation:
+    - src/strict/lifecycle.ts
+  tests:
+    - tests/strict-lifecycle.test.ts
+operations:
+  ADDED:
+    valid-transitions:
+      strength: MUST
+      statement: >-
+        ChangeLifecycle MUST allow only the defined valid transitions: proposed->applied,
+        proposed->canceled, applied->verified, verified->reviewed, reviewed->archived,
+        archived->shipped.
+      scenarios:
+        valid-forward:
+          - GIVEN: a change in proposed state
+          - WHEN: attemptTransition('proposed', 'applied') is called
+          - THEN: the state is written to proposal.yaml change.status as applied and no error is thrown
+    invalid-transition-rejection:
+      strength: MUST
+      statement: >-
+        ChangeLifecycle MUST throw a descriptive error when attemptTransition is called with an
+        invalid (from, to) pair that is not in the transition map.
+      scenarios:
+        invalid-transition:
+          - GIVEN: a change in applied state
+          - WHEN: attemptTransition('applied', 'proposed') is called
+          - THEN: an error is thrown describing the invalid transition and the state is not changed
+    terminal-state-immutable:
+      strength: MUST
+      statement: >-
+        ChangeLifecycle MUST reject all transition attempts from terminal states (shipped, canceled)
+        by throwing a descriptive error.
+      scenarios:
+        terminal-rejection:
+          - GIVEN: a change in shipped state
+          - WHEN: attemptTransition('shipped', 'proposed') is called
+          - THEN: an error is thrown indicating shipped is a terminal state
+    read-current-state:
+      strength: MUST
+      statement: >-
+        ChangeLifecycle.readCurrentState(changeName) MUST parse
+        .strict-spec-driven/changes/<name>/proposal.yaml change.status and return the typed ChangeState value.
+      scenarios:
+        read-happy-path:
+          - GIVEN: 'a change directory with a proposal.yaml containing change.status: applied'
+          - WHEN: readCurrentState('my-change') is called
+          - THEN: the value 'applied' is returned as a typed ChangeState
+  MODIFIED: {}
+  REMOVED: {}

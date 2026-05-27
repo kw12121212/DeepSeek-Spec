@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: lifecycle-module
   milestone: 0002-change-lifecycle
-status: planned
+status: complete
 summary: Create src/strict/lifecycle.ts with ChangeLifecycle class
 details: >-
   Implement a state machine. States: proposed, applied, verified, reviewed, archived, shipped,
