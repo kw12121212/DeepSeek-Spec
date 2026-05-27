@@ -14,6 +14,7 @@ const STRICT_TOOL_NAMES = [
   "strict_roadmap_status",
   "strict_roadmap_sync",
   "strict_roadmap_recommend",
+  "strict_auto_pipeline",
 ] as const;
 
 function makeRegistry(): ToolRegistry {
@@ -23,12 +24,12 @@ function makeRegistry(): ToolRegistry {
 }
 
 describe("registerStrictTools", () => {
-  it("registers exactly 11 strict tools", () => {
+  it("registers exactly 12 strict tools", () => {
     const registry = makeRegistry();
     for (const name of STRICT_TOOL_NAMES) {
       expect(registry.has(name)).toBe(true);
     }
-    expect(registry.size).toBeGreaterThanOrEqual(11);
+    expect(registry.size).toBeGreaterThanOrEqual(12);
   });
 
   it("sets parallelSafe=false on every strict tool", () => {

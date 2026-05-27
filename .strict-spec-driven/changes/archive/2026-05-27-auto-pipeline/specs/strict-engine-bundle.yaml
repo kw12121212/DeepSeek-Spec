@@ -1,0 +1,76 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-engine-bundle
+mapping:
+  implementation:
+    - src/strict/auto-pipeline.ts
+    - src/tools/strict-auto.ts
+  tests:
+    - tests/strict-auto-pipeline.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    auto-pipeline-subcommand:
+      strength: MUST
+      statement: >-
+        The Subcommand type MUST include 'auto-pipeline' as a supported subcommand and invokeStrict
+        MUST accept and dispatch it correctly.
+      scenarios:
+        auto-pipeline-dispatch:
+          - GIVEN: the Subcommand union type includes auto-pipeline
+          - WHEN: invokeStrict('auto-pipeline', ['my-change']) is called
+          - THEN: >-
+              the engine subprocess receives auto-pipeline as the subcommand and returns a valid
+              result
+    auto-tool-registered:
+      strength: MUST
+      statement: >-
+        The ToolRegistry MUST include an entry for strict_auto with parallelSafe=false and a
+        changeName parameter and an optional --from flag.
+      scenarios:
+        auto-tool-visible:
+          - GIVEN: the ToolRegistry is initialized with default tools
+          - WHEN: list() is called and filtered for strict_auto
+          - THEN: >-
+              exactly one tool entry is returned with parallelSafe=false and changeName in its
+              parameter schema
+    auto-step-sequencing:
+      strength: MUST
+      statement: >-
+        AutoPipeline MUST execute steps in order: recommend, apply, verify, review, archive, ship.
+        Each step MUST call the corresponding invokeStrict subcommand and MUST run npm run verify as
+        a gate check before proceeding to the next step.
+      scenarios:
+        full-pipeline-run:
+          - GIVEN: a valid change name and no --from flag
+          - WHEN: run() is called
+          - THEN: all six steps execute in order and each gate check passes before the next step starts
+        gate-failure-pause:
+          - GIVEN: a change where the verify step returns a non-zero exit code
+          - WHEN: run() reaches the verify step
+          - THEN: >-
+              the pipeline pauses and returns a structured error describing the gate failure without
+              proceeding to review
+    from-flag-resume:
+      strength: MUST
+      statement: >-
+        AutoPipeline MUST accept an optional --from flag to start execution from any named step,
+        skipping completed steps.
+      scenarios:
+        resume-from-verify:
+          - GIVEN: a change that has already completed recommend and apply steps
+          - WHEN: 'run({ from: ''verify'' }) is called'
+          - THEN: the pipeline starts at verify and does not re-run recommend or apply
+    roadmap-sync-after-archive:
+      strength: MUST
+      statement: >-
+        After the archive step completes successfully, AutoPipeline MUST call
+        invokeStrict('roadmap-sync', []) to sync the roadmap INDEX.yaml before proceeding to ship.
+      scenarios:
+        sync-called:
+          - GIVEN: a change that passes through archive successfully
+          - WHEN: the archive step gate check passes
+          - THEN: roadmap-sync is called exactly once and the pipeline proceeds to ship
+  REMOVED: {}

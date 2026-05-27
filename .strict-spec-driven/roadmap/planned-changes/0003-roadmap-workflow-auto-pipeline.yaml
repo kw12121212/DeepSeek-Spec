@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: auto-pipeline
   milestone: 0003-roadmap-workflow
-status: planned
+status: complete
 summary: Implement /strict-auto for the full roadmap-driven pipeline with context compaction
 details: >-
   Create src/strict/auto-pipeline.ts. Step runner: recommend->apply->verify->review->archive->ship.

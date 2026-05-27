@@ -1,0 +1,50 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: auto-pipeline
+sections:
+  Implementation:
+    create-auto-pipeline-module:
+      text: >-
+        Create src/strict/auto-pipeline.ts with AutoPipeline class, ordered step array, gate-check
+        loop, running note compaction, --from flag support.
+      status: complete
+    register-auto-tool:
+      text: >-
+        Add strict_auto tool definition in src/tools/ with parallelSafe=false, changeName parameter,
+        --from optional flag.
+      status: complete
+    add-subcommand-coverage:
+      text: >-
+        Add 'auto-pipeline' to the Subcommand type union in strict-engine-bundle spec and engine
+        invoker.
+      status: complete
+    wire-roadmap-sync-after-archive:
+      text: After successful archive step, call invokeStrict('roadmap-sync', []) to sync INDEX.yaml.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+    unit-test-auto-pipeline:
+      text: >-
+        Write tests/strict-auto-pipeline.test.ts covering step sequencing, gate-failure pause,
+        --from resume, roadmap-sync call after archive.
+      status: complete
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

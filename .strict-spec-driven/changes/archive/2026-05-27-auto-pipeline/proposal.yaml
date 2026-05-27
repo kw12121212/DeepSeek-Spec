@@ -1,0 +1,30 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: auto-pipeline
+  status: proposed
+summary:
+  what:
+    - >-
+      Implement /strict-auto command that runs the full roadmap-driven pipeline
+      (recommend->apply->verify->review->archive->ship) in one session with context compaction
+      between lifecycle gates.
+  why:
+    - >-
+      M3 requires a single-command auto pipeline so the agent can select the next roadmap change,
+      implement it, and advance through all lifecycle states automatically, pausing only for human
+      checkpoints when verification fails or requirements are ambiguous.
+scope:
+  in:
+    - >-
+      .strict-spec-driven/roadmap/planned-changes/*, src/strict/lifecycle.ts,
+      src/strict/engine-path.ts, src/tools/
+  out:
+    - src/strict/auto-pipeline.ts, src/tools/strict-auto.ts
+unchanged_behavior:
+  - src/strict/config-reader.ts, src/strict/lifecycle.ts
+roadmap:
+  milestone: 0003-roadmap-workflow
+  planned_change: auto-pipeline

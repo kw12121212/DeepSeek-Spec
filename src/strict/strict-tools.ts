@@ -1,5 +1,6 @@
 import type { ToolRegistry } from "../tools.js";
 import type { JSONSchema } from "../types.js";
+import { type PipelineStep, runAutoPipeline } from "./auto-pipeline.js";
 import { brainstorm } from "./brainstorm.js";
 import { requireState } from "./guard.js";
 import { type Subcommand, invokeStrict } from "./invoker.js";
@@ -90,6 +91,12 @@ const STRICT_TOOLS: StrictToolDef[] = [
       "Interactive brainstorming tool that refines a rough idea into a structured change summary. Multi-call protocol: returns questions for the agent to relay, or a structured summary for user confirmation.",
     requiresChangeName: false,
   },
+  {
+    subcommand: "auto-pipeline",
+    description:
+      "Run the full roadmap-driven auto pipeline (recommend->apply->verify->review->archive->ship) in one call with gate checks between steps.",
+    requiresChangeName: true,
+  },
 ];
 
 function buildCliArgs(args: StrictToolArgs): string[] {
@@ -133,6 +140,12 @@ function makeHandler(subcommand: Subcommand) {
         idea: typeof args.idea === "string" ? args.idea : undefined,
         history: Array.isArray(args.history) ? args.history : undefined,
         summary: args.summary,
+      });
+    }
+    if (subcommand === "auto-pipeline") {
+      return runAutoPipeline({
+        changeName: args.changeName ?? "",
+        from: typeof args.from === "string" ? (args.from as PipelineStep) : undefined,
       });
     }
     const cliArgs = buildCliArgs(args);
@@ -193,6 +206,14 @@ export function registerStrictTools(registry: ToolRegistry): ToolRegistry {
           },
           done_criteria: { type: "array", items: { type: "string" } },
         },
+      };
+    }
+
+    if (def.subcommand === "auto-pipeline") {
+      properties.from = {
+        type: "string",
+        description:
+          "Resume from a specific pipeline step (recommend, apply, verify, review, archive, ship). Default starts from recommend.",
       };
     }
 

@@ -14,7 +14,8 @@ export type Subcommand =
   | "roadmap-status"
   | "roadmap-sync"
   | "roadmap-recommend"
-  | "brainstorm";
+  | "brainstorm"
+  | "auto-pipeline";
 
 export interface InvokeResult {
   ok: boolean;
