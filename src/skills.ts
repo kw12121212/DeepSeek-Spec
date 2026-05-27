@@ -362,7 +362,7 @@ Tips:
 
 function skillDescription(s: Pick<Skill, "name" | "description" | "scope">): string {
   if (s.scope !== "builtin") return s.description;
-  const key = s.name === "security-review" ? "securityReview" : s.name;
+  const key = s.name.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
   return t(`builtinSkills.${key}`);
 }
 
@@ -555,6 +555,186 @@ Don't:
 
 Lead each turn with a one-line status: "▸ running \`npm test\` ..." → "▸ 2 failures in tests/foo.test.ts — first is …" → so the user always knows where you are without scrolling tool output.`;
 
+const BUILTIN_STRICT_INIT_BODY = `Initialize a strict-spec-driven workflow in the current project.
+
+How to operate:
+1. Run \`node vendor/strict-spec-driven.js init\` to scaffold \`.strict-spec-driven/\`.
+2. If the command reports that \`.strict-spec-driven/\` already exists, confirm with the user whether they want to reinitialize or abort.
+3. After successful init, walk the user through filling in \`config.yaml\` — project context, rules, and review evidence settings.
+4. Report what was created and suggest next steps: \`/strict-propose\` for a first change, or \`/strict-roadmap-plan\` to set up a roadmap.
+
+Stop conditions:
+- If init fails due to missing dependencies or permission errors, report the error and suggest the fix. Do not retry blindly.`;
+
+const BUILTIN_STRICT_PROPOSE_BODY = `Propose a new strict-spec change from a description.
+
+How to operate:
+1. Gather the change scope from the user's task description or the arguments passed to this skill.
+2. Run \`node vendor/strict-spec-driven.js propose <change-name>\` to scaffold the change directory under \`.strict-spec-driven/changes/\`.
+3. Populate artifacts in order: proposal.yaml, design.yaml, tasks.yaml, questions.yaml, delta specs.
+   - For each artifact, run \`node vendor/strict-spec-driven.js generate <change-name> <artifact> --...\` with the appropriate named arguments.
+   - For tasks.yaml, edit the file directly — do not use a generate command.
+4. Run \`node vendor/strict-spec-driven.js ready <change-name>\` to validate the scaffold.
+5. If \`ready\` reports open questions, surface them to the user and wait for answers before continuing.
+
+Stop conditions:
+- If the change name conflicts with an existing change, report the conflict and suggest a different name.
+- If required context is missing and cannot be inferred, stop and ask the user.`;
+
+const BUILTIN_STRICT_APPLY_BODY = `Mark a task as complete in the current strict change.
+
+How to operate:
+1. Run \`node vendor/strict-spec-driven.js apply <change-name>\` to advance the next pending task to in-progress and then to completed.
+2. Confirm the returned task matches the work you just finished. If it does not match, investigate before proceeding.
+3. After each apply, check if there are remaining pending tasks. If so, continue with the next one.
+4. Never run \`apply\` only to inspect status — it mutates tasks.yaml.
+
+Stop conditions:
+- If all tasks are complete, report completion and suggest running \`/strict-verify\`.
+- If apply fails because a task dependency is not met, report the blocker.`;
+
+const BUILTIN_STRICT_VERIFY_BODY = `Verify that a strict change is complete and consistent.
+
+How to operate:
+1. Run \`node vendor/strict-spec-driven.js verify <change-name>\` to check that all tasks are complete and delta specs are consistent.
+2. If verification reports issues, fix them in the relevant files and rerun verification.
+3. After clean verification, run \`node vendor/strict-spec-driven.js verify-spec-mappings\` to confirm implementation-to-spec mappings.
+4. Report the verification result to the user.
+
+Stop conditions:
+- If verification reveals spec mismatches that require design decisions, surface them and wait for user input.
+- Do not modify specs to match implementation silently — the user must approve spec changes.`;
+
+const BUILTIN_STRICT_REVIEW_BODY = `Review a strict change for code quality and spec alignment.
+
+How to operate:
+1. Read all changed files listed in the change's delta specs and tasks.yaml.
+2. Read \`git diff\` and \`git status\` to see the actual changes vs the main branch.
+3. Evaluate: correctness, spec alignment, test coverage, error handling, edge cases, security, performance.
+4. For MUST-fix issues, fix them automatically when safe and in scope.
+5. Rerun verification and the project regression command after any review-time changes.
+6. Report the review verdict: "ship", "fix needed", or "blocked".
+
+What to look for:
+- Implementation matches delta-spec requirements and scenarios.
+- No unchanged_behavior items were accidentally modified.
+- Tests cover the observable behavior described in specs, not internal details.
+- No security vulnerabilities or performance regressions introduced.
+
+Stop conditions:
+- If you cannot safely fix an issue (ambiguous, out-of-scope, or potentially breaking), stop and report it rather than guessing.`;
+
+const BUILTIN_STRICT_ARCHIVE_BODY = `Archive a verified and reviewed strict change.
+
+How to operate:
+1. Confirm the change has passed verification (\`verify\` returned clean) and code review.
+2. Run \`node vendor/strict-spec-driven.js archive <change-name>\` to move the change from active to archived.
+3. Report what was archived, including any roadmap files or milestone statuses the archive step reconciled.
+4. Suggest \`/strict-ship <change-name>\` as an optional next step for creating a focused git commit.
+
+Stop conditions:
+- If verification has not passed, do not archive — run \`/strict-verify\` first.
+- If code review has not been performed, do not archive — run \`/strict-review\` first.
+- If the project regression command has not passed, stop and provide setup guidance.`;
+
+const BUILTIN_STRICT_SHIP_BODY = `Create a focused git commit for an archived strict change.
+
+How to operate:
+1. Run \`git status\` and \`git diff\` to see all uncommitted changes.
+2. Stage only the files that belong to this strict change — check the change's delta-spec implementation and test mappings.
+3. Write a commit message following the project's convention (imperative mood, scope tag).
+4. Do NOT push automatically — report the commit and let the user decide.
+5. After committing, suggest cleaning up the archived change directory if appropriate.
+
+Stop conditions:
+- If the change has not been archived, suggest running \`/strict-archive\` first.
+- If git status shows unexpected changes outside the change scope, report them and let the user decide.`;
+
+const BUILTIN_STRICT_CANCEL_BODY = `Cancel an in-progress strict change.
+
+How to operate:
+1. Confirm the change exists and is in a cancellable state (proposed or applied, not archived).
+2. Run \`node vendor/strict-spec-driven.js cancel <change-name>\` to mark it as cancelled.
+3. Report what was cancelled and whether any files need manual cleanup.
+4. If the change had applied code changes, ask the user whether to revert them via git.
+
+Stop conditions:
+- If the change is already archived, cancellation is not applicable — suggest manual cleanup instead.
+- If the user is unsure, confirm before proceeding with cancellation.`;
+
+const BUILTIN_STRICT_BRAINSTORM_BODY = `Brainstorm and shape a strict change from a rough idea.
+
+How to operate:
+1. Discuss the idea with the user — ask clarifying questions about scope, intent, and constraints.
+2. Once the idea is clear enough, scaffold the change with \`node vendor/strict-spec-driven.js propose <change-name>\`.
+3. Populate proposal, design, tasks, and questions artifacts based on the brainstorm outcome.
+4. Run \`ready\` to validate and surface any remaining blockers.
+5. If the brainstorm reveals the idea is not ready for a formal change, summarize what was discussed and what needs to be resolved first.
+
+Stop conditions:
+- If the user's idea is too vague to form a proposal, ask targeted questions rather than guessing scope.
+- If brainstorming reveals the change is out of scope for the project, say so plainly.`;
+
+const BUILTIN_STRICT_MODIFY_BODY = `Modify a strict change that is already in progress.
+
+How to operate:
+1. Identify what needs to change: scope, requirements, tasks, or design decisions.
+2. Update the relevant artifacts under \`.strict-spec-driven/changes/<change-name>/\`:
+   - For proposal scope changes, update proposal.yaml and regenerate affected delta specs.
+   - For task changes, edit tasks.yaml directly.
+   - For design changes, update design.yaml and regenerate affected artifacts.
+3. Run \`ready\` to validate the modified change.
+4. If the modification expands scope beyond the original proposal, confirm with the user before proceeding.
+5. Report what was modified and any downstream effects on existing tasks.
+
+Stop conditions:
+- If the modification would invalidate already-completed tasks, surface the conflict and let the user decide.
+- Never expand scope silently — always surface scope changes explicitly.`;
+
+const BUILTIN_STRICT_ROADMAP_RECOMMEND_BODY = `Recommend the next strict change from the roadmap.
+
+How to operate:
+1. Run \`node vendor/strict-spec-driven.js roadmap-recommend\` to get the scripted recommendation.
+2. Read the recommended planned-change file and its owning milestone for context.
+3. Present the recommendation: change name, milestone, why it is the best next step, and which specs are affected.
+4. Scaffold the recommended change with \`propose\`, populate artifacts, validate with \`ready\`.
+5. Continue through the full strict lifecycle automatically via \`/strict-auto\`.
+
+Stop conditions:
+- If no eligible planned changes exist, report the roadmap state and suggest next steps.
+- If the scripted recommendation fails, surface the diagnostic and stop rather than manually choosing.`;
+
+const BUILTIN_STRICT_ROADMAP_PLAN_BODY = `Create or restructure a strict roadmap.
+
+How to operate:
+1. Run \`node vendor/strict-spec-driven.js roadmap-status\` to see the current roadmap state.
+2. Discuss with the user what milestones and planned changes to add, reorder, or remove.
+3. Create or update milestone files under \`.strict-spec-driven/roadmap/milestones/\`.
+4. Create or update planned-change files under \`.strict-spec-driven/roadmap/planned-changes/\`.
+5. Update \`INDEX.yaml\` to reflect the new roadmap structure.
+6. Run \`roadmap-sync\` to reconcile roadmap state with active and archived changes.
+
+Stop conditions:
+- If the roadmap structure is invalid or inconsistent, report the specific issues.
+- If the user's plan conflicts with already-archived changes, surface the conflict.`;
+
+const BUILTIN_STRICT_AUTO_BODY = `Run the strict workflow end to end for a single change.
+
+How to operate:
+1. If the change does not exist yet, scaffold with \`propose\` and populate all artifacts.
+2. If the change already exists, resume from its current state using \`ready\` or \`next\`.
+3. Surface any open questions to the user and wait for answers before continuing implementation.
+4. Implement tasks in order: read code, implement, mark complete with \`apply\`.
+5. After all tasks are done, run verification, code review, and archive.
+6. Suggest \`/strict-ship\` as the final optional step.
+
+The workflow is automatic except when open questions block progress. For each blocker, explain the question, its impact, and wait for an explicit answer.
+
+Stop conditions:
+- Open questions must be resolved before implementation — do not infer answers.
+- If the change scope is open-ended or cross-repository, suggest \`/strict-brainstorm\` instead.
+- If the project regression command cannot run, stop and provide actionable setup guidance.`;
+
 const BUILTIN_SKILLS: readonly Skill[] = Object.freeze([
   Object.freeze<Skill>({
     name: "explore",
@@ -597,6 +777,123 @@ const BUILTIN_SKILLS: readonly Skill[] = Object.freeze([
     description:
       "Run the project's test suite, diagnose failures, propose SEARCH/REPLACE fixes, re-run until green (or stop after 2 fix attempts on the same failure). Inlined — runs in the parent loop so you see the edit blocks and can /apply them. Detects npm/pnpm/yarn/pytest/go/cargo.",
     body: BUILTIN_TEST_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-init",
+    description:
+      "Initialize .strict-spec-driven/ in the current project — scaffolds config, specs, and roadmap directories. Best first step before any strict workflow.",
+    body: BUILTIN_STRICT_INIT_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-propose",
+    description:
+      "Propose a new strict-spec change — scaffolds proposal, design, tasks, questions, and delta spec artifacts under .strict-spec-driven/changes/.",
+    body: BUILTIN_STRICT_PROPOSE_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-apply",
+    description:
+      "Mark a task as complete in the current strict change. Advances the task state machine — only call after finishing the work.",
+    body: BUILTIN_STRICT_APPLY_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-verify",
+    description:
+      "Verify a strict change is complete and consistent — checks tasks, delta specs, and spec mappings. Run before review and archive.",
+    body: BUILTIN_STRICT_VERIFY_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-review",
+    description:
+      "Review a strict change for code quality, spec alignment, test coverage, and security. Fixes safe issues automatically; escalates ambiguous ones.",
+    body: BUILTIN_STRICT_REVIEW_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-archive",
+    description:
+      "Archive a verified and reviewed strict change — moves it from active to archived and reconciles roadmap milestone status.",
+    body: BUILTIN_STRICT_ARCHIVE_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-ship",
+    description:
+      "Create a focused git commit for an archived strict change. Stages only change-related files, writes a conventional commit message, does not push.",
+    body: BUILTIN_STRICT_SHIP_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-cancel",
+    description:
+      "Cancel an in-progress strict change — marks it as cancelled and optionally reverts applied code changes.",
+    body: BUILTIN_STRICT_CANCEL_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-brainstorm",
+    description:
+      "Brainstorm and shape a strict change from a rough idea — interactive refinement followed by proposal scaffolding when ready.",
+    body: BUILTIN_STRICT_BRAINSTORM_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-modify",
+    description:
+      "Modify a strict change mid-flight — update scope, requirements, tasks, or design decisions. Never expands scope silently.",
+    body: BUILTIN_STRICT_MODIFY_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-roadmap-recommend",
+    description:
+      "Recommend the next roadmap-backed strict change and scaffold it automatically. Uses scripted priority from roadmap dependencies and completion state.",
+    body: BUILTIN_STRICT_ROADMAP_RECOMMEND_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-roadmap-plan",
+    description:
+      "Create or restructure a strict roadmap — add milestones, planned changes, and dependencies. Runs roadmap-sync to reconcile state.",
+    body: BUILTIN_STRICT_ROADMAP_PLAN_BODY,
+    scope: "builtin",
+    path: "(builtin)",
+    runAs: "inline",
+  }),
+  Object.freeze<Skill>({
+    name: "strict-auto",
+    description:
+      "Run the full strict lifecycle end to end — propose, implement, verify, review, archive. Automatic except when open questions block progress.",
+    body: BUILTIN_STRICT_AUTO_BODY,
     scope: "builtin",
     path: "(builtin)",
     runAs: "inline",

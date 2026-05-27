@@ -1863,6 +1863,32 @@ export const EN: TranslationSchema = {
     securityReview:
       "Security-focused review of the current branch diff in an isolated subagent \u2014 flags injection/authz/secrets/deserialization/path-traversal/crypto issues, severity-tagged. Read-only. Use when shipping changes that touch auth, input parsing, file IO, or external requests.",
     test: "Run the project\u2019s test suite, diagnose failures, propose SEARCH/REPLACE fixes, re-run until green (or stop after 2 fix attempts on the same failure). Inlined \u2014 runs in the parent loop so you see the edit blocks and can /apply them. Detects npm/pnpm/yarn/pytest/go/cargo.",
+    strictInit:
+      "Initialize .strict-spec-driven/ in the current project \u2014 scaffolds config, specs, and roadmap directories. Best first step before any strict workflow.",
+    strictPropose:
+      "Propose a new strict-spec change \u2014 scaffolds proposal, design, tasks, questions, and delta spec artifacts under .strict-spec-driven/changes/.",
+    strictApply:
+      "Mark a task as complete in the current strict change. Advances the task state machine \u2014 only call after finishing the work.",
+    strictVerify:
+      "Verify a strict change is complete and consistent \u2014 checks tasks, delta specs, and spec mappings. Run before review and archive.",
+    strictReview:
+      "Review a strict change for code quality, spec alignment, test coverage, and security. Fixes safe issues automatically; escalates ambiguous ones.",
+    strictArchive:
+      "Archive a verified and reviewed strict change \u2014 moves it from active to archived and reconciles roadmap milestone status.",
+    strictShip:
+      "Create a focused git commit for an archived strict change. Stages only change-related files, writes a conventional commit message, does not push.",
+    strictCancel:
+      "Cancel an in-progress strict change \u2014 marks it as cancelled and optionally reverts applied code changes.",
+    strictBrainstorm:
+      "Brainstorm and shape a strict change from a rough idea \u2014 interactive refinement followed by proposal scaffolding when ready.",
+    strictModify:
+      "Modify a strict change mid-flight \u2014 update scope, requirements, tasks, or design decisions. Never expands scope silently.",
+    strictRoadmapRecommend:
+      "Recommend the next roadmap-backed strict change and scaffold it automatically. Uses scripted priority from roadmap dependencies and completion state.",
+    strictRoadmapPlan:
+      "Create or restructure a strict roadmap \u2014 add milestones, planned changes, and dependencies. Runs roadmap-sync to reconcile state.",
+    strictAuto:
+      "Run the full strict lifecycle end to end \u2014 propose, implement, verify, review, archive. Automatic except when open questions block progress.",
   },
   shortcutsHelp: {
     title: "Shortcuts",

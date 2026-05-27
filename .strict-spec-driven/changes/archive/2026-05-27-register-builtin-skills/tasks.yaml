@@ -1,0 +1,56 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: register-builtin-skills
+sections:
+  Implementation:
+    add-skill-bodies:
+      text: >-
+        Add 13 BUILTIN_STRICT_*_BODY string constants in src/skills.ts with playbooks for each
+        strict-spec workflow skill (strict-init, strict-propose, strict-apply, strict-verify,
+        strict-review, strict-archive, strict-ship, strict-cancel, strict-brainstorm, strict-modify,
+        strict-roadmap-recommend, strict-roadmap-plan, strict-auto).
+      status: complete
+    add-skill-entries:
+      text: >-
+        Add 13 frozen Skill objects to the BUILTIN_SKILLS array, each referencing its body constant,
+        with scope=builtin, path=(builtin), runAs=inline.
+      status: complete
+    update-i18n-keys:
+      text: >-
+        Add i18n keys for the 13 new builtin skill descriptions under builtinSkills in src/i18n/
+        locale files so skillDescription() can look them up.
+      status: complete
+  Testing:
+    write-skill-tests:
+      text: >-
+        Create tests/strict-builtin-skills.test.ts asserting that SkillStore.list() returns all 13
+        strict-spec skills with correct names, scope=builtin, runAs=inline, and non-empty
+        description/body.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run typecheck.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — 13 skills registered, no new files beyond
+        src/skills.ts and i18n, no changes to invoker/engine-path.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

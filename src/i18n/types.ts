@@ -952,6 +952,19 @@ export interface TranslationSchema {
     review: string;
     securityReview: string;
     test: string;
+    strictInit: string;
+    strictPropose: string;
+    strictApply: string;
+    strictVerify: string;
+    strictReview: string;
+    strictArchive: string;
+    strictShip: string;
+    strictCancel: string;
+    strictBrainstorm: string;
+    strictModify: string;
+    strictRoadmapRecommend: string;
+    strictRoadmapPlan: string;
+    strictAuto: string;
   };
   shortcutsHelp: {
     title: string;

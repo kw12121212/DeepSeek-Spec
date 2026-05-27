@@ -1,0 +1,23 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: register-builtin-skills
+open: []
+resolved:
+  - id: skill-body-detail
+    question: >-
+      Should the builtin skill bodies reference invokeStrict by name and describe the subcommand
+      dispatch pattern, or should they contain full prompt-level playbooks with step-by-step
+      instructions for each workflow?
+    context: >-
+      The existing builtin skills (explore, research, review, security-review, test) have detailed
+      multi-paragraph bodies that instruct the model on how to operate. The strict-spec skills could
+      either be thin wrappers (just invoke the subcommand) or rich playbooks. Thin wrappers are
+      simpler but may not guide the model well; rich playbooks are more code to maintain but produce
+      better results.
+    answer: >-
+      Use rich playbooks matching the existing builtin pattern (explore, research, review,
+      security-review, test). Each skill body should include detailed multi-paragraph instructions
+      covering purpose, preconditions, step-by-step operation, error recovery, and stop conditions.
+    status: resolved

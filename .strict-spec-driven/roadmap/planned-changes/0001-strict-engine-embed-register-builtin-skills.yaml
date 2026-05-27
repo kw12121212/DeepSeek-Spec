@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: register-builtin-skills
   milestone: 0001-strict-engine-embed
-status: planned
+status: complete
 summary: Register core strict-spec skills as built-in Reasonix skills
 details: >-
   In src/skills.ts, add a builtin skill root for strict-spec skills. Create skill manifests for each

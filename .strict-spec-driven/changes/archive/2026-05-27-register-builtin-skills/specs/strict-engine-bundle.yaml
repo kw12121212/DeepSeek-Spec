@@ -1,0 +1,28 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-engine-bundle
+mapping:
+  implementation:
+    - src/skills.ts
+  tests:
+    - tests/strict-builtin-skills.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    builtin-skill-registration:
+      strength: MUST
+      statement: >-
+        The BUILTIN_SKILLS array MUST include entries for each core strict-spec workflow skill:
+        strict-init, strict-propose, strict-apply, strict-verify, strict-review, strict-archive,
+        strict-ship, strict-cancel, strict-brainstorm, strict-modify, strict-roadmap-recommend,
+        strict-roadmap-plan, strict-auto.
+      scenarios:
+        all-skills-registered:
+          - GIVEN: the SkillStore is initialized with default builtins enabled
+          - WHEN: list() is called
+          - THEN: >-
+              the result includes 13 strict-spec skill entries with scope=builtin and names prefixed
+              with strict-
+  REMOVED: {}

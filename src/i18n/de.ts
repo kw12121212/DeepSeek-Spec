@@ -1975,6 +1975,32 @@ export const de: TranslationSchema = {
     securityReview:
       "Sicherheitsfokussierte Überprüfung des aktuellen Branch-Diffs in einem isolierten Subagenten — kennzeichnet Injection/Authz/Secrets/Deserialisierung/Pfad-Traversal/Krypto-Probleme, mit Schweregrad. Schreibgeschützt. Verwende beim Ausliefern von Änderungen, die Auth, Eingabeanalyse, Datei-E/A oder externe Anfragen betreffen.",
     test: "Führe die Testsuite des Projekts aus, diagnostiziere Fehler, schlage SEARCH/REPLACE-Fixes vor, wiederhole bis grün (oder stoppe nach 2 Fixversuchen beim gleichen Fehler). Inline — läuft in der übergeordneten Schleife, sodass du die Edit-Blocks siehst und /apply verwenden kannst. Erkennt npm/pnpm/yarn/pytest/go/cargo.",
+    strictInit:
+      "Initialisiere .strict-spec-driven/ im aktuellen Projekt — erstellt Konfigurations-, Spezifikations- und Roadmap-Verzeichnisse. Bester erster Schritt vor jedem Strict-Workflow.",
+    strictPropose:
+      "Schlage eine neue Strict-Spec-Änderung vor — erstellt Proposal-, Design-, Aufgaben-, Fragen- und Delta-Spec-Artefakte unter .strict-spec-driven/changes/.",
+    strictApply:
+      "Markiere eine Aufgabe in der aktuellen Strict-Änderung als abgeschlossen. Setzt den Aufgaben-Zustandsautomaten fort — nur nach Abschluss der Arbeit aufrufen.",
+    strictVerify:
+      "Überprüfe, ob eine Strict-Änderung vollständig und konsistent ist — prüft Aufgaben, Delta-Specs und Spec-Zuordnungen. Vor Review und Archivierung ausführen.",
+    strictReview:
+      "Überprüfe eine Strict-Änderung auf Codequalität, Spec-Übereinstimmung, Testabdeckung und Sicherheit. Behebt sichere Probleme automatisch; eskaliert mehrdeutige.",
+    strictArchive:
+      "Archiviere eine verifizierte und überprüfte Strict-Änderung — verschiebt sie von aktiv nach archiviert und gleicht den Roadmap-Meilensteinstatus ab.",
+    strictShip:
+      "Erstelle einen fokussierten Git-Commit für eine archivierte Strict-Änderung. Staged nur änderungsbezogene Dateien, schreibt konventionelle Commit-Nachricht, pusht nicht.",
+    strictCancel:
+      "Breche eine laufende Strict-Änderung ab — markiert als abgebrochen und setzt optional angewandte Codeänderungen zurück.",
+    strictBrainstorm:
+      "Brainstorme und forme eine Strict-Änderung aus einer groben Idee — interaktive Verfeinerung gefolgt von Proposal-Scaffolding wenn bereit.",
+    strictModify:
+      "Modifiziere eine laufende Strict-Änderung — aktualisiere Umfang, Anforderungen, Aufgaben oder Designentscheidungen. Erweitert den Umfang nie stillschweigend.",
+    strictRoadmapRecommend:
+      "Empfiehlt die nächste Roadmap-gestützte Strict-Änderung und scaffolded sie automatisch. Verwendet skriptbasierte Priorität aus Roadmap-Abhängigkeiten und Abschlussstatus.",
+    strictRoadmapPlan:
+      "Erstelle oder restrukturiere eine Strict-Roadmap — füge Meilensteine, geplante Änderungen und Abhängigkeiten hinzu. Führt roadmap-sync zur Zustandsabgleichung aus.",
+    strictAuto:
+      "Führe den vollständigen Strict-Lebenszyklus Ende-zu-Ende aus — Vorschlagen, Implementieren, Verifizieren, Überprüfen, Archivieren. Automatisch außer bei blockierenden offenen Fragen.",
   },
   shortcutsHelp: {
     ...EN.shortcutsHelp,

@@ -56,6 +56,20 @@ requirements:
         - GIVEN: the Subcommand union type is defined
         - WHEN: each supported subcommand string is passed to invokeStrict
         - THEN: TypeScript accepts it at compile time and the function dispatches correctly at runtime
+  builtin-skill-registration:
+    strength: MUST
+    statement: >-
+      The BUILTIN_SKILLS array MUST include entries for each core strict-spec workflow skill:
+      strict-init, strict-propose, strict-apply, strict-verify, strict-review, strict-archive,
+      strict-ship, strict-cancel, strict-brainstorm, strict-modify, strict-roadmap-recommend,
+      strict-roadmap-plan, strict-auto.
+    scenarios:
+      all-skills-registered:
+        - GIVEN: the SkillStore is initialized with default builtins enabled
+        - WHEN: list() is called
+        - THEN: >-
+            the result includes 13 strict-spec skill entries with scope=builtin and names prefixed
+            with strict-
 mapping:
   implementation:
     - vendor/strict-spec-driven.js

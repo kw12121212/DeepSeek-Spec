@@ -1,0 +1,25 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: register-builtin-skills
+approach:
+  - >-
+    Add 13 new BUILTIN_*_BODY string constants and corresponding frozen Skill objects to the
+    BUILTIN_SKILLS array in src/skills.ts. Each skill body contains the playbook the model follows
+    when invoked — calling invokeStrict with the appropriate subcommand and handling the result. No
+    new files needed; all skills are inline (run in the parent loop) since they need access to the
+    strict invoker which is already in-process.
+decisions:
+  skill-location:
+    decision: >-
+      Add skills inline in src/skills.ts alongside existing BUILTIN_SKILLS rather than creating
+      separate manifest files under src/strict/skills/ or data/strict-skills/
+    rationale: >-
+      The existing pattern for builtin skills is hardcoded constants in src/skills.ts. Adding
+      separate manifest files would require a new loading path in SkillStore for file-backed
+      builtins, which is a larger scope change. Inline constants keep this change minimal and
+      consistent with the existing 5 builtins. If file-backed builtin loading is needed later, that
+      would be a separate planned change.
+alternatives: []
+risks: []

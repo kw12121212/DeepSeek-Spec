@@ -1,0 +1,31 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: register-builtin-skills
+  status: proposed
+summary:
+  what:
+    - >-
+      Register core strict-spec workflow skills as built-in Reasonix skills in src/skills.ts
+      BUILTIN_SKILLS array
+  why:
+    - >-
+      The strict-spec engine and invoker are already bundled and working. To make strict workflows
+      discoverable and invocable from the agent loop, the 13 core skill entries (init, propose,
+      apply, verify, review, archive, ship, cancel, brainstorm, modify, roadmap-recommend,
+      roadmap-plan, auto) must appear alongside existing builtins in the SkillStore so users and the
+      agent can invoke them via run_skill or /strict-* commands.
+scope:
+  in:
+    - src/skills.ts — the BUILTIN_SKILLS array and supporting body constants
+  out:
+    - src/skills.ts — extended with 13 new builtin skill entries and their body constants
+unchanged_behavior:
+  - >-
+    src/strict/invoker.ts, src/strict/engine-path.ts, vendor/strict-spec-driven.js,
+    tests/strict-invoker.test.ts, tests/strict-engine-bundle.test.ts
+roadmap:
+  milestone: 0001-strict-engine-embed
+  planned_change: register-builtin-skills
