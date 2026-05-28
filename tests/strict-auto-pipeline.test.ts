@@ -1,6 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { runAutoPipeline } from "../src/strict/auto-pipeline";
+import { runAutoPipeline, runFreeformPipeline } from "../src/strict/auto-pipeline";
 import { invokeStrict } from "../src/strict/invoker";
+import { propose } from "../src/strict/propose";
+
+vi.mock("../src/strict/invoker", () => ({
+  invokeStrict: vi.fn(),
+}));
+
+vi.mock("../src/strict/propose", () => ({
+  propose: vi.fn(),
+}));
 
 vi.mock("../src/strict/invoker", () => ({
   invokeStrict: vi.fn(),
@@ -154,6 +163,139 @@ describe("runAutoPipeline", () => {
 
     await runAutoPipeline({
       changeName: "test-change",
+      gateCheckFn: gateFn,
+    });
+
+    expect(gateCalls).toBe(5);
+  });
+});
+
+describe("runFreeformPipeline", () => {
+  it("executes propose then remaining five steps when all gates pass", async () => {
+    vi.mocked(propose).mockResolvedValue({
+      ok: true,
+      changeName: "test-change",
+      directory: "/project/.strict-spec-driven/changes/test-change",
+    });
+    mockInvokeStrict({});
+
+    const result = await runFreeformPipeline({
+      changeName: "test-change",
+      description: "add feature X",
+      gateCheckFn: makePassingGate(),
+    });
+
+    expect(result.failed).toBeUndefined();
+    expect(result.completed).toHaveLength(6);
+    expect(result.completed.map((s) => s.step)).toEqual([
+      "propose",
+      "apply",
+      "verify",
+      "review",
+      "archive",
+      "ship",
+    ]);
+    expect(result.synced).toBe(true);
+    expect(propose).toHaveBeenCalledWith(
+      process.cwd(),
+      expect.objectContaining({ changeName: "test-change", description: "add feature X" }),
+    );
+  });
+
+  it("returns failure when propose step fails", async () => {
+    vi.mocked(propose).mockResolvedValue({
+      ok: false,
+      error: "change already exists",
+    });
+
+    const result = await runFreeformPipeline({
+      changeName: "test-change",
+      description: "add feature X",
+      gateCheckFn: makePassingGate(),
+    });
+
+    expect(result.failed).toBeDefined();
+    expect(result.failed!.step).toBe("propose");
+    expect(result.failed!.ok).toBe(false);
+    expect(result.failed!.error).toBe("change already exists");
+    expect(result.completed).toHaveLength(0);
+  });
+
+  it("pauses when a step after propose fails", async () => {
+    vi.mocked(propose).mockResolvedValue({
+      ok: true,
+      changeName: "test-change",
+      directory: "/project/.strict-spec-driven/changes/test-change",
+    });
+    mockInvokeStrict({ verify: FAIL("verification failed") });
+
+    const result = await runFreeformPipeline({
+      changeName: "test-change",
+      description: "add feature X",
+      gateCheckFn: makePassingGate(),
+    });
+
+    expect(result.failed).toBeDefined();
+    expect(result.failed!.step).toBe("verify");
+    expect(result.completed).toHaveLength(2);
+    expect(result.completed.map((s) => s.step)).toEqual(["propose", "apply"]);
+  });
+
+  it("pauses when gate check fails", async () => {
+    vi.mocked(propose).mockResolvedValue({
+      ok: true,
+      changeName: "test-change",
+      directory: "/project/.strict-spec-driven/changes/test-change",
+    });
+    mockInvokeStrict({});
+
+    const result = await runFreeformPipeline({
+      changeName: "test-change",
+      description: "add feature X",
+      gateCheckFn: makeFailingGate("test failed", 2),
+    });
+
+    expect(result.failed).toBeDefined();
+    expect(result.failed!.step).toBe("verify");
+    expect(result.failed!.error).toContain("gate check failed");
+    expect(result.completed).toHaveLength(2);
+  });
+
+  it("calls roadmap-sync after archive and sets synced true", async () => {
+    vi.mocked(propose).mockResolvedValue({
+      ok: true,
+      changeName: "test-change",
+      directory: "/project/.strict-spec-driven/changes/test-change",
+    });
+    mockInvokeStrict({});
+
+    const result = await runFreeformPipeline({
+      changeName: "test-change",
+      description: "add feature X",
+      gateCheckFn: makePassingGate(),
+    });
+
+    expect(result.synced).toBe(true);
+    const syncCalls = vi.mocked(invokeStrict).mock.calls.filter((c) => c[0] === "roadmap-sync");
+    expect(syncCalls).toHaveLength(1);
+  });
+
+  it("skips gate check on ship step", async () => {
+    let gateCalls = 0;
+    const gateFn = () => {
+      gateCalls++;
+      return Promise.resolve({ ok: true });
+    };
+    vi.mocked(propose).mockResolvedValue({
+      ok: true,
+      changeName: "test-change",
+      directory: "/project/.strict-spec-driven/changes/test-change",
+    });
+    mockInvokeStrict({});
+
+    await runFreeformPipeline({
+      changeName: "test-change",
+      description: "add feature X",
       gateCheckFn: gateFn,
     });
 

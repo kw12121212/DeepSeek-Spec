@@ -1,8 +1,16 @@
 import { execFile } from "node:child_process";
 import { type InvokeResult, type Subcommand, invokeStrict } from "./invoker.js";
 import { milestoneAdvance } from "./milestone-advance.js";
+import { propose } from "./propose.js";
 
-export type PipelineStep = "recommend" | "apply" | "verify" | "review" | "archive" | "ship";
+export type PipelineStep =
+  | "recommend"
+  | "propose"
+  | "apply"
+  | "verify"
+  | "review"
+  | "archive"
+  | "ship";
 
 const STEPS: readonly PipelineStep[] = [
   "recommend",
@@ -13,8 +21,18 @@ const STEPS: readonly PipelineStep[] = [
   "ship",
 ] as const;
 
+const FREEFORM_STEPS: readonly PipelineStep[] = [
+  "propose",
+  "apply",
+  "verify",
+  "review",
+  "archive",
+  "ship",
+] as const;
+
 const STEP_SUBCOMMANDS: Record<PipelineStep, Subcommand> = {
   recommend: "roadmap-recommend",
+  propose: "propose",
   apply: "apply",
   verify: "verify",
   review: "ready",
@@ -61,6 +79,15 @@ function runGateCheck(cwd: string, command: string): Promise<{ ok: boolean; erro
   });
 }
 
+export interface FreeformPipelineOptions {
+  changeName: string;
+  description: string;
+  from?: PipelineStep;
+  cwd?: string;
+  verifyCommand?: string;
+  gateCheckFn?: () => Promise<{ ok: boolean; error?: string }>;
+}
+
 export async function runAutoPipeline(options: PipelineOptions): Promise<PipelineResult> {
   const {
     changeName,
@@ -103,6 +130,90 @@ export async function runAutoPipeline(options: PipelineOptions): Promise<Pipelin
     }
 
     const stepResult: StepResult = { step, ok: true, data: result.data };
+
+    if (step !== "ship") {
+      const gate = gateCheckFn ? await gateCheckFn() : await runGateCheck(cwd, verifyCommand);
+      if (!gate.ok) {
+        return {
+          completed,
+          failed: { step, ok: false, error: `gate check failed: ${gate.error}` },
+          synced,
+        };
+      }
+    }
+
+    completed.push(stepResult);
+
+    if (step === "archive") {
+      const syncResult = await invokeStrict("roadmap-sync", { cwd });
+      synced = syncResult.ok;
+      const advance = milestoneAdvance(cwd, changeName);
+      if (advance.advanced) {
+        const reSync = await invokeStrict("roadmap-sync", { cwd });
+        synced = reSync.ok;
+      }
+    }
+  }
+
+  return { completed, synced };
+}
+
+export async function runFreeformPipeline(
+  options: FreeformPipelineOptions,
+): Promise<PipelineResult> {
+  const {
+    changeName,
+    description,
+    from,
+    cwd = process.cwd(),
+    verifyCommand = "npm run verify",
+    gateCheckFn,
+  } = options;
+
+  const startIdx = from ? FREEFORM_STEPS.indexOf(from) : 0;
+  if (startIdx < 0) {
+    return {
+      completed: [],
+      failed: { step: from!, ok: false, error: `unknown step '${from}'` },
+      synced: false,
+    };
+  }
+
+  const completed: StepResult[] = [];
+  let synced = false;
+
+  for (let i = startIdx; i < FREEFORM_STEPS.length; i++) {
+    const step = FREEFORM_STEPS[i]!;
+
+    let stepOk = true;
+    let stepError: string | undefined;
+    let stepData: unknown;
+
+    if (step === "propose") {
+      const proposeResult = await propose(cwd, { changeName, description });
+      if (!proposeResult.ok) {
+        stepOk = false;
+        stepError = proposeResult.error;
+      } else {
+        stepData = proposeResult;
+      }
+    } else {
+      const subcommand = STEP_SUBCOMMANDS[step];
+      const result = await invokeStrict(subcommand, { args: [changeName], cwd });
+      stepOk = result.ok;
+      stepError = result.error;
+      stepData = result.data;
+    }
+
+    if (!stepOk) {
+      return {
+        completed,
+        failed: { step, ok: false, error: stepError! },
+        synced,
+      };
+    }
+
+    const stepResult: StepResult = { step, ok: true, data: stepData };
 
     if (step !== "ship") {
       const gate = gateCheckFn ? await gateCheckFn() : await runGateCheck(cwd, verifyCommand);

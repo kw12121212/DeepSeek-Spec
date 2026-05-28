@@ -183,6 +183,42 @@ requirements:
         - THEN: >-
             a tool named strict_propose is available with parallelSafe=false and no required
             changeName parameter
+  freeform-variant-detection:
+    strength: MUST
+    statement: >-
+      The auto-pipeline tool MUST detect the freeform variant when a description argument is
+      provided and run propose->apply->verify->review->archive->ship instead of the roadmap-driven
+      recommend->apply->verify->review->archive->ship sequence.
+    scenarios:
+      freeform-with-description:
+        - GIVEN: the strict_auto_pipeline tool is called with a description argument and a changeName
+        - WHEN: the tool handler executes
+        - THEN: >-
+            runFreeformPipeline is called which runs propose first using the description, then
+            continues with apply through ship using the same gate-check logic as the roadmap variant
+  freeform-propose-first:
+    strength: MUST
+    statement: >-
+      runFreeformPipeline MUST call the propose function with the provided description and
+      changeName before any other pipeline step, and return a failure result if the propose step
+      fails.
+    scenarios:
+      propose-fails:
+        - GIVEN: runFreeformPipeline is called with a description and changeName
+        - WHEN: the propose step fails
+        - THEN: >-
+            the pipeline returns a failed StepResult for the propose step with no further steps
+            executed
+  freeform-gate-checks:
+    strength: MUST
+    statement: >-
+      runFreeformPipeline MUST run the same gate-check logic between steps as runAutoPipeline,
+      including verifyCommand execution and roadmap-sync after archive.
+    scenarios:
+      gate-check-parity:
+        - GIVEN: runFreeformPipeline is executing steps after propose
+        - WHEN: a gate check fails at any step
+        - THEN: the pipeline returns a failed StepResult and does not continue to subsequent steps
 mapping:
   implementation:
     - src/strict/lifecycle.ts

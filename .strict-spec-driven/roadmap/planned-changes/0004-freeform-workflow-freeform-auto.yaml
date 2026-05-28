@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: freeform-auto
   milestone: 0004-freeform-workflow
-status: planned
+status: complete
 summary: Implement /strict-auto free-form variant (propose -> ship from user prompt)
 details: >-
   Extend src/strict/auto-pipeline.ts with free-form entry point. Accepts user prompt. Runs

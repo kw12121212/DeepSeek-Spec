@@ -1,0 +1,29 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: freeform-auto
+  status: proposed
+summary:
+  what:
+    - >-
+      Add a free-form entry point to the auto pipeline that accepts a user prompt, runs
+      propose->apply->verify->review->archive->ship without requiring a roadmap
+  why:
+    - >-
+      The auto-pipeline currently only supports the roadmap-driven variant (starts with
+      roadmap-recommend). Users need a way to describe changes ad-hoc and drive them through the
+      full lifecycle.
+scope:
+  in:
+    - src/strict/auto-pipeline.ts, src/strict/strict-tools.ts
+  out:
+    - >-
+      src/strict/auto-pipeline.ts (freeform entry point and variant detection),
+      src/strict/strict-tools.ts (freeform parameters on strict_auto_pipeline tool)
+unchanged_behavior:
+  - src/strict/propose.ts, src/strict/lifecycle.ts, src/strict/invoker.ts
+roadmap:
+  milestone: 0004-freeform-workflow
+  planned_change: freeform-auto

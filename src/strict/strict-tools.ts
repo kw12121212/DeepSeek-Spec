@@ -1,6 +1,6 @@
 import type { ToolRegistry } from "../tools.js";
 import type { JSONSchema } from "../types.js";
-import { type PipelineStep, runAutoPipeline } from "./auto-pipeline.js";
+import { type PipelineStep, runAutoPipeline, runFreeformPipeline } from "./auto-pipeline.js";
 import { brainstorm } from "./brainstorm.js";
 import { cancelChange } from "./cancel.js";
 import { requireState } from "./guard.js";
@@ -154,6 +154,13 @@ function makeHandler(subcommand: Subcommand) {
       });
     }
     if (subcommand === "auto-pipeline") {
+      if (typeof args.description === "string" && args.description.trim()) {
+        return runFreeformPipeline({
+          changeName: args.changeName ?? "",
+          description: args.description,
+          from: typeof args.from === "string" ? (args.from as PipelineStep) : undefined,
+        });
+      }
       return runAutoPipeline({
         changeName: args.changeName ?? "",
         from: typeof args.from === "string" ? (args.from as PipelineStep) : undefined,
@@ -238,6 +245,11 @@ export function registerStrictTools(registry: ToolRegistry): ToolRegistry {
         type: "string",
         description:
           "Resume from a specific pipeline step (recommend, apply, verify, review, archive, ship). Default starts from recommend.",
+      };
+      properties.description = {
+        type: "string",
+        description:
+          "Free-text description for the freeform variant. If provided, runs propose->apply->verify->review->archive->ship instead of the roadmap-driven pipeline.",
       };
     }
 

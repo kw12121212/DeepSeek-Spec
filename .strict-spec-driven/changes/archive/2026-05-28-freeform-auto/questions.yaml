@@ -1,0 +1,18 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: freeform-auto
+open: []
+resolved:
+  - id: freeform-change-name
+    question: >-
+      Should the freeform variant auto-generate a change name from the description, or require the
+      user to provide one?
+    context: >-
+      The propose step needs a changeName. The roadmap variant gets it from the recommend result.
+      For freeform, we need to decide the source.
+    answer: >-
+      The user provides changeName as a required parameter on the strict_auto_pipeline tool, same as
+      the roadmap variant. No auto-generation needed.
+    status: resolved
