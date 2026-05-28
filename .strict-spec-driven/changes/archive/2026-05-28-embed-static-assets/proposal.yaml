@@ -1,0 +1,29 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: embed-static-assets
+  status: proposed
+summary:
+  what:
+    - >-
+      Create an asset registry (src/cli/assets.ts) that embeds static files (tokenizer JSON,
+      tree-sitter WASM grammars, dashboard HTML/CSS/JS) into the compiled binary via Bun.file() and
+      import attributes
+  why:
+    - >-
+      The native binary produced by bun build --compile must be fully standalone — users cannot be
+      expected to ship external data files alongside the binary
+scope:
+  in:
+    - >-
+      src/tokenizer.ts, src/code-query/parser.ts, src/server/assets.ts,
+      src/mcp/marketplace-overlay/loader.ts
+  out:
+    - src/cli/assets.ts (new), scripts/build-native.mjs (extended)
+unchanged_behavior:
+  - All tool logic, loop, repair, TUI — no behavioral changes
+roadmap:
+  milestone: 0006-native-executable
+  planned_change: embed-static-assets

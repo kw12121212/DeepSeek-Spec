@@ -1,10 +1,11 @@
 /** Encode-only DeepSeek V4 tokenizer port. Applies V4 chat template so token count tracks API `prompt_tokens`. */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
+import { assets } from "./cli/assets.js";
 import { LruCache } from "./core/lru.js";
 
 interface AddedToken {
@@ -78,9 +79,9 @@ function buildByteToChar(): string[] {
 let cached: LoadedTokenizer | null = null;
 
 /** Two ../data candidates needed: dist/index.js AND dist/cli/index.js resolve to different roots. */
-export function resolveDataPath(): string {
-  if (process.env.REASONIX_TOKENIZER_PATH) return process.env.REASONIX_TOKENIZER_PATH;
+function tokenizerDiskCandidates(): string[] {
   const candidates: string[] = [];
+  if (process.env.REASONIX_TOKENIZER_PATH) candidates.push(process.env.REASONIX_TOKENIZER_PATH);
   try {
     const here = dirname(fileURLToPath(import.meta.url));
     candidates.push(join(here, "..", "data", "deepseek-tokenizer.json.gz"));
@@ -96,17 +97,21 @@ export function resolveDataPath(): string {
   } catch {
     /* Not installed as `reasonix/` — the earlier candidates still may hit. */
   }
-  for (const p of candidates) {
+  return candidates;
+}
+
+assets.register("tokenizer", tokenizerDiskCandidates);
+
+export function resolveDataPath(): string {
+  for (const p of tokenizerDiskCandidates()) {
     if (existsSync(p)) return p;
   }
-  // Nothing exists — return the first candidate anyway so readFileSync
-  // surfaces a concrete path in the ENOENT message (better than silent miss).
-  return candidates[0] ?? join(process.cwd(), "data", "deepseek-tokenizer.json.gz");
+  return tokenizerDiskCandidates()[0] ?? join(process.cwd(), "data", "deepseek-tokenizer.json.gz");
 }
 
 function loadTokenizer(): LoadedTokenizer {
   if (cached) return cached;
-  const buf = readFileSync(resolveDataPath());
+  const buf = Buffer.from(assets.get("tokenizer"));
   const json = gunzipSync(buf).toString("utf8");
   const data = JSON.parse(json) as TokenizerData;
 

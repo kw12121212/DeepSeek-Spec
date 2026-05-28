@@ -1,0 +1,21 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: embed-static-assets
+approach:
+  - >-
+    Create src/cli/assets.ts with an AssetRegistry class that maps asset names to typed blobs. In
+    Node/tsup mode, assets resolve to disk paths via path.join(__dirname, ..). In Bun compile mode,
+    assets are loaded via import attributes or Bun.file() embedded at compile time. A detectNative()
+    function checks process.isBun && process.execPath to select the strategy. The build-native.mjs
+    script is extended with --embed flag that pre-processes assets into import-attribute modules
+    before calling bun build --compile.
+decisions:
+  asset-strategy:
+    decision: Use a factory pattern with runtime detection rather than build-time code generation
+    rationale: >-
+      Runtime detection keeps the same source working in both tsup (Node) and bun compile contexts
+      without maintaining two codepaths
+alternatives: []
+risks: []

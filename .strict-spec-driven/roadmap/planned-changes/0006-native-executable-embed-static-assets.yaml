@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: embed-static-assets
   milestone: 0006-native-executable
-status: planned
+status: complete
 summary: Embed data files, tree-sitter grammars, and dashboard into the compiled binary
 details: >-
   Convert static assets to embeddable form for bun compile. Use Bun.file() and import attributes to

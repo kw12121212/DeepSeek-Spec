@@ -5,6 +5,7 @@ import { createRequire } from "node:module";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Language, Parser, type Tree } from "web-tree-sitter";
+import { assets } from "../cli/assets.js";
 import { type GrammarName, grammarForPath } from "./grammar-map.js";
 
 export { type GrammarName, grammarForPath } from "./grammar-map.js";
@@ -57,11 +58,17 @@ export async function parseSource(
 function loadLanguage(grammar: GrammarName, opts: ParserOptions): Promise<Language> {
   const cached = languageCache.get(grammar);
   if (cached) return cached;
-  const wasmPath = resolveGrammarPath(grammar, opts.grammarDir);
-  const bytes = readFileSync(wasmPath);
+  const assetName = `grammar:${grammar}`;
+  const bytes = assets.has(assetName) ? assets.get(assetName) : readGrammarFromDisk(grammar, opts);
   const promise = Language.load(new Uint8Array(bytes));
   languageCache.set(grammar, promise);
   return promise;
+}
+
+function readGrammarFromDisk(grammar: GrammarName, opts: ParserOptions): Uint8Array {
+  const wasmPath = resolveGrammarPath(grammar, opts.grammarDir);
+  const buf = readFileSync(wasmPath);
+  return new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
 }
 
 function resolveGrammarPath(grammar: GrammarName, overrideDir?: string): string {
@@ -93,3 +100,27 @@ const DEV_PACKAGE_FOR_GRAMMAR: Record<GrammarName, string[]> = {
   rust: ["tree-sitter-rust"],
   java: ["tree-sitter-java"],
 };
+
+for (const g of Object.keys(DEV_PACKAGE_FOR_GRAMMAR) as GrammarName[]) {
+  assets.register(`grammar:${g}`, () => grammarDiskCandidates(g));
+}
+
+function grammarDiskCandidates(grammar: GrammarName): string[] {
+  const filename = `tree-sitter-${grammar}.wasm`;
+  const candidates: string[] = [];
+  if (resolvedGrammarDir) candidates.push(resolve(resolvedGrammarDir, filename));
+  try {
+    candidates.push(resolve(dirname(fileURLToPath(import.meta.url)), "..", "grammars", filename));
+    candidates.push(resolve(dirname(fileURLToPath(import.meta.url)), "grammars", filename));
+  } catch {
+    /* import.meta.url unavailable */
+  }
+  for (const pkg of DEV_PACKAGE_FOR_GRAMMAR[grammar]) {
+    try {
+      candidates.push(resolve(dirname(localRequire.resolve(`${pkg}/package.json`)), filename));
+    } catch {
+      /* dev-only grammar package not installed */
+    }
+  }
+  return candidates;
+}

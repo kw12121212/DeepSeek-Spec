@@ -1,0 +1,60 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: embedded-assets
+  title: Embedded Asset Registry
+requirements:
+  registry-must-resolve:
+    strength: MUST
+    statement: AssetRegistry MUST resolve a named asset to a Uint8Array in both Node and Bun compile contexts
+    scenarios:
+      node-resolution:
+        - GIVEN: the runtime is Node (tsup build)
+        - WHEN: AssetRegistry.get('tokenizer') is called
+        - THEN: >-
+            the registry reads data/deepseek-tokenizer.json.gz from disk and returns its contents as
+            Uint8Array
+  native-resolve:
+    strength: MUST
+    statement: >-
+      AssetRegistry MUST resolve a named asset to a Uint8Array without filesystem access in compiled
+      mode
+    scenarios:
+      native-resolution:
+        - GIVEN: the runtime is a compiled Bun binary (process.isBun and IS_COMPILED)
+        - WHEN: AssetRegistry.get('tokenizer') is called
+        - THEN: the registry returns the embedded blob as Uint8Array without filesystem access
+  asset-enumeration:
+    strength: MUST
+    statement: AssetRegistry MUST enumerate all registered asset names
+    scenarios:
+      list-assets:
+        - GIVEN: assets have been registered
+        - WHEN: AssetRegistry.list() is called
+        - THEN: it returns an array of all registered asset name strings
+  detect-native:
+    strength: MUST
+    statement: detectNative() MUST return true when running inside a compiled Bun binary
+    scenarios:
+      compiled-context:
+        - GIVEN: process.isBun is true and process.execPath does not contain bun
+        - WHEN: detectNative() is called
+        - THEN: it returns true
+  embed-flag:
+    strength: MUST
+    statement: >-
+      build-native.mjs MUST accept --embed flag that pre-processes static assets into
+      import-attribute modules before compilation
+    scenarios:
+      embed-flag-build:
+        - GIVEN: dist/cli/index.js exists and static assets are present
+        - WHEN: scripts/build-native.mjs --target linux-x64 --embed is executed
+        - THEN: >-
+            assets are bundled into the compiled binary and accessible via AssetRegistry without
+            external files
+mapping:
+  implementation:
+    - src/cli/assets.ts
+  tests:
+    - tests/assets.test.ts

@@ -1,0 +1,16 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: embed-static-assets
+open: []
+resolved:
+  - id: dashboard-sourcemaps
+    question: >-
+      Should dashboard source maps (~4.4 MB) be embedded in the native binary or stripped during
+      build?
+    context: Source maps are useful for debugging but add significant size to the binary
+    answer: >-
+      Strip source maps from native binary — they add 4.4 MB and are only useful for debugging.
+      Users debugging the dashboard should use the npm distribution.
+    status: resolved

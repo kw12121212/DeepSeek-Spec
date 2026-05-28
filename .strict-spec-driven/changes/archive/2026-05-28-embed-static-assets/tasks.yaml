@@ -1,0 +1,48 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: embed-static-assets
+sections:
+  Implementation:
+    create-asset-registry:
+      text: Create src/cli/assets.ts with AssetRegistry class, detectNative(), and factory pattern
+      status: complete
+    wire-tokenizer:
+      text: Update src/tokenizer.ts to load tokenizer via AssetRegistry instead of direct readFileSync
+      status: complete
+    wire-grammars:
+      text: Update src/code-query/parser.ts to load tree-sitter WASM grammars via AssetRegistry
+      status: complete
+    wire-dashboard:
+      text: Update src/server/assets.ts to serve dashboard files via AssetRegistry
+      status: complete
+    wire-marketplace:
+      text: Update src/mcp/marketplace-overlay/loader.ts to load zh-CN.json via AssetRegistry
+      status: complete
+    extend-build-script:
+      text: Extend scripts/build-native.mjs with --embed flag to pre-process assets before compilation
+      status: complete
+  Testing:
+    unit-tests:
+      text: Write tests/assets.test.ts covering registry resolution, enumeration, and detectNative()
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

@@ -1,6 +1,7 @@
 import { closeSync, fstatSync, openSync, readFileSync, readSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { assets } from "../cli/assets.js";
 
 /** Resolve dashboard/ across tsx-dev and tsup-bundled layouts. */
 function resolveAssetDir(): string {
@@ -36,6 +37,8 @@ const textCache = new Map<string, { body: string; mtimeMs: number }>();
 const binaryCache = new Map<string, { body: Buffer; mtimeMs: number }>();
 
 function loadCachedText(path: string): string {
+  const assetName = pathToAssetName(path);
+  if (assetName && assets.has(assetName)) return assets.getText(assetName);
   const fd = openSync(path, "r");
   try {
     const stat = fstatSync(fd);
@@ -57,6 +60,8 @@ function loadCachedText(path: string): string {
 }
 
 function loadCachedBinary(path: string): Buffer {
+  const assetName = pathToAssetName(path);
+  if (assetName && assets.has(assetName)) return Buffer.from(assets.get(assetName));
   const fd = openSync(path, "r");
   try {
     const stat = fstatSync(fd);
@@ -74,6 +79,14 @@ function loadCachedBinary(path: string): Buffer {
   } finally {
     closeSync(fd);
   }
+}
+
+function pathToAssetName(path: string): string | null {
+  if (path.startsWith(ASSET_DIR)) {
+    const rel = path.slice(ASSET_DIR.length).replace(/^[/\\]+/, "");
+    return `dashboard:${rel}`;
+  }
+  return null;
 }
 
 function loadIndexTemplate(): string {
