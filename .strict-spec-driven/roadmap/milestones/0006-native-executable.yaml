@@ -43,7 +43,7 @@ risks:
   - Tree-sitter WASM loading path differs in compiled binary; may need asset path rewriting
   - Cross-compilation from linux-arm64 CI runners is limited; may need separate runners per target
   - Binary size may be large (>80MB) due to embedded Bun runtime + assets — acceptable for v1
-status: proposed
+status: complete
 notes:
   - Bun compile is the natural choice since the project already uses Bun as package manager
   - Asset embedding uses Bun.file() / import attributes to bundle static data at compile time

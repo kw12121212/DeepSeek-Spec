@@ -1,0 +1,60 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: install-scripts
+sections:
+  Implementation:
+    create-install-sh:
+      text: >-
+        Create scripts/install.sh — POSIX shell script that detects platform, copies binary from
+        dist/native/<target>/ to ~/.local/bin or --prefix, makes executable.
+      status: complete
+    create-install-ps1:
+      text: >-
+        Create scripts/install.ps1 — PowerShell script that copies windows-x64 binary from
+        dist/native/windows-x64/ to %USERPROFILE%\bin and adds to user PATH.
+      status: complete
+    create-smoke-native:
+      text: >-
+        Create scripts/smoke-native.mjs — smoke test that runs the local native binary and verifies
+        --version output and --help exit 0.
+      status: complete
+    add-npm-script:
+      text: Add smoke-native script entry to package.json.
+      status: complete
+  Testing:
+    test-install-sh:
+      text: >-
+        Write tests/scripts/install.test.sh — verify install.sh platform detection, local binary
+        copy, --prefix flag, and missing-binary error.
+      status: complete
+    test-install-ps1:
+      text: >-
+        Write tests/scripts/install.test.ps1 — verify install.ps1 local binary copy, PATH update
+        logic, and error handling for missing binary.
+      status: complete
+    test-smoke-native:
+      text: >-
+        Write tests/smoke-native.test.ts — unit tests for smoke-native.mjs version assertion and
+        exit-code checks.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

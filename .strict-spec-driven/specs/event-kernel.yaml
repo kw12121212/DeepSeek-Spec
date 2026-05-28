@@ -1,0 +1,140 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: event-kernel
+  title: Event Log Kernel
+requirements:
+  event-type-coverage:
+    strength: MUST
+    statement: >-
+      The Event union type MUST include events for: conversation
+      (user.message, model.turn.started, model.delta, model.final), tools
+      (tool.preparing, tool.intent, tool.dispatched, tool.denied,
+      tool.result, tool.call, tool.confirm.allow/deny/always_allow), effects
+      (effect.file.touched, effect.memory.written), planning
+      (plan.submitted, plan.step.completed), checkpoints
+      (checkpoint.created, checkpoint.restored), policy (hook.fired,
+      policy.budget.warning, policy.budget.blocked, policy.escalated),
+      session (session.opened, session.compacted, capability.registered,
+      capability.removed), and system (status, error, warning).
+    scenarios:
+      all-events-defined:
+        - GIVEN: the Event union type
+        - WHEN: each event type string is checked
+        - THEN: all listed types are present in the union
+  event-base-fields:
+    strength: MUST
+    statement: >-
+      Every event MUST have id (number), ts (timestamp), turn (number), and
+      type (string) fields from EventBase.
+    scenarios:
+      base-present:
+        - GIVEN: any event object
+        - WHEN: its fields are inspected
+        - THEN: id, ts, turn, and type are present
+  conversation-reducer:
+    strength: MUST
+    statement: >-
+      The conversation reducer MUST build a message array from user.message,
+      model.final, tool.result, and tool.denied events, tracking pending tool
+      calls and resetting on session.compacted.
+    scenarios:
+      message-assembly:
+        - GIVEN: a sequence of user.message, model.final, and tool.result events
+        - WHEN: the conversation reducer processes them
+        - THEN: the ConversationView contains the assembled message list
+      compact-reset:
+        - GIVEN: an existing conversation view with messages
+        - WHEN: a session.compacted event is processed
+        - THEN: the conversation view is reset
+  budget-reducer:
+    strength: MUST
+    statement: >-
+      The budget reducer MUST accumulate token counts and USD cost from
+      model.final events, tracking warning and blocked states.
+    scenarios:
+      cost-accumulation:
+        - GIVEN: a model.final event with usage data
+        - WHEN: the budget reducer processes it
+        - THEN: >-
+            BudgetView reflects the updated cumulative token counts and cost
+      budget-warning:
+        - GIVEN: accumulated cost exceeds a warning threshold
+        - WHEN: the budget reducer processes the event
+        - THEN: the BudgetView warning flag is set
+  plan-reducer:
+    strength: MUST
+    statement: >-
+      The plan reducer MUST build plan steps from plan.submitted events and
+      mark steps complete from plan.step.completed events.
+    scenarios:
+      plan-creation:
+        - GIVEN: a plan.submitted event with steps
+        - WHEN: the plan reducer processes it
+        - THEN: PlanView contains the submitted steps
+      step-completion:
+        - GIVEN: a plan with steps and a plan.step.completed event
+        - WHEN: the plan reducer processes it
+        - THEN: the corresponding step is marked complete
+  workspace-reducer:
+    strength: MUST
+    statement: >-
+      The workspace reducer MUST track file modifications from
+      effect.file.touched events and store the last checkpoint ID from
+      checkpoint.created events.
+    scenarios:
+      file-tracked:
+        - GIVEN: an effect.file.touched event
+        - WHEN: the workspace reducer processes it
+        - THEN: the file path appears in WorkspaceView.modifiedFiles
+  apply-function:
+    strength: MUST
+    statement: >-
+      apply(state, event) MUST return a new ProjectionSet with all reducers
+      updated from the event, without mutating the input state.
+    scenarios:
+      immutable-apply:
+        - GIVEN: a ProjectionSet and an event
+        - WHEN: apply is called
+        - THEN: >-
+            a new ProjectionSet is returned and the input state is unchanged
+  replay-function:
+    strength: MUST
+    statement: >-
+      replay(events) MUST apply all events in order starting from empty
+      projections and return the final ProjectionSet.
+    scenarios:
+      full-replay:
+        - GIVEN: an array of events
+        - WHEN: replay is called
+        - THEN: >-
+            all events are applied in order and the final projection state is
+            returned
+  secret-redaction:
+    strength: MUST
+    statement: >-
+      redactEventValue MUST replace values of keys matching
+      secret|token|password|api_key|authorization|cookie|credential patterns
+      and values starting with "Bearer " with "[redacted]".
+    scenarios:
+      api-key-redacted:
+        - GIVEN: 'an object {"apiKey": "sk-12345"}'
+        - WHEN: redactEventValue is called
+        - THEN: 'the result is {"apiKey": "[redacted]"}'
+      bearer-redacted:
+        - GIVEN: a string value "Bearer abc123"
+        - WHEN: redactEventValue processes it
+        - THEN: the value is replaced with "[redacted]"
+      non-sensitive-preserved:
+        - GIVEN: 'an object {"path": "/foo/bar"}'
+        - WHEN: redactEventValue is called
+        - THEN: 'the result is {"path": "/foo/bar"} unchanged'
+mapping:
+  implementation:
+    - src/core/events.ts
+    - src/core/reducers.ts
+    - src/core/event-redaction.ts
+  tests:
+    - tests/core-reducers.test.ts
+    - tests/event-replay.test.ts

@@ -1,0 +1,20 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: install-scripts
+approach:
+  - >-
+    Three deliverables: (1) scripts/install.sh — POSIX shell script that detects the local
+    dist/native/<target>/reasonix binary, copies it to ~/.local/bin (or --prefix), makes executable,
+    prints success. (2) scripts/install.ps1 — PowerShell script that copies the windows-x64 binary
+    from dist/native/windows-x64/ to %USERPROFILE%\bin, adds to user PATH if not present. (3)
+    scripts/smoke-native.mjs — Node/Bun script that runs the compiled binary from dist/native/ and
+    verifies --version output matches package.json version, --help exits 0. All three scripts work
+    offline against local build output with no network access.
+decisions:
+  local-only:
+    decision: Install scripts copy from local dist/native/ build output only, no GitHub Releases download
+    rationale: User requested removal of all GitHub CI/CD; scripts install from the local project build
+alternatives: []
+risks: []

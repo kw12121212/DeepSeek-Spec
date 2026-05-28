@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: embedded-assets
+mapping:
+  implementation:
+    - scripts/smoke-native.mjs
+  tests:
+    - tests/smoke-native.test.ts
+operations:
+  ADDED:
+    smoke-tokenizer:
+      strength: MUST
+      statement: >-
+        smoke-native.mjs MUST verify that the tokenizer asset loads without error in the native
+        binary
+      scenarios:
+        tokenizer-check:
+          - GIVEN: a compiled native binary with embedded assets
+          - WHEN: the smoke test checks asset loading
+          - THEN: the binary reports successful tokenizer load without error output
+  MODIFIED: {}
+  REMOVED: {}

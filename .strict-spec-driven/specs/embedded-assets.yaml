@@ -85,6 +85,14 @@ requirements:
         - THEN: >-
             the data file is read from disk using the existing candidate-path resolution and
             returned as Uint8Array
+  smoke-tokenizer:
+    strength: MUST
+    statement: smoke-native.mjs MUST verify that the tokenizer asset loads without error in the native binary
+    scenarios:
+      tokenizer-check:
+        - GIVEN: a compiled native binary with embedded assets
+        - WHEN: the smoke test checks asset loading
+        - THEN: the binary reports successful tokenizer load without error output
 mapping:
   implementation:
     - src/cli/assets.ts

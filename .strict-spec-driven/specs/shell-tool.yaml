@@ -1,0 +1,149 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: shell-tool
+  title: Shell Tool
+requirements:
+  command-tokenization:
+    strength: MUST
+    statement: >-
+      tokenizeCommand MUST split a command string into an argv array without
+      using a real shell (shell: false). It MUST support pipe chains |, ||,
+      &&, ; and redirects >, >>, <, 2>, 2>&1, &>.
+    scenarios:
+      simple-command:
+        - GIVEN: "git status"
+        - WHEN: tokenizeCommand is called
+        - THEN: '["git", "status"] is returned'
+      pipe-chain:
+        - GIVEN: "cat foo | grep bar"
+        - WHEN: the command is parsed and executed
+        - THEN: both commands run connected via pipe
+  rejected-operators:
+    strength: MUST
+    statement: >-
+      The shell tool MUST reject commands containing background &, heredocs <<,
+      subshells $(), variable expansion $VAR, and glob expansion.
+    scenarios:
+      background-rejected:
+        - GIVEN: "sleep 10 &"
+        - WHEN: the command is submitted
+        - THEN: a parse error is returned
+      subshell-rejected:
+        - GIVEN: "echo $(whoami)"
+        - WHEN: the command is submitted
+        - THEN: a parse error is returned
+  cwd-pinned:
+    strength: MUST
+    statement: >-
+      All commands MUST execute with CWD pinned to rootDir (absolute path).
+      Relative paths escaping root MUST be rejected.
+    scenarios:
+      pinned-execution:
+        - GIVEN: rootDir is /home/user/project
+        - WHEN: '"ls ." is executed'
+        - THEN: the listing shows /home/user/project contents
+      escape-rejected:
+        - GIVEN: rootDir is /home/user/project
+        - WHEN: a command references "../../etc"
+        - THEN: the path is rejected
+  allowlist:
+    strength: MUST
+    statement: >-
+      isCommandAllowed MUST return true for built-in allowed commands (git, ls,
+      cat, grep, find, npm test, pytest, etc.) and user-configured
+      extraAllowed prefixes. allowAll bypasses the allowlist.
+    scenarios:
+      git-allowed:
+        - GIVEN: the built-in allowlist
+        - WHEN: isCommandAllowed("git") is called
+        - THEN: true is returned
+      unknown-denied:
+        - GIVEN: the built-in allowlist without extraAllowed
+        - WHEN: isCommandAllowed("curl") is called
+        - THEN: false is returned
+      allowall-bypass:
+        - GIVEN: allowAll is true
+        - WHEN: isCommandAllowed is called for any command
+        - THEN: true is returned regardless of the allowlist
+  confirmation-gate:
+    strength: MUST
+    statement: >-
+      Commands not on the allowlist MUST prompt the user with deny, run_once,
+      and always_allow choices. always_allow MUST persist the prefix for the
+      session.
+    scenarios:
+      deny-rejects:
+        - GIVEN: a non-allowlisted command and the user selects deny
+        - WHEN: the confirmation result is processed
+        - THEN: NeedsConfirmationError is thrown
+      always-allow-persists:
+        - GIVEN: a non-allowlisted command and the user selects always_allow
+        - WHEN: the same command prefix is used later in the session
+        - THEN: no confirmation is prompted
+  risky-arg-demotion:
+    strength: MUST
+    statement: >-
+      Flags like git branch -D, eslint --fix, find -delete MUST trigger
+      confirmation even when the base command is allowlisted.
+    scenarios:
+      force-delete:
+        - GIVEN: '"git branch -D feature" with git in the allowlist'
+        - WHEN: isCommandAllowed evaluates the full command
+        - THEN: the command is demoted to requiring confirmation
+  sensitive-path-demotion:
+    strength: MUST
+    statement: >-
+      Commands targeting sensitive paths (.env, .ssh/, ~/.aws/) MUST trigger
+      confirmation even when the command is allowlisted.
+    scenarios:
+      env-file-access:
+        - GIVEN: '"cat .env" with cat in the allowlist'
+        - WHEN: isCommandAllowed evaluates the command with sensitive path detection
+        - THEN: the command is demoted to requiring confirmation
+  timeout:
+    strength: MUST
+    statement: >-
+      Commands exceeding timeoutSec (default 60, max 600) MUST be killed and
+      the result MUST include timedOut: true.
+    scenarios:
+      timeout-fires:
+        - GIVEN: timeoutSec is 5 and a command that runs for 10 seconds
+        - WHEN: the command is executed
+        - THEN: it is killed after 5 seconds and timedOut is true
+  output-truncation:
+    strength: MUST
+    statement: >-
+      Command output exceeding maxOutputChars MUST be truncated with a
+      "[... truncated N chars ...]" marker.
+    scenarios:
+      long-output:
+        - GIVEN: a command producing 50000 chars and maxOutputChars is 10000
+        - WHEN: the result is formatted
+        - THEN: output is truncated to 10000 chars with a truncation marker
+  background-jobs:
+    strength: MUST
+    statement: >-
+      The shell tool MUST support run_background to spawn long-running
+      processes, job_output to read output with incremental streaming, wait_for_job
+      to block until job exit, stop_job to terminate jobs, and list_jobs to
+      enumerate all jobs.
+    scenarios:
+      spawn-background:
+        - GIVEN: '"npm run dev" as a background command'
+        - WHEN: run_background is called
+        - THEN: a job ID is returned and the process runs in the background
+      stream-output:
+        - GIVEN: a running background job
+        - WHEN: job_output is called with since byte offset
+        - THEN: only output after the offset is returned
+      stop-job:
+        - GIVEN: a running background job
+        - WHEN: stop_job is called with the job ID
+        - THEN: the process is terminated
+mapping:
+  implementation:
+    - src/tools/shell.ts
+  tests:
+    - tests/shell-tools.test.ts

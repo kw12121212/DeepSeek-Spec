@@ -1,0 +1,176 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: code-edit-blocks
+  title: Code Edit Blocks
+requirements:
+  parse-search-replace:
+    strength: MUST
+    statement: >-
+      parseEditBlocks MUST extract SEARCH/REPLACE blocks from text with path,
+      search content, and replace content.
+    scenarios:
+      valid-block:
+        - GIVEN: text containing a SEARCH/REPLACE block with path and content
+        - WHEN: parseEditBlocks is called
+        - THEN: >-
+            an EditBlock array is returned with the correct path, search, and
+            replace fields
+  exact-match:
+    strength: MUST
+    statement: >-
+      applyEditBlock MUST require the SEARCH text to match exactly once in the
+      target file. Ambiguous (multiple) matches and missing matches MUST fail.
+    scenarios:
+      exact-single-match:
+        - GIVEN: a file containing the search text exactly once
+        - WHEN: applyEditBlock is called
+        - THEN: "the search text is replaced and the result is {ok: true}"
+      ambiguous-match:
+        - GIVEN: a file containing the search text twice
+        - WHEN: applyEditBlock is called
+        - THEN: "the result is {ok: false, error: 'not-found'} with a message about ambiguity"
+      not-found:
+        - GIVEN: a file not containing the search text
+        - WHEN: applyEditBlock is called
+        - THEN: "the result is {ok: false, error: 'not-found'}"
+  create-new-file:
+    strength: MUST
+    statement: >-
+      applyEditBlock MUST create a new file when SEARCH is empty and the file
+      does not exist.
+    scenarios:
+      new-file:
+        - GIVEN: SEARCH is empty and the file path does not exist
+        - WHEN: applyEditBlock is called
+        - THEN: "the file is created with REPLACE content and the result is {ok: true}"
+  path-escape-guard:
+    strength: MUST
+    statement: >-
+      applyEditBlock MUST reject edit blocks whose resolved path escapes the
+      rootDir.
+    scenarios:
+      escape-rejected:
+        - GIVEN: a path like "../../etc/passwd"
+        - WHEN: applyEditBlock is called
+        - THEN: "the result is {ok: false, error: 'path-escape'}"
+  encoding-preserve:
+    strength: MUST
+    statement: >-
+      applyEditBlock MUST preserve file encoding (UTF-8, GB18030, UTF-8-BOM)
+      and adapt line endings (\r\n vs \n) to match the original file content.
+    scenarios:
+      bom-preserved:
+        - GIVEN: a file with UTF-8-BOM encoding
+        - WHEN: applyEditBlock modifies the file
+        - THEN: the BOM is preserved in the output
+      crlf-adapted:
+        - GIVEN: a file with \r\n line endings
+        - WHEN: applyEditBlock applies a \n search text
+        - THEN: the search matches and line endings match the original file
+  atomic-write:
+    strength: MUST
+    statement: >-
+      applyEditBlock MUST write files atomically using a temp file + fsync
+      before renaming.
+    scenarios:
+      atomic-replace:
+        - GIVEN: a valid edit block targeting an existing file
+        - WHEN: applyEditBlock is called
+        - THEN: >-
+            the file is written via temp file + fsync + rename, not by direct
+            overwrite
+  snapshot-restore:
+    strength: MUST
+    statement: >-
+      snapshotBeforeEdits MUST capture file contents before edits and
+      restoreSnapshots MUST revert files to their pre-edit state.
+    scenarios:
+      round-trip:
+        - GIVEN: files captured by snapshotBeforeEdits
+        - WHEN: edits are applied and restoreSnapshots is called
+        - THEN: all files are restored to their pre-edit content
+  lifecycle-state-machine:
+    strength: MUST
+    statement: >-
+      EngineeringLifecycleRuntime MUST progress through states:
+      idle→armed→planning→approved→executing→complete/cancelled in "strict"
+      mode. In "off" mode all guards MUST be disabled.
+    scenarios:
+      strict-progression:
+        - GIVEN: mode is "strict"
+        - WHEN: setMode("strict") is called followed by observeUserPrompt
+        - THEN: the state transitions from idle to armed
+      off-mode-no-guards:
+        - GIVEN: mode is "off"
+        - WHEN: any tool call is made
+        - THEN: no guards are applied and the tool call proceeds
+  lifecycle-block-high-risk:
+    strength: MUST
+    statement: >-
+      EngineeringLifecycleRuntime MUST block high-risk tool calls (Bash, Edit,
+      Write) when the state is not "approved" or "executing".
+    scenarios:
+      block-before-approval:
+        - GIVEN: state is "armed" or "planning"
+        - WHEN: a Bash tool call is attempted
+        - THEN: the guard returns a blocking error
+      allow-after-approval:
+        - GIVEN: state is "executing"
+        - WHEN: a Bash tool call is attempted
+        - THEN: the guard allows the call
+  lifecycle-evidence:
+    strength: MUST
+    statement: >-
+      mark_step_complete MUST require evidence when mutations occurred since
+      the last step, the step risk is "med" or "high", or the step has
+      verification requirements.
+    scenarios:
+      evidence-required:
+        - GIVEN: a step with "high" risk and no evidence provided
+        - WHEN: recordStepCompleted is called
+        - THEN: the step is blocked with an evidence-required error
+  checkpoint-create-restore:
+    strength: MUST
+    statement: >-
+      createCheckpoint MUST snapshot tracked file contents and
+      restoreCheckpoint MUST revert files to their checkpoint state, deleting
+      files that did not exist at checkpoint time.
+    scenarios:
+      restore-existing:
+        - GIVEN: a checkpoint with file A containing "original"
+        - WHEN: file A is modified to "changed" and restoreCheckpoint is called
+        - THEN: file A content is "original"
+      restore-delete-new:
+        - GIVEN: a checkpoint where file B did not exist
+        - WHEN: file B is created and restoreCheckpoint is called
+        - THEN: file B is deleted
+  pending-edits-persist:
+    strength: MUST
+    statement: >-
+      savePendingEdits MUST persist unapplied edit blocks to disk and
+      loadPendingEdits MUST restore them. Both MUST be no-ops for ephemeral
+      sessions (sessionName is null).
+    scenarios:
+      round-trip:
+        - GIVEN: a session name and edit blocks
+        - WHEN: savePendingEdits is called followed by loadPendingEdits
+        - THEN: the same edit blocks are returned
+      ephemeral-noop:
+        - GIVEN: sessionName is null
+        - WHEN: savePendingEdits is called
+        - THEN: no file is written
+      malformed-returns-null:
+        - GIVEN: a pending-edits file with invalid JSON
+        - WHEN: loadPendingEdits is called
+        - THEN: null is returned without throwing
+mapping:
+  implementation:
+    - src/code/edit-blocks.ts
+    - src/code/lifecycle.ts
+    - src/code/checkpoints.ts
+    - src/code/pending-edits.ts
+  tests:
+    - tests/edit-blocks.test.ts
+    - tests/code-query-parser.test.ts

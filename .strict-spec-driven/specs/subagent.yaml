@@ -1,0 +1,122 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: subagent
+  title: Subagent System
+requirements:
+  isolated-execution:
+    strength: MUST
+    statement: >-
+      spawnSubagent MUST create an isolated child loop that inherits parent
+      tools but runs in a separate message context, returning a
+      SubagentResult with success, output, turns, cost, and usage.
+    scenarios:
+      spawn-success:
+        - GIVEN: a valid task description and parent registry
+        - WHEN: spawnSubagent is called
+        - THEN: >-
+            a child loop executes the task and returns SubagentResult with
+            success=true and the output
+      spawn-failure:
+        - GIVEN: a task that causes an API error
+        - WHEN: spawnSubagent is called
+        - THEN: SubagentResult has success=false with an error message
+  no-recursion:
+    strength: MUST
+    statement: >-
+      Child registries MUST automatically exclude spawn_subagent and
+      submit_plan to cap depth at 1.
+    scenarios:
+      depth-capped:
+        - GIVEN: a parent registry containing spawn_subagent
+        - WHEN: a child loop is created
+        - THEN: the child registry does not contain spawn_subagent or submit_plan
+  abort-propagation:
+    strength: MUST
+    statement: >-
+      Child loops MUST respect parent AbortSignal propagation, including
+      signals already aborted at dispatch time.
+    scenarios:
+      pre-aborted:
+        - GIVEN: a parentSignal that is already aborted
+        - WHEN: spawnSubagent is called
+        - THEN: the child loop does not start and returns success=false with an abort error
+  session-resumption:
+    strength: MUST
+    statement: >-
+      spawnSubagent MUST support resume_session to continue a previous
+      subagent session's conversation context.
+    scenarios:
+      resume-continues:
+        - GIVEN: a previous session name with existing conversation
+        - WHEN: spawnSubagent is called with resume_session
+        - THEN: the child loop continues from the previous session state
+  tool-scoping:
+    strength: MUST
+    statement: >-
+      forkRegistryWithAllowList MUST create a child registry containing only
+      the specified tools, and forkRegistryExcluding MUST exclude specified
+      tools while keeping all others.
+    scenarios:
+      allowlist-scoped:
+        - GIVEN: a parent registry with 10 tools
+        - WHEN: forkRegistryWithAllowList is called with 3 allowed tools
+        - THEN: the child registry contains exactly those 3 tools
+      exclude-scoped:
+        - GIVEN: a parent registry with 10 tools
+        - WHEN: forkRegistryExcluding is called with 2 excluded tools
+        - THEN: the child registry contains 8 tools, excluding the 2
+  event-streaming:
+    strength: MUST
+    statement: >-
+      spawnSubagent MUST emit progressive events through the sink: start,
+      progress, phase, stream-progress, and end with a unique runId.
+    scenarios:
+      event-sequence:
+        - GIVEN: a valid subagent spawn
+        - WHEN: the child loop executes
+        - THEN: >-
+            events are emitted in order (start → progress → end) with a
+            consistent runId
+  result-truncation:
+    strength: MUST
+    statement: >-
+      Subagent output exceeding maxResultChars (default 8000) MUST be
+      truncated with a truncation marker.
+    scenarios:
+      long-output:
+        - GIVEN: a subagent that produces 15000 chars of output
+        - WHEN: the result is formatted
+        - THEN: output is truncated to maxResultChars with a marker
+  budget-hints:
+    strength: MUST
+    statement: >-
+      subagentBudgetHint MUST return null for the first spawn, a soft note for
+      spawns 2-4, and a strong hint for spawn 5+ or 50k+ total tokens.
+    scenarios:
+      first-spawn:
+        - GIVEN: spawn count 1 and 0 total tokens
+        - WHEN: subagentBudgetHint is called
+        - THEN: null is returned
+      fifth-spawn:
+        - GIVEN: spawn count 5 and 0 total tokens
+        - WHEN: subagentBudgetHint is called
+        - THEN: a strong hint string is returned
+  tool-registration:
+    strength: MUST
+    statement: >-
+      registerSubagentTool MUST register spawn_subagent in the parent registry
+      with task as a required parameter and optional model, type, system,
+      resume_session, and allowedTools parameters.
+    scenarios:
+      tool-registered:
+        - GIVEN: a parent ToolRegistry
+        - WHEN: registerSubagentTool is called
+        - THEN: >-
+            spawn_subagent is available in the registry with task as required
+mapping:
+  implementation:
+    - src/tools/subagent.ts
+  tests:
+    - tests/subagent.test.ts

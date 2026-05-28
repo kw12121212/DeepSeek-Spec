@@ -1,0 +1,69 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: native-build-script
+mapping:
+  implementation:
+    - scripts/install.sh
+    - scripts/install.ps1
+    - scripts/smoke-native.mjs
+  tests:
+    - tests/scripts/install.test.sh
+    - tests/scripts/install.test.ps1
+    - tests/smoke-native.test.ts
+operations:
+  ADDED:
+    unix-local-install:
+      strength: MUST
+      statement: >-
+        install.sh MUST copy the native binary from dist/native/<target>/reasonix to ~/.local/bin (or
+        --prefix) and make it executable
+      scenarios:
+        local-copy:
+          - GIVEN: a compiled binary exists at dist/native/linux-x64/reasonix
+          - WHEN: scripts/install.sh is run without arguments
+          - THEN: >-
+              the binary is copied to ~/.local/bin/reasonix and is executable
+        prefix-flag:
+          - GIVEN: a compiled binary exists at dist/native/linux-x64/reasonix
+          - WHEN: scripts/install.sh --prefix /usr/local/bin is run
+          - THEN: the binary is copied to /usr/local/bin/reasonix and is executable
+        missing-binary:
+          - GIVEN: dist/native/linux-x64/reasonix does not exist
+          - WHEN: scripts/install.sh is run
+          - THEN: the script exits non-zero with an error message
+    windows-local-install:
+      strength: MUST
+      statement: >-
+        install.ps1 MUST copy the native binary from dist/native/windows-x64/ to %USERPROFILE%\bin and
+        add that directory to the user PATH if not already present
+      scenarios:
+        windows-copy:
+          - GIVEN: a compiled binary exists at dist/native/windows-x64/reasonix.exe
+          - WHEN: install.ps1 is run
+          - THEN: >-
+              the binary is copied to %USERPROFILE%\bin\reasonix.exe and %USERPROFILE%\bin is in the
+              user PATH
+    smoke-version:
+      strength: MUST
+      statement: >-
+        smoke-native.mjs MUST run the native binary with --version and assert the output matches the
+        version in package.json
+      scenarios:
+        version-check:
+          - GIVEN: a compiled native binary exists at the expected path
+          - WHEN: smoke-native.mjs is run
+          - THEN: >-
+              the binary --version output matches the version field read from package.json
+    smoke-help:
+      strength: MUST
+      statement: >-
+        smoke-native.mjs MUST run the native binary with --help and assert it exits with code 0
+      scenarios:
+        help-check:
+          - GIVEN: a compiled native binary exists
+          - WHEN: the binary is run with --help
+          - THEN: the process exits with code 0
+  MODIFIED: {}
+  REMOVED: {}

@@ -1,0 +1,161 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: mcp-integration
+  title: MCP Client Integration
+requirements:
+  client-initialize:
+    strength: MUST
+    statement: >-
+      McpClient.initialize MUST perform the MCP initialize handshake and expose
+      serverCapabilities, serverInfo, and protocolVersion after completion.
+      Double initialization MUST throw.
+    scenarios:
+      happy-path:
+        - GIVEN: a connected transport to a valid MCP server
+        - WHEN: initialize() is called
+        - THEN: >-
+            serverCapabilities, serverInfo, and protocolVersion are populated
+            and notifications/initialized is sent
+      double-init:
+        - GIVEN: a client that has already been initialized
+        - WHEN: initialize() is called again
+        - THEN: an error is thrown indicating the client is already initialized
+  client-tools:
+    strength: MUST
+    statement: >-
+      McpClient.listTools MUST return available tools from the server.
+      McpClient.callTool MUST invoke a tool by name with arguments and return
+      the result. Both MUST throw if called before initialize().
+    scenarios:
+      list-tools:
+        - GIVEN: an initialized client connected to a server with tools
+        - WHEN: listTools() is called
+        - THEN: an array of tool definitions is returned
+      call-tool:
+        - GIVEN: an initialized client and a tool named "search"
+        - WHEN: 'callTool("search", {query: "test"}) is called'
+        - THEN: the tool result is returned
+      uninitialized:
+        - GIVEN: a client that has not been initialized
+        - WHEN: listTools() is called
+        - THEN: an error is thrown indicating the client is not initialized
+  client-timeout:
+    strength: MUST
+    statement: >-
+      McpClient MUST enforce requestTimeoutMs (default 60000) per request and
+      reject pending requests on timeout.
+    scenarios:
+      timeout-fires:
+        - GIVEN: a server that does not respond within requestTimeoutMs
+        - WHEN: callTool() is called
+        - THEN: a timeout error is returned
+  client-close:
+    strength: MUST
+    statement: >-
+      McpClient.close MUST close the transport and reject all pending requests.
+    scenarios:
+      close-rejects-pending:
+        - GIVEN: a client with pending requests
+        - WHEN: close() is called
+        - THEN: the transport is closed and pending requests are rejected
+  client-cancel:
+    strength: MUST
+    statement: >-
+      McpClient.callTool MUST support cancellation via AbortSignal, sending
+      notifications/cancelled to the server.
+    scenarios:
+      abort-signal:
+        - GIVEN: a callTool in progress with an AbortSignal
+        - WHEN: the signal is aborted
+        - THEN: >-
+            notifications/cancelled is sent and the call resolves with an abort
+            error
+  stdio-transport:
+    strength: MUST
+    statement: >-
+      StdioTransport MUST spawn a child process and communicate via
+      newline-delimited JSON on stdin/stdout.
+    scenarios:
+      spawn-and-send:
+        - GIVEN: a valid command and args
+        - WHEN: StdioTransport is created and send() is called
+        - THEN: >-
+            the child process is spawned and the JSON-RPC message is written to
+            stdin as a newline-delimited line
+      receive-messages:
+        - GIVEN: an active StdioTransport with a running child process
+        - WHEN: the child writes JSON-RPC messages to stdout
+        - THEN: messages() yields parsed JSON-RPC messages
+      close-terminates:
+        - GIVEN: an active StdioTransport
+        - WHEN: close() is called
+        - THEN: stdin is closed and the child process is terminated
+  sse-transport:
+    strength: MUST
+    statement: >-
+      SseTransport MUST connect to an HTTP SSE endpoint, receive the endpoint
+      URL from the initial event: endpoint frame, and POST messages to that
+      URL.
+    scenarios:
+      sse-handshake:
+        - GIVEN: a valid SSE URL
+        - WHEN: SseTransport is created and messages() is iterated
+        - THEN: >-
+            the transport connects via SSE, receives the endpoint URL, and POSTs
+            send() calls to that URL
+      endpoint-events:
+        - GIVEN: an active SSE connection
+        - WHEN: "the server sends event: message frames"
+        - THEN: messages() yields the parsed JSON-RPC content
+  bridge-tools:
+    strength: MUST
+    statement: >-
+      bridgeMcpTools MUST list tools from an MCP client and register them as
+      callable tools in a ToolRegistry with correct schemas.
+    scenarios:
+      bridge-registration:
+        - GIVEN: an initialized MCP client with 3 tools
+        - WHEN: bridgeMcpTools() is called
+        - THEN: 3 tools are registered in the registry and callable
+  bridge-progress:
+    strength: MUST
+    statement: >-
+      Bridged MCP tools MUST forward progress notifications via the onProgress
+      callback with toolName, progress, and optional total/message.
+    scenarios:
+      progress-forwarded:
+        - GIVEN: a bridged MCP tool that sends progress notifications
+        - WHEN: the tool is invoked
+        - THEN: onProgress is called with {toolName, progress, total?, message?}
+  bridge-truncation:
+    strength: MUST
+    statement: >-
+      truncateForModel MUST truncate tool results exceeding maxChars with
+      head+tail preservation and a truncation marker.
+    scenarios:
+      long-result:
+        - GIVEN: a tool result of 20000 chars and maxChars is 8000
+        - WHEN: truncateForModel is called
+        - THEN: >-
+            the result is under 8000 chars with the beginning and end preserved
+            and a truncation marker in between
+  bridge-slow-threshold:
+    strength: SHOULD
+    statement: >-
+      bridgeMcpTools SHOULD fire onSlow events when tool call latency exceeds
+      slowThresholdMs (default 4000ms).
+    scenarios:
+      slow-call:
+        - GIVEN: a bridged tool that takes 5 seconds to respond
+        - WHEN: the tool is called with slowThresholdMs 4000
+        - THEN: onSlow is fired with the event details
+mapping:
+  implementation:
+    - src/mcp/client.ts
+    - src/mcp/registry.ts
+    - src/mcp/stdio.ts
+    - src/mcp/sse.ts
+  tests:
+    - tests/mcp.test.ts

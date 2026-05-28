@@ -1,0 +1,175 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: tool-call-repair
+  title: Tool Call Repair Pipeline
+requirements:
+  repair-pipeline-order:
+    strength: MUST
+    statement: >-
+      ToolCallRepair.process MUST execute repairs in order: scavenge, truncation
+      repair, storm breaking — returning filtered calls and a RepairReport with
+      counts and notes for each stage.
+    scenarios:
+      full-pipeline:
+        - GIVEN: declared tool calls with reasoning content containing unreported calls
+        - WHEN: process() is called
+        - THEN: >-
+            scavenged calls are appended, truncated JSON is repaired, repetitive
+            calls are suppressed, and the report includes per-stage counts
+  scavenge-dsml:
+    strength: MUST
+    statement: >-
+      scavengeToolCalls MUST extract tool calls from DSML invoke blocks
+      <|DSML|invoke name="...">... in reasoning content that match
+      allowedNames.
+    scenarios:
+      dsml-recovery:
+        - GIVEN: reasoning content containing a DSML invoke block for a known tool
+        - WHEN: scavengeToolCalls is called
+        - THEN: the tool call is extracted with its name and arguments
+  scavenge-raw-json:
+    strength: MUST
+    statement: >-
+      scavengeToolCalls MUST extract tool calls from raw JSON patterns
+      {name, arguments}, {type: "function", function: {name, arguments}}, and
+      {tool_name, tool_args} in reasoning content.
+    scenarios:
+      name-arguments-pattern:
+        - GIVEN: 'reasoning content containing {"name": "read_file", "arguments": {...}}'
+        - WHEN: scavengeToolCalls is called
+        - THEN: the tool call is extracted with name "read_file"
+  scavenge-name-filter:
+    strength: MUST
+    statement: >-
+      scavengeToolCalls MUST only extract calls whose names appear in the
+      allowedNames set, silently ignoring unknown tool names.
+    scenarios:
+      unknown-tool-ignored:
+        - GIVEN: reasoning content containing a call with tool name "unknown_tool"
+        - WHEN: scavengeToolCalls is called with allowedNames not containing "unknown_tool"
+        - THEN: the call is not included in the result
+  scavenge-size-limit:
+    strength: MUST
+    statement: >-
+      scavengeToolCalls MUST skip processing when reasoning content exceeds
+      100KB to prevent ReDoS, returning an empty array with a warning note.
+    scenarios:
+      oversized-input:
+        - GIVEN: reasoning content larger than 100KB
+        - WHEN: scavengeToolCalls is called
+        - THEN: an empty array is returned with a diagnostic note about size
+  scavenge-max-calls:
+    strength: MUST
+    statement: >-
+      scavengeToolCalls MUST enforce maxCalls (default 4) and not extract more
+      calls than the limit.
+    scenarios:
+      max-exceeded:
+        - GIVEN: reasoning content with 6 extractable calls and maxCalls is 4
+        - WHEN: scavengeToolCalls is called
+        - THEN: exactly 4 calls are returned
+  truncation-repair:
+    strength: MUST
+    statement: >-
+      repairTruncatedJson MUST attempt to fix incomplete JSON by trimming
+      trailing commas, filling dangling keys with null, closing unterminated
+      strings, and balancing braces/brackets.
+    scenarios:
+      dangling-key:
+        - GIVEN: '{"path": "/foo", "content":'
+        - WHEN: repairTruncatedJson is called
+        - THEN: "the result is '{\"path\": \"/foo\", \"content\": null}' with fallback false"
+      valid-json-passes:
+        - GIVEN: '{"path": "/foo"}'
+        - WHEN: repairTruncatedJson is called
+        - THEN: the result is the original string with fallback false and no modification
+      unrecoverable-fallback:
+        - GIVEN: completely malformed input that cannot be repaired
+        - WHEN: repairTruncatedJson is called
+        - THEN: the result is '{}' with fallback true
+  storm-suppression:
+    strength: MUST
+    statement: >-
+      StormBreaker.inspect MUST suppress a tool call when its (name, args)
+      signature appears threshold times (default 3) within the sliding window
+      (default 6).
+    scenarios:
+      threshold-exceeded:
+        - GIVEN: 3 identical tool calls have been inspected
+        - WHEN: a 4th identical call is inspected
+        - THEN: suppress is true with a reason string
+      below-threshold:
+        - GIVEN: 2 identical tool calls have been inspected
+        - WHEN: a 3rd identical call is inspected with threshold 3
+        - THEN: suppress is false
+  storm-mutating-reset:
+    strength: MUST
+    statement: >-
+      StormBreaker MUST clear prior read-only entries from the window when a
+      mutating call is detected, preventing false storm detection after edits.
+    scenarios:
+      mutating-clears:
+        - GIVEN: 3 read-only calls followed by a mutating call
+        - WHEN: the mutating call is inspected
+        - THEN: >-
+            prior read-only entries are cleared and subsequent read-only calls
+            are not falsely suppressed
+  storm-exempt:
+    strength: MUST
+    statement: >-
+      StormBreaker MUST NOT suppress calls matching the isStormExempt
+      predicate, regardless of repetition count.
+    scenarios:
+      exempt-never-suppressed:
+        - GIVEN: 5 identical calls to an exempt tool
+        - WHEN: the 6th identical call is inspected
+        - THEN: suppress is false
+  storm-reset:
+    strength: MUST
+    statement: >-
+      StormBreaker.reset MUST clear all repetition tracking state.
+    scenarios:
+      reset-clears:
+        - GIVEN: StormBreaker has tracked several calls
+        - WHEN: reset() is called
+        - THEN: subsequent inspect calls start fresh with no history
+  schema-flatten:
+    strength: MUST
+    statement: >-
+      analyzeSchema MUST recommend flattening when the schema has more than 10
+      leaf nodes or depth greater than 2 levels.
+    scenarios:
+      deep-schema:
+        - GIVEN: a schema with depth 4
+        - WHEN: analyzeSchema is called
+        - THEN: the decision indicates flattening is needed
+      shallow-schema:
+        - GIVEN: a schema with depth 1 and 3 leaves
+        - WHEN: analyzeSchema is called
+        - THEN: the decision indicates flattening is not needed
+  nest-reversal:
+    strength: MUST
+    statement: >-
+      nestArguments MUST convert flat dot-path arguments back to nested object
+      structure, reversing the flattening transformation.
+    scenarios:
+      dot-path-to-nested:
+        - GIVEN: {"parent.child.grandchild": "value"}
+        - WHEN: nestArguments is called
+        - THEN: >-
+            the result is {parent: {child: {grandchild: "value"}}}
+mapping:
+  implementation:
+    - src/repair/index.ts
+    - src/repair/scavenge.ts
+    - src/repair/storm.ts
+    - src/repair/flatten.ts
+    - src/repair/truncation.ts
+  tests:
+    - tests/repair/scavenge.test.ts
+    - tests/repair/truncation.test.ts
+    - tests/repair/storm.test.ts
+    - tests/repair/flatten.test.ts
+    - tests/repair/pipeline.test.ts

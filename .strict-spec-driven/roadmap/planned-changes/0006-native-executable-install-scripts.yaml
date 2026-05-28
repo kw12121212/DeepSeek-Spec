@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: install-scripts
   milestone: 0006-native-executable
-status: planned
+status: complete
 summary: Platform-specific install scripts and smoke test for native binary
 details: >-
   Create scripts/install.sh for Linux/macOS: detect platform+arch, download the correct binary from

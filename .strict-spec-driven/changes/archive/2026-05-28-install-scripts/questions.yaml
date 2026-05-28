@@ -1,0 +1,18 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: install-scripts
+open: []
+resolved:
+  - id: version-endpoint
+    question: >-
+      Should the install scripts resolve the latest version from GitHub Releases API
+      (api.github.com/repos/<owner>/<repo>/releases/latest) or from a static latest-version file?
+    context: >-
+      The GitHub API is rate-limited to 60 req/hr unauthenticated. A static file avoids rate limits
+      but adds a publishing step.
+    answer: >-
+      Not needed — install scripts copy from local build output, no remote version resolution
+      required
+    status: resolved
