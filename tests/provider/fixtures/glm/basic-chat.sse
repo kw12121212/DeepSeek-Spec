@@ -1,0 +1,9 @@
+data: {"id":"glm-20240101-abc","created":1704067200,"model":"glm-4","choices":[{"index":0,"delta":{"role":"assistant","content":"Hello"},"finish_reason":null}]}
+
+data: {"id":"glm-20240101-abc","created":1704067200,"model":"glm-4","choices":[{"index":0,"delta":{"content":" world"},"finish_reason":null}]}
+
+data: {"id":"glm-20240101-abc","created":1704067200,"model":"glm-4","choices":[{"index":0,"delta":{"content":"!"},"finish_reason":null}]}
+
+data: {"id":"glm-20240101-abc","created":1704067200,"model":"glm-4","choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":{"prompt_tokens":10,"completion_tokens":5,"total_tokens":15}}
+
+data: [DONE]

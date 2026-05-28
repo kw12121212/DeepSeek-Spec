@@ -30,4 +30,4 @@ milestones:
   0007-multi-provider-api:
     title: 'M7: GLM Provider Compatibility'
     path: roadmap/milestones/0007-multi-provider-api.yaml
-    status: proposed
+    status: complete

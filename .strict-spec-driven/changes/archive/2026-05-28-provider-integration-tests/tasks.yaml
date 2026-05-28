@@ -1,0 +1,58 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: provider-integration-tests
+sections:
+  Implementation:
+    create-fixture-directory:
+      text: >-
+        Create tests/provider/fixtures/glm/ directory with placeholder fixture files for GLM SSE
+        responses.
+      status: complete
+    record-glm-fixtures:
+      text: >-
+        Record or synthesize GLM SSE fixture files covering basic chat, streaming deltas, tool-call
+        invocation, tool-call streaming args, multi-turn, parallel tool calls, stop reasons, empty
+        content, long response, error responses (401/429/context-length/malformed JSON), and usage
+        tracking.
+      status: complete
+    implement-glm-test:
+      text: >-
+        Implement tests/provider/glm.test.ts — GLM compatibility matrix testing streaming,
+        tool-calls, multi-turn, errors, auth, usage, and no-thinking-params against recorded
+        fixtures.
+      status: complete
+    implement-openai-compat-test:
+      text: >-
+        Implement tests/provider/openai-compat.test.ts — DeepSeek regression tests verifying
+        streaming output identical to pre-refactor behavior and OpenAICompatClient base handles
+        standard SSE format.
+      status: complete
+    implement-registry-test:
+      text: >-
+        Implement tests/provider/registry.test.ts — Provider resolution tests for env var, config
+        fallback, default, modelToProvider mapping, and capability flags.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — all test matrices covered, no production code
+        changed.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

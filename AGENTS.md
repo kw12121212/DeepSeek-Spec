@@ -4,7 +4,7 @@ Guidance for AI coding agents working on this codebase.
 
 ## Project
 
-Reasonix is a DeepSeek-native coding agent with a cache-first loop. TypeScript 5.6+, ESM, strict mode. Ink 5 + React for the TUI. Vitest for tests. Biome for lint/format. Node >=22.
+Reasonix is a DeepSeek-native coding agent with a cache-first loop. TypeScript 5.6+, ESM, strict mode. Ink 5 + React for the TUI. Vitest for tests. Biome for lint/format. Bun is the runtime and package manager — use `bun` (not `npm`, not `npx`) for all commands. Node >=22.
 
 ## Architecture
 

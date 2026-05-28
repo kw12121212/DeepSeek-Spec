@@ -1,0 +1,5 @@
+data: {"id":"glm-20240101-tc2","created":1704067200,"model":"glm-4","choices":[{"index":0,"delta":{"role":"assistant","content":null,"tool_calls":[{"index":0,"id":"call_glm_sr","type":"function","function":{"name":"run_command","arguments":"{\"cmd\":\"ls\"}"}}]},"finish_reason":null}]}
+
+data: {"id":"glm-20240101-tc2","created":1704067200,"model":"glm-4","choices":[{"index":0,"delta":{},"finish_reason":"tool_calls"}],"usage":{"prompt_tokens":12,"completion_tokens":8,"total_tokens":20}}
+
+data: [DONE]

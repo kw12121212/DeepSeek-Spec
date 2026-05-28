@@ -1,0 +1,7 @@
+data: {"id":"glm-20240101-mt2","created":1704067200,"model":"glm-4","choices":[{"index":0,"delta":{"role":"assistant","content":"The directory contains the following files:"},"finish_reason":null}]}
+
+data: {"id":"glm-20240101-mt2","created":1704067200,"model":"glm-4","choices":[{"index":0,"delta":{"content":"\n- src/index.ts\n- package.json"},"finish_reason":null}]}
+
+data: {"id":"glm-20240101-mt2","created":1704067200,"model":"glm-4","choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":{"prompt_tokens":35,"completion_tokens":20,"total_tokens":55}}
+
+data: [DONE]

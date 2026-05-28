@@ -7,9 +7,9 @@ import { join } from "node:path";
 import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline/promises";
 import { DeepSeekClient } from "../../client.js";
-import type { ModelClient } from "../../ports/model-client.js";
 import { loadEndpoint } from "../../config.js";
 import { loadDotenv } from "../../env.js";
+import type { ModelClient } from "../../ports/model-client.js";
 
 export interface CommitOptions {
   /** Override the default model (deepseek-v4-flash). */

@@ -89,13 +89,14 @@ requirements:
   provider-registry-factory:
     strength: MUST
     statement: >-
-      ProviderRegistry MUST map a provider ID string to a factory function that produces a
-      ModelClient-typed instance
+      ProviderRegistry integration tests MUST validate REASONIX_PROVIDER env resolution, config.json
+      fallback, default-to-deepseek, modelToProvider mapping, and capability flags for both
+      providers
     scenarios:
-      register-and-resolve:
-        - GIVEN: a provider 'deepseek' is registered with a factory
-        - WHEN: resolveModelClient('deepseek') is called
-        - THEN: a ModelClient instance from that factory is returned
+      env-override-resolution:
+        - GIVEN: REASONIX_PROVIDER is set to 'glm'
+        - WHEN: the provider registry resolves the active provider
+        - THEN: GLMClient is returned
   model-validation:
     strength: MUST
     statement: >-
@@ -131,37 +132,27 @@ requirements:
   openai-compat-client:
     strength: MUST
     statement: >-
-      OpenAICompatClient MUST provide a generic /chat/completions HTTP client with chat() and
-      stream() methods, Bearer token auth, configurable retry, timeout, SSE streaming, standard
-      delta parsing, usage accumulation, and structured error handling
+      OpenAICompatClient regression tests MUST verify DeepSeek streaming output is identical to
+      pre-refactor behavior and the base class correctly handles standard OpenAI SSE format
     scenarios:
-      openai-compat-chat:
-        - GIVEN: an OpenAICompatClient instance with valid baseUrl and apiKey
-        - WHEN: chat() is called with a model and messages
-        - THEN: a POST to baseUrl/chat/completions returns a parsed ChatResponse
-      openai-compat-stream:
-        - GIVEN: an OpenAICompatClient instance with valid baseUrl and apiKey
-        - WHEN: stream() is called with a model and messages
-        - THEN: SSE chunks are parsed into StreamChunk objects until [DONE]
+      deepseek-regression:
+        - GIVEN: a DeepSeekClient subclass of OpenAICompatClient with recorded DeepSeek SSE fixtures
+        - WHEN: stream() is called and fixtures are replayed
+        - THEN: assembled output matches the pre-refactor DeepSeek streaming behavior exactly
   glm-adapter-class:
     strength: MUST
     statement: >-
-      GLMClient MUST extend OpenAICompatClient with raw Bearer token auth (matching base class),
-      default baseUrl https://open.bigmodel.cn/api/paas/v4, provider label 'GLM', and no
-      thinking/reasoning capability flags
+      GLMClient integration tests MUST validate streaming chat, tool-call invocation, multi-turn
+      tool-use, parallel tool calls, stop reasons, empty content, long response assembly, Bearer
+      auth headers, error response handling (401/429/context-length/malformed JSON), usage tracking,
+      and absence of thinking params
     scenarios:
-      glm-bearer-auth:
-        - GIVEN: a GLMClient with a valid Zhipu API key
-        - WHEN: authHeaders() is called
-        - THEN: Authorization header contains 'Bearer <api-key>' matching base class behavior
-      glm-no-thinking:
-        - GIVEN: a GLMClient instance
-        - WHEN: capabilities is accessed
-        - THEN: supportsThinking is false and supportsReasoningContent is false
-      glm-default-base-url:
-        - GIVEN: a GLMClient with no baseUrl override
-        - WHEN: constructed
-        - THEN: baseUrl is https://open.bigmodel.cn/api/paas/v4
+      glm-streaming-chat:
+        - GIVEN: >-
+            a GLMClient with a valid API key and a pre-recorded SSE fixture for a basic chat
+            response
+        - WHEN: stream() is called and the fixture is replayed
+        - THEN: content deltas are assembled into the complete response text
   glm-provider-registration:
     strength: MUST
     statement: >-

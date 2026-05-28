@@ -55,7 +55,7 @@ risks:
   - >-
     thinkingModeForModel() and reasoning_content parsing are woven into loop.ts and streaming.ts —
     must be guarded by capability flags
-status: proposed
+status: complete
 notes:
   - >-
     DeepSeekClient does NOT currently implement ModelClient port — the port method name (chatStream)

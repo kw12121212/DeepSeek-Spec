@@ -1,0 +1,5 @@
+data: {"id":"glm-20240101-ut","created":1704067200,"model":"glm-4","choices":[{"index":0,"delta":{"role":"assistant","content":"Hello"},"finish_reason":null}]}
+
+data: {"id":"glm-20240101-ut","created":1704067200,"model":"glm-4","choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":{"prompt_tokens":42,"completion_tokens":18,"total_tokens":60}}
+
+data: [DONE]

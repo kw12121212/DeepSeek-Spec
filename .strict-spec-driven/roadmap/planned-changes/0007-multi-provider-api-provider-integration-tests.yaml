@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: provider-integration-tests
   milestone: 0007-multi-provider-api
-status: planned
+status: complete
 summary: Comprehensive GLM compatibility test matrix using recorded fixtures
 details: >-
   Create tests/provider/ with fixture-based integration tests. All tests use pre-recorded HTTP

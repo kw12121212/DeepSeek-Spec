@@ -30,7 +30,7 @@ rules:
 review_evidence:
   project_regression:
     method: complete_project_regression
-    command: npm run verify
+    command: bun run verify
     meaning: >-
       Passing this command is required review evidence before strict-spec-review recommends archive
       or strict-spec-auto performs archive. This command represents the complete project-level
