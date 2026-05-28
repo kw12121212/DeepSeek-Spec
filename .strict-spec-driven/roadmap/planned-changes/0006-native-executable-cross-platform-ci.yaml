@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: cross-platform-ci
   milestone: 0006-native-executable
-status: planned
+status: complete
 summary: GitHub Actions workflow for cross-platform native builds and release artifacts
 details: >-
   Create .github/workflows/build-native.yml. Trigger on tag push (v*). Use a matrix strategy for 5

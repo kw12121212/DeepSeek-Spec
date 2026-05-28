@@ -1,0 +1,42 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: cross-platform-ci
+sections:
+  Implementation:
+    create-workflow-file:
+      text: >-
+        Create .github/workflows/build-native.yml with tag push trigger (v*) and matrix strategy for
+        5 targets
+      status: complete
+    add-build-job:
+      text: >-
+        Add build job per target: checkout, setup Bun, bun install, bun run build, run
+        build-native.mjs --target
+      status: complete
+    add-release-job:
+      text: >-
+        Add release job that creates GitHub Release, uploads all binaries, and generates SHA256
+        checksums file
+      status: complete
+  Testing:
+    run-lint:
+      text: Run lint checks on workflow YAML and source.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run existing tests to verify no regressions.
+      status: complete
+      command: bun run test
+    run-typecheck:
+      text: Run type checking.
+      status: complete
+      command: bun run typecheck
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-lint
+  unit_test_task: run-tests

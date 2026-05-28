@@ -1,0 +1,85 @@
+name: Build Native Binaries
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+env:
+  BUN_VERSION: "1.2"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - target: linux-x64
+            runner: ubuntu-latest
+          - target: linux-arm64
+            runner: ubuntu-latest
+          - target: darwin-x64
+            runner: macos-latest
+          - target: darwin-arm64
+            runner: macos-latest
+          - target: windows-x64
+            runner: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - run: bun install --frozen-lockfile
+        shell: bash
+
+      - run: bun run build
+        shell: bash
+
+      - run: node scripts/build-native.mjs --target ${{ matrix.target }}
+        shell: bash
+
+      - name: Rename binary for upload
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          TARGET="${{ matrix.target }}"
+          EXT=""
+          if [[ "$TARGET" == windows-* ]]; then
+            EXT=".exe"
+          fi
+          BIN="dist/native/${TARGET}/reasonix${EXT}"
+          ASSET="reasonix-${VERSION}-${TARGET}${EXT}"
+          cp "$BIN" "$ASSET"
+          echo "asset=${ASSET}" >> "$GITHUB_ENV"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binary-${{ matrix.target }}
+          path: ${{ env.asset }}
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Generate SHA256 checksums
+        run: |
+          cd artifacts
+          sha256sum * > ../checksums.txt
+          mv ../checksums.txt .
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/*
+          generate_release_notes: true

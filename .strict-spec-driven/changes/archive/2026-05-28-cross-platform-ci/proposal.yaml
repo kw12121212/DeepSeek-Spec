@@ -1,0 +1,28 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: cross-platform-ci
+  status: proposed
+summary:
+  what:
+    - >-
+      GitHub Actions CI workflow (.github/workflows/build-native.yml) that builds cross-platform
+      native executables on tag push
+  why:
+    - >-
+      M6 requires automated release artifact production for all 5 native targets when a version tag
+      is pushed
+scope:
+  in:
+    - Manual local builds only; no CI workflow exists; no .github/workflows directory
+  out:
+    - >-
+      Automated GitHub Actions workflow triggered on v* tag push producing 5 native binaries
+      uploaded as release assets with SHA256 checksums
+unchanged_behavior:
+  - Source code, tsup build, native build script logic, existing tests
+roadmap:
+  milestone: 0006-native-executable
+  planned_change: cross-platform-ci

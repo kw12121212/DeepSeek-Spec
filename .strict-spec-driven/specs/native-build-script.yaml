@@ -35,6 +35,40 @@ requirements:
         - THEN: >-
             the script exits with a non-zero code and prints an error message instructing the user
             to run bun run build first
+  tag-trigger:
+    strength: MUST
+    statement: The workflow MUST trigger on pushes to tags matching v*
+    scenarios:
+      tag-push-builds:
+        - GIVEN: a tag matching v* is pushed to the repository
+        - WHEN: the workflow runs
+        - THEN: native binaries are built for all 5 targets and uploaded as release assets
+  matrix-targets:
+    strength: MUST
+    statement: >-
+      The workflow MUST use a matrix strategy building linux-x64, linux-arm64, darwin-x64,
+      darwin-arm64, and windows-x64
+    scenarios:
+      matrix-coverage:
+        - GIVEN: the workflow is triggered
+        - WHEN: the matrix expands
+        - THEN: one job runs per target on the appropriate OS runner
+  sha256-checksums:
+    strength: MUST
+    statement: The workflow MUST produce a SHA256 checksums file alongside release assets
+    scenarios:
+      checksums-file:
+        - GIVEN: all matrix build jobs complete successfully
+        - WHEN: the release job runs
+        - THEN: a checksums.txt file is generated and uploaded containing SHA256 hashes for each binary
+  release-naming:
+    strength: MUST
+    statement: Release assets MUST follow naming convention reasonix-<version>-<target>[.exe]
+    scenarios:
+      naming-convention:
+        - GIVEN: a binary is built for a target
+        - WHEN: it is uploaded as a release asset
+        - THEN: the filename matches reasonix-<tag-version>-<target> with .exe appended for windows-x64
 mapping:
   implementation:
     - scripts/build-native.mjs

@@ -1,0 +1,16 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: cross-platform-ci
+open: []
+resolved:
+  - id: ci-permissions
+    question: >-
+      Does the repository already have GitHub Actions enabled, and does the default GITHUB_TOKEN
+      have write permissions for creating releases?
+    context: The workflow needs contents:write permission to create releases and upload assets
+    answer: >-
+      Use explicit permissions: contents: write in the workflow file. This works regardless of
+      repo-level settings and follows least-privilege.
+    status: resolved
