@@ -112,7 +112,8 @@ function buildTarget(target, embed) {
   }
 
   const ext = target.startsWith("windows-") ? ".exe" : "";
-  const outPath = join(OUT_DIR, target, `reasonix${ext}`);
+  const binaryName = (process.env.BINARY_NAME || "deepseek-spec");
+  const outPath = join(OUT_DIR, target, `${binaryName}${ext}`);
 
   mkdirSync(join(OUT_DIR, target), { recursive: true });
 

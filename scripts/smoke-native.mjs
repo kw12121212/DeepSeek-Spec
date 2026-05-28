@@ -37,7 +37,8 @@ if (!target) {
 }
 
 const ext = target.startsWith("windows-") ? ".exe" : "";
-const binary = resolve(ROOT, "dist", "native", target, `reasonix${ext}`);
+const binaryName = (process.env.BINARY_NAME || "deepseek-spec");
+const binary = resolve(ROOT, "dist", "native", target, `${binaryName}${ext}`);
 
 if (!existsSync(binary)) {
   console.error(`Binary not found: ${binary}`);

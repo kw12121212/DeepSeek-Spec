@@ -103,6 +103,24 @@ Bare `reasonix` (no subcommand) launches `code` in the current directory — typ
 
 Other subcommands (`replay` · `diff` · `events` · `stats` · `index` · `mcp` · `prune-sessions`) are in `reasonix --help` and the [CLI reference](https://esengine.github.io/DeepSeek-Reasonix/#cli).
 
+### Build from source
+
+Clone and run the one-command setup script — it installs all dependencies (root + workspaces), builds the dashboard and CLI bundle, then links `reasonix` / `dsnix` onto your `PATH`:
+
+~~~bash
+git clone https://github.com/kw12121212/DeepSeek-Spec.git
+cd DeepSeek-Spec
+./setup.sh                   # Linux / macOS — links to ~/.local/bin
+./setup.sh --prefix /usr/local/bin  # custom location
+~~~
+
+~~~powershell
+.\setup.ps1                  # Windows — links to %USERPROFILE%\bin
+.\setup.ps1 -Prefix C:\Tools # custom location
+~~~
+
+Requires **Bun** (preferred) or **Node ≥ 22** already on the system.
+
 ### QQ channel
 
 QQ can extend an existing `chat`, `code`, or desktop session as a remote channel. It is part of the current session flow, not a separate runtime mode.

@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-# Install a locally built Reasonix native binary to ~/.local/bin (or --prefix).
+# Install a locally built binary to ~/.local/bin (or --prefix).
 # Usage: scripts/install.sh [--prefix <path>]
 
 PREFIX="${PREFIX:-$HOME/.local/bin}"
@@ -38,11 +38,11 @@ esac
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-BINARY="$ROOT_DIR/dist/native/$TARGET/reasonix"
+BINARY="$ROOT_DIR/dist/native/$TARGET/deepseek-spec"
 
 if [ ! -f "$BINARY" ]; then
-  echo "error: native binary not found at $BINARY" >&2
-  echo "Run 'bun run build:native --target $TARGET' first." >&2
+  echo "error: binary not found at $BINARY" >&2
+  echo "Run './setup.sh' to build from source, or 'BINARY_NAME=deepseek-spec bun run build:native --target $TARGET' first." >&2
   exit 1
 fi
 
@@ -50,8 +50,8 @@ fi
 mkdir -p "$PREFIX"
 
 # Copy and make executable
-DEST="$PREFIX/reasonix"
+DEST="$PREFIX/deepseek-spec"
 cp "$BINARY" "$DEST"
 chmod +x "$DEST"
 
-echo "installed reasonix to $DEST"
+echo "installed deepseek-spec to $DEST"
