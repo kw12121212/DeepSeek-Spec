@@ -1,0 +1,20 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: native-build-script
+open: []
+resolved:
+  - id: dynamic-imports
+    question: >-
+      Does the codebase use dynamic imports or require() fallbacks that bun build --compile cannot
+      resolve?
+    context: >-
+      The M6 risk notes that bun build --compile may not handle all import patterns. Need to audit
+      src/ for dynamic imports before relying on the compile output.
+    answer: >-
+      The codebase uses dynamic imports (src/code-query.ts lazy loaders, src/cli/index.ts setup/code
+      commands) and one require() for worker_threads in src/tools/fs/regex-runner.ts. Bun build
+      --compile handles all of these natively — they resolve at compile time. No action needed for
+      this change.
+    status: resolved

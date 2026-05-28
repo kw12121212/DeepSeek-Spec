@@ -45,6 +45,8 @@
     "lint:fix": "biome check --write src tests",
     "format": "biome format --write src tests",
     "typecheck": "tsc --noEmit && tsc --noEmit -p dashboard",
+    "build:native": "node scripts/build-native.mjs --target",
+    "build:native:all": "node scripts/build-native.mjs --all",
     "verify": "bun run build && bun run lint && bun run typecheck && bun run test --silent",
     "pitch:pptx": "bunx --bun @marp-team/marp-cli pitch/pitch.md -o pitch/dist/pitch.pptx --allow-local-files",
     "pitch:pdf": "bunx --bun @marp-team/marp-cli pitch/pitch.md -o pitch/dist/pitch.pdf --allow-local-files",

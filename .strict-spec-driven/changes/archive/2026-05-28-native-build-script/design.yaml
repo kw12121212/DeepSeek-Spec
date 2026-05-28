@@ -1,0 +1,28 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: native-build-script
+approach:
+  - >-
+    Create scripts/build-native.mjs as a standalone Node/Bun script that invokes bun build --compile
+    with the tsup-produced dist/cli/index.js entry point. Accept --target <platform> for
+    single-target builds and --all for sequential multi-target builds. Output binaries to
+    dist/native/<target>/reasonix[.exe]. Validate that dist/cli/index.js exists before compiling.
+    Add build:native and build:native:all package.json scripts.
+decisions:
+  target-layout:
+    decision: >-
+      Output binaries to dist/native/<target>/reasonix[.exe] rather than a flat dist/native/
+      directory
+    rationale: >-
+      Per-target subdirectory avoids filename collisions on cross-platform builds and mirrors the CI
+      artifact layout that cross-platform-ci will use
+  target-enum:
+    decision: 'Support targets: linux-x64, linux-arm64, darwin-x64, darwin-arm64, windows-x64'
+    rationale: Matches Bun compile target triplets and covers the platforms listed in the M6 scope
+  entry-point:
+    decision: Use dist/cli/index.js from the existing tsup build as the compile entry point
+    rationale: Reuses the already-bundled JS output; avoids duplicating tsup logic in the native build script
+alternatives: []
+risks: []

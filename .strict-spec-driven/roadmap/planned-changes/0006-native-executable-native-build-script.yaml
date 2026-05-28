@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: native-build-script
   milestone: 0006-native-executable
-status: planned
+status: complete
 summary: Create scripts/build-native.mjs that compiles per-target native executables
 details: >-
   Create scripts/build-native.mjs that wraps `bun build --compile` to produce standalone

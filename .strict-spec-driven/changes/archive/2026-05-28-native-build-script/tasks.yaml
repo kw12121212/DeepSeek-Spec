@@ -1,0 +1,44 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: native-build-script
+sections:
+  Implementation:
+    create-build-script:
+      text: Create scripts/build-native.mjs with CLI arg parsing for --target and --all flags
+      status: complete
+    implement-single-target:
+      text: >-
+        Implement single-target compile: validate dist/cli/index.js exists, run bun build --compile,
+        output to dist/native/<target>/reasonix[.exe]
+      status: complete
+    implement-all-targets:
+      text: Implement --all flag to build all 5 targets sequentially
+      status: complete
+    add-package-scripts:
+      text: Add build:native and build:native:all scripts to package.json
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+    test-build-script-args:
+      text: Test that invalid --target values and missing dist/ are rejected with clear errors
+      status: complete
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

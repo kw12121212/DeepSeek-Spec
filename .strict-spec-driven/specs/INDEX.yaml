@@ -5,6 +5,9 @@ specs:
   - id: multi-provider-config
     title: Multi-Provider Configuration
     path: .strict-spec-driven/specs/multi-provider-config.yaml
+  - id: native-build-script
+    title: Native Build Script
+    path: .strict-spec-driven/specs/native-build-script.yaml
   - id: strict-brainstorm
     title: Strict Brainstorm Tool
     path: .strict-spec-driven/specs/strict-brainstorm.yaml

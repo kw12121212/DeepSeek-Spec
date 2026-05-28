@@ -1,0 +1,42 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: native-build-script
+  title: Native Build Script
+requirements:
+  single-target:
+    strength: MUST
+    statement: >-
+      build-native.mjs MUST accept --target <platform> and produce a standalone binary at
+      dist/native/<platform>/reasonix[.exe]
+    scenarios:
+      happy-path:
+        - GIVEN: dist/cli/index.js exists from a prior tsup build
+        - WHEN: scripts/build-native.mjs --target linux-x64 is executed
+        - THEN: a standalone binary is produced at dist/native/linux-x64/reasonix
+  all-targets:
+    strength: MUST
+    statement: build-native.mjs MUST accept --all flag to build all 5 targets sequentially
+    scenarios:
+      all-flag:
+        - GIVEN: dist/cli/index.js exists
+        - WHEN: scripts/build-native.mjs --all is executed
+        - THEN: >-
+            binaries are produced for linux-x64, linux-arm64, darwin-x64, darwin-arm64, and
+            windows-x64
+  missing-dist:
+    strength: MUST
+    statement: build-native.mjs MUST exit with a clear error when dist/cli/index.js does not exist
+    scenarios:
+      no-tsup-output:
+        - GIVEN: dist/cli/index.js does not exist
+        - WHEN: scripts/build-native.mjs --target linux-x64 is executed
+        - THEN: >-
+            the script exits with a non-zero code and prints an error message instructing the user
+            to run bun run build first
+mapping:
+  implementation:
+    - scripts/build-native.mjs
+  tests:
+    - tests/native-build.test.ts
