@@ -37,6 +37,7 @@ export const PILL_MODEL = {
   flash: { bg: "#11141a", fg: "#79c0ff" },
   pro: { bg: "#11141a", fg: "#d2a8ff" },
   r1: { bg: "#11141a", fg: "#b395f5" },
+  glm: { bg: "#1a2433", fg: "#7ee787" },
   unknown: { bg: "#11141a", fg: "#8b949e" },
 } as const;
 
@@ -45,9 +46,10 @@ export interface ModelBadge {
   kind: keyof typeof PILL_MODEL;
 }
 
-/** Map full DeepSeek model id to short label + color class. */
+/** Map model id to short label + color class. */
 export function modelBadgeFor(model: string | undefined): ModelBadge {
   if (!model) return { label: "?", kind: "unknown" };
+  if (model.startsWith("glm-")) return { label: model, kind: "glm" };
   const stripped = model.replace(/^deepseek-/, "");
   if (stripped === "v4-flash" || stripped === "chat") return { label: "v4-flash", kind: "flash" };
   if (stripped === "v4-pro") return { label: "v4-pro", kind: "pro" };

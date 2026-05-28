@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: config-provider-selection
   milestone: 0007-multi-provider-api
-status: planned
+status: complete
 summary: Extend config.ts with provider selection and per-provider settings
 details: >-
   Extend src/config.ts to support multi-provider configuration.

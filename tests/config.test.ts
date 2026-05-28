@@ -10,6 +10,7 @@ import {
   clearProjectShellAllowed,
   editModeHintShown,
   isPlausibleKey,
+  loadActiveProvider,
   loadApiKey,
   loadBaseUrl,
   loadBraveApiKey,
@@ -18,6 +19,8 @@ import {
   loadEndpoint,
   loadEngineeringLifecycleMode,
   loadFilesystemOutlineThresholdBytes,
+  loadGlmApiKey,
+  loadGlmBaseUrl,
   loadIndexConfig,
   loadIndexUserConfig,
   loadModel,
@@ -33,6 +36,7 @@ import {
   loadTheme,
   loadToolRateLimit,
   markEditModeHintShown,
+  modelToProvider,
   readConfig,
   redactKey,
   redactSemanticEmbeddingConfig,
@@ -61,6 +65,9 @@ describe("config", () => {
   const originalSearch = process.env.REASONIX_SEARCH;
   const originalBaseUrl = process.env.DEEPSEEK_BASE_URL;
   const originalApiBaseUrl = process.env.DEEPSEEK_API_BASE_URL;
+  const originalProvider = process.env.REASONIX_PROVIDER;
+  const originalZhipuKey = process.env.ZHIPU_API_KEY;
+  const originalZhipuUrl = process.env.ZHIPU_BASE_URL;
 
   beforeEach(() => {
     dir = mkdtempSync(join(tmpdir(), "reasonix-test-"));
@@ -73,6 +80,12 @@ describe("config", () => {
     delete process.env.DEEPSEEK_BASE_URL;
     // biome-ignore lint/performance/noDelete: same reason
     delete process.env.DEEPSEEK_API_BASE_URL;
+    // biome-ignore lint/performance/noDelete: same reason
+    delete process.env.REASONIX_PROVIDER;
+    // biome-ignore lint/performance/noDelete: same reason
+    delete process.env.ZHIPU_API_KEY;
+    // biome-ignore lint/performance/noDelete: same reason
+    delete process.env.ZHIPU_BASE_URL;
   });
 
   afterEach(() => {
@@ -100,6 +113,24 @@ describe("config", () => {
       delete process.env.DEEPSEEK_API_BASE_URL;
     } else {
       process.env.DEEPSEEK_API_BASE_URL = originalApiBaseUrl;
+    }
+    if (originalProvider === undefined) {
+      // biome-ignore lint/performance/noDelete: same reason
+      delete process.env.REASONIX_PROVIDER;
+    } else {
+      process.env.REASONIX_PROVIDER = originalProvider;
+    }
+    if (originalZhipuKey === undefined) {
+      // biome-ignore lint/performance/noDelete: same reason
+      delete process.env.ZHIPU_API_KEY;
+    } else {
+      process.env.ZHIPU_API_KEY = originalZhipuKey;
+    }
+    if (originalZhipuUrl === undefined) {
+      // biome-ignore lint/performance/noDelete: same reason
+      delete process.env.ZHIPU_BASE_URL;
+    } else {
+      process.env.ZHIPU_BASE_URL = originalZhipuUrl;
     }
   });
 
@@ -957,6 +988,101 @@ describe("config", () => {
       saveSubagentModels({}, path);
       expect(loadSubagentModels(path)).toEqual({});
       expect(readConfig(path).subagentModels).toBeUndefined();
+    });
+  });
+
+  describe("multi-provider config", () => {
+    it("loadActiveProvider defaults to deepseek when nothing set", () => {
+      expect(loadActiveProvider(path)).toBe("deepseek");
+    });
+
+    it("loadActiveProvider reads REASONIX_PROVIDER env var first", () => {
+      process.env.REASONIX_PROVIDER = "glm";
+      expect(loadActiveProvider(path)).toBe("glm");
+    });
+
+    it("loadActiveProvider reads config.json provider field when env unset", () => {
+      writeConfig({ provider: "glm" } as never, path);
+      expect(loadActiveProvider(path)).toBe("glm");
+    });
+
+    it("loadActiveProvider ignores invalid provider values", () => {
+      process.env.REASONIX_PROVIDER = "claude";
+      expect(loadActiveProvider(path)).toBe("deepseek");
+      process.env.REASONIX_PROVIDER = undefined;
+      writeConfig({ provider: "invalid" as never } as never, path);
+      expect(loadActiveProvider(path)).toBe("deepseek");
+    });
+
+    it("modelToProvider maps deepseek-* prefix to deepseek", () => {
+      expect(modelToProvider("deepseek-v4-pro")).toBe("deepseek");
+      expect(modelToProvider("deepseek-v4-flash")).toBe("deepseek");
+    });
+
+    it("modelToProvider maps glm-* prefix to glm", () => {
+      expect(modelToProvider("glm-4.7")).toBe("glm");
+      expect(modelToProvider("glm-5.1")).toBe("glm");
+      expect(modelToProvider("glm-5-turbo")).toBe("glm");
+    });
+
+    it("modelToProvider falls back to active provider for unknown prefix", () => {
+      expect(modelToProvider("my-custom-model", undefined, path)).toBe("deepseek");
+      writeConfig({ provider: "glm" } as never, path);
+      expect(modelToProvider("my-custom-model", undefined, path)).toBe("glm");
+    });
+
+    it("modelToProvider accepts explicit activeProvider override", () => {
+      expect(modelToProvider("my-model", "glm")).toBe("glm");
+      expect(modelToProvider("my-model", "deepseek")).toBe("deepseek");
+    });
+
+    it("loadGlmApiKey returns ZHIPU_API_KEY env var first", () => {
+      process.env.ZHIPU_API_KEY = "zhipu-env-key-123";
+      expect(loadGlmApiKey(path)).toBe("zhipu-env-key-123");
+    });
+
+    it("loadGlmApiKey falls back to config.json glm.apiKey", () => {
+      writeConfig({ glm: { apiKey: "zhipu-config-key-456" } } as never, path);
+      expect(loadGlmApiKey(path)).toBe("zhipu-config-key-456");
+    });
+
+    it("loadGlmApiKey returns undefined when nothing set", () => {
+      expect(loadGlmApiKey(path)).toBeUndefined();
+    });
+
+    it("loadGlmBaseUrl returns ZHIPU_BASE_URL env var first", () => {
+      process.env.ZHIPU_BASE_URL = "https://custom-glm.example.com";
+      expect(loadGlmBaseUrl(path)).toBe("https://custom-glm.example.com");
+    });
+
+    it("loadGlmBaseUrl falls back to config.json glm.baseUrl", () => {
+      writeConfig({ glm: { baseUrl: "https://glm-config.example.com" } } as never, path);
+      expect(loadGlmBaseUrl(path)).toBe("https://glm-config.example.com");
+    });
+
+    it("loadGlmBaseUrl returns undefined when nothing set", () => {
+      expect(loadGlmBaseUrl(path)).toBeUndefined();
+    });
+
+    it("GLM models are accepted by loadModel on the official endpoint", () => {
+      writeConfig({ model: "glm-5.1" }, path);
+      expect(loadModel(path)).toBe("glm-5.1");
+    });
+
+    it("existing DeepSeek env vars remain backward compatible", () => {
+      process.env.DEEPSEEK_API_KEY = "sk-deepseek-test";
+      expect(loadApiKey(path)).toBe("sk-deepseek-test");
+    });
+
+    it("provider and glm fields round-trip through config", () => {
+      writeConfig(
+        { provider: "glm", glm: { apiKey: "key-123", baseUrl: "https://glm.test" } } as never,
+        path,
+      );
+      const cfg = readConfig(path);
+      expect(cfg.provider).toBe("glm");
+      expect(cfg.glm?.apiKey).toBe("key-123");
+      expect(cfg.glm?.baseUrl).toBe("https://glm.test");
     });
   });
 });

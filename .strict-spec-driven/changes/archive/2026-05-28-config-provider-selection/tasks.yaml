@@ -1,0 +1,55 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: config-provider-selection
+sections:
+  Implementation:
+    extend-config-types:
+      text: Add provider field (string union) and glm section to ReasonixConfig in src/config.ts
+      status: complete
+    add-provider-resolution:
+      text: >-
+        Add loadActiveProvider() with resolution order: REASONIX_PROVIDER env → config.json provider
+        → 'deepseek' default
+      status: complete
+    add-glm-api-key-resolution:
+      text: 'Add GLM API key resolution: ZHIPU_API_KEY env → config.json glm.apiKey → error'
+      status: complete
+    add-model-to-provider:
+      text: Add modelToProvider(modelId) helper mapping model prefixes to provider IDs
+      status: complete
+    extend-supported-models:
+      text: Add GLM models (glm-4.7, glm-5.1, glm-5-turbo) to SUPPORTED_OFFICIAL_MODELS
+      status: complete
+    update-model-command:
+      text: Update CLI /model command to show provider name alongside model
+      status: complete
+    update-env-example:
+      text: Add ZHIPU_API_KEY and ZHIPU_BASE_URL to .env.example
+      status: complete
+  Testing:
+    unit-tests:
+      text: >-
+        Unit tests for loadActiveProvider, modelToProvider, GLM config resolution, backward
+        compatibility
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

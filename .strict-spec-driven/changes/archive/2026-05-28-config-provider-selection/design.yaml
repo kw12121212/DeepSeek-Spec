@@ -1,0 +1,22 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: config-provider-selection
+approach:
+  - >-
+    Extend ReasonixConfig with a provider field (string union) and a glm section mirroring the
+    existing deepseek section. Add a modelToProvider() helper that maps model ID prefixes to
+    provider IDs. Update SUPPORTED_OFFICIAL_MODELS with GLM models. Extend the /model command
+    display. Keep all existing DeepSeek config as backward-compatible.
+decisions:
+  provider-field-type:
+    decision: Use string union type 'deepseek' | 'glm' with 'deepseek' default rather than an enum
+    rationale: String union is simpler, matches existing config patterns, and is easy to extend
+  api-key-resolution:
+    decision: >-
+      Per-provider env var (DEEPSEEK_API_KEY / ZHIPU_API_KEY) takes precedence over config.json
+      apiKey field
+    rationale: Consistent with existing DeepSeek resolution order and standard 12-factor practice
+alternatives: []
+risks: []

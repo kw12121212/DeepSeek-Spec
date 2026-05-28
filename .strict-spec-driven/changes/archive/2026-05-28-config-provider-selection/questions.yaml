@@ -1,0 +1,16 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: config-provider-selection
+open: []
+resolved:
+  - id: glm-model-ids
+    question: >-
+      Should the GLM model IDs in SUPPORTED_OFFICIAL_MODELS be exact strings (glm-4.7, glm-5.1,
+      glm-5-turbo) or use a prefix pattern?
+    context: >-
+      Planned-change details list these three model IDs. Need to confirm these are the correct
+      production model identifiers from Zhipu AI.
+    answer: 'Use exact strings: glm-4.7, glm-5.1, glm-5-turbo — matches Zhipu naming convention'
+    status: resolved

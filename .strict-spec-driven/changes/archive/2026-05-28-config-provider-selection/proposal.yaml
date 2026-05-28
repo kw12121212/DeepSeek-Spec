@@ -1,0 +1,26 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: config-provider-selection
+  status: proposed
+summary:
+  what:
+    - >-
+      Extend src/config.ts with multi-provider support: provider field, GLM config section,
+      model-to-provider mapping, and CLI /model display
+  why:
+    - >-
+      Root dependency for M7 — provider-registry and all downstream GLM changes need config to know
+      which provider is active and how to resolve per-provider settings
+scope:
+  in:
+    - src/config.ts, src/types.ts
+  out:
+    - src/config.ts (extended ReasonixConfig, new helpers), .env.example
+unchanged_behavior:
+  - src/client.ts, src/loop.ts, DeepSeekClient — no behavioral changes to existing code
+roadmap:
+  milestone: 0007-multi-provider-api
+  planned_change: config-provider-selection

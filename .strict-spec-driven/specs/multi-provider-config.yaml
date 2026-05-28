@@ -1,0 +1,70 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: multi-provider-config
+  title: Multi-Provider Configuration
+requirements:
+  provider-field:
+    strength: MUST
+    statement: >-
+      ReasonixConfig MUST include a provider field accepting 'deepseek' or 'glm', defaulting to
+      'deepseek'
+    scenarios:
+      provider-default:
+        - GIVEN: a config.json with no provider field
+        - WHEN: readConfig() is called
+        - THEN: the returned config has provider set to 'deepseek'
+  glm-config-section:
+    strength: MUST
+    statement: ReasonixConfig MUST include a glm section with optional apiKey and baseUrl fields
+    scenarios:
+      glm-section-present:
+        - GIVEN: a config.json with a glm section containing apiKey and baseUrl
+        - WHEN: readConfig() is called
+        - THEN: the returned config has glm.apiKey and glm.baseUrl populated
+  active-provider-resolution:
+    strength: MUST
+    statement: >-
+      loadActiveProvider() MUST resolve via REASONIX_PROVIDER env var, then config.json provider
+      field, then 'deepseek' default
+    scenarios:
+      env-override:
+        - GIVEN: REASONIX_PROVIDER is set to 'glm'
+        - WHEN: loadActiveProvider() is called
+        - THEN: '''glm'' is returned regardless of config.json value'
+  glm-api-key-resolution:
+    strength: MUST
+    statement: >-
+      GLM API key MUST resolve from ZHIPU_API_KEY env var first, then config.json glm.apiKey, then
+      throw
+    scenarios:
+      glm-env-key:
+        - GIVEN: ZHIPU_API_KEY env var is set
+        - WHEN: the GLM provider API key is resolved
+        - THEN: the ZHIPU_API_KEY value is returned
+  model-to-provider:
+    strength: MUST
+    statement: >-
+      modelToProvider(modelId) MUST map 'deepseek-*' to 'deepseek', 'glm-*' to 'glm', and unknown
+      prefixes to the active provider
+    scenarios:
+      deepseek-prefix:
+        - GIVEN: modelId is 'deepseek-v4-pro'
+        - WHEN: modelToProvider('deepseek-v4-pro') is called
+        - THEN: '''deepseek'' is returned'
+  backward-compat:
+    strength: MUST
+    statement: >-
+      DEEPSEEK_API_KEY, DEEPSEEK_BASE_URL, DEEPSEEK_API_BASE_URL MUST remain as backward-compatible
+      aliases with no behavioral change
+    scenarios:
+      existing-env-vars:
+        - GIVEN: DEEPSEEK_API_KEY is set and no provider is configured
+        - WHEN: loadApiKey() is called
+        - THEN: the DEEPSEEK_API_KEY value is returned as before
+mapping:
+  implementation:
+    - src/config.ts
+  tests:
+    - tests/config.test.ts

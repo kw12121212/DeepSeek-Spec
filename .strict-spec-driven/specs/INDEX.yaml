@@ -2,6 +2,9 @@ schema: strict-spec-driven/spec-index/v1
 schema_version: 1
 artifact_type: spec_index
 specs:
+  - id: multi-provider-config
+    title: Multi-Provider Configuration
+    path: .strict-spec-driven/specs/multi-provider-config.yaml
   - id: strict-brainstorm
     title: Strict Brainstorm Tool
     path: .strict-spec-driven/specs/strict-brainstorm.yaml

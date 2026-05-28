@@ -26,11 +26,17 @@ export type EditMode = "review" | "auto" | "yolo" | "plan";
 
 export const DEFAULT_MODEL = "deepseek-v4-flash";
 
+export type ProviderId = "deepseek" | "glm";
+
 /** Models the official api.deepseek.com endpoint currently accepts. v3-era
- *  `deepseek-chat`/`deepseek-reasoner` are gone — sending them produces a 400. */
+ *  `deepseek-chat`/`deepseek-reasoner` are gone — sending them produces a 400.
+ *  GLM models are routed to Zhipu AI's OpenAI-compatible endpoint. */
 export const SUPPORTED_OFFICIAL_MODELS: readonly string[] = [
   "deepseek-v4-flash",
   "deepseek-v4-pro",
+  "glm-4.7",
+  "glm-5.1",
+  "glm-5-turbo",
 ];
 
 export type ReasoningEffort = "low" | "medium" | "high" | "max";
@@ -146,9 +152,18 @@ export interface ProxyConfig {
   bypassDeepSeekDirect?: boolean;
 }
 
+export interface GlmProviderConfig {
+  apiKey?: string;
+  baseUrl?: string;
+}
+
 export interface ReasonixConfig {
   apiKey?: string;
   baseUrl?: string;
+  /** Active provider: "deepseek" or "glm". Default "deepseek". */
+  provider?: ProviderId;
+  /** GLM (Zhipu AI) provider settings. */
+  glm?: GlmProviderConfig;
   lang?: LanguageCode;
   /** Persisted DeepSeek model id — `/model <id>` and the dashboard model picker write through this. */
   model?: string;
@@ -692,6 +707,44 @@ export function bridgeEndpointEnv(path: string = defaultConfigPath()): void {
   const ep = loadEndpoint(path);
   if (ep.apiKey) process.env.DEEPSEEK_API_KEY = ep.apiKey;
   if (ep.baseUrl) process.env.DEEPSEEK_BASE_URL = ep.baseUrl;
+}
+
+/** Active provider: REASONIX_PROVIDER env → config.json provider → "deepseek". */
+export function loadActiveProvider(path: string = defaultConfigPath()): ProviderId {
+  const env = process.env.REASONIX_PROVIDER?.trim();
+  if (env === "deepseek" || env === "glm") return env;
+  const cfg = readConfig(path).provider;
+  if (cfg === "deepseek" || cfg === "glm") return cfg;
+  return "deepseek";
+}
+
+/** Map model ID prefix to provider ID. Unknown prefix falls back to active provider. */
+export function modelToProvider(
+  modelId: string,
+  activeProvider?: ProviderId,
+  path: string = defaultConfigPath(),
+): ProviderId {
+  if (modelId.startsWith("deepseek-")) return "deepseek";
+  if (modelId.startsWith("glm-")) return "glm";
+  return activeProvider ?? loadActiveProvider(path);
+}
+
+/** GLM API key: ZHIPU_API_KEY env → config.json glm.apiKey → undefined. */
+export function loadGlmApiKey(path: string = defaultConfigPath()): string | undefined {
+  const env = process.env.ZHIPU_API_KEY?.trim();
+  if (env) return env;
+  const cfg = readConfig(path).glm?.apiKey;
+  if (cfg && typeof cfg === "string" && cfg.trim()) return cfg.trim();
+  return undefined;
+}
+
+/** GLM base URL: ZHIPU_BASE_URL env → config.json glm.baseUrl → undefined. */
+export function loadGlmBaseUrl(path: string = defaultConfigPath()): string | undefined {
+  const env = process.env.ZHIPU_BASE_URL?.trim();
+  if (env) return env;
+  const cfg = readConfig(path).glm?.baseUrl;
+  if (cfg && typeof cfg === "string" && cfg.trim()) return cfg.trim();
+  return undefined;
 }
 
 function isNonNegativeNumber(value: unknown): value is number {
