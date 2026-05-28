@@ -279,6 +279,29 @@ requirements:
         - THEN: >-
             a tool named strict_modify is available with parallelSafe=false and changeName as a
             required parameter
+  e2e-freeform-pipeline:
+    strength: MUST
+    statement: >-
+      An E2E test MUST exercise the complete free-form lifecycle (init, propose, generate, apply,
+      modify, verify, review, archive, ship) against a fixture project and assert correct state
+      transitions, file existence, and directory cleanup at each step
+    scenarios:
+      full-lifecycle:
+        - GIVEN: a fixture project with an empty .strict-spec-driven/ directory
+        - WHEN: the E2E test runs the free-form pipeline from propose through ship
+        - THEN: >-
+            each state transition succeeds, the corresponding artifacts exist, and the final state
+            is shipped
+  e2e-cancel-cleanup:
+    strength: MUST
+    statement: >-
+      An E2E test MUST verify that cancel on a second proposed change transitions state to canceled
+      and removes the change directory when removeDir is true
+    scenarios:
+      cancel-cleanup:
+        - GIVEN: a second change in proposed state
+        - WHEN: cancelChange is called with removeDir true
+        - THEN: the change state transitions to canceled and the change directory is removed
 mapping:
   implementation:
     - src/strict/lifecycle.ts

@@ -1,0 +1,24 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: e2e-freeform-test
+  status: proposed
+summary:
+  what:
+    - E2E test for free-form full lifecycle cycle against a fixture project
+  why:
+    - >-
+      M5 requires E2E validation of the free-form workflow path (propose, modify, cancel, and full
+      pipeline) to ensure production readiness
+scope:
+  in:
+    - tests/strict/e2e-freeform-pipeline.test.ts and supporting test fixtures
+  out:
+    - New workflow logic (all in M1-M4), roadmap-driven workflow, TUI changes
+unchanged_behavior:
+  - src/strict/ source modules (tests only read these, no modifications)
+roadmap:
+  milestone: 0005-e2e-hardening
+  planned_change: e2e-freeform-test
