@@ -6,6 +6,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
 import { assets } from "./cli/assets.js";
+import { IS_NATIVE } from "./cli/native-detect.js";
 import { LruCache } from "./core/lru.js";
 
 interface AddedToken {
@@ -103,6 +104,10 @@ function tokenizerDiskCandidates(): string[] {
 assets.register("tokenizer", tokenizerDiskCandidates);
 
 export function resolveDataPath(): string {
+  if (IS_NATIVE)
+    throw new Error(
+      "Tokenizer path unavailable in native mode — use assets.get('tokenizer') instead",
+    );
   for (const p of tokenizerDiskCandidates()) {
     if (existsSync(p)) return p;
   }

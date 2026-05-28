@@ -1,0 +1,29 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: native-runtime-paths
+open: []
+resolved:
+  - id: native-caller-audit
+    question: >-
+      Which callers besides tokenizer, parser, server/assets, engine-path, and marketplace-loader
+      read runtime assets that need updating?
+    context: >-
+      The explore agent identified these five callers. If there are additional callers using
+      __dirname-relative paths for runtime assets, they must also be migrated.
+    answer: >-
+      The 5 identified callers (tokenizer.ts, parser.ts, server/assets.ts, engine-path.ts,
+      marketplace-overlay/loader.ts) are the complete set. No additional callers need migration.
+    status: resolved
+  - id: dashboard-asset-granularity
+    question: >-
+      Should dashboard assets be registered individually (dashboard:index.html, dashboard:app.js,
+      etc.) or as a single dashboard archive/blob in the AssetRegistry?
+    context: >-
+      The current server/assets.ts resolves multiple individual dashboard files. The embedded-assets
+      spec uses named assets. We need to decide the granularity.
+    answer: >-
+      Use individual named assets per file (dashboard:index.html, dashboard:app.js, etc.) to align
+      with existing server serving patterns and avoid runtime unpacking.
+    status: resolved

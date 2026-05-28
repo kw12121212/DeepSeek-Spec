@@ -1,0 +1,65 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: native-runtime-paths
+sections:
+  Implementation:
+    create-native-detect:
+      text: >-
+        Create src/cli/native-detect.ts — export detectNativeContext(), resolveAsset(name),
+        resolveDataFile(relPath) that branch on IS_NATIVE using AssetRegistry for native mode and
+        __dirname-based paths for Node mode
+      status: complete
+    update-tokenizer:
+      text: >-
+        Update src/tokenizer.ts — replace __dirname/candidate-path tokenizer resolution with
+        resolveAsset('tokenizer') or resolveDataFile()
+      status: complete
+    update-parser:
+      text: >-
+        Update src/code-query/parser.ts — replace __dirname/candidate-path grammar resolution with
+        resolveAsset('grammar:*') or resolveDataFile()
+      status: complete
+    update-server-assets:
+      text: >-
+        Update src/server/assets.ts — replace __dirname/candidate-path dashboard resolution with
+        resolveAsset('dashboard:*') or resolveDataFile()
+      status: complete
+    update-engine-path:
+      text: >-
+        Update src/strict/engine-path.ts — replace package.json traversal for vendor/ resolution
+        with resolveDataFile()
+      status: complete
+    update-marketplace-loader:
+      text: >-
+        Update src/mcp/marketplace-overlay/loader.ts — replace __dirname/candidate-path marketplace
+        JSON resolution with resolveDataFile()
+      status: complete
+  Testing:
+    unit-tests-native-detect:
+      text: >-
+        Add unit tests for native-detect module — test detectNativeContext(), resolveAsset(),
+        resolveDataFile() in both native and Node mock contexts
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — native binary path resolves embedded assets;
+        Node/tsup path is unchanged.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

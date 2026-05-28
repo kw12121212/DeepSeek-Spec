@@ -1,0 +1,46 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: embedded-assets
+mapping:
+  implementation:
+    - src/cli/native-detect.ts
+  tests:
+    - tests/native-detect.test.ts
+operations:
+  ADDED:
+    resolve-data-file:
+      strength: MUST
+      statement: >-
+        resolveDataFile(relPath) MUST return an absolute path suitable for fs operations in Node
+        mode, and throw in native mode where filesystem access is not available
+      scenarios:
+        node-data-file:
+          - GIVEN: IS_NATIVE is false
+          - WHEN: resolveDataFile('data/deepseek-tokenizer.json.gz') is called
+          - THEN: an absolute path to the file on disk is returned
+  MODIFIED:
+    unified-resolve:
+      strength: MUST
+      statement: >-
+        resolveAsset(name) MUST return a Uint8Array using AssetRegistry in native mode and
+        __dirname-based disk read in Node mode
+      scenarios:
+        native-resolve-asset:
+          - GIVEN: IS_NATIVE is true and AssetRegistry contains the named asset
+          - WHEN: resolveAsset('tokenizer') is called
+          - THEN: the embedded blob is returned as Uint8Array without filesystem access
+    node-fallback-resolve:
+      strength: MUST
+      statement: >-
+        resolveAsset(name) MUST return a Uint8Array via disk read when IS_NATIVE is false,
+        preserving existing __dirname-based resolution
+      scenarios:
+        node-resolve-asset:
+          - GIVEN: IS_NATIVE is false
+          - WHEN: resolveAsset('tokenizer') is called
+          - THEN: >-
+              the data file is read from disk using the existing candidate-path resolution and
+              returned as Uint8Array
+  REMOVED: {}

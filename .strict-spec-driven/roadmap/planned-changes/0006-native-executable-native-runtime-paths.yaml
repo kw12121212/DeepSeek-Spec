@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: native-runtime-paths
   milestone: 0006-native-executable
-status: planned
+status: complete
 summary: Update runtime asset resolution to work from the compiled executable context
 details: >-
   Create src/cli/native-detect.ts that detects whether Reasonix is running as a native compiled

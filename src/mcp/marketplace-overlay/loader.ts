@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { assets } from "../../cli/assets.js";
+import { IS_NATIVE } from "../../cli/native-detect.js";
 
 export interface OverlayEntry {
   title: string;
@@ -19,7 +20,10 @@ export function loadOverlay(lang: string): Record<string, OverlayEntry> | null {
   try {
     const raw = assets.has(assetName)
       ? assets.getText(assetName)
-      : readFileSync(join(here, `${lang}.json`), "utf8");
+      : IS_NATIVE
+        ? null
+        : readFileSync(join(here, `${lang}.json`), "utf8");
+    if (raw === null) return null;
     cache = JSON.parse(raw) as Record<string, OverlayEntry>;
     cachedLang = lang;
     return cache;

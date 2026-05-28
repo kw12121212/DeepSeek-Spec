@@ -2,9 +2,11 @@ import { closeSync, fstatSync, openSync, readFileSync, readSync } from "node:fs"
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { assets } from "../cli/assets.js";
+import { IS_NATIVE } from "../cli/native-detect.js";
 
 /** Resolve dashboard/ across tsx-dev and tsup-bundled layouts. */
 function resolveAssetDir(): string {
+  if (IS_NATIVE) return "<native>/dashboard";
   const here = dirname(fileURLToPath(import.meta.url));
   // Try a few candidates; the first existing one wins.
   // - src/server/   → ../../dashboard

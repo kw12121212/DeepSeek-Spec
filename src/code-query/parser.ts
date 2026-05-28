@@ -6,6 +6,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Language, Parser, type Tree } from "web-tree-sitter";
 import { assets } from "../cli/assets.js";
+import { IS_NATIVE } from "../cli/native-detect.js";
 import { type GrammarName, grammarForPath } from "./grammar-map.js";
 
 export { type GrammarName, grammarForPath } from "./grammar-map.js";
@@ -72,6 +73,10 @@ function readGrammarFromDisk(grammar: GrammarName, opts: ParserOptions): Uint8Ar
 }
 
 function resolveGrammarPath(grammar: GrammarName, overrideDir?: string): string {
+  if (IS_NATIVE)
+    throw new Error(
+      `Grammar path unavailable in native mode: ${grammar} — use AssetRegistry instead`,
+    );
   const filename = `tree-sitter-${grammar}.wasm`;
   const candidates: string[] = [];
   if (overrideDir) candidates.push(resolve(overrideDir, filename));
