@@ -1,0 +1,25 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-lifecycle
+mapping:
+  implementation:
+    - README.md
+  tests:
+    - tests/readme-strict-workflows.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    documentation:
+      strength: MUST
+      statement: >-
+        README.md MUST contain a 'Strict Spec Workflows' section that documents
+        strict-spec workflow commands and usage, including quick start, roadmap-driven
+        workflow, free-form workflow, and command reference.
+      scenarios:
+        readme-section-exists:
+          - GIVEN: the project README.md file
+          - WHEN: a user reads the file
+          - THEN: a 'Strict Spec Workflows' section is present with workflow documentation
+  REMOVED: {}

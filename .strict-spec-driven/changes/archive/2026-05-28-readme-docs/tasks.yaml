@@ -1,0 +1,26 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: readme-docs
+sections:
+  Implementation:
+    add-strict-workflows-section:
+      text: >-
+        Add 'Strict Spec Workflows' section to README.md with quick start, roadmap-driven workflow,
+        free-form workflow, and command reference (under 60 lines total).
+      status: complete
+  Testing:
+    run-verify:
+      text: Run full project verification (build + lint + typecheck + test) to ensure no regressions.
+      status: complete
+      command: bun run verify
+  Verification:
+    verify-readme-section:
+      text: >-
+        Verify the new section exists in README.md and contains all required subsections (quick
+        start, roadmap-driven, free-form, command reference).
+      status: complete
+testing_gates:
+  validation_task: run-verify
+  unit_test_task: run-verify

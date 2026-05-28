@@ -1,0 +1,26 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: readme-docs
+  status: proposed
+summary:
+  what:
+    - >-
+      Add 'Strict Spec Workflows' section to README.md documenting strict-spec workflow commands and
+      usage
+  why:
+    - >-
+      Users need clear documentation to discover and use strict-spec workflow commands
+      (/strict-init, /strict-roadmap-plan, /strict-auto, /strict-propose, etc.)
+scope:
+  in:
+    - README.md
+  out:
+    - No code or workflow logic changes
+unchanged_behavior:
+  - All existing README content remains unchanged except for the new section
+roadmap:
+  milestone: 0005-e2e-hardening
+  planned_change: readme-docs

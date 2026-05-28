@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: readme-docs
   milestone: 0005-e2e-hardening
-status: planned
+status: complete
 summary: README section documenting strict-spec workflows in Reasonix
 details: >-
   Add 'Strict Spec Workflows' section to README.md: (1) quick start with /strict-init, (2)

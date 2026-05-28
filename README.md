@@ -166,6 +166,21 @@ bunx openspec init --tools claude    # writes .claude/skills/openspec-*/SKILL.md
 
 <br/>
 
+## Strict Spec Workflows
+
+Reasonix includes a strict-spec workflow for structured change management. Run `/strict-spec-init` to create the `.strict-spec-driven/` directory.
+
+| Workflow | Commands |
+|---|---|
+| Roadmap-driven | `/strict-roadmap-plan` · `/strict-roadmap-recommend` · `/strict-spec-auto` |
+| Free-form | `/strict-spec-propose <name>` · `/strict-spec-auto <name>` |
+
+Other: `/strict-spec-apply` · `/strict-spec-verify` · `/strict-spec-review` · `/strict-spec-archive` · `/strict-spec-ship`.
+
+Config: `.strict-spec-driven/config.yaml`.
+
+<br/>
+
 ## Configuration
 
 One JSON file at `~/.reasonix/config.json` plus per-project overrides under `<project>/.reasonix/`. The full bilingual reference — every key, every slash command, the on-disk shape of skills/memory/hooks — lives at:

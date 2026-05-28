@@ -334,6 +334,17 @@ requirements:
         - GIVEN: An archived strict change with updated INDEX.yaml
         - WHEN: ship is executed
         - THEN: Changes are committed and change status transitions to 'shipped'
+  documentation:
+    strength: MUST
+    statement: >-
+      README.md MUST contain a 'Strict Spec Workflows' section that documents strict-spec workflow
+      commands and usage, including quick start, roadmap-driven workflow, free-form workflow, and
+      command reference.
+    scenarios:
+      readme-section-exists:
+        - GIVEN: the project README.md file
+        - WHEN: a user reads the file
+        - THEN: a 'Strict Spec Workflows' section is present with workflow documentation
 mapping:
   implementation:
     - src/strict/lifecycle.ts
