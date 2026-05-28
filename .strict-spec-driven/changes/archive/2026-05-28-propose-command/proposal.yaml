@@ -1,0 +1,30 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: propose-command
+  status: proposed
+summary:
+  what:
+    - Implement the /strict-propose tool that scaffolds a full change from a free-text description
+  why:
+    - >-
+      M4 requires a propose entry point that takes ad-hoc user descriptions and creates valid change
+      scaffolds. Two downstream M4 changes (freeform-auto, modify-command) are blocked on this.
+scope:
+  in:
+    - >-
+      src/strict/strict-tools.ts (tool registration), src/strict/brainstorm.ts (reference pattern
+      for multi-call tools)
+  out:
+    - >-
+      src/strict/propose.ts (new propose logic), .strict-spec-driven/specs/strict-propose.yaml (new
+      spec)
+unchanged_behavior:
+  - >-
+    src/strict/lifecycle.ts, src/strict/invoker.ts, src/strict/cancel.ts,
+    src/strict/auto-pipeline.ts, src/strict/milestone-advance.ts, src/strict/roadmap-recommend.ts
+roadmap:
+  milestone: 0004-freeform-workflow
+  planned_change: propose-command

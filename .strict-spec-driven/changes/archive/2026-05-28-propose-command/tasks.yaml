@@ -1,0 +1,49 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: propose-command
+sections:
+  Implementation:
+    create-propose-module:
+      text: >-
+        Create src/strict/propose.ts with propose({ changeName, description }) that calls
+        invokeStrict('propose', { args }) and validates scaffold exists.
+      status: complete
+    register-propose-tool:
+      text: >-
+        Add strict_propose entry to STRICT_TOOLS in src/strict/strict-tools.ts with
+        requiresChangeName=false and custom handler that calls propose().
+      status: complete
+    add-duplicate-guard:
+      text: >-
+        In propose function, check if change directory already exists and return error directing
+        user to /strict-modify or /strict-cancel.
+      status: complete
+  Testing:
+    write-unit-tests:
+      text: >-
+        Write tests/strict-propose.test.ts covering happy-path scaffold, duplicate-name rejection,
+        and missing-description validation.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — propose creates scaffold, rejects duplicates,
+        no state guard needed.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

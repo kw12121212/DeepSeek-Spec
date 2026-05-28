@@ -6,6 +6,7 @@ import { cancelChange } from "./cancel.js";
 import { requireState } from "./guard.js";
 import { type Subcommand, invokeStrict } from "./invoker.js";
 import type { ChangeState } from "./lifecycle.js";
+import { propose } from "./propose.js";
 import { roadmapRecommend } from "./roadmap-recommend.js";
 
 interface StrictToolArgs {
@@ -24,7 +25,7 @@ const STRICT_TOOLS: StrictToolDef[] = [
     subcommand: "propose",
     description:
       "Scaffold a new strict-spec change directory under .strict-spec-driven/changes/<name>/ with proposal, design, tasks, questions, and specs/ artifacts.",
-    requiresChangeName: true,
+    requiresChangeName: false,
   },
   {
     subcommand: "generate",
@@ -133,6 +134,12 @@ function makeHandler(subcommand: Subcommand) {
       const error = requireState(process.cwd(), args.changeName, ...requiredStates);
       if (error) return { ok: false, error };
     }
+    if (subcommand === "propose") {
+      return propose(process.cwd(), {
+        changeName: args.changeName ?? "",
+        description: typeof args.description === "string" ? args.description : "",
+      });
+    }
     if (subcommand === "cancel") {
       return cancelChange(process.cwd(), args.changeName ?? "", args.removeDir === true);
     }
@@ -211,6 +218,19 @@ export function registerStrictTools(registry: ToolRegistry): ToolRegistry {
           done_criteria: { type: "array", items: { type: "string" } },
         },
       };
+    }
+
+    if (def.subcommand === "propose") {
+      properties.changeName = {
+        type: "string",
+        description: "Name for the new strict-spec change.",
+      };
+      properties.description = {
+        type: "string",
+        description: "Free-text description of what the change should accomplish.",
+      };
+      required.push("changeName");
+      required.push("description");
     }
 
     if (def.subcommand === "auto-pipeline") {

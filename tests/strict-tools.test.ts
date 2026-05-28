@@ -81,10 +81,10 @@ describe("strict tool handlers", () => {
     mocked.mockResolvedValue({ ok: true, data: { valid: true } });
 
     const registry = makeRegistry();
-    const def = registry.get("strict_propose");
+    const def = registry.get("strict_apply");
     const result = await def?.fn({ changeName: "my-change" });
 
-    expect(mocked).toHaveBeenCalledWith("propose", {
+    expect(mocked).toHaveBeenCalledWith("apply", {
       args: ["my-change"],
     });
     expect(result).toEqual({ ok: true, data: { valid: true } });

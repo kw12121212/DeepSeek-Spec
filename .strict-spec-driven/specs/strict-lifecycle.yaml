@@ -147,6 +147,42 @@ requirements:
         - THEN: >-
             the .strict-spec-driven/changes/<name> directory is removed after the state transition
             completes
+  propose-scaffold:
+    strength: MUST
+    statement: >-
+      The propose tool MUST call invokeStrict('propose', { changeName, description }) and validate
+      that the change directory and proposal.yaml exist after invocation
+    scenarios:
+      propose-happy-path:
+        - GIVEN: a valid change name and free-text description
+        - WHEN: propose({ changeName, description }) is called
+        - THEN: >-
+            invokeStrict is called with the correct subcommand and args, and the function returns {
+            ok: true } if the scaffold exists
+  propose-duplicate-rejection:
+    strength: MUST
+    statement: >-
+      The propose tool MUST return an error if a change directory with the same name already exists
+      under .strict-spec-driven/changes/
+    scenarios:
+      duplicate-name:
+        - GIVEN: a change name matching an existing directory in .strict-spec-driven/changes/
+        - WHEN: propose({ changeName, description }) is called
+        - THEN: >-
+            the function returns an error indicating the change already exists and suggests
+            /strict-modify or /strict-cancel
+  propose-tool-registration:
+    strength: MUST
+    statement: >-
+      The strict_propose tool MUST be registered as a dispatchable agent tool with
+      requiresChangeName=false and no state guard
+    scenarios:
+      tool-registered:
+        - GIVEN: the strict tool registry is initialized
+        - WHEN: registerStrictTools is called
+        - THEN: >-
+            a tool named strict_propose is available with parallelSafe=false and no required
+            changeName parameter
 mapping:
   implementation:
     - src/strict/lifecycle.ts

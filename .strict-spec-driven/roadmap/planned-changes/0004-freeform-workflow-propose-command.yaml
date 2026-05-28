@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: propose-command
   milestone: 0004-freeform-workflow
-status: planned
+status: complete
 summary: Implement /strict-propose command that scaffolds a change from free text
 details: >-
   Create src/strict/propose.ts. Accepts free-text description and change name. Calls

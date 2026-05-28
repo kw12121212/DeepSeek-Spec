@@ -1,0 +1,24 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: propose-command
+approach:
+  - >-
+    Create src/strict/propose.ts with a propose function that accepts a free-text description and
+    change name, calls invokeStrict('propose', ...) to scaffold the change directory, then validates
+    the scaffold. Register as strict_propose tool in strict-tools.ts with no state guard (proposed
+    state is the initial state). Follow the brainstorm pattern for structured parameter handling but
+    as a single-call operation since scaffolding is atomic.
+decisions:
+  single-call-vs-multi-call:
+    decision: >-
+      Use single-call invocation rather than brainstorm-style multi-call protocol. Propose is an
+      atomic scaffold operation — the user provides name and description, and the tool creates the
+      full change directory. Interactive refinement before scaffolding is already handled by the
+      brainstorm tool.
+    rationale: >-
+      Brainstorm handles pre-scaffolding refinement. Propose should be a direct, one-shot operation
+      that creates the change from a confirmed description.
+alternatives: []
+risks: []
