@@ -1,0 +1,27 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: refactor-openai-base
+open: []
+resolved:
+  - id: fetch-retry-location
+    question: >-
+      Should fetchWithRetry stay as a standalone utility or move into OpenAICompatClient as a
+      protected method?
+    context: >-
+      fetchWithRetry is currently imported from src/utils/retry.ts. Moving it into the base class
+      would make it overridable per-provider, but adds coupling.
+    answer: >-
+      Keep fetchWithRetry as a standalone utility in src/utils/retry.ts. Providers override the
+      calling method if they need custom retry behavior, not the utility itself.
+    status: resolved
+  - id: rate-limit-strategy
+    question: Should RPM rate limiting be generic in the base class or DeepSeek-specific only?
+    context: >-
+      DeepSeekClient uses waitForChatRateLimit() with configurable intervals. GLM may have different
+      rate limit behavior.
+    answer: >-
+      Generic in the base class with configurable minRequestIntervalMs constructor parameter. Each
+      provider sets its own interval.
+    status: resolved

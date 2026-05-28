@@ -1,0 +1,52 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: refactor-openai-base
+sections:
+  Implementation:
+    create-openai-compat-client:
+      text: >-
+        Create src/adapters/model-openai-compat.ts with OpenAICompatClient base class owning generic
+        /chat/completions logic (HTTP construction, auth header, retry, timeout, SSE parsing,
+        non-streaming parsing, usage accumulation, standard delta parsing, error parsing).
+      status: complete
+    refactor-deepseek-subclass:
+      text: >-
+        Refactor src/client.ts so DeepSeekClient extends OpenAICompatClient, keeping only
+        DeepSeek-specific logic (thinking mode, reasoning_content, surrogate sanitization, extended
+        timeout, Azure detection, getBalance/listModels).
+      status: complete
+    update-exports:
+      text: Update barrel exports and imports so all existing call sites compile without changes.
+      status: complete
+  Testing:
+    unit-tests-openai-compat:
+      text: Write unit tests for OpenAICompatClient chat() and stream() using recorded HTTP fixtures.
+      status: complete
+    deepseek-regression:
+      text: Verify DeepSeekClient subclass passes all existing tests with zero behavioral change.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run typecheck.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope — no call-site changes, no behavioral drift.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

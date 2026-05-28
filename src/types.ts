@@ -65,3 +65,65 @@ export interface ChatRequestOptions {
   thinking?: "enabled" | "disabled";
   reasoningEffort?: import("./config.js").ReasoningEffort;
 }
+
+export class Usage {
+  constructor(
+    public promptTokens = 0,
+    public completionTokens = 0,
+    public totalTokens = 0,
+    public promptCacheHitTokens = 0,
+    public promptCacheMissTokens = 0,
+  ) {}
+
+  get cacheHitRatio(): number {
+    const denom = this.promptCacheHitTokens + this.promptCacheMissTokens;
+    return denom > 0 ? this.promptCacheHitTokens / denom : 0;
+  }
+
+  static hasApiUsage(raw: unknown): raw is RawUsage {
+    if (!raw || typeof raw !== "object") return false;
+    const u = raw as RawUsage;
+    return (
+      typeof u.prompt_tokens === "number" ||
+      typeof u.completion_tokens === "number" ||
+      typeof u.total_tokens === "number" ||
+      typeof u.prompt_cache_hit_tokens === "number" ||
+      typeof u.prompt_cache_miss_tokens === "number" ||
+      typeof u.prompt_eval_count === "number" ||
+      typeof u.eval_count === "number"
+    );
+  }
+
+  static fromApi(raw: RawUsage | undefined | null): Usage {
+    const u = raw ?? {};
+    const promptTokens = u.prompt_tokens ?? u.prompt_eval_count ?? 0;
+    const completionTokens = u.completion_tokens ?? u.eval_count ?? 0;
+    const cacheHitTokens = u.prompt_cache_hit_tokens ?? 0;
+    const cacheMissTokens =
+      u.prompt_cache_miss_tokens ?? Math.max(0, promptTokens - cacheHitTokens);
+    return new Usage(
+      promptTokens,
+      completionTokens,
+      u.total_tokens ?? promptTokens + completionTokens,
+      cacheHitTokens,
+      cacheMissTokens,
+    );
+  }
+}
+
+export interface ChatResponse {
+  content: string;
+  reasoningContent: string | null;
+  toolCalls: ToolCall[];
+  usage: Usage;
+  raw: unknown;
+}
+
+export interface StreamChunk {
+  contentDelta?: string;
+  reasoningDelta?: string;
+  toolCallDelta?: { index: number; id?: string; name?: string; argumentsDelta?: string };
+  usage?: Usage;
+  finishReason?: string;
+  raw: any;
+}

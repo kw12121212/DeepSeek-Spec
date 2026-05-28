@@ -1,0 +1,29 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - src/adapters/model-openai-compat.ts
+  tests:
+    - tests/model-openai-compat.test.ts
+operations:
+  ADDED:
+    openai-compat-client:
+      strength: MUST
+      statement: >-
+        OpenAICompatClient MUST provide a generic /chat/completions HTTP client with chat() and
+        stream() methods, Bearer token auth, configurable retry, timeout, SSE streaming, standard
+        delta parsing, usage accumulation, and structured error handling
+      scenarios:
+        openai-compat-chat:
+          - GIVEN: an OpenAICompatClient instance with valid baseUrl and apiKey
+          - WHEN: chat() is called with a model and messages
+          - THEN: a POST to baseUrl/chat/completions returns a parsed ChatResponse
+        openai-compat-stream:
+          - GIVEN: an OpenAICompatClient instance with valid baseUrl and apiKey
+          - WHEN: stream() is called with a model and messages
+          - THEN: SSE chunks are parsed into StreamChunk objects until [DONE]
+  MODIFIED: {}
+  REMOVED: {}

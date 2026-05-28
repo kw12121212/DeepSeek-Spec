@@ -126,6 +126,21 @@ requirements:
         - GIVEN: a ModelClient implementation for deepseek
         - WHEN: client.capabilities is accessed
         - THEN: supportsThinking and supportsReasoningContent are boolean
+  openai-compat-client:
+    strength: MUST
+    statement: >-
+      OpenAICompatClient MUST provide a generic /chat/completions HTTP client with chat() and
+      stream() methods, Bearer token auth, configurable retry, timeout, SSE streaming, standard
+      delta parsing, usage accumulation, and structured error handling
+    scenarios:
+      openai-compat-chat:
+        - GIVEN: an OpenAICompatClient instance with valid baseUrl and apiKey
+        - WHEN: chat() is called with a model and messages
+        - THEN: a POST to baseUrl/chat/completions returns a parsed ChatResponse
+      openai-compat-stream:
+        - GIVEN: an OpenAICompatClient instance with valid baseUrl and apiKey
+        - WHEN: stream() is called with a model and messages
+        - THEN: SSE chunks are parsed into StreamChunk objects until [DONE]
 mapping:
   implementation:
     - src/config.ts

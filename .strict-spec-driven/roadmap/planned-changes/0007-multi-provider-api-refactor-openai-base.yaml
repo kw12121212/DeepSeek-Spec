@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: refactor-openai-base
   milestone: 0007-multi-provider-api
-status: planned
+status: complete
 summary: Extract OpenAICompatClient base from DeepSeekClient with both chat() and stream()
 details: >-
   Refactor src/client.ts by extracting a new OpenAICompatClient base class into

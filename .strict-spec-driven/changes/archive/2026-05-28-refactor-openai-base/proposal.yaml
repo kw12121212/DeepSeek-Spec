@@ -1,0 +1,24 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: refactor-openai-base
+  status: proposed
+summary:
+  what:
+    - Extract OpenAICompatClient base class from DeepSeekClient
+  why:
+    - >-
+      Unblock GLM adapter and all downstream M7 planned changes by providing a reusable
+      OpenAI-compatible HTTP client base
+scope:
+  in:
+    - src/client.ts
+  out:
+    - src/adapters/model-openai-compat.ts, src/client.ts (thin subclass)
+unchanged_behavior:
+  - All call sites (loop.ts, streaming.ts, desktop.ts, etc.) — zero behavioral change
+roadmap:
+  milestone: 0007-multi-provider-api
+  planned_change: refactor-openai-base

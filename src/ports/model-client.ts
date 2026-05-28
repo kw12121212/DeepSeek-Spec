@@ -1,5 +1,4 @@
-import type { ChatResponse, StreamChunk } from "../client.js";
-import type { ChatRequestOptions } from "../types.js";
+import type { ChatRequestOptions, ChatResponse, StreamChunk } from "../types.js";
 
 export interface ProviderCapabilities {
   supportsThinking: boolean;
