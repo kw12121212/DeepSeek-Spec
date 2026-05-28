@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: e2e-roadmap-test
   milestone: 0005-e2e-hardening
-status: planned
+status: complete
 summary: E2E test for roadmap-driven full cycle against a fixture project
 details: >-
   Create tests/strict/e2e-roadmap-pipeline.test.ts. Fixture project with .strict-spec-driven/

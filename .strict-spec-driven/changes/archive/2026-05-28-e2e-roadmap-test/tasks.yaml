@@ -1,0 +1,48 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: e2e-roadmap-test
+sections:
+  Implementation:
+    create-fixture:
+      text: >-
+        Create fixture project at tests/fixtures/e2e-roadmap-fixture/ with minimal
+        .strict-spec-driven/ (config.yaml, roadmap/ with 1 milestone and 1 planned change,
+        specs/INDEX.yaml)
+      status: complete
+    create-e2e-test:
+      text: >-
+        Create tests/strict/e2e-roadmap-pipeline.test.ts with full lifecycle E2E tests (recommend →
+        apply → verify → review → archive → ship)
+      status: complete
+    mock-invoker:
+      text: Add module mocking for strict-spec-driven.js invoker responses using vitest spy/mock
+      status: complete
+    implement-test-scenarios:
+      text: >-
+        Implement 7 test scenarios - (1) roadmap-recommend picks correct change, (2) apply modifies
+        files and state is applied, (3) verify runs npm run verify and state is verified, (4) review
+        collects evidence and state is reviewed, (5) archive archives and state is archived, (6)
+        ship commits and state is shipped, (7) INDEX.yaml shows milestone updated
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run E2E test (tests/strict/e2e-roadmap-pipeline.test.ts)
+      status: complete
+      command: bun test tests/strict/e2e-roadmap-pipeline.test.ts
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope and all 7 scenarios pass
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

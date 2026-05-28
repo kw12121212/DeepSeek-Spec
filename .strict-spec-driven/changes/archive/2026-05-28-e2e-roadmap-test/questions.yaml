@@ -1,0 +1,18 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: e2e-roadmap-test
+open: []
+resolved:
+  - id: fixture-location
+    question: >-
+      Where should the fixture project be placed - tests/fixtures/e2e-roadmap-fixture/ or a temp
+      directory?
+    context: >-
+      The planned change details say 'Fixture project with .strict-spec-driven/' but does not
+      specify if it should be checked into the repo or created dynamically in the test
+    answer: >-
+      Place fixture project at tests/fixtures/e2e-roadmap-fixture/ and check it into the repo. This
+      allows the E2E test to reuse the same fixture without dynamic creation overhead.
+    status: resolved

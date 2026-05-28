@@ -1,0 +1,46 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-lifecycle
+mapping:
+  implementation:
+    - tests/strict/e2e-roadmap-pipeline.test.ts
+  tests:
+    - tests/strict/e2e-roadmap-pipeline.test.ts
+operations:
+  ADDED:
+    e2e-lifecycle-validation:
+      strength: MUST
+      statement: >-
+        E2E test MUST cover all 6 strict lifecycle transitions (recommend → apply → verify → review
+        → archive → ship) against a fixture project
+      scenarios:
+        lifecycle-recommend:
+          - GIVEN: >-
+              A fixture project with .strict-spec-driven/ containing 1 milestone and 1 planned
+              change in 'planned' status
+          - WHEN: roadmap-recommend is executed
+          - THEN: The correct planned change is selected and scaffolded as a strict change
+        lifecycle-apply:
+          - GIVEN: A scaffolded strict change in 'proposed' status with proposal.yaml and design.yaml
+          - WHEN: apply is executed and files are modified
+          - THEN: Change status transitions to 'in_progress' and artifacts reflect applied changes
+        lifecycle-verify:
+          - GIVEN: A strict change with all implementation tasks completed
+          - WHEN: verify is executed after npm run verify passes
+          - THEN: Change status transitions to 'verified'
+        lifecycle-review:
+          - GIVEN: A verified strict change with passing review evidence
+          - WHEN: review is executed and evidence is collected
+          - THEN: Change status transitions to 'reviewed'
+        lifecycle-archive:
+          - GIVEN: A reviewed strict change ready for archive
+          - WHEN: archive is executed
+          - THEN: Change is moved to archive/ directory and milestone status is updated in INDEX.yaml
+        lifecycle-ship:
+          - GIVEN: An archived strict change with updated INDEX.yaml
+          - WHEN: ship is executed
+          - THEN: Changes are committed and change status transitions to 'shipped'
+  MODIFIED: {}
+  REMOVED: {}

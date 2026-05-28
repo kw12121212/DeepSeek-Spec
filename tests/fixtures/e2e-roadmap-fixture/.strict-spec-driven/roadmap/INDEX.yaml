@@ -1,0 +1,9 @@
+schema: strict-spec-driven/roadmap-index/v2
+schema_version: 2
+artifact_type: roadmap_index
+schema_file: ../schemas/roadmap-index.yaml
+milestones:
+  0001-e2e-fixture:
+    title: 'M1: E2E Test Fixture Milestone'
+    path: roadmap/milestones/0001-e2e-fixture.yaml
+    status: proposed

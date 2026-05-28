@@ -1,0 +1,20 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../../schemas/roadmap-milestone.yaml
+milestone:
+  0001-e2e-fixture:
+    title: 'M1: E2E Test Fixture Milestone'
+goal: |
+  Test milestone for E2E roadmap pipeline testing.
+scope:
+  in:
+    - Fixture planned change for E2E testing
+  out:
+    - Unrelated changes
+done_criteria:
+  - Fixture planned change is implemented and archived
+planned_changes: {}
+dependencies: []
+risks: []
+status: proposed

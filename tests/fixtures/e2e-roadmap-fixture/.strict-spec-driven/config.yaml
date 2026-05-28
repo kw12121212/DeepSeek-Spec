@@ -1,0 +1,13 @@
+schema: strict-spec-driven/config/v1
+schema_version: 1
+artifact_type: workflow_config
+context: |
+  E2E test fixture project for roadmap-driven full cycle testing.
+  Minimal config to support roadmap-recommend → apply → verify → review → ship.
+rules:
+  specs:
+    - Describe observable behavior only
+  change:
+    - Implement only what is in scope
+  test:
+    - Tests must verify observable behavior

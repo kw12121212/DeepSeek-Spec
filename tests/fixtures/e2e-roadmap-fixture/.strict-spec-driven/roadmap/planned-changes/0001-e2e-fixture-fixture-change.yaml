@@ -1,0 +1,13 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../../schemas/planned-change.yaml
+planned_change:
+  id: fixture-change
+  milestone: 0001-e2e-fixture
+status: planned
+summary: E2E test fixture planned change
+details: >
+  Minimal planned change for E2E testing of the strict-spec roadmap workflow.
+  This change serves as the target for roadmap-recommend in the E2E test.
+depends_on: []

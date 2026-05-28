@@ -4,7 +4,6 @@ import { ProviderRegistry } from "../src/providers/registry.js";
 
 function stubClient(caps: Partial<ProviderCapabilities> = {}): ModelClient {
   return {
-    // biome-ignore lint/correctness/useYield: stub — no values to yield
     async *stream() {},
     async chat() {
       throw new Error("stub");

@@ -1,0 +1,23 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: e2e-roadmap-test
+approach:
+  - >-
+    Create a fixture project at tests/fixtures/e2e-roadmap-fixture/ with a minimal
+    .strict-spec-driven/ (config.yaml, roadmap/ with 1 milestone and 1 planned change,
+    specs/INDEX.yaml). Create tests/strict/e2e-roadmap-pipeline.test.ts that uses the fixture and
+    spies on the invoker to simulate the full lifecycle without running real CLI commands. Each test
+    step validates state transitions and artifact changes.
+decisions:
+  approach:
+    decision: >-
+      Use vitest + temporary directory fixtures with symlinks/copies of .strict-spec-driven/, and
+      spy on strict-spec-driven.js invoker responses via module mocking
+    rationale: >-
+      Full lifecycle E2E tests against a real fixture project catch regressions in
+      roadmap-recommend, apply, verify, review, archive, and ship transitions. Using recorded/spy
+      responses avoids flaky model-dependent tests.
+alternatives: []
+risks: []
