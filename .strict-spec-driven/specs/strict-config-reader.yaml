@@ -38,28 +38,35 @@ requirements:
         - THEN: >-
             the return type matches the expected TypeScript interface at compile time and the values
             are populated from config.yaml
+  get-config-accessor:
+    strength: MUST
+    statement: >-
+      ConfigReader MUST expose a getConfig() method returning the full parsed StrictConfig object.
+    scenarios:
+      get-config-returns-all:
+        - GIVEN: a ConfigReader instance created with a valid project root
+        - WHEN: getConfig() is called
+        - THEN: the full StrictConfig object is returned with context, rules, and review_evidence fields
+  partial-field-defaults:
+    strength: MUST
+    statement: >-
+      When .strict-spec-driven/config.yaml exists but has missing sections (e.g. no rules.specs),
+      ConfigReader MUST populate those fields with sensible defaults rather than throwing.
+    scenarios:
+      missing-rules-section:
+        - GIVEN: a config.yaml with context but no rules field
+        - WHEN: getRules() is called
+        - THEN: default rule arrays are returned without throwing
   session-cache:
     strength: MUST
     statement: >-
       ConfigReader MUST cache the parsed config on first read and return the cached object on
-      subsequent calls within the same session.
+      subsequent calls within the same instance.
     scenarios:
       cache-hit:
         - GIVEN: a ConfigReader instance has already parsed config.yaml once
         - WHEN: any accessor is called again
         - THEN: the same object reference is returned without re-reading the file
-  roadmap-recommend-uses-config:
-    strength: MUST
-    statement: >-
-      roadmapRecommend() MUST use the project root to locate .strict-spec-driven/ directory for
-      reading roadmap YAML files.
-    scenarios:
-      config-path-resolution:
-        - GIVEN: a project root with a valid .strict-spec-driven/ directory
-        - WHEN: roadmapRecommend(projectRoot) is called
-        - THEN: >-
-            the function resolves INDEX.yaml and milestone files relative to
-            projectRoot/.strict-spec-driven/
 mapping:
   implementation:
     - src/strict/config-reader.ts

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { pickPrimaryBalance } from "../../client.js";
+import { DeepSeekClient, pickPrimaryBalance } from "../../client.js";
 import type { CacheFirstLoop } from "../../loop.js";
 import { VERSION, compareVersions, getLatestVersion } from "../../version.js";
 
@@ -21,6 +21,7 @@ export interface UseSessionInfoResult {
 
 /** All values best-effort — `null` means "not loaded or endpoint failed"; StatsPanel hides those cells. */
 export function useSessionInfo(loop: CacheFirstLoop): UseSessionInfoResult {
+  const dsClient = loop.client instanceof DeepSeekClient ? loop.client : null;
   const [balance, setBalance] = useState<Balance | null>(null);
   const [models, setModels] = useState<string[] | null>(null);
   const [latestVersion, setLatestVersion] = useState<string | null>(null);
@@ -32,7 +33,7 @@ export function useSessionInfo(loop: CacheFirstLoop): UseSessionInfoResult {
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const bal = await loop.client.getBalance().catch(() => null);
+      const bal = await dsClient?.getBalance().catch(() => null);
       if (cancelled || !bal) return;
       const primary = pickPrimaryBalance(bal.balance_infos);
       if (!primary) return;
@@ -41,7 +42,7 @@ export function useSessionInfo(loop: CacheFirstLoop): UseSessionInfoResult {
     return () => {
       cancelled = true;
     };
-  }, [loop]);
+  }, [dsClient]);
 
   // Fetch the model catalog from DeepSeek once. Silent degrade on
   // failure (stays null), so `/models` can tell "still loading /
@@ -49,14 +50,14 @@ export function useSessionInfo(loop: CacheFirstLoop): UseSessionInfoResult {
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const list = await loop.client.listModels().catch(() => null);
+      const list = await dsClient?.listModels().catch(() => null);
       if (cancelled || !list) return;
-      setModels(list.data.map((m) => m.id));
+      setModels(list.data.map((m: { id: string }) => m.id));
     })();
     return () => {
       cancelled = true;
     };
-  }, [loop]);
+  }, [dsClient]);
 
   // Background registry check — 24h disk cache absorbs repeated
   // launches, timeout bounded so a flaky network doesn't delay the
@@ -80,20 +81,20 @@ export function useSessionInfo(loop: CacheFirstLoop): UseSessionInfoResult {
 
   const refreshBalance = useCallback(() => {
     void (async () => {
-      const bal = await loop.client.getBalance().catch(() => null);
+      const bal = await dsClient?.getBalance().catch(() => null);
       const primary = bal ? pickPrimaryBalance(bal.balance_infos) : null;
       if (primary) {
         setBalance({ currency: primary.currency, total: Number(primary.total_balance) });
       }
     })();
-  }, [loop]);
+  }, [dsClient]);
 
   const refreshModels = useCallback(() => {
     void (async () => {
-      const list = await loop.client.listModels().catch(() => null);
-      if (list) setModels(list.data.map((m) => m.id));
+      const list = await dsClient?.listModels().catch(() => null);
+      if (list) setModels(list.data.map((m: { id: string }) => m.id));
     })();
-  }, [loop]);
+  }, [dsClient]);
 
   const refreshLatestVersion = useCallback(() => {
     void (async () => {

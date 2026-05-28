@@ -1,5 +1,6 @@
-import { type DeepSeekClient, Usage } from "../client.js";
+import { Usage } from "../client.js";
 import { t } from "../i18n/index.js";
+import type { ModelClient } from "../ports/model-client.js";
 import type { TurnStats } from "../telemetry/stats.js";
 import type { ChatMessage } from "../types.js";
 import { errorLabelFor, reasonPrefixFor } from "./errors.js";
@@ -10,7 +11,7 @@ import type { LoopEvent } from "./types.js";
 export type ForceSummaryReason = "aborted" | "context-guard" | "stuck";
 
 export interface ForceSummaryContext {
-  client: DeepSeekClient;
+  client: ModelClient;
   signal: AbortSignal;
   buildMessages: () => ChatMessage[];
   appendAndPersist: (msg: ChatMessage) => void;

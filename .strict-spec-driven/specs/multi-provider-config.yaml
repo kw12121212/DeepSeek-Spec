@@ -43,16 +43,39 @@ requirements:
         - GIVEN: ZHIPU_API_KEY env var is set
         - WHEN: the GLM provider API key is resolved
         - THEN: the ZHIPU_API_KEY value is returned
+  glm-base-url-resolution:
+    strength: MUST
+    statement: >-
+      GLM base URL MUST resolve from ZHIPU_BASE_URL env var first, then config.json glm.baseUrl,
+      then undefined
+    scenarios:
+      glm-env-base-url:
+        - GIVEN: ZHIPU_BASE_URL env var is set
+        - WHEN: the GLM provider base URL is resolved
+        - THEN: the ZHIPU_BASE_URL value is returned
+      glm-config-base-url:
+        - GIVEN: ZHIPU_BASE_URL is not set and config.json has glm.baseUrl
+        - WHEN: the GLM provider base URL is resolved
+        - THEN: the config.json glm.baseUrl value is returned
+      glm-no-base-url:
+        - GIVEN: neither ZHIPU_BASE_URL nor config.json glm.baseUrl is set
+        - WHEN: the GLM provider base URL is resolved
+        - THEN: undefined is returned without throwing
   model-to-provider:
     strength: MUST
     statement: >-
       modelToProvider(modelId) MUST map 'deepseek-*' to 'deepseek', 'glm-*' to 'glm', and unknown
-      prefixes to the active provider
+      prefixes to the active provider. An optional activeProvider parameter MAY override the
+      resolved active provider for unknown prefixes.
     scenarios:
       deepseek-prefix:
         - GIVEN: modelId is 'deepseek-v4-pro'
         - WHEN: modelToProvider('deepseek-v4-pro') is called
         - THEN: '''deepseek'' is returned'
+      explicit-active-provider:
+        - GIVEN: modelId is 'unknown-model' and activeProvider is 'glm'
+        - WHEN: modelToProvider('unknown-model', 'glm') is called
+        - THEN: '''glm'' is returned'
   backward-compat:
     strength: MUST
     statement: >-
@@ -63,6 +86,46 @@ requirements:
         - GIVEN: DEEPSEEK_API_KEY is set and no provider is configured
         - WHEN: loadApiKey() is called
         - THEN: the DEEPSEEK_API_KEY value is returned as before
+  provider-registry-factory:
+    strength: MUST
+    statement: >-
+      ProviderRegistry MUST map a provider ID string to a factory function that produces a
+      ModelClient-typed instance
+    scenarios:
+      register-and-resolve:
+        - GIVEN: a provider 'deepseek' is registered with a factory
+        - WHEN: resolveModelClient('deepseek') is called
+        - THEN: a ModelClient instance from that factory is returned
+  model-validation:
+    strength: MUST
+    statement: >-
+      Each registered provider MUST declare its supported model IDs and resolveModelClient() MUST
+      throw on unknown models
+    scenarios:
+      unknown-model-throws:
+        - GIVEN: provider 'glm' is registered with models ['glm-4', 'glm-4-flash']
+        - WHEN: resolveModelClient('unknown-model') is called with active provider 'glm'
+        - THEN: an error is thrown indicating the model is not supported
+  resolve-defaults-to-active:
+    strength: MUST
+    statement: >-
+      resolveModelClient() with no explicit provider MUST use the active provider resolved from
+      config
+    scenarios:
+      default-provider-resolution:
+        - GIVEN: config has provider set to 'deepseek'
+        - WHEN: resolveModelClient() is called with no provider argument
+        - THEN: a DeepSeekClient-typed ModelClient is returned
+  port-chat-stream:
+    strength: MUST
+    statement: >-
+      ModelClient port MUST define chat() and stream() methods matching current DeepSeekClient
+      signatures, plus provider capability metadata (supportsThinking, supportsReasoningContent)
+    scenarios:
+      port-has-capability-flags:
+        - GIVEN: a ModelClient implementation for deepseek
+        - WHEN: client.capabilities is accessed
+        - THEN: supportsThinking and supportsReasoningContent are boolean
 mapping:
   implementation:
     - src/config.ts

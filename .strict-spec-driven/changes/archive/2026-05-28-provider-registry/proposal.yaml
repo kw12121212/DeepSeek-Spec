@@ -1,0 +1,31 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: provider-registry
+  status: proposed
+summary:
+  what:
+    - >-
+      Align the ModelClient port with actual DeepSeekClient usage (chat() + stream() + capability
+      metadata) and create a ProviderRegistry that maps provider IDs to client factories
+  why:
+    - >-
+      The current ModelClient port defines chatStream() which no code implements. DeepSeekClient has
+      chat() and stream() with different signatures. Without aligning the port and building a
+      registry, all remaining M7 work (GLM adapter, provider-aware loop) is blocked.
+scope:
+  in:
+    - >-
+      src/ports/model-client.ts, src/adapters/deepseek-client.ts, src/loop.ts,
+      src/loop/streaming.ts, and all chat() call sites
+  out:
+    - >-
+      src/ports/model-client.ts (updated port), src/providers/registry.ts (new ProviderRegistry +
+      resolveModelClient)
+unchanged_behavior:
+  - TUI, MCP, desktop, i18n, memory, tools, repair, code editor
+roadmap:
+  milestone: 0007-multi-provider-api
+  planned_change: provider-registry

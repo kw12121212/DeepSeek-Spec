@@ -1,0 +1,42 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: provider-registry
+sections:
+  Implementation:
+    align-model-client-port:
+      text: Update ModelClient port to define chat(), stream(), and provider capability metadata matching actual DeepSeekClient signatures
+      status: complete
+    create-provider-registry:
+      text: Create src/providers/registry.ts with ProviderRegistry class, provider factories, and resolveModelClient()
+      status: complete
+    wire-registry-in-loop:
+      text: Replace direct DeepSeekClient construction in loop.ts and entry points with resolveModelClient()
+      status: complete
+  Testing:
+    test-port-alignment:
+      text: Unit tests verifying ModelClient port contract (chat, stream, capability flags)
+      status: complete
+    test-registry:
+      text: Unit tests for ProviderRegistry (register, resolve, model validation, default provider)
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

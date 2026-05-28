@@ -19,6 +19,7 @@ import { McpClient } from "../../mcp/client.js";
 import { preflightStdioSpec } from "../../mcp/preflight.js";
 import { bridgeMcpTools } from "../../mcp/registry.js";
 import { buildTransportFromSpec } from "../../mcp/transport-from-spec.js";
+import { ProviderRegistry } from "../../providers/registry.js";
 import { appendUsage } from "../../telemetry/usage.js";
 import { ToolRegistry } from "../../tools.js";
 import { openTranscriptFile, recordFromLoopEvent, writeRecord } from "../../transcript/log.js";
@@ -140,7 +141,13 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   }
 
   const ep = loadEndpoint();
-  const client = new DeepSeekClient({ apiKey: ep.apiKey, baseUrl: ep.baseUrl });
+  const registry = new ProviderRegistry();
+  registry.register(
+    "deepseek",
+    () => new DeepSeekClient({ apiKey: ep.apiKey, baseUrl: ep.baseUrl }),
+    ["deepseek-v4-flash", "deepseek-v4-pro"],
+  );
+  const client = registry.resolve("deepseek");
   const prefix = new ImmutablePrefix({
     system: opts.system,
     toolSpecs: tools?.specs(),

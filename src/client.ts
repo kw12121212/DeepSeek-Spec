@@ -1,5 +1,6 @@
 import { type EventSourceMessage, createParser } from "eventsource-parser";
 import { loadRateLimit, resolveBaseUrlEnv } from "./config.js";
+import type { ModelClient } from "./ports/model-client.js";
 import { type RetryOptions, fetchWithRetry } from "./retry.js";
 import type { ChatMessage, ChatRequestOptions, RawUsage, ToolCall, ToolSpec } from "./types.js";
 
@@ -151,7 +152,7 @@ function stringifyJsonTransport(value: unknown): string {
   return JSON.stringify(sanitizeJsonTransportValue(value));
 }
 
-export class DeepSeekClient {
+export class DeepSeekClient implements ModelClient {
   readonly apiKey: string;
   readonly baseUrl: string;
   readonly timeoutMs: number;
@@ -159,6 +160,8 @@ export class DeepSeekClient {
   private readonly _fetch: typeof fetch;
   private readonly minChatIntervalMs: number;
   private nextChatRequestAt = 0;
+
+  readonly capabilities = { supportsThinking: true, supportsReasoningContent: true } as const;
 
   constructor(opts: DeepSeekClientOptions = {}) {
     const apiKey = opts.apiKey ?? process.env.DEEPSEEK_API_KEY;

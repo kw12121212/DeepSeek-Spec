@@ -5,21 +5,66 @@ spec:
   id: strict-brainstorm
   title: Strict Brainstorm Tool
 requirements:
-  structured-output:
+  multi-phase-protocol:
     strength: MUST
     statement: >-
-      The brainstorm tool MUST return a structured summary object containing title, goal, scope.in,
-      scope.out, and done_criteria fields
+      The brainstorm tool MUST implement a two-phase protocol: when the summary is incomplete it
+      returns {phase: "questions", questions: string[]}; when complete it returns
+      {phase: "summary", summary: BrainstormSummary}.
     scenarios:
-      happy-path:
-        - GIVEN: a rough free-text idea describing a desired change
-        - WHEN: the brainstorm tool is invoked with that idea
-        - THEN: it returns a structured summary with all five fields populated
+      incomplete-returns-questions:
+        - GIVEN: an idea is provided but required fields are missing from the partial summary
+        - WHEN: the brainstorm tool is invoked
+        - THEN: it returns phase "questions" with a non-empty questions array identifying missing fields
+      complete-returns-summary:
+        - GIVEN: all required fields are populated in the summary
+        - WHEN: the brainstorm tool is invoked
+        - THEN: it returns phase "summary" with a BrainstormSummary containing title, goal, scope.in,
+            scope.out, and done_criteria
+  parameter-schema:
+    strength: MUST
+    statement: >-
+      The brainstorm tool MUST accept three optional parameters: idea (free-text description), history
+      (array of {question, answer} pairs for multi-turn refinement), and summary (partial
+      BrainstormSummary to validate and refine).
+    scenarios:
+      idea-only:
+        - GIVEN: the brainstorm tool is called with only an idea string
+        - WHEN: no history or summary is provided
+        - THEN: the tool generates focus questions for all required fields
+      history-refinement:
+        - GIVEN: a history of prior Q&A pairs and a partial summary
+        - WHEN: the brainstorm tool is invoked with history and summary
+        - THEN: the tool uses history context to avoid repeating the original idea in questions
+  summary-validation:
+    strength: MUST
+    statement: >-
+      The brainstorm tool MUST validate that a complete summary has non-empty title, non-empty goal,
+      non-empty scope.in or scope.out arrays, and at least one done_criterion entry.
+    scenarios:
+      missing-done-criteria:
+        - GIVEN: a summary with title, goal, and scope but empty done_criteria
+        - WHEN: the brainstorm tool validates the summary
+        - THEN: it returns phase "questions" asking about done_criteria
+      missing-scope:
+        - GIVEN: a summary with title and goal but both scope.in and scope.out are empty
+        - WHEN: the brainstorm tool validates the summary
+        - THEN: it returns phase "questions" asking about scope
+  fallback-question:
+    strength: MUST
+    statement: >-
+      When no focus questions can be generated for missing fields, the brainstorm tool MUST default
+      to asking about the goal.
+    scenarios:
+      no-questions-generated:
+        - GIVEN: a summary where no specific missing-field questions are produced
+        - WHEN: the brainstorm tool builds its response
+        - THEN: it returns a question about the goal as the fallback
   no-side-effects:
     strength: MUST
     statement: >-
       The brainstorm tool MUST NOT create or modify any files until the user explicitly confirms the
-      structured summary
+      structured summary.
     scenarios:
       reject-summary:
         - GIVEN: a brainstorm session that produces a structured summary
@@ -29,7 +74,8 @@ requirements:
     strength: MUST
     statement: >-
       The brainstorm subcommand MUST be registered as a dispatchable agent tool named
-      strict_brainstorm with no required parameters
+      strict_brainstorm with parallelSafe=false, requiresChangeName=false, and no required
+      parameters.
     scenarios:
       tool-dispatch:
         - GIVEN: the strict tool registry is initialized
@@ -37,3 +83,9 @@ requirements:
         - THEN: >-
             a tool named strict_brainstorm is available with parallelSafe=false and no required
             changeName
+mapping:
+  implementation:
+    - src/strict/brainstorm.ts
+    - src/strict/strict-tools.ts
+  tests:
+    - tests/strict-brainstorm.test.ts

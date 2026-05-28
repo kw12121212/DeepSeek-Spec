@@ -1,4 +1,4 @@
-import { type DeepSeekClient, Usage } from "./client.js";
+import { DeepSeekClient, Usage } from "./client.js";
 import type { ReasoningEffort } from "./config.js";
 import type { PauseGate } from "./core/pause-gate.js";
 import { pauseGate as defaultPauseGate } from "./core/pause-gate.js";
@@ -9,6 +9,7 @@ import {
   truncateForModel,
   truncateForModelByTokens,
 } from "./mcp/registry.js";
+import type { ModelClient } from "./ports/model-client.js";
 
 import { ContextManager, TURN_START_FOLD_THRESHOLD } from "./context-manager.js";
 import { InflightSet } from "./core/inflight.js";
@@ -84,7 +85,7 @@ export {
 export type { EventRole, LoopEvent } from "./loop/types.js";
 
 export interface CacheFirstLoopOptions {
-  client: DeepSeekClient;
+  client: ModelClient;
   prefix: ImmutablePrefix;
   tools?: ToolRegistry;
   model?: string;
@@ -123,7 +124,7 @@ function shrinkMessageForRetention(message: ChatMessage): ChatMessage {
 }
 
 export class CacheFirstLoop {
-  readonly client: DeepSeekClient;
+  readonly client: ModelClient;
   readonly prefix: ImmutablePrefix;
   readonly tools: ToolRegistry;
   readonly log = new AppendOnlyLog();
@@ -854,10 +855,13 @@ export class CacheFirstLoop {
           this._steerQueue.length = 0;
           return;
         }
-        const upstreamHost = this.client.baseUrl;
+        const upstreamHost =
+          this.client instanceof DeepSeekClient ? this.client.baseUrl : undefined;
         const dsHost = isDeepSeekHost(upstreamHost);
         const probe =
-          is5xxError(err) && dsHost ? await probeDeepSeekReachable(this.client) : undefined;
+          is5xxError(err) && dsHost
+            ? await probeDeepSeekReachable(this.client as DeepSeekClient)
+            : undefined;
         const cause = err instanceof Error ? err : new Error(String(err));
         const retryable = !is4xxError(cause) && cause.name !== "AbortError";
         const { code, phase } = errorMeta(cause);

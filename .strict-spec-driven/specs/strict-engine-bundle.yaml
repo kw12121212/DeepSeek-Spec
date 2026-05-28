@@ -50,7 +50,8 @@ requirements:
     strength: MUST
     statement: >-
       The Subcommand type MUST include all supported subcommands: init, propose, generate, apply,
-      verify, ready, archive, ship, cancel, roadmap-status, roadmap-sync, roadmap-recommend.
+      verify, ready, archive, ship, cancel, brainstorm, roadmap-status, roadmap-sync,
+      roadmap-recommend, auto-pipeline.
     scenarios:
       all-subcommands-accepted:
         - GIVEN: the Subcommand union type is defined
@@ -85,8 +86,10 @@ requirements:
   tool-registry-entries:
     strength: MUST
     statement: >-
-      The ToolRegistry MUST include entries for strict_roadmap_status and strict_roadmap_sync with
-      parallelSafe=false and no changeName parameter.
+      The ToolRegistry MUST include entries for strict_roadmap_status, strict_roadmap_sync,
+      strict_ready, strict_generate, and strict_brainstorm with parallelSafe=false. roadmap tools
+      MUST NOT require changeName. ready and generate MUST require changeName. brainstorm MUST NOT
+      require changeName.
     scenarios:
       roadmap-status-registered:
         - GIVEN: the ToolRegistry is initialized with default tools
@@ -94,11 +97,30 @@ requirements:
         - THEN: >-
             exactly one tool entry is returned with parallelSafe=false and no changeName in its
             parameter schema
+      ready-tool-registered:
+        - GIVEN: the ToolRegistry is initialized with default tools
+        - WHEN: list() is called and filtered for strict_ready
+        - THEN: >-
+            exactly one tool entry is returned with parallelSafe=false and changeName in its
+            parameter schema
+      generate-tool-registered:
+        - GIVEN: the ToolRegistry is initialized with default tools
+        - WHEN: list() is called and filtered for strict_generate
+        - THEN: >-
+            exactly one tool entry is returned with parallelSafe=false and changeName in its
+            parameter schema
+      brainstorm-tool-registered:
+        - GIVEN: the ToolRegistry is initialized with default tools
+        - WHEN: list() is called and filtered for strict_brainstorm
+        - THEN: >-
+            exactly one tool entry is returned with parallelSafe=false and no changeName in its
+            parameter schema
   tool-handler-invokes-engine:
     strength: MUST
     statement: >-
       Each strict tool handler MUST call invokeStrict() with the corresponding subcommand name and
-      the tool's input args, and return the structured result.
+      the tool's input args, and return the structured result. State-guarded tools MUST call
+      requireState before invoking the subcommand.
     scenarios:
       handler-dispatch:
         - GIVEN: a strict tool is invoked with a valid changeName and subcommand-specific fields
@@ -106,6 +128,21 @@ requirements:
         - THEN: >-
             invokeStrict is called with the correct subcommand and the result is returned to the
             caller
+      state-guard-rejects:
+        - GIVEN: a state-guarded tool is invoked for a change in the wrong state
+        - WHEN: the tool handler runs
+        - THEN: the handler returns the requireState error without calling invokeStrict
+  state-guards:
+    strength: MUST
+    statement: >-
+      STATE_GUARDS MUST define required states for apply (proposed), generate (proposed), verify
+      (applied), archive (reviewed), ship (archived), and cancel (proposed, applied). Each guarded
+      tool MUST check via requireState before dispatch.
+    scenarios:
+      apply-requires-proposed:
+        - GIVEN: a change in verified state
+        - WHEN: strict_apply is invoked
+        - THEN: the tool returns a state mismatch error without calling the apply subcommand
   tool-parallel-safety:
     strength: MUST
     statement: >-
@@ -143,14 +180,18 @@ requirements:
   auto-step-sequencing:
     strength: MUST
     statement: >-
-      AutoPipeline MUST execute steps in order: recommend, apply, verify, review, archive, ship.
-      Each step MUST call the corresponding invokeStrict subcommand and MUST run npm run verify as a
-      gate check before proceeding to the next step.
+      AutoPipeline MUST execute steps in order: recommend, apply, verify, review (dispatched as the
+      ready subcommand), archive, ship. Each step MUST call the corresponding invokeStrict
+      subcommand and MUST run npm run verify as a gate check before proceeding to the next step.
     scenarios:
       full-pipeline-run:
         - GIVEN: a valid change name and no --from flag
         - WHEN: run() is called
         - THEN: all six steps execute in order and each gate check passes before the next step starts
+      review-dispatches-ready:
+        - GIVEN: the pipeline reaches the review step
+        - WHEN: the review step executes
+        - THEN: invokeStrict is called with the 'ready' subcommand, not 'review'
       gate-failure-pause:
         - GIVEN: a change where the verify step returns a non-zero exit code
         - WHEN: run() reaches the verify step
@@ -171,12 +212,35 @@ requirements:
     strength: MUST
     statement: >-
       After the archive step completes successfully, AutoPipeline MUST call
-      invokeStrict('roadmap-sync', []) to sync the roadmap INDEX.yaml before proceeding to ship.
+      milestoneAdvance(changeName) to check and update milestone status, then call
+      invokeStrict('roadmap-sync', []) to sync the roadmap INDEX.yaml. If milestoneAdvance updates
+      a milestone, roadmap-sync MUST be called a second time after the advancement.
     scenarios:
       sync-called:
         - GIVEN: a change that passes through archive successfully
         - WHEN: the archive step gate check passes
-        - THEN: roadmap-sync is called exactly once and the pipeline proceeds to ship
+        - THEN: milestoneAdvance is called, roadmap-sync is called at least once, and the pipeline
+            proceeds to ship
+      milestone-advance-triggers-second-sync:
+        - GIVEN: a change whose archival completes the last planned change in a milestone
+        - WHEN: milestoneAdvance updates the milestone status to complete
+        - THEN: roadmap-sync is called a second time to reflect the milestone update
+  freeform-pipeline:
+    strength: MUST
+    statement: >-
+      When the strict_auto tool is called with a description argument, AutoPipeline MUST run the
+      freeform variant: propose (using the description), apply, verify, review (ready), archive,
+      ship. This replaces the roadmap-driven recommend step with a propose step using the provided
+      description and changeName.
+    scenarios:
+      freeform-with-description:
+        - GIVEN: the strict_auto tool is called with a description and changeName
+        - WHEN: the tool handler executes
+        - THEN: runFreeformPipeline is called which runs propose first, then apply through ship
+      freeform-gate-parity:
+        - GIVEN: runFreeformPipeline is executing steps after propose
+        - WHEN: a gate check fails at any step
+        - THEN: the pipeline returns a failed result and does not continue
 mapping:
   implementation:
     - vendor/strict-spec-driven.js

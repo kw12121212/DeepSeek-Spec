@@ -1,0 +1,19 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: provider-registry
+open: []
+resolved:
+  - id: port-return-types
+    question: >-
+      Should the updated ModelClient port use the existing DeepSeekMessage/DeepSeekStreamChunk types
+      directly, or should we define new provider-agnostic type aliases?
+    context: >-
+      DeepSeekClient currently uses types from the OpenAI SDK compatibility layer. If we reuse them
+      directly, the port is coupled to OpenAI wire format; if we alias them, we have an abstraction
+      layer but more types to maintain.
+    answer: >-
+      Use thin type aliases in the port file — re-export existing shapes under provider-agnostic
+      names with minimal wrapping
+    status: resolved

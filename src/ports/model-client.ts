@@ -1,20 +1,15 @@
-/** Port: streaming chat model. Adapters: DeepSeek today; pluggable later. */
+import type { ChatResponse, StreamChunk } from "../client.js";
+import type { ChatRequestOptions } from "../types.js";
 
-import type { ChatRequestOptions, RawUsage } from "../types.js";
-
-export interface ModelStreamChunk {
-  contentDelta?: string;
-  reasoningDelta?: string;
-  toolCallDelta?: {
-    index: number;
-    id?: string;
-    name?: string;
-    argumentsDelta?: string;
-  };
-  usage?: RawUsage;
-  finishReason?: string;
+export interface ProviderCapabilities {
+  supportsThinking: boolean;
+  supportsReasoningContent: boolean;
 }
 
 export interface ModelClient {
-  chatStream(opts: ChatRequestOptions, signal?: AbortSignal): AsyncIterable<ModelStreamChunk>;
+  chat(opts: ChatRequestOptions): Promise<ChatResponse>;
+  stream(opts: ChatRequestOptions): AsyncGenerator<StreamChunk>;
+  readonly capabilities: ProviderCapabilities;
 }
+
+export type { ChatResponse, StreamChunk };

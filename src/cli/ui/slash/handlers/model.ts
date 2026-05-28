@@ -5,6 +5,7 @@ import {
   saveReasoningEffort,
 } from "@/config.js";
 import { t } from "@/i18n/index.js";
+import { DeepSeekClient } from "@/index.js";
 import { effortChoicesForBaseUrl } from "../../effort-choices.js";
 import type { SlashHandler } from "../dispatch.js";
 
@@ -30,7 +31,8 @@ const model: SlashHandler = (args, loop, ctx) => {
 };
 
 const effort: SlashHandler = (args, loop) => {
-  const choices = effortChoicesForBaseUrl(loop.client.baseUrl);
+  const baseUrl = loop.client instanceof DeepSeekClient ? loop.client.baseUrl : undefined;
+  const choices = effortChoicesForBaseUrl(baseUrl);
   const list = choices.join(" | ");
   const usageKey =
     choices.length === 4 ? "handlers.model.effortUsage" : "handlers.model.effortUsageNoMax";

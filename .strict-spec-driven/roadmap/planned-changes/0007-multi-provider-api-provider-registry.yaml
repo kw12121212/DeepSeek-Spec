@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: provider-registry
   milestone: 0007-multi-provider-api
-status: planned
+status: complete
 summary: Create provider registry and align ModelClient port with actual usage
 details: >-
   Two-part change:

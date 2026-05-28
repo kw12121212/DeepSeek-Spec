@@ -1471,7 +1471,8 @@ function AppInner({
 
   // `max` is a DeepSeek-only reasoning extension — drop it from /effort
   // suggestions + picker when the active endpoint is third-party (#1794).
-  const effortChoices = React.useMemo(() => effortChoicesForBaseUrl(loop.client.baseUrl), [loop]);
+  const baseUrl = loop.client instanceof DeepSeekClient ? loop.client.baseUrl : undefined;
+  const effortChoices = React.useMemo(() => effortChoicesForBaseUrl(baseUrl), [baseUrl]);
 
   // Three mutually-exclusive input-prefix pickers (slash name, @ file
   // mention, slash argument) —state + memos + commit callbacks live

@@ -5,6 +5,7 @@ import { CacheFirstLoop } from "../loop.js";
 import { applyProjectMemory } from "../memory/project.js";
 import { ImmutablePrefix } from "../memory/runtime.js";
 import { timestampSuffix } from "../memory/session.js";
+import type { ModelClient } from "../ports/model-client.js";
 import {
   NEGATIVE_CLAIM_RULE,
   TUI_FORMATTING_RULES,
@@ -52,7 +53,7 @@ export interface SubagentSink {
 export const SHARED_SUBAGENT_SINK: SubagentSink = { current: null };
 
 export interface SpawnSubagentOptions {
-  client: DeepSeekClient;
+  client: ModelClient;
   parentRegistry: ToolRegistry;
   system: string;
   task: string;

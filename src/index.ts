@@ -3,6 +3,8 @@
 export { DeepSeekClient, Usage } from "./client.js";
 export type { ChatResponse, StreamChunk, DeepSeekClientOptions } from "./client.js";
 
+export type { ModelClient, ProviderCapabilities } from "./ports/model-client.js";
+
 export {
   CacheFirstLoop,
   formatLoopError,

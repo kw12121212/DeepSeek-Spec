@@ -9,8 +9,8 @@ requirements:
     strength: MUST
     statement: >-
       ChangeLifecycle MUST allow only the defined valid transitions: proposed->applied,
-      proposed->canceled, applied->verified, verified->reviewed, reviewed->archived,
-      archived->shipped.
+      proposed->canceled, applied->verified, applied->canceled, verified->reviewed,
+      reviewed->archived, archived->shipped.
     scenarios:
       valid-forward:
         - GIVEN: a change in proposed state
@@ -71,13 +71,19 @@ requirements:
   tool-dispatch-guarded:
     strength: MUST
     statement: >-
-      Each strict tool dispatch handler MUST call requireState before invoking the CLI subcommand
-      and return the error string as the tool result if the guard rejects the call
+      Each state-guarded strict tool dispatch handler MUST call requireState before invoking the CLI
+      subcommand and return the error string as the tool result if the guard rejects the call.
+      Guarded tools and their required states are: apply (proposed), generate (proposed), verify
+      (applied), archive (reviewed), ship (archived), cancel (proposed, applied).
     scenarios:
       guarded-tool-call:
         - GIVEN: a change named my-change is in proposed state
         - WHEN: strict_verify tool is invoked with changeName my-change
         - THEN: the tool returns the guard error string without invoking the verify CLI subcommand
+      ready-requires-proposed:
+        - GIVEN: a change in verified state
+        - WHEN: strict_generate tool is invoked with changeName my-change
+        - THEN: the tool returns a state mismatch error without invoking the generate subcommand
   roadmap-recommend-ignores-completed:
     strength: MUST
     statement: >-

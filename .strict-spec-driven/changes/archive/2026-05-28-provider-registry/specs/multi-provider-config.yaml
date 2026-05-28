@@ -1,0 +1,56 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - src/providers/registry.ts
+    - src/ports/model-client.ts
+  tests:
+    - tests/providers/registry.test.ts
+    - tests/ports/model-client.test.ts
+operations:
+  ADDED:
+    provider-registry-factory:
+      strength: MUST
+      statement: >-
+        ProviderRegistry MUST map a provider ID string to a factory function that produces a
+        ModelClient-typed instance
+      scenarios:
+        register-and-resolve:
+          - GIVEN: a provider 'deepseek' is registered with a factory
+          - WHEN: resolveModelClient('deepseek') is called
+          - THEN: a ModelClient instance from that factory is returned
+    model-validation:
+      strength: MUST
+      statement: >-
+        Each registered provider MUST declare its supported model IDs and resolveModelClient() MUST
+        throw on unknown models
+      scenarios:
+        unknown-model-throws:
+          - GIVEN: provider 'glm' is registered with models ['glm-4', 'glm-4-flash']
+          - WHEN: resolveModelClient('unknown-model') is called with active provider 'glm'
+          - THEN: an error is thrown indicating the model is not supported
+    resolve-defaults-to-active:
+      strength: MUST
+      statement: >-
+        resolveModelClient() with no explicit provider MUST use the active provider resolved from
+        config
+      scenarios:
+        default-provider-resolution:
+          - GIVEN: config has provider set to 'deepseek'
+          - WHEN: resolveModelClient() is called with no provider argument
+          - THEN: a DeepSeekClient-typed ModelClient is returned
+  MODIFIED:
+    port-chat-stream:
+      strength: MUST
+      statement: >-
+        ModelClient port MUST define chat() and stream() methods matching current DeepSeekClient
+        signatures, plus provider capability metadata (supportsThinking, supportsReasoningContent)
+      scenarios:
+        port-has-capability-flags:
+          - GIVEN: a ModelClient implementation for deepseek
+          - WHEN: client.capabilities is accessed
+          - THEN: supportsThinking and supportsReasoningContent are boolean
+  REMOVED: {}

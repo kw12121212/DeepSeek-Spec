@@ -12,7 +12,7 @@ import {
   parseAtQuery,
   rankPickerCandidates,
 } from "../../at-mentions.js";
-import { pickPrimaryBalance } from "../../client.js";
+import { DeepSeekClient, pickPrimaryBalance } from "../../client.js";
 import { codeSystemPrompt } from "../../code/prompt.js";
 import { applyPlanMode, buildCodeToolset } from "../../code/setup.js";
 import {
@@ -90,12 +90,7 @@ import {
 } from "../../desktop/qq-turn-routing.js";
 import { loadDotenv } from "../../env.js";
 import { type ResolvedHook, formatHookOutcomeMessage, loadHooks, runHooks } from "../../hooks.js";
-import {
-  CacheFirstLoop,
-  DeepSeekClient,
-  ImmutablePrefix,
-  type LoopAbortOptions,
-} from "../../index.js";
+import { CacheFirstLoop, ImmutablePrefix, type LoopAbortOptions } from "../../index.js";
 import { parseMcpSpec } from "../../mcp/spec.js";
 import {
   deleteSession,
@@ -761,7 +756,9 @@ function emitQQSettings(tab: Tab): void {
 
 async function emitBalance(tab: Tab): Promise<void> {
   if (!tab.runtime) return;
-  const bal = await tab.runtime.loop.client.getBalance().catch(() => null);
+  const dsClient = tab.runtime.loop.client;
+  if (!(dsClient instanceof DeepSeekClient)) return;
+  const bal = await dsClient.getBalance().catch(() => null);
   if (!bal) return;
   const primary = pickPrimaryBalance(bal.balance_infos);
   if (!primary) return;
