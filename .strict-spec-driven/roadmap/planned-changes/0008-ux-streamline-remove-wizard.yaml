@@ -1,0 +1,46 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: remove-wizard
+  milestone: 0008-ux-streamline
+status: planned
+summary: |
+  Remove the auto-triggered first-run wizard. On first run, write default config
+  and print a hint. Keep /setup as a simplified single-step API key prompt.
+details: |
+  First-run flow changes:
+  - resolveBareCommandMode(): always return "code" (remove "setup" branch)
+  - On first run (setupCompleted absent), writeConfig with defaults:
+    language from detectSystemLanguage(), theme "auto", editMode "yolo",
+    setupCompleted: true
+  - Before entering code mode, check API key availability
+    (DEEPSEEK_API_KEY env OR config.apiKey OR ZHIPU_API_KEY env for GLM).
+    If no key found, print a one-line hint:
+    "No API key found. Set DEEPSEEK_API_KEY env or run /setup."
+  - This is a non-blocking hint, not a blocking wizard — the user can still
+    browse sessions, /doctor, etc. Only model calls will fail.
+
+  /setup simplification:
+  - Replace the 5-step wizard with a single API key input step
+  - Re-use ApiKeyStep component from Wizard.tsx
+  - Remove the full Wizard component (Wizard.tsx can be deleted)
+  - Remove 37 wizard.* i18n keys from all 5 locale files + types.ts
+  - Keep validateDeepSeekApiKey() as a standalone export
+
+  Files to modify:
+  - src/cli/resolve.ts: remove "setup" return, always "code"
+  - src/cli/index.ts: remove wizard import, add default-config write + hint
+  - src/cli/commands/setup.tsx: simplify to single API key prompt
+  - src/cli/ui/Wizard.tsx: DELETE (keep validateDeepSeekApiKey in separate file)
+  - src/i18n/EN.ts, zh-CN.ts, JA.ts, de.ts, ru.ts: remove wizard.* keys
+  - src/i18n/types.ts: remove wizard key types, add setup.hint key
+
+  Files to add:
+  - src/cli/validate-api-key.ts: extract validateDeepSeekApiKey from Wizard.tsx
+
+  Test updates:
+  - tests/wizard.test.tsx: DELETE (buildSpec/validateApiKey tests move elsewhere)
+  - tests/cli-bare-routing.test.ts: update to assert "code" on first run
+depends_on: []

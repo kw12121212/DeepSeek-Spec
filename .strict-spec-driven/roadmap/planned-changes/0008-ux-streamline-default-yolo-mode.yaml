@@ -1,0 +1,40 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: default-yolo-mode
+  milestone: 0008-ux-streamline
+status: planned
+summary: |
+  Change the default EditMode from "review" to "yolo" (full access: auto-apply
+  edits + allow all shell commands). Keep all four modes and /mode command.
+details: |
+  Code change (single line):
+  - src/config.ts loadEditMode(): change fallback from "review" to "yolo"
+    (line ~1183: return "yolo" instead of "review")
+  - The function already reads from config file first, so existing users with
+    explicit editMode are unaffected.
+
+  Default config alignment:
+  - The default config written by the first-run flow (remove-wizard) should
+    NOT include an explicit editMode field — let the fallback in loadEditMode()
+    handle it. This way changing the default in one place is sufficient.
+
+  UX hint:
+  - The /mode command summary in slash/commands.ts already documents all four
+    modes. No text changes needed there.
+  - The first-run hint (from remove-wizard) does NOT need to mention /mode
+    review — the default is intentional.
+
+  Test updates:
+  - tests/config.test.ts: update assertions that expect "review" as default
+    to expect "yolo"
+  - Any test that creates a fresh config without editMode and checks behavior
+    must be audited.
+
+  Not in scope:
+  - Removing or renaming any of the four modes
+  - Changing the /mode command interface
+  - Changing how existing configs with explicit editMode are read
+depends_on: []

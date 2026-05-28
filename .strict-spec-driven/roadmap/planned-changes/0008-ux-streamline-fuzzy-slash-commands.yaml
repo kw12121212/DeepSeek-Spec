@@ -1,0 +1,51 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: fuzzy-slash-commands
+  milestone: 0008-ux-streamline
+status: planned
+summary: |
+  Add fuzzy matching to slash command autocomplete so partial/abbreviated input
+  always finds relevant commands alongside prefix matches.
+details: |
+  Strategy — fuzzy always active, prefix results ranked first:
+  1. Collect prefix matches (current: c.cmd.startsWith(p) or alias match)
+  2. Collect fuzzy matches using character-skipping scoring
+  3. Merge: prefix matches first (stable order), then fuzzy-only matches
+  4. Deduplicate (a command can be both prefix and fuzzy match)
+
+  Algorithm (in src/cli/ui/slash/nearest.ts):
+  - Add fuzzyMatch(input, target) function using character-skipping scoring:
+    - Walk both strings, match input chars against target chars in order
+    - Sequential match bonus (+2 per consecutive match)
+    - Gap penalty (-1 per skipped target char)
+    - First-char match bonus (+1)
+    - Return a numeric score (0 = no match)
+  - Add fuzzySlashCommands(input, commands, opts) that:
+    - Scores all commands (cmd name + each alias)
+    - Returns commands above a minimum score threshold
+    - Sorted by score descending
+    - Capped at opts.max (default 8)
+  - Keep existing nearestCommands() and levenshtein() unchanged
+
+  Integration (in src/cli/ui/slash/commands.ts):
+  - suggestSlashCommands(): after collecting prefix matches, also run
+    fuzzySlashCommands(p, SLASH_COMMANDS)
+  - Merge: prefix matches first, then fuzzy-only matches not already in prefix set
+  - Respect codeMode and contextual filters for fuzzy results too
+  - Minimum input length for fuzzy: 2 chars (1-char inputs skip fuzzy to avoid noise)
+
+  Examples:
+    /st   → prefix: status, stop, strict-* → + fuzzy: stats, setup
+    /mo   → prefix: model, mode → + fuzzy: (nothing extra)
+    /init → prefix: none → fuzzy: strict-init (high score)
+    /si   → prefix: none → fuzzy: strict-init, skill, sessions
+    /sa   → prefix: none → fuzzy: strict-apply, strict-archive, save
+    /co   → prefix: compact, commit, cost, code, context → + fuzzy: (enough prefix results)
+
+  Test additions:
+  - tests/nearest.test.ts: add tests for fuzzyMatch scoring and fuzzySlashCommands
+  - tests/slash-commands.test.ts: verify prefix-first ordering and fuzzy dedup
+depends_on: []

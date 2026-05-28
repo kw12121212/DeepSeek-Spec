@@ -31,3 +31,7 @@ milestones:
     title: 'M7: GLM Provider Compatibility'
     path: roadmap/milestones/0007-multi-provider-api.yaml
     status: complete
+  0008-ux-streamline:
+    title: 'M8: UX Streamline — Wizard Removal, QQ Cleanup, Permission Default, Fuzzy Slash'
+    path: roadmap/milestones/0008-ux-streamline.yaml
+    status: proposed

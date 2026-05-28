@@ -1,0 +1,72 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: remove-qq-channel
+  milestone: 0008-ux-streamline
+status: planned
+summary: |
+  Remove the entire QQ channel integration across CLI, desktop, dashboard,
+  docs, and i18n.
+details: |
+  Core removal (src/qq/):
+  - DELETE src/qq/use-qq-channel.ts (941 lines)
+  - DELETE src/qq/channel.ts (292 lines)
+  - DELETE src/qq/access.ts (90 lines)
+  - DELETE src/qq/bot.ts (286 lines)
+  - DELETE src/qq/strings.ts (50 lines)
+
+  CLI cleanup:
+  - src/cli/ui/slash/commands.ts: remove /qq command entry
+  - DELETE src/cli/ui/slash/handlers/qq.ts
+  - src/cli/ui/slash/dispatch.ts: remove qqHandlers import and registration
+  - src/cli/ui/App.tsx: remove QQChannel import and useQQChannel hook
+  - src/cli/commands/chat.tsx: remove QQChannel import
+  - src/cli/commands/desktop.ts: remove QQChannel import
+
+  Config cleanup:
+  - src/config.ts: remove loadQQConfig(), saveQQConfig(), and QQ env var
+    handling (QQ_APPID, QQ_SECRET, QQ_SANDBOX, QQ_ALLOWLIST, QQ_OWNER_OPENID)
+  - Remove normalizeQQAllowlist, normalizeQQOpenId imports from qq/access.js
+
+  Desktop cleanup:
+  - DELETE desktop/src/qq-settings.ts
+  - desktop/src/ui/settings.tsx: remove QQ settings UI section
+  - desktop/src/App.tsx: remove QQ integration
+  - desktop/src/protocol.ts: remove QQ protocol types
+
+  Dashboard cleanup:
+  - DELETE dashboard/src/qq-settings.ts
+  - dashboard/src/ui/settings.tsx: remove QQ settings UI section
+  - dashboard/src/App.tsx: remove QQ integration
+  - dashboard/src/protocol.ts: remove QQ protocol types
+
+  i18n cleanup (~30 keys per file):
+  - src/i18n/EN.ts, zh-CN.ts, JA.ts, de.ts, ru.ts: remove qq.* keys
+  - src/i18n/types.ts: remove qq key types
+  - desktop/src/i18n/en.ts, zh-CN.ts, ja.ts, de.ts: remove qq.* keys
+  - dashboard/src/i18n/*: remove qq.* keys
+
+  Docs cleanup:
+  - DELETE docs/qq-connect.md
+  - DELETE docs/qq-connect.zh-CN.md
+  - README.md: remove QQ channel section (lines ~124-133, 263-266)
+  - README.zh-CN.md: remove QQ channel section (lines ~81-90, 184-187)
+
+  Project metadata:
+  - CLAUDE.md: remove "QQ/WeChat adapters" from context description
+
+  Test removal:
+  - DELETE tests/qq-access.test.ts
+  - DELETE tests/qq-channel.test.ts
+  - DELETE tests/qq-config.test.ts
+  - DELETE tests/qq-slash.test.ts
+  - DELETE tests/desktop-qq-config.test.ts
+  - DELETE tests/desktop-qq-settings-ui.test.ts
+  - DELETE tests/desktop-qq-turn-routing.test.ts
+  - Update tests/desktop-user-message.test.ts and tests/desktop-btw-status.test.ts
+    to remove QQ-specific assertions
+
+  ws dependency: keep — used by MCP stdio transport, not QQ-only.
+depends_on: []

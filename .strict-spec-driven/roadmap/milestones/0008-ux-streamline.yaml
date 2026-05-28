@@ -1,0 +1,45 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0008-ux-streamline:
+    title: 'M8: UX Streamline — Wizard Removal, QQ Cleanup, Permission Default, Fuzzy Slash'
+goal: |
+  Simplify the first-run experience, remove unused QQ channel integration,
+  change the default permission mode to full access, and upgrade slash command
+  matching to fuzzy for more flexible command discovery.
+scope:
+  in:
+    - Replace auto-triggered setup wizard with instant default config + API key hint
+    - Simplify /setup to a single-step API key prompt (delete full Wizard.tsx)
+    - Remove all QQ channel code across CLI, desktop, dashboard, docs, and i18n
+    - Change default EditMode from "review" to "yolo" (full access)
+    - Add fuzzy slash command matching as fallback when prefix matching returns zero results
+  out:
+    - New permission modes beyond review/auto/yolo/plan
+    - Changes to provider logic, agent loop, or tool-call repair
+    - Removing the /setup command itself (kept as simplified single-step)
+    - Removing /mode command or changing its interface
+done_criteria:
+  - First run writes default config and prints API key hint if no key found
+  - /setup simplified to single API key prompt (Wizard.tsx deleted)
+  - No QQ references remain in src/, desktop/, dashboard/, tests, i18n, docs, or READMEs
+  - CLAUDE.md updated to remove QQ/WeChat mention
+  - Fresh install starts in yolo mode; existing configs with explicit editMode unaffected
+  - /init, /si, /sa fuzzy-match to strict-* commands; /st shows prefix results first + fuzzy extras
+  - bun run verify passes with zero regressions
+planned_changes: {}
+dependencies: []
+risks:
+  - QQ removal surface area is large (9 test files, 5 src/qq/ files, desktop+dashboard integration)
+  - Default yolo mode is less safe for new users — intentional tradeoff for friction-free onboarding
+  - >-
+    Fuzzy fallback may still return unexpected results for very short inputs (1 char) — cap at min
+    length 2
+  - Desktop and dashboard QQ removal may leave orphaned settings UI — verify each platform builds
+status: proposed
+notes:
+  - All four changes are independent and can be implemented in parallel
+  - QQ removal is the highest-risk item due to cross-platform surface area
+  - default-yolo-mode no longer depends on remove-wizard (config fallback is independent)
