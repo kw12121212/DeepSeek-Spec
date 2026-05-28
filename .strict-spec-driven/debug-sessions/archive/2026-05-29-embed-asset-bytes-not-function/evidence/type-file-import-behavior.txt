@@ -1,0 +1,14 @@
+Bun 1.3.13 — `import X from "path" with { type: "file" }` behavior:
+
+1. Direct bun run:
+   typeof: string
+   value: /home/wx766/Code/DeepSeek-Spec/data/deepseek-tokenizer.json.gz
+
+2. After bun build --compile:
+   typeof: string
+   value: /$bunfs/root/deepseek-tokenizer.json-d4zq0fmm.gz
+
+In BOTH cases the result is a plain string, not a Blob.
+Calling `.bytes()` on a string throws: TypeError: X.bytes is not a function.
+
+The correct API is: Bun.file(importResult).arrayBuffer() or Bun.file(importResult).bytes()

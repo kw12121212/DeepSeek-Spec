@@ -1,0 +1,13 @@
+## Disk candidates resolved at runtime
+
+Installed at: /home/wx766/.local/lib/deepseek-spec/app.mjs
+
+import.meta.url → file:///home/wx766/.local/lib/deepseek-spec/app.mjs
+dirname → /home/wx766/.local/lib/deepseek-spec/
+
+Candidate 1: REASONIX_TOKENIZER_PATH env → (not set)
+Candidate 2: ../data/deepseek-tokenizer.json.gz → /home/wx766/.local/lib/deepseek-spec/data/deepseek-tokenizer.json.gz → MISSING
+Candidate 3: ../../data/deepseek-tokenizer.json.gz → /home/wx766/.local/lib/data/deepseek-tokenizer.json.gz → MISSING
+Candidate 4: reasonix/package.json resolution → FAILS (not npm-installed)
+
+Result: all candidates fail → "Asset tokenizer not found on disk"

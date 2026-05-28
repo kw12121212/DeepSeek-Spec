@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# setup.sh — one-command bootstrap: install deps, build, bundle, install.
-# Produces a standalone single-file bundle installed as `deepseek-spec`.
+# setup.sh — one-command bootstrap: install deps, build, compile, install.
+# Produces a standalone single binary with all assets embedded.
+# Requires bun (bun build --compile).
 # Usage: ./setup.sh [--prefix <path>]
 #   Defaults to ~/.local
 
@@ -38,65 +39,48 @@ die()  { printf "${RED}✗ %s${NC}\n" "$1" >&2; exit 1; }
 
 step "checking runtime"
 
-if command -v bun >/dev/null 2>&1; then
-  BUN="$(command -v bun)"
-  ok "bun $(bun --version) at $BUN"
-else
-  BUN=""
+if ! command -v bun >/dev/null 2>&1; then
+  die "bun not found. Install bun: curl -fsSL https://bun.sh/install | bash"
 fi
+ok "bun $(bun --version) at $(command -v bun)"
 
-if command -v node >/dev/null 2>&1; then
-  NODE_VERSION="$(node --version)"
-  NODE_MAJOR="${NODE_VERSION#v}"
-  NODE_MAJOR="${NODE_MAJOR%%.*}"
-  if [ "$NODE_MAJOR" -lt 22 ]; then
-    die "node $NODE_VERSION found, but >=22 required."
-  fi
-  ok "node $NODE_VERSION"
-else
-  die "no bun or node found. Install bun: curl -fsSL https://bun.sh/install | bash"
-fi
+# ── 2. Detect platform target ────────────────────────────────────────────────
 
-# ── 2. Install root dependencies ─────────────────────────────────────────────
+OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+ARCH="$(uname -m)"
+
+case "$OS-$ARCH" in
+  linux-x86_64)  TARGET="bun-linux-x64"   ;;
+  linux-aarch64) TARGET="bun-linux-arm64" ;;
+  linux-arm64)   TARGET="bun-linux-arm64" ;;
+  darwin-x86_64) TARGET="bun-darwin-x64"  ;;
+  darwin-arm64)  TARGET="bun-darwin-arm64" ;;
+  *) die "unsupported platform $OS-$ARCH" ;;
+esac
+ok "target $TARGET"
+
+# ── 3. Install dependencies ──────────────────────────────────────────────────
 
 step "installing dependencies"
-if [ -n "${BUN:-}" ]; then
-  bun install --frozen-lockfile 2>/dev/null || bun install
-else
-  npm ci 2>/dev/null || npm install
-fi
+bun install --frozen-lockfile 2>/dev/null || bun install
 ok "dependencies installed"
 
-# ── 3. Install workspace dependencies ────────────────────────────────────────
-
+step "installing workspace deps"
 for ws in dashboard desktop packages/core-utils packages/dsnix packages/ink; do
   if [ -f "$ws/package.json" ]; then
-    step "installing $ws"
-    if [ -n "${BUN:-}" ]; then
-      bun install --cwd "$ws" 2>/dev/null || true
-    else
-      (cd "$ws" && npm ci --ignore-scripts 2>/dev/null) || true
-    fi
-    ok "$ws"
+    bun install --cwd "$ws" 2>/dev/null || true
   fi
 done
+ok "workspace deps"
 
 # ── 4. Build ─────────────────────────────────────────────────────────────────
 
 step "building dashboard"
-if [ -n "${BUN:-}" ]; then
-  bun run build:dashboard
-else
-  npm run build:dashboard
-fi
+bun run build:dashboard
 ok "dashboard"
 
 step "bundling with tsup"
-if [ -n "${BUN:-}" ]; then
-  bun x tsup
-else
-  npx tsup
-fi
+bun x tsup
 ok "tsup"
 
 step "copying vendor assets"
@@ -104,46 +88,25 @@ node scripts/copy-dashboard-vendor-css.mjs
 node scripts/copy-tree-sitter-grammars.mjs
 ok "vendor assets"
 
-# ── 5. Create single-file bundle ─────────────────────────────────────────────
+# ── 5. Compile single binary with embedded assets ────────────────────────────
 
-step "creating standalone bundle"
-ESBUILD="node_modules/.bin/esbuild"
-if [ ! -x "$ESBUILD" ]; then
-  ESBUILD="esbuild"
-fi
-
-"$ESBUILD" dist/cli/index.js \
-  --bundle \
-  --platform=node \
-  --format=esm \
-  --target=node22 \
-  --outfile=dist/bundle/deepseek-spec.mjs \
-  --external:react-devtools-core \
-  --external:inspector/promises \
-  --external:readline/promises \
-  --log-level=error
-
-ok "standalone bundle ($(du -h dist/bundle/deepseek-spec.mjs | cut -f1))"
+step "compiling native binary (embedded assets)"
+BINARY_NAME=deepseek-spec node scripts/build-native.mjs --target "$TARGET" --embed
+ok "native binary"
 
 # ── 6. Install ────────────────────────────────────────────────────────────────
 
 step "installing to $PREFIX"
 
-LIB_DIR="$PREFIX/lib/deepseek-spec"
 BIN_DIR="$PREFIX/bin"
-mkdir -p "$LIB_DIR" "$BIN_DIR"
+mkdir -p "$BIN_DIR"
 
-# Copy bundle
-cp dist/bundle/deepseek-spec.mjs "$LIB_DIR/app.mjs"
+EXT=""
+[ "$TARGET" = "bun-windows-x64" ] && EXT=".exe"
+cp "dist/native/$TARGET/deepseek-spec$EXT" "$BIN_DIR/deepseek-spec$EXT"
+chmod +x "$BIN_DIR/deepseek-spec$EXT"
 
-# Create launcher script
-cat > "$BIN_DIR/deepseek-spec" << 'LAUNCHER'
-#!/usr/bin/env bash
-exec node "$(dirname "$0")/../lib/deepseek-spec/app.mjs" "$@"
-LAUNCHER
-chmod +x "$BIN_DIR/deepseek-spec"
-
-ok "installed $BIN_DIR/deepseek-spec"
+ok "installed $BIN_DIR/deepseek-spec$EXT ($(du -h "$BIN_DIR/deepseek-spec$EXT" | cut -f1))"
 
 # Ensure bin dir is in PATH
 case ":$PATH:" in

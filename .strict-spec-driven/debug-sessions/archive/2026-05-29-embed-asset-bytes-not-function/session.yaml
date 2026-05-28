@@ -1,0 +1,142 @@
+schema: strict-spec-driven/debug-session/v1
+schema_version: 1
+artifact_type: debug_session
+schema_file: ../../../templates/strict-spec-driven/schemas/debug-session.yaml
+debug_session:
+  id: "embed-asset-bytes-not-function"
+  status: resolved
+issue:
+  summary: "Packaged native binary crashes at startup — generated embed-assets.js calls .bytes() on a string (Bun import with type: 'file' returns a path string, not a Blob)"
+  observed_behavior: "Running deepseek-spec after ./setup.sh throws TypeError: deepseek_tokenizer_json_default.bytes is not a function at embed-assets.js:193547"
+  expected_behavior: "Native binary starts without error; tokenizer and other embedded assets load from the compiled blob"
+scope:
+  layers:
+    - web_api
+  out_of_scope:
+    - electron
+    - cdp_access
+targets:
+  build-native:
+    layer: web_api
+    kind: http_endpoint
+    label: "scripts/build-native.mjs — generateEmbedModule() emits .bytes() call assuming import returns a Blob"
+    command: "node scripts/build-native.mjs --target bun-linux-x64 --embed"
+    notes:
+      - "generateEmbedModule() generates: import _a0 from '...' with { type: 'file' }; then _a0.bytes()"
+      - "Bun 1.3.13 resolves import-with-type-file to a string path, not a Blob"
+      - "After bun build --compile, the path becomes /$bunfs/root/... — still a string"
+  embed-assets:
+    layer: web_api
+    kind: http_endpoint
+    label: "dist/cli/embed-assets.js (generated) — contains the broken .bytes() call"
+    command: "cat dist/cli/embed-assets.js"
+    notes:
+      - "Generated line: [\"tokenizer\", () => new Uint8Array(_a0.bytes())]"
+      - "_a0 is a string like '/$bunfs/root/deepseek-tokenizer.json-d4zq0fmm.gz'"
+      - "String has no .bytes() method — TypeError"
+  assets-registry:
+    layer: web_api
+    kind: http_endpoint
+    label: "src/cli/assets.ts — AssetRegistry reads from globalThis.__REASONIX_EMBEDDED"
+    command: "node dist/bundle/deepseek-spec.mjs"
+    notes:
+      - "setEmbeddedLoaders() stores the Map; get() calls each loader which triggers the .bytes() crash"
+reproduction:
+  preconditions:
+    - "Bun 1.3.13 installed"
+    - "Repository with data/deepseek-tokenizer.json.gz present"
+  steps:
+    - id: build-and-install
+      target: build-native
+      action: "Run: ./setup.sh"
+      expected: "Standalone binary compiled and installed to ~/.local/bin/deepseek-spec"
+    - id: run-binary
+      target: embed-assets
+      action: "Run: deepseek-spec"
+      expected: "TypeError: deepseek_tokenizer_json_default.bytes is not a function at embed-assets line"
+  expected_failure: "TypeError: deepseek_tokenizer_json_default.bytes is not a function"
+evidence:
+  directory: evidence/
+  entries:
+    - id: ev-type-file-import
+      path: type-file-import-behavior.txt
+      type: text_log
+      layer: web_api
+      description: "Bun 1.3.13 test confirming import-with-type-file returns string in both direct-run and compile modes; .bytes() fails, Bun.file(result).arrayBuffer() works"
+      captured_at: "2026-05-29T00:00:00Z"
+      redacted: false
+    - id: ev-verification
+      path: verification-binary-starts.txt
+      type: text_log
+      layer: web_api
+      description: "Post-fix verification: binary starts and runs without .bytes() TypeError"
+      captured_at: "2026-05-29T00:00:00Z"
+      redacted: false
+hypotheses:
+  - id: h1
+    statement: "generateEmbedModule() assumes import-with-type-file returns a Blob with .bytes(), but Bun 1.3.13 returns a string path; must wrap with Bun.file() to get a Blob"
+    layer: web_api
+    status: verified
+    evidence:
+      - ev-type-file-import
+findings:
+  - id: f1
+    layer: web_api
+    target: build-native
+    summary: "The fix is in generateEmbedModule() (scripts/build-native.mjs line 92): change `${varName}.bytes()` to `Bun.file(${varName}).bytes()` or use `await Bun.file(${varName}).arrayBuffer()`. Since Bun.file().bytes() is synchronous in Bun, `new Uint8Array(Bun.file(${varName}).bytes())` is the minimal fix."
+    status: confirmed
+    evidence:
+      - ev-type-file-import
+human_checkpoints: []
+manual_actions: []
+cdp_health:
+  required: false
+  checks: []
+dev_session:
+  declaration: .strict-spec-driven/dev-session.yaml
+  services: []
+  lifecycle:
+    plan:
+      command: strict-spec-driven dev-session-plan
+      status: not_run
+      evidence: []
+    start:
+      command: strict-spec-driven dev-session-start
+      status: not_run
+      evidence: []
+    status:
+      command: strict-spec-driven dev-session-status
+      status: not_run
+      evidence: []
+    logs: []
+    stop:
+      command: strict-spec-driven dev-session-stop
+      status: not_run
+      evidence: []
+    cleanup_status: not_needed
+  unavailable_conditions: []
+replay:
+  commands:
+    - id: build-and-install
+      command: "./setup.sh"
+      working_directory: "/home/wx766/Code/DeepSeek-Spec"
+      layer: web_api
+      expected_result: "Standalone binary installed to ~/.local/bin/deepseek-spec"
+    - id: run-and-observe
+      command: "deepseek-spec"
+      working_directory: "/home/wx766"
+      layer: web_api
+      expected_result: "TypeError: deepseek_tokenizer_json_default.bytes is not a function"
+verification:
+  status: passed
+  steps:
+    - id: rebuild
+      action: "Run ./setup.sh to rebuild and install native binary"
+      expected: "Build succeeds with embedded assets; no compile error"
+      status: passed
+    - id: run-help
+      action: "Run deepseek-spec --help"
+      expected: "Exits 0, prints usage — no TypeError"
+      status: passed
+  evidence:
+    - ev-verification

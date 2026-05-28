@@ -1,0 +1,4 @@
+/home/wx766/.local/lib/deepseek-spec/:
+app.mjs  9.7M
+
+No data/ directory exists. Only the bundle JS file was installed.

@@ -1,0 +1,19 @@
+=== Bun 1.3.13: Bun.file().bytes() returns Promise, not Uint8Array ===
+
+Test: bun /tmp/test-bun-bytes.mjs
+
+  typeof result: object
+  result instanceof Promise: true
+  result instanceof Uint8Array: false
+  Loader result type: object isUint8Array: true length: 0
+
+  Async result length: 1747037
+  First 4 bytes (hex): 1f8b0800
+
+Conclusion:
+  Bun.file(path).bytes() returns a Promise in Bun 1.3.13.
+  new Uint8Array(promise) creates an empty Uint8Array (length: 0).
+  The generated embed module line:
+    ["tokenizer", () => new Uint8Array(Bun.file(_a0).bytes())]
+  creates a zero-length Uint8Array, causing gunzipSync to fail
+  with "unexpected end of file" because there is no gzip data.

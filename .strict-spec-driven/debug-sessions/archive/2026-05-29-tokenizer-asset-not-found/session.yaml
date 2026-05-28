@@ -1,0 +1,135 @@
+schema: strict-spec-driven/debug-session/v1
+schema_version: 1
+artifact_type: debug_session
+schema_file: ../../../templates/strict-spec-driven/schemas/debug-session.yaml
+debug_session:
+  id: "tokenizer-asset-not-found"
+  status: resolved
+issue:
+  summary: "Packaged binary fails at startup — AssetRegistry cannot find tokenizer on disk because setup.sh omits data/ directory"
+  observed_behavior: "Running deepseek-spec after ./setup.sh throws Error: Asset 'tokenizer' not found on disk from warmupTokenizer"
+  expected_behavior: "Binary starts without error; tokenizer loads from a bundled or adjacent data file"
+scope:
+  layers:
+    - web_api
+  out_of_scope:
+    - electron
+    - cdp_access
+targets:
+  setup-sh:
+    layer: web_api
+    kind: http_endpoint
+    label: "scripts/setup.sh — install step that creates the standalone bundle"
+    command: "./setup.sh"
+    notes:
+      - "setup.sh uses esbuild to bundle dist/cli/index.js into a single .mjs file"
+      - "Only copies dist/bundle/deepseek-spec.mjs to $PREFIX/lib/deepseek-spec/app.mjs"
+      - "Does NOT copy data/deepseek-tokenizer.json.gz alongside the bundle"
+  asset-registry:
+    layer: web_api
+    kind: http_endpoint
+    label: "src/cli/assets.ts — AssetRegistry.get() tries disk candidates that all fail"
+    command: "node dist/bundle/deepseek-spec.mjs"
+    notes:
+      - "import.meta.url resolves to file:///.../app.mjs in the installed location"
+      - "Candidate ../data/ → $PREFIX/lib/deepseek-spec/data/ — MISSING"
+      - "Candidate ../../data/ → $PREFIX/lib/data/ — MISSING"
+      - "npm resolution of reasonix/package.json — FAILS (not npm-installed)"
+  tokenizer:
+    layer: web_api
+    kind: http_endpoint
+    label: "src/tokenizer.ts — tokenizerDiskCandidates() registers disk paths that don't exist post-install"
+    command: "node dist/bundle/deepseek-spec.mjs"
+    notes:
+      - "1.7MB gzipped tokenizer file exists at data/deepseek-tokenizer.json.gz in source tree"
+      - "Disk candidates are relative to import.meta.url, which changes after esbuild bundling"
+reproduction:
+  preconditions:
+    - "./setup.sh has been run to build and install the standalone bundle"
+  steps:
+    - id: run-binary
+      target: setup-sh
+      action: "Run: deepseek-spec"
+      expected: "Application starts; within ~1s warmupTimer fires and calls assets.get('tokenizer')"
+    - id: observe-error
+      action: "Observe unhandled Error: Asset 'tokenizer' not found on disk"
+      expected: "Stack trace points to AssetRegistry.get → loadTokenizer → warmupTokenizer"
+  expected_failure: "Error: Asset 'tokenizer' not found on disk at AssetRegistry.get (assets.ts:60)"
+evidence:
+  directory: evidence/
+  entries:
+    - id: ev-disk-candidates
+      path: disk-candidates-resolved.txt
+      type: text_log
+      layer: web_api
+      description: "All four tokenizer disk candidate paths resolved and confirmed missing in the installed layout"
+      captured_at: "2026-05-29T00:00:00Z"
+      redacted: false
+    - id: ev-install-listing
+      path: install-dir-listing.txt
+      type: text_log
+      layer: web_api
+      description: "ls of the installed directory showing only app.mjs, no data/ subdirectory"
+      captured_at: "2026-05-29T00:00:00Z"
+      redacted: false
+hypotheses:
+  - id: h1
+    statement: "setup.sh does not copy data/ directory to the install location, so all disk candidate paths fail"
+    layer: web_api
+    status: verified
+    evidence:
+      - ev-disk-candidates
+      - ev-install-listing
+findings:
+  - id: f1
+    layer: web_api
+    target: setup-sh
+    summary: "setup.sh step 6 (install) copies only the .mjs bundle, not the data/ directory containing deepseek-tokenizer.json.gz. The tokenizerDiskCandidates() paths resolve relative to import.meta.url, which points inside the installed lib dir where no data/ exists."
+    status: confirmed
+    evidence:
+      - ev-disk-candidates
+      - ev-install-listing
+human_checkpoints: []
+manual_actions: []
+cdp_health:
+  required: false
+  checks: []
+dev_session:
+  declaration: .strict-spec-driven/dev-session.yaml
+  services: []
+  lifecycle:
+    plan:
+      command: strict-spec-driven dev-session-plan
+      status: not_run
+      evidence: []
+    start:
+      command: strict-spec-driven dev-session-start
+      status: not_run
+      evidence: []
+    status:
+      command: strict-spec-driven dev-session-status
+      status: not_run
+      evidence: []
+    logs: []
+    stop:
+      command: strict-spec-driven dev-session-stop
+      status: not_run
+      evidence: []
+    cleanup_status: not_needed
+  unavailable_conditions: []
+replay:
+  commands:
+    - id: build-and-install
+      command: "./setup.sh"
+      working_directory: "/home/wx766/Code/DeepSeek-Spec"
+      layer: web_api
+      expected_result: "Standalone bundle installed to ~/.local/lib/deepseek-spec/app.mjs"
+    - id: run-and-observe
+      command: "deepseek-spec"
+      working_directory: "/home/wx766"
+      layer: web_api
+      expected_result: "Error: Asset 'tokenizer' not found on disk"
+verification:
+  status: not_started
+  steps: []
+  evidence: []

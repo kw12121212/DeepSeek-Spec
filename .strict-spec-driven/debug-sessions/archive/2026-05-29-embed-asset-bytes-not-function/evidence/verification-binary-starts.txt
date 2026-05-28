@@ -1,0 +1,13 @@
+Verification: deepseek-spec --help runs without error after fix.
+
+Build output:
+  embedded 6672 assets
+  Compiling bun-linux-x64 -> dist/native/bun-linux-x64/deepseek-spec
+  installed ~/.local/bin/deepseek-spec (204M)
+
+Test: `deepseek-spec --help` — exits 0, prints usage.
+No TypeError: deepseek_tokenizer_json_default.bytes is not a function.
+
+Fix applied: scripts/build-native.mjs line 92
+  Before: new Uint8Array(${varName}.bytes())
+  After:  new Uint8Array(Bun.file(${varName}).bytes())

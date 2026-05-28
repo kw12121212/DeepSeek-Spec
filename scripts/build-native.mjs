@@ -5,11 +5,11 @@ import { existsSync, mkdirSync, readdirSync, unlinkSync, writeFileSync } from "n
 import { resolve, join } from "node:path";
 
 const TARGETS = [
-  "linux-x64",
-  "linux-arm64",
-  "darwin-x64",
-  "darwin-arm64",
-  "windows-x64",
+  "bun-linux-x64",
+  "bun-linux-arm64",
+  "bun-darwin-x64",
+  "bun-darwin-arm64",
+  "bun-windows-x64",
 ];
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -75,9 +75,8 @@ function collectDir(dir, prefix, files) {
 }
 
 function generateEmbedModule(files) {
-  // Self-contained module that stores embedded loaders on globalThis.
-  // The main bundle's AssetRegistry reads from globalThis at startup.
   const lines = [];
+  lines.push('import { readFileSync } from "node:fs";');
   for (let i = 0; i < files.length; i++) {
     const { path } = files[i];
     const varName = `_a${i}`;
@@ -89,7 +88,7 @@ function generateEmbedModule(files) {
   for (let i = 0; i < files.length; i++) {
     const { assetName } = files[i];
     const varName = `_a${i}`;
-    lines.push(`  ["${assetName}", () => new Uint8Array(${varName}.bytes())],`);
+    lines.push(`  ["${assetName}", () => new Uint8Array(readFileSync(${varName}))],`);
   }
   lines.push("]);");
   lines.push("");
@@ -111,7 +110,7 @@ function buildTarget(target, embed) {
     process.exit(1);
   }
 
-  const ext = target.startsWith("windows-") ? ".exe" : "";
+  const ext = target.startsWith("bun-windows-") ? ".exe" : "";
   const binaryName = (process.env.BINARY_NAME || "deepseek-spec");
   const outPath = join(OUT_DIR, target, `${binaryName}${ext}`);
 
@@ -139,7 +138,7 @@ function buildTarget(target, embed) {
 
   console.log(`Compiling ${target} -> ${outPath}`);
   try {
-    execFileSync("bun", ["build", "--compile", "--target", target, entryFile, "--outfile", outPath], {
+    execFileSync("bun", ["build", "--compile", "--target", target, entryFile, "--outfile", outPath, "--external", "undici"], {
       stdio: "inherit",
     });
     console.log(`  done: ${outPath}`);

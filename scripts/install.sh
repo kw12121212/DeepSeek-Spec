@@ -25,11 +25,11 @@ OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 ARCH="$(uname -m)"
 
 case "$OS-$ARCH" in
-  linux-x86_64)  TARGET="linux-x64"   ;;
-  linux-aarch64) TARGET="linux-arm64" ;;
-  linux-arm64)   TARGET="linux-arm64" ;;
-  darwin-x86_64) TARGET="darwin-x64"  ;;
-  darwin-arm64)  TARGET="darwin-arm64" ;;
+  linux-x86_64)  TARGET="bun-linux-x64"   ;;
+  linux-aarch64) TARGET="bun-linux-arm64" ;;
+  linux-arm64)   TARGET="bun-linux-arm64" ;;
+  darwin-x86_64) TARGET="bun-darwin-x64"  ;;
+  darwin-arm64)  TARGET="bun-darwin-arm64" ;;
   *)
     echo "error: unsupported platform $OS-$ARCH" >&2
     exit 1

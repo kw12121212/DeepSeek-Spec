@@ -3,7 +3,17 @@
 // matched by NO_PROXY (curl-style) so DeepSeek API stays direct while user-set
 // HTTPS_PROXY still routes everything else through the user's proxy.
 
-import { Agent, type Dispatcher, ProxyAgent, setGlobalDispatcher } from "undici";
+import { createRequire } from "node:module";
+import { IS_NATIVE } from "../cli/native-detect.js";
+import type { Dispatcher } from "undici";
+
+let _undici: typeof import("undici") | null = null;
+
+function loadUndici(): typeof import("undici") {
+  if (_undici) return _undici;
+  _undici = createRequire(import.meta.url)("undici");
+  return _undici!;
+}
 
 /** Env-var precedence matches curl: HTTPS_PROXY → HTTP_PROXY → ALL_PROXY, upper-case first then lower. */
 const PROXY_ENV_KEYS = [
@@ -122,11 +132,16 @@ export function matchesNoProxy(host: string, patterns: readonly NoProxyPattern[]
 }
 
 class SelectiveProxyDispatcher {
-  private readonly direct: Agent;
-  private readonly proxied: ProxyAgent;
+  private readonly direct: InstanceType<typeof import("undici").Agent>;
+  private readonly proxied: InstanceType<typeof import("undici").ProxyAgent>;
   private readonly patterns: readonly NoProxyPattern[];
 
-  constructor(proxyUrl: string, patterns: readonly NoProxyPattern[]) {
+  constructor(
+    Agent: typeof import("undici").Agent,
+    ProxyAgent: typeof import("undici").ProxyAgent,
+    proxyUrl: string,
+    patterns: readonly NoProxyPattern[],
+  ) {
     this.direct = new Agent();
     this.proxied = new ProxyAgent(proxyUrl);
     this.patterns = patterns;
@@ -240,6 +255,7 @@ export function installProxyIfConfigured(
   opts: InstallProxyOptions = {},
 ): ProxyInstallResult | null {
   if (opts.disabled) return null;
+  if (IS_NATIVE) return null;
   const configRaw = typeof opts.url === "string" && opts.url.trim() !== "" ? opts.url.trim() : null;
   const raw = configRaw ?? detectProxyUrl(env);
   if (!raw) return null;
@@ -263,7 +279,10 @@ export function installProxyIfConfigured(
 
   try {
     const reinstalled = installed;
-    setGlobalDispatcher(new SelectiveProxyDispatcher(url, patterns) as unknown as Dispatcher);
+    const { Agent, ProxyAgent, setGlobalDispatcher } = loadUndici();
+    setGlobalDispatcher(
+      new SelectiveProxyDispatcher(Agent, ProxyAgent, url, patterns) as unknown as Dispatcher,
+    );
     installed = true;
     const bypassList = patterns.map((p) => p.raw).join(",");
     process.stderr.write(`[proxy] using ${url} (source: ${source}, NO_PROXY: ${bypassList})\n`);

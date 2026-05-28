@@ -1,0 +1,147 @@
+schema: strict-spec-driven/debug-session/v1
+schema_version: 1
+artifact_type: debug_session
+schema_file: ../../../templates/strict-spec-driven/schemas/debug-session.yaml
+debug_session:
+  id: "zlib-unexpected-eof-load-tokenizer"
+  status: resolved
+issue:
+  summary: "Packaged native binary crashes at startup — gunzipSync fails with 'unexpected end of file' because embed-assets.js uses async Bun.file().bytes() synchronously, producing an empty Uint8Array"
+  observed_behavior: "Running deepseek-spec after ./setup.sh throws ZlibError: unexpected end of file at loadTokenizer (/$bunfs/root/deepseek-spec:33853) via gunzipSync on a zero-length buffer"
+  expected_behavior: "Native binary starts without error; tokenizer and other embedded assets decompress and load correctly"
+scope:
+  layers:
+    - web_api
+  out_of_scope:
+    - electron
+    - cdp_access
+targets:
+  build-native:
+    layer: web_api
+    kind: http_endpoint
+    label: "scripts/build-native.mjs — generateEmbedModule() uses Bun.file().bytes() which is async in Bun 1.3.13"
+    command: "node scripts/build-native.mjs --target bun-linux-x64 --embed"
+    notes:
+      - "generateEmbedModule() generates: () => new Uint8Array(Bun.file(${varName}).bytes())"
+      - "Bun.file().bytes() returns Promise<Uint8Array> in Bun 1.3.13, not Uint8Array"
+      - "new Uint8Array(promise) creates an empty Uint8Array (length 0)"
+      - "gunzipSync on empty buffer throws 'unexpected end of file'"
+  embed-assets:
+    layer: web_api
+    kind: http_endpoint
+    label: "Generated embed-assets.js — contains the broken Bun.file().bytes() call"
+    notes:
+      - "Generated line: [\"tokenizer\", () => new Uint8Array(Bun.file(_a0).bytes())]"
+      - "Bun.file(_a0).bytes() returns Promise, new Uint8Array(Promise) = empty"
+  tokenizer:
+    layer: web_api
+    kind: http_endpoint
+    label: "src/tokenizer.ts — loadTokenizer() calls gunzipSync on the empty embedded bytes"
+    command: "deepseek-spec --help"
+    notes:
+      - "assets.get('tokenizer') returns zero-length Uint8Array from embed loader"
+      - "gunzipSync(Buffer.from(emptyUint8Array)) throws 'unexpected end of file'"
+reproduction:
+  preconditions:
+    - "Bun 1.3.13 installed"
+    - "Repository with data/deepseek-tokenizer.json.gz present"
+  steps:
+    - id: build-and-install
+      target: build-native
+      action: "Run: ./setup.sh"
+      expected: "Standalone binary compiled and installed to ~/.local/bin/deepseek-spec"
+    - id: run-binary
+      target: tokenizer
+      action: "Run: deepseek-spec"
+      expected: "ZlibError: unexpected end of file at loadTokenizer line in embed-assets"
+  expected_failure: "ZlibError: unexpected end of file"
+evidence:
+  directory: evidence/
+  entries:
+    - id: ev-bun-file-bytes-async
+      path: bun-file-bytes-is-async.txt
+      type: text_log
+      layer: web_api
+      description: "Bun 1.3.13 test confirming Bun.file().bytes() returns Promise; new Uint8Array(promise) yields empty Uint8Array (length 0); readFileSync returns correct 1747037 bytes"
+      captured_at: "2026-05-29T00:00:00Z"
+      redacted: false
+    - id: ev-verification
+      path: verification-binary-starts.txt
+      type: text_log
+      layer: web_api
+      description: "Post-fix verification: binary starts with --help and --version without zlib error"
+      captured_at: "2026-05-29T00:00:00Z"
+      redacted: false
+hypotheses:
+  - id: h1
+    statement: "generateEmbedModule() uses Bun.file().bytes() which is async (returns Promise) in Bun 1.3.13; wrapping in new Uint8Array() produces empty buffer causing gunzipSync to fail"
+    layer: web_api
+    status: verified
+    evidence:
+      - ev-bun-file-bytes-async
+findings:
+  - id: f1
+    layer: web_api
+    target: build-native
+    summary: "Fix: replace Bun.file(varName).bytes() with readFileSync(varName) in generateEmbedModule(). readFileSync is synchronous and returns correct file bytes in both dev and compiled-binary contexts."
+    status: confirmed
+    evidence:
+      - ev-bun-file-bytes-async
+      - ev-verification
+human_checkpoints: []
+manual_actions: []
+cdp_health:
+  required: false
+  checks: []
+dev_session:
+  declaration: .strict-spec-driven/dev-session.yaml
+  services: []
+  lifecycle:
+    plan:
+      command: strict-spec-driven dev-session-plan
+      status: not_run
+      evidence: []
+    start:
+      command: strict-spec-driven dev-session-start
+      status: not_run
+      evidence: []
+    status:
+      command: strict-spec-driven dev-session-status
+      status: not_run
+      evidence: []
+    logs: []
+    stop:
+      command: strict-spec-driven dev-session-stop
+      status: not_run
+      evidence: []
+    cleanup_status: not_needed
+  unavailable_conditions: []
+replay:
+  commands:
+    - id: build-and-install
+      command: "./setup.sh"
+      working_directory: "/home/wx766/Code/DeepSeek-Spec"
+      layer: web_api
+      expected_result: "Standalone binary installed to ~/.local/bin/deepseek-spec"
+    - id: run-and-observe
+      command: "deepseek-spec --help"
+      working_directory: "/home/wx766"
+      layer: web_api
+      expected_result: "ZlibError: unexpected end of file (pre-fix) or usage output (post-fix)"
+verification:
+  status: passed
+  steps:
+    - id: rebuild
+      action: "Run bun run build && BINARY_NAME=deepseek-spec node scripts/build-native.mjs --target bun-linux-x64 --embed"
+      expected: "Build succeeds with embedded assets; no compile error"
+      status: passed
+    - id: install-and-run
+      action: "cp binary to ~/.local/bin/deepseek-spec && deepseek-spec --help"
+      expected: "Prints usage, exits 0 — no TypeError or ZlibError"
+      status: passed
+    - id: version-check
+      action: "deepseek-spec --version"
+      expected: "Prints version string without error"
+      status: passed
+  evidence:
+    - ev-verification

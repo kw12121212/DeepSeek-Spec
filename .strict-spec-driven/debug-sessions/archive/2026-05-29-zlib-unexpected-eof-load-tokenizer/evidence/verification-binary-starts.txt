@@ -1,0 +1,13 @@
+=== Post-fix verification: binary starts without zlib TypeError ===
+
+$ cp dist/native/bun-linux-x64/deepseek-spec ~/.local/bin/deepseek-spec
+$ deepseek-spec --help
+Usage: reasonix [options] [command]
+
+DeepSeek-native agent framework — built for cache hits and cheap tokens.
+...
+
+$ deepseek-spec --version
+0.0.0-dev
+
+Result: No zlib errors. Binary starts correctly with embedded tokenizer.
