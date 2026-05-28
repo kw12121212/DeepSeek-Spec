@@ -2,6 +2,7 @@ import { Box, type Color, Text, useStdout } from "ink";
 // biome-ignore lint/style/useImportType: tsconfig jsx=react needs React in value scope for JSX compilation
 import React from "react";
 import { t } from "../../../i18n/index.js";
+import { type ActiveChange, listActiveStrictChanges } from "../../../strict/active-changes.js";
 import { DEEPSEEK_CONTEXT_TOKENS, DEFAULT_CONTEXT_TOKENS } from "../../../telemetry/stats.js";
 import { VERSION } from "../../../version.js";
 import { formatTokens } from "../primitives.js";
@@ -66,6 +67,7 @@ export function StatusRow({
   const showWallet =
     cols >= WALLET_MIN_COLS &&
     ((hasSession && statusBar.showSessionCost) || (hasBalance && statusBar.showBalance));
+  const strictActive = listActiveStrictChanges(session.workspace);
 
   return (
     <Box flexDirection="row" flexShrink={0} marginTop={1}>
@@ -132,6 +134,14 @@ export function StatusRow({
             <Gap />
             <Pill>
               <McpLoadingPill ready={status.mcpLoading.ready} total={status.mcpLoading.total} />
+            </Pill>
+          </>
+        )}
+        {strictActive.length > 0 && (
+          <>
+            <Gap />
+            <Pill>
+              <StrictStatusPill changes={strictActive} />
             </Pill>
           </>
         )}
@@ -350,6 +360,29 @@ function CountdownRow({
       <Text color={TONE.warn} wrap="truncate">
         {t("statusBar.escToInterrupt")}
       </Text>
+    </>
+  );
+}
+
+const STRICT_NAME_MAX = 20;
+
+function StrictStatusPill({ changes }: { changes: ActiveChange[] }): React.ReactElement {
+  const first = changes[0]!;
+  const displayName =
+    first.name.length > STRICT_NAME_MAX ? `${first.name.slice(0, STRICT_NAME_MAX)}…` : first.name;
+  return (
+    <>
+      <Text color={TONE.brand} wrap="truncate">
+        {"◆ "}
+      </Text>
+      <Text color={FG.body} wrap="truncate">
+        {`strict: ${displayName} [${first.state}]`}
+      </Text>
+      {changes.length > 1 && (
+        <Text color={FG.faint} wrap="truncate">
+          {` +${changes.length - 1}`}
+        </Text>
+      )}
     </>
   );
 }

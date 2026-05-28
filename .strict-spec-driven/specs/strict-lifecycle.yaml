@@ -345,6 +345,50 @@ requirements:
         - GIVEN: the project README.md file
         - WHEN: a user reads the file
         - THEN: a 'Strict Spec Workflows' section is present with workflow documentation
+  list-active-changes:
+    strength: MUST
+    statement: >-
+      listActiveStrictChanges(projectRoot) MUST scan .strict-spec-driven/changes/ for subdirectories
+      containing proposal.yaml, parse each change.status, and return an array of { name, state }
+      entries filtered to exclude terminal states (shipped, canceled).
+    scenarios:
+      active-change-detected:
+        - GIVEN: >-
+            a changes directory with one subdirectory my-change containing proposal.yaml with
+            change.status: applied
+        - WHEN: listActiveStrictChanges is called
+        - THEN: 'the result is [{ name: ''my-change'', state: ''applied'' }]'
+  no-changes-empty:
+    strength: MUST
+    statement: >-
+      listActiveStrictChanges MUST return an empty array when .strict-spec-driven/changes/ does not
+      exist or contains no subdirectories with proposal.yaml.
+    scenarios:
+      no-changes-dir:
+        - GIVEN: a project with no .strict-spec-driven/changes/ directory
+        - WHEN: listActiveStrictChanges is called
+        - THEN: an empty array is returned with no error thrown
+  tui-strict-status-pill:
+    strength: MUST
+    statement: >-
+      StrictStatusPill MUST render a pill displaying 'strict: <change-name> [<state>]' when
+      listActiveStrictChanges returns at least one active change, and render nothing when no active
+      changes exist.
+    scenarios:
+      pill-active:
+        - GIVEN: 'listActiveStrictChanges returns [{ name: ''my-change'', state: ''applied'' }]'
+        - WHEN: StrictStatusPill renders
+        - THEN: 'the output contains ''strict: my-change [applied]'''
+  slash-autocomplete-strict:
+    strength: MUST
+    statement: >-
+      All /strict-* commands MUST have group: 'strict' in the SLASH_COMMANDS array so they appear in
+      the strict autocomplete group.
+    scenarios:
+      all-strict-grouped:
+        - GIVEN: the SLASH_COMMANDS array
+        - WHEN: commands with cmd starting with 'strict-' are counted
+        - THEN: 'every such command has group: ''strict'''
 mapping:
   implementation:
     - src/strict/lifecycle.ts

@@ -1,0 +1,53 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: tui-strict-status
+sections:
+  Implementation:
+    create-active-changes-module:
+      text: >-
+        Create src/strict/active-changes.ts with listActiveStrictChanges(projectRoot) that scans
+        .strict-spec-driven/changes/ for subdirectories with proposal.yaml and returns { name, state
+        }[] filtered to non-terminal states.
+      status: complete
+    add-strict-status-pill:
+      text: >-
+        Add StrictStatusPill component to StatusRow.tsx that renders 'strict: <name> [<state>]' when
+        listActiveStrictChanges returns entries, and renders nothing when no active changes exist.
+      status: complete
+    audit-slash-commands:
+      text: >-
+        Audit src/cli/ui/slash/commands.ts to confirm all /strict-* commands have group: 'strict'
+        and add any missing entries.
+      status: complete
+  Testing:
+    test-active-changes:
+      text: >-
+        Unit tests for listActiveStrictChanges covering: no changes directory, empty changes, active
+        change detected, multiple active changes, terminal states excluded.
+      status: complete
+    test-strict-status-pill:
+      text: >-
+        Unit test for StrictStatusPill rendering: renders name and state when active, renders
+        nothing when no active changes.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

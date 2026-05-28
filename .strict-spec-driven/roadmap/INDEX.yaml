@@ -22,7 +22,7 @@ milestones:
   0005-e2e-hardening:
     title: 'M5: E2E Testing and TUI Hardening'
     path: roadmap/milestones/0005-e2e-hardening.yaml
-    status: proposed
+    status: complete
   0006-native-executable:
     title: 'M6: Native Executable Packaging and Distribution'
     path: roadmap/milestones/0006-native-executable.yaml

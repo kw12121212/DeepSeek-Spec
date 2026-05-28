@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: tui-strict-status
   milestone: 0005-e2e-hardening
-status: planned
+status: complete
 summary: TUI strict status indicator in top bar and slash autocomplete
 details: >-
   Add strict status cell to TUI top bar. When a strict change is active (detected by scanning

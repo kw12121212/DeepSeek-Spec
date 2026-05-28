@@ -31,7 +31,7 @@ dependencies:
 risks:
   - E2E tests may be flaky if they depend on model responses. Use recorded fixtures
   - TUI top bar may conflict with existing layout on narrow terminals
-status: proposed
+status: complete
 notes:
   - Polish milestone with no new workflow logic
   - TUI status indicator was originally in M2 but moved here to keep M2 focused on logic

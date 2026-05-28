@@ -1,0 +1,23 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: tui-strict-status
+approach:
+  - >-
+    Create a listActiveStrictChanges() function in src/strict/active-changes.ts that scans
+    .strict-spec-driven/changes/ for directories with proposal.yaml and returns change names with
+    their current state. Add a StrictStatusPill component to StatusRow.tsx that calls this function
+    and displays 'strict: <name> [<state>]' when any non-terminal change is active. For slash
+    autocomplete, audit src/cli/ui/slash/commands.ts to confirm all /strict-* commands have group:
+    'strict' and add any missing entries.
+decisions:
+  scan-synchronously:
+    decision: >-
+      Scan changes/ directory synchronously on each StatusRow render since the directory is local FS
+      and the number of changes is small (< 20 typically)
+    rationale: >-
+      No async needed; the scan is cheap and keeps the Pill component simple without state
+      management
+alternatives: []
+risks: []

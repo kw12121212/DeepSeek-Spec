@@ -1,0 +1,19 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: tui-strict-status
+open: []
+resolved:
+  - id: q-narrow-terminals
+    question: >-
+      Should the strict status pill truncate long change names on narrow terminals, and if so what
+      is the max display width?
+    context: >-
+      The planned-change details say to display the change name and state. Long names may overflow
+      on narrow terminals. The milestone risk mentions potential layout conflicts on narrow
+      terminals.
+    answer: >-
+      Truncate change name at 20 characters with ellipsis (…) suffix when exceeding the limit. The
+      state tag is always short and never truncated.
+    status: resolved
