@@ -1,0 +1,29 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: glm-adapter
+  status: proposed
+summary:
+  what:
+    - Create GLMClient adapter extending OpenAICompatClient for Zhipu AI GLM models
+  why:
+    - >-
+      M7 requires a GLM provider adapter to support Zhipu AI models. Dependencies
+      (provider-registry, refactor-openai-base) are complete. OpenAICompatClient base and
+      ProviderRegistry exist in codebase.
+scope:
+  in:
+    - src/adapters/, src/providers/registry.ts, src/config.ts
+  out:
+    - >-
+      src/adapters/model-glm.ts, updated provider registration in src/cli/commands/run.ts,
+      ZHIPU_API_KEY/ZHIPU_BASE_URL in .env.example
+unchanged_behavior:
+  - >-
+    src/adapters/model-openai-compat.ts, src/client.ts (DeepSeekClient), all existing deepseek call
+    sites
+roadmap:
+  milestone: 0007-multi-provider-api
+  planned_change: glm-adapter

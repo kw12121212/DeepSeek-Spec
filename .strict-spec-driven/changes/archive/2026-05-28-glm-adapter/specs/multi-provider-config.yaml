@@ -1,0 +1,47 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - src/adapters/model-glm.ts
+  tests:
+    - tests/glm-adapter.test.ts
+operations:
+  ADDED:
+    glm-adapter-class:
+      strength: MUST
+      statement: >-
+        GLMClient MUST extend OpenAICompatClient with raw Bearer token auth (matching base class),
+        default baseUrl https://open.bigmodel.cn/api/paas/v4, provider label 'GLM', and no
+        thinking/reasoning capability flags
+      scenarios:
+        glm-bearer-auth:
+          - GIVEN: a GLMClient with a valid Zhipu API key
+          - WHEN: authHeaders() is called
+          - THEN: "Authorization header contains 'Bearer <api-key>' matching base class behavior"
+        glm-no-thinking:
+          - GIVEN: a GLMClient instance
+          - WHEN: capabilities is accessed
+          - THEN: supportsThinking is false and supportsReasoningContent is false
+        glm-default-base-url:
+          - GIVEN: a GLMClient with no baseUrl override
+          - WHEN: constructed
+          - THEN: baseUrl is https://open.bigmodel.cn/api/paas/v4
+    glm-provider-registration:
+      strength: MUST
+      statement: >-
+        GLM provider MUST be registered in ProviderRegistry with ID 'glm' and supported models
+        glm-4.7, glm-5.1, glm-5-turbo
+      scenarios:
+        glm-registry-resolve:
+          - GIVEN: ProviderRegistry with GLM registered
+          - WHEN: resolve('glm') is called
+          - THEN: a GLMClient instance is returned
+        glm-registry-validate:
+          - GIVEN: ProviderRegistry with GLM registered
+          - WHEN: validateModel('glm', 'glm-5.1') is called
+          - THEN: no error is thrown
+  MODIFIED: {}
+  REMOVED: {}

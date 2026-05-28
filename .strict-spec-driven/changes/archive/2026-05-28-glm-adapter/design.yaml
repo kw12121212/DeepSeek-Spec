@@ -1,0 +1,32 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: glm-adapter
+approach:
+  - >-
+    Extend OpenAICompatClient with GLMClient. Zhipu supports raw Bearer token auth (same as base
+    class), standard OpenAI tool_calls streaming, and standard usage fields. No
+    auth/payload/streaming overrides needed. Only override providerLabel(). Constructor resolves
+    ZHIPU_API_KEY env -> config.json glm.apiKey -> error, and ZHIPU_BASE_URL env -> config.json
+    glm.baseUrl -> https://open.bigmodel.cn/api/paas/v4 default. Register in ProviderRegistry with
+    ID glm and models glm-4.7, glm-5.1, glm-5-turbo.
+decisions:
+  raw-bearer-auth:
+    decision: Use raw API key as Bearer token instead of JWT
+    rationale: >-
+      Official Zhipu docs confirm both JWT and raw Bearer work. Raw Bearer is simpler, matches
+      OpenAICompatClient base behavior, and requires no auth override. JWT can be added later as
+      security enhancement.
+  no-thinking-initial:
+    decision: Start with supportsThinking=false and supportsReasoningContent=false
+    rationale: >-
+      While GLM-4.7 docs show thinking support, the format needs real compatibility testing. Safer
+      to start without thinking and enable in a follow-up change after verified testing.
+  standard-tool-calls:
+    decision: No parseStreamDelta override needed for tool calls
+    rationale: >-
+      Zhipu API returns tool_calls in standard OpenAI format in choices[0].delta.tool_calls with
+      incremental arguments. Base class handles this correctly.
+alternatives: []
+risks: []

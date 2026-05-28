@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: glm-adapter
   milestone: 0007-multi-provider-api
-status: planned
+status: complete
 summary: Create GLM adapter extending OpenAICompatClient for Zhipu AI
 details: >-
   Create src/adapters/model-glm.ts implementing a GLMClient that extends OpenAICompatClient (from

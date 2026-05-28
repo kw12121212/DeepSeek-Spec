@@ -1,0 +1,44 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: glm-adapter
+open: []
+resolved:
+  - id: glm-tool-call-format
+    question: >-
+      Does GLM emit tool_calls in choices[0].delta.tool_calls with incremental arguments matching
+      the OpenAI streaming format, or does the format diverge?
+    context: >-
+      Need to verify GLM streaming tool-call delta structure against
+      OpenAICompatClient.parseStreamDelta expectations. If format differs, GLMClient must override
+      parseStreamDelta.
+    answer: >-
+      GLM follows standard OpenAI format. Non-streaming: choices[0].message.tool_calls with
+      function.name and function.arguments. Streaming: choices[0].delta.tool_calls with incremental
+      arguments. No parseStreamDelta override needed. Source:
+      https://docs.z.ai/guides/develop/openai/python function calling section.
+    status: resolved
+  - id: glm-error-format
+    question: >-
+      Does GLM return errors in { error: { message, type, code } } structure matching OpenAI, or
+      does it use a different error schema?
+    context: >-
+      OpenAICompatClient error handling expects OpenAI-style errors. GLM may need error parsing
+      override.
+    answer: >-
+      GLM returns { error: { code: string, message: string } } which is similar to OpenAI. Base
+      class error handling uses resp.status + resp.text() so exact body format does not affect
+      behavior. No error parsing override needed.
+    status: resolved
+  - id: glm-usage-fields
+    question: >-
+      Does GLM return usage stats with standard field names (prompt_tokens, completion_tokens,
+      total_tokens)?
+    context: >-
+      Usage.fromApi() needs to handle GLM usage format. If field names differ, adapter or usage
+      parser needs adjustment.
+    answer: >-
+      GLM returns standard OpenAI-compatible usage with prompt_tokens, completion_tokens,
+      total_tokens. No adaptation needed for Usage.fromApi().
+    status: resolved

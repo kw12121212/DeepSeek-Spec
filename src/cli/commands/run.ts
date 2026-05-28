@@ -1,6 +1,7 @@
 import type { WriteStream } from "node:fs";
 import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline/promises";
+import { GLMClient } from "../../adapters/model-glm.js";
 import {
   bridgeEndpointEnv,
   defaultConfigPath,
@@ -147,6 +148,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     () => new DeepSeekClient({ apiKey: ep.apiKey, baseUrl: ep.baseUrl }),
     ["deepseek-v4-flash", "deepseek-v4-pro"],
   );
+  registry.register("glm", () => new GLMClient(), ["glm-4.7", "glm-5.1", "glm-5-turbo"]);
   const client = registry.resolve("deepseek");
   const prefix = new ImmutablePrefix({
     system: opts.system,
