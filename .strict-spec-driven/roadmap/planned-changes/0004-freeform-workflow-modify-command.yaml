@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: modify-command
   milestone: 0004-freeform-workflow
-status: planned
+status: complete
 summary: Implement /strict-modify for mid-flight scope adjustment
 details: >-
   Create src/strict/modify.ts. Reads active change from .strict-spec-driven/changes/<name>/.

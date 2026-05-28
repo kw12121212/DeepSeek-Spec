@@ -1,0 +1,56 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: modify-command
+sections:
+  Implementation:
+    create-modify-module:
+      text: >-
+        Create src/strict/modify.ts with modifyChange function that reads proposal.yaml/design.yaml,
+        validates state, shows current scope, applies modifications, and requires confirmation.
+      status: complete
+    add-modify-tool-registration:
+      text: >-
+        Register strict_modify tool in src/strict/strict-tools.ts with requiresChangeName=true and
+        state guard [proposed, applied].
+      status: complete
+    add-confirm-parameter:
+      text: >-
+        Add confirm boolean parameter to modify tool schema and handler; reject modifications when
+        confirm is false or absent.
+      status: complete
+    add-applied-warning:
+      text: >-
+        Return a warning field in the modify result when the change was in applied state, indicating
+        re-apply may be needed.
+      status: complete
+  Testing:
+    unit-tests:
+      text: >-
+        Write tests/strict-modify.test.ts covering: valid modify in proposed state, valid modify in
+        applied state with warning, reject modify in verified/archived/shipped/canceled state,
+        reject modify without changeName, reject modify without confirm=true, reject modify for
+        nonexistent change, modification actually updates proposal.yaml and design.yaml.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — modify only works in proposed/applied states,
+        requires confirmation, and warns on applied-state modifications.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

@@ -1,0 +1,70 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: strict-lifecycle
+mapping:
+  implementation:
+    - src/strict/modify.ts
+  tests:
+    - tests/strict-modify.test.ts
+operations:
+  ADDED:
+    modify-state-guard:
+      strength: MUST
+      statement: >-
+        modifyChange MUST reject modifications to changes not in proposed or applied state by
+        returning the requireState error
+      scenarios:
+        reject-verified-state:
+          - GIVEN: a change in verified state
+          - WHEN: modifyChange is called
+          - THEN: the function returns an error string from requireState without modifying any artifacts
+    modify-read-current-scope:
+      strength: MUST
+      statement: >-
+        modifyChange MUST read and return the current scope from proposal.yaml before applying
+        modifications
+      scenarios:
+        show-current-scope:
+          - GIVEN: a change in proposed state with existing proposal.yaml
+          - WHEN: modifyChange is called
+          - THEN: >-
+              the function returns a scope summary including the current what, why, in, and out
+              fields
+    modify-requires-confirmation:
+      strength: MUST
+      statement: >-
+        modifyChange MUST NOT write to proposal.yaml or design.yaml unless the confirm parameter is
+        true
+      scenarios:
+        no-confirm-rejects:
+          - GIVEN: a change in proposed state
+          - WHEN: modifyChange is called with confirm false or absent
+          - THEN: >-
+              the function returns an error indicating confirmation is required and no files are
+              modified
+    modify-applied-warning:
+      strength: SHOULD
+      statement: >-
+        modifyChange SHOULD include a warning field in its result when the change was in applied
+        state, indicating that re-apply may be needed to reflect the modifications
+      scenarios:
+        applied-state-warning:
+          - GIVEN: a change in applied state
+          - WHEN: modifyChange is called with confirm true
+          - THEN: the result includes a warning string indicating re-apply may be needed
+    modify-tool-registration:
+      strength: MUST
+      statement: >-
+        The strict_modify tool MUST be registered as a dispatchable agent tool with
+        requiresChangeName=true and state guard for proposed and applied states
+      scenarios:
+        tool-registered:
+          - GIVEN: the strict tool registry is initialized
+          - WHEN: registerStrictTools is called
+          - THEN: >-
+              a tool named strict_modify is available with parallelSafe=false and changeName as a
+              required parameter
+  MODIFIED: {}
+  REMOVED: {}

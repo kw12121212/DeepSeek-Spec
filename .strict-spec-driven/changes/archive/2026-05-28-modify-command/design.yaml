@@ -1,0 +1,24 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: modify-command
+approach:
+  - >-
+    Create src/strict/modify.ts with a modifyChange function that: (1) reads the active change's
+    proposal.yaml and design.yaml, (2) validates the change is in proposed or applied state via
+    requireState, (3) shows current scope summary, (4) applies user-provided modifications to
+    proposal and design fields, (5) requires explicit user confirmation before writing. Register
+    strict_modify as a dispatchable agent tool with requiresChangeName=true and state guard
+    [proposed, applied]. Add a warning when the change was already applied indicating re-apply may
+    be needed.
+decisions:
+  state-guard:
+    decision: >-
+      Modify is only allowed in proposed or applied states to prevent mutating frozen artifacts in
+      verified/reviewed/archived states
+    rationale: >-
+      Changes past applied have their specs frozen for verification; modifying them would invalidate
+      review evidence
+alternatives: []
+risks: []

@@ -6,6 +6,7 @@ import { cancelChange } from "./cancel.js";
 import { requireState } from "./guard.js";
 import { type Subcommand, invokeStrict } from "./invoker.js";
 import type { ChangeState } from "./lifecycle.js";
+import { modifyChange } from "./modify.js";
 import { propose } from "./propose.js";
 import { roadmapRecommend } from "./roadmap-recommend.js";
 
@@ -94,6 +95,12 @@ const STRICT_TOOLS: StrictToolDef[] = [
     requiresChangeName: false,
   },
   {
+    subcommand: "modify",
+    description:
+      "Modify the scope of an in-flight strict change in proposed or applied state. Updates proposal.yaml with user-confirmed field changes. Warns when re-apply may be needed.",
+    requiresChangeName: true,
+  },
+  {
     subcommand: "auto-pipeline",
     description:
       "Run the full roadmap-driven auto pipeline (recommend->apply->verify->review->archive->ship) in one call with gate checks between steps.",
@@ -121,6 +128,7 @@ function buildCliArgs(args: StrictToolArgs): string[] {
 const STATE_GUARDS: Partial<Record<Subcommand, ChangeState[]>> = {
   apply: ["proposed"],
   generate: ["proposed"],
+  modify: ["proposed", "applied"],
   verify: ["applied"],
   archive: ["reviewed"],
   ship: ["archived"],
@@ -142,6 +150,18 @@ function makeHandler(subcommand: Subcommand) {
     }
     if (subcommand === "cancel") {
       return cancelChange(process.cwd(), args.changeName ?? "", args.removeDir === true);
+    }
+    if (subcommand === "modify") {
+      return modifyChange(process.cwd(), {
+        changeName: args.changeName ?? "",
+        fields: {
+          what: Array.isArray(args.fields_what) ? args.fields_what : undefined,
+          why: Array.isArray(args.fields_why) ? args.fields_why : undefined,
+          scope_in: Array.isArray(args.fields_scope_in) ? args.fields_scope_in : undefined,
+          scope_out: Array.isArray(args.fields_scope_out) ? args.fields_scope_out : undefined,
+        },
+        confirm: args.confirm === true,
+      });
     }
     if (subcommand === "roadmap-recommend") {
       return roadmapRecommend(process.cwd());
@@ -258,6 +278,35 @@ export function registerStrictTools(registry: ToolRegistry): ToolRegistry {
         type: "boolean",
         description: "Remove the change directory after cancellation. Defaults to false.",
       };
+    }
+
+    if (def.subcommand === "modify") {
+      properties.fields_what = {
+        type: "array",
+        items: { type: "string" },
+        description: "Replacement what entries for the proposal summary.",
+      };
+      properties.fields_why = {
+        type: "array",
+        items: { type: "string" },
+        description: "Replacement why entries for the proposal summary.",
+      };
+      properties.fields_scope_in = {
+        type: "array",
+        items: { type: "string" },
+        description: "Replacement in-scope entries for the proposal.",
+      };
+      properties.fields_scope_out = {
+        type: "array",
+        items: { type: "string" },
+        description: "Replacement out-of-scope entries for the proposal.",
+      };
+      properties.confirm = {
+        type: "boolean",
+        description:
+          "Must be true to apply modifications. Without confirmation, the change is not modified.",
+      };
+      required.push("confirm");
     }
 
     const parameters: JSONSchema = {

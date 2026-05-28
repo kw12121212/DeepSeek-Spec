@@ -1,0 +1,20 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: modify-command
+open: []
+resolved:
+  - id: reapply-semantics
+    question: >-
+      When a change in applied state is modified, should the modify command automatically reset the
+      state back to proposed, or leave it in applied state and just warn the user to re-apply?
+    context: >-
+      The planned change details say: warn that re-apply may be needed. This affects whether delta
+      specs are invalidated automatically or require manual re-apply.
+    answer: >-
+      Keep the change in applied state and only include a warning in the result. Do not
+      automatically reset state to proposed. Automatic state reset would add a new transition path
+      (applied->proposed) that conflicts with the existing lifecycle state machine, and the planned
+      change details explicitly say to warn rather than reset.
+    status: resolved

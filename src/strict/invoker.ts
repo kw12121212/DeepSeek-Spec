@@ -11,6 +11,7 @@ export type Subcommand =
   | "archive"
   | "ship"
   | "cancel"
+  | "modify"
   | "roadmap-status"
   | "roadmap-sync"
   | "roadmap-recommend"

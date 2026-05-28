@@ -18,7 +18,7 @@ milestones:
   0004-freeform-workflow:
     title: 'M4: Free-Form Auto Workflow'
     path: roadmap/milestones/0004-freeform-workflow.yaml
-    status: proposed
+    status: complete
   0005-e2e-hardening:
     title: 'M5: E2E Testing and TUI Hardening'
     path: roadmap/milestones/0005-e2e-hardening.yaml
