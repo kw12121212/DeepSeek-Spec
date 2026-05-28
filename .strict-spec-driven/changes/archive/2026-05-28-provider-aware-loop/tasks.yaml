@@ -1,0 +1,53 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: provider-aware-loop
+sections:
+  Implementation:
+    retype-loop-core:
+      text: >-
+        Retype CacheFirstLoopOptions.client and CacheFirstLoop.client from DeepSeekClient to the
+        provider port interface in src/loop.ts
+      status: complete
+    retype-streaming:
+      text: >-
+        Retype StreamModelOptions.client from DeepSeekClient to the port interface in
+        src/loop/streaming.ts
+      status: complete
+    retype-non-streaming-call-sites:
+      text: >-
+        Retype 6 non-streaming chat() call sites: desktop.ts, commit.ts, session-title.ts,
+        force-summary.ts, context-manager.ts, loop.ts non-streaming path
+      status: complete
+    guard-thinking-by-capability:
+      text: >-
+        Guard thinkingModeForModel() and reasoning_content parsing behind provider capability flags
+        (supportsThinking, supportsReasoningContent)
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run typecheck.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — all 8 call sites retyped, no behavioral
+        change for DeepSeek.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

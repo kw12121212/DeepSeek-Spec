@@ -817,13 +817,14 @@ export class CacheFirstLoop {
           usage = result.usage;
         } else {
           const callModel = this.model;
+          const supportsThinking = this.client.capabilities.supportsThinking;
           const resp = await this.client.chat({
             model: callModel,
             messages,
             tools: toolSpecs.length ? toolSpecs : undefined,
             signal,
-            thinking: thinkingModeForModel(callModel),
-            reasoningEffort: this.reasoningEffort,
+            thinking: supportsThinking ? thinkingModeForModel(callModel) : "disabled",
+            reasoningEffort: supportsThinking ? this.reasoningEffort : undefined,
           });
           assistantContent = resp.content;
           reasoningContent = resp.reasoningContent ?? "";

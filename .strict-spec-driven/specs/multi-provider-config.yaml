@@ -119,13 +119,15 @@ requirements:
   port-chat-stream:
     strength: MUST
     statement: >-
-      ModelClient port MUST define chat() and stream() methods matching current DeepSeekClient
-      signatures, plus provider capability metadata (supportsThinking, supportsReasoningContent)
+      All call sites that currently import DeepSeekClient for the type MUST import and use the
+      ModelClient provider port interface instead
     scenarios:
-      port-has-capability-flags:
-        - GIVEN: a ModelClient implementation for deepseek
-        - WHEN: client.capabilities is accessed
-        - THEN: supportsThinking and supportsReasoningContent are boolean
+      call-sites-retyped:
+        - GIVEN: the provider registry is initialized with active provider deepseek
+        - WHEN: >-
+            CacheFirstLoop, StreamModelOptions, and 6 non-streaming call sites resolve their client
+            type
+        - THEN: all client references are typed as ModelClient, not DeepSeekClient
   openai-compat-client:
     strength: MUST
     statement: >-
@@ -174,6 +176,21 @@ requirements:
         - GIVEN: ProviderRegistry with GLM registered
         - WHEN: validateModel('glm', 'glm-5.1') is called
         - THEN: no error is thrown
+  capability-guard-thinking:
+    strength: MUST
+    statement: >-
+      thinkingModeForModel() MUST only be called when the active provider's supportsThinking
+      capability is true; reasoning_content delta parsing MUST only occur when
+      supportsReasoningContent is true
+    scenarios:
+      thinking-guarded-by-capability:
+        - GIVEN: >-
+            the active provider is GLM which has supportsThinking=false and
+            supportsReasoningContent=false
+        - WHEN: the agent loop processes a streaming response from GLM
+        - THEN: >-
+            no thinking parameters are sent in the request and no reasoning_content is parsed from
+            the response
 mapping:
   implementation:
     - src/config.ts

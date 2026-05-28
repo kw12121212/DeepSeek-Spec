@@ -33,15 +33,18 @@ export async function* streamModelResponse(
   const callBuf: Map<number, ToolCall> = new Map();
   const readyIndices = new Set<number>();
 
+  const supportsThinking = client.capabilities.supportsThinking;
+  const supportsReasoningContent = client.capabilities.supportsReasoningContent;
+
   for await (const chunk of client.stream({
     model,
     messages,
     tools: toolSpecs.length ? toolSpecs : undefined,
     signal,
-    thinking: thinkingModeForModel(model),
-    reasoningEffort,
+    thinking: supportsThinking ? thinkingModeForModel(model) : "disabled",
+    reasoningEffort: supportsThinking ? reasoningEffort : undefined,
   })) {
-    if (chunk.reasoningDelta) {
+    if (supportsReasoningContent && chunk.reasoningDelta) {
       reasoningContent += chunk.reasoningDelta;
       yield {
         turn,

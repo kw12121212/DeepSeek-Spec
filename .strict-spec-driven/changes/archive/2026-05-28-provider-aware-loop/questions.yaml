@@ -1,0 +1,21 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: provider-aware-loop
+open: []
+resolved:
+  - id: capability-guard-scope
+    question: >-
+      Should thinkingModeForModel() and reasoning_content parsing be guarded per-provider (check
+      active provider capabilities at each call site) or per-request (pass capability flags through
+      to the call site)?
+    context: >-
+      loop.ts and streaming.ts both call thinkingModeForModel() and parse reasoning_content. With
+      multi-provider support, GLM does not support these features. The provider registry already
+      exposes capability flags.
+    answer: >-
+      Per-provider: check active provider capabilities at each call site via client.capabilities.
+      The provider registry already exposes these flags. This avoids plumbing extra parameters
+      through every function signature.
+    status: resolved

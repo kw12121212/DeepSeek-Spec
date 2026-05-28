@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: provider-aware-loop
   milestone: 0007-multi-provider-api
-status: planned
+status: complete
 summary: Retype loop, streaming, and all chat() call sites to use the provider port
 details: >-
   Replace all direct DeepSeekClient type references with the updated provider port interface so that
