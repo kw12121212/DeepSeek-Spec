@@ -29,7 +29,7 @@ describe("buildEditToolBlocks", () => {
   let root: string;
 
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-review-gate-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-review-gate-"));
     writeFileSync(join(root, "existing.ts"), "export const value = 1;\n", "utf8");
   });
 

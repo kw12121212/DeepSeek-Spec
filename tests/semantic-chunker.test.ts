@@ -90,7 +90,7 @@ describe("chunker", () => {
     let root: string;
 
     beforeEach(async () => {
-      root = await mkdtemp(join(tmpdir(), "reasonix-chunk-"));
+      root = await mkdtemp(join(tmpdir(), "dspec-chunk-"));
     });
 
     afterEach(async () => {

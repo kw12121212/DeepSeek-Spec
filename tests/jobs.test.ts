@@ -19,7 +19,7 @@ describe("JobRegistry", () => {
   let registry: JobRegistry;
 
   beforeEach(() => {
-    cwd = mkdtempSync(join(tmpdir(), "reasonix-job-"));
+    cwd = mkdtempSync(join(tmpdir(), "dspec-job-"));
     registry = new JobRegistry();
   });
   afterEach(async () => {

@@ -8,7 +8,7 @@ describe("loadDotMcpJson", () => {
   let root: string;
 
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-dotmcp-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-dotmcp-"));
   });
 
   afterEach(() => {

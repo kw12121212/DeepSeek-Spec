@@ -18,9 +18,9 @@ describe("filesystem outside-sandbox gate (#684)", () => {
   let gateRequests: Array<{ kind: string; payload: unknown }>;
 
   beforeEach(async () => {
-    root = await mkdtemp(join(tmpdir(), "reasonix-sandbox-"));
-    outside = await mkdtemp(join(tmpdir(), "reasonix-outside-"));
-    configDir = await mkdtemp(join(tmpdir(), "reasonix-cfg-"));
+    root = await mkdtemp(join(tmpdir(), "dspec-sandbox-"));
+    outside = await mkdtemp(join(tmpdir(), "dspec-outside-"));
+    configDir = await mkdtemp(join(tmpdir(), "dspec-cfg-"));
     configPath = join(configDir, "config.json");
     writeConfig({}, configPath);
     tools = new ToolRegistry();

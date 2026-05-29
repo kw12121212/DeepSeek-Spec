@@ -10,7 +10,7 @@ import { ImmutablePrefix } from "../src/memory/runtime.js";
 describe("codeSystemPrompt", () => {
   let root: string;
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-prompt-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-prompt-"));
   });
   afterEach(() => {
     rmSync(root, { recursive: true, force: true });

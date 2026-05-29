@@ -55,7 +55,7 @@ describe("session persistence", () => {
   const realHome = homedir();
 
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-session-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-session-"));
     vi.stubEnv("USERPROFILE", tmp); // Windows
     vi.stubEnv("HOME", tmp); // Unix
     // os.homedir() is cached per-process on some platforms — override via spy.
@@ -554,15 +554,15 @@ describe("session persistence", () => {
     it("returns session names matching the prefix, sorted alpha-reverse", () => {
       // Filename sort — zero-padded YYYYMMDDHHmm sorts newest-first after reverse.
       // Non-digit suffixes (letters > digits in ASCII) sort above timestamps.
-      appendSessionMessage("code-reasonix-old", { role: "user", content: "x" });
-      appendSessionMessage("code-reasonix-20260430T143200", { role: "user", content: "y" });
-      appendSessionMessage("code-reasonix-20260430T154500", { role: "user", content: "z" });
+      appendSessionMessage("code-dspec-old", { role: "user", content: "x" });
+      appendSessionMessage("code-dspec-20260430T143200", { role: "user", content: "y" });
+      appendSessionMessage("code-dspec-20260430T154500", { role: "user", content: "z" });
 
-      const result = findSessionsByPrefix("code-reasonix-");
+      const result = findSessionsByPrefix("code-dspec-");
       expect(result).toEqual([
-        "code-reasonix-old",
-        "code-reasonix-20260430T154500",
-        "code-reasonix-20260430T143200",
+        "code-dspec-old",
+        "code-dspec-20260430T154500",
+        "code-dspec-20260430T143200",
       ]);
     });
 

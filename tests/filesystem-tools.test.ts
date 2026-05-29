@@ -12,7 +12,7 @@ describe("filesystem tools (built-in, sandbox-enforced)", () => {
   let tools: ToolRegistry;
 
   beforeEach(async () => {
-    root = await mkdtemp(join(tmpdir(), "reasonix-fs-"));
+    root = await mkdtemp(join(tmpdir(), "dspec-fs-"));
     tools = new ToolRegistry();
     registerFilesystemTools(tools, { rootDir: root });
     await fs.writeFile(join(root, "hello.txt"), "line 1\nline 2\nline 3\n");

@@ -59,7 +59,7 @@ describe("ignoredByLayers", () => {
 describe("loadGitignoreAt / loadGitignoreAtSync", () => {
   let dir: string;
   beforeEach(() => {
-    dir = mkdtempSync(path.join(tmpdir(), "reasonix-gitignore-"));
+    dir = mkdtempSync(path.join(tmpdir(), "dspec-gitignore-"));
   });
   afterEach(() => {
     rmSync(dir, { recursive: true, force: true });

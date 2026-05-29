@@ -17,7 +17,7 @@ describe("findSubdirMemoryAncestors", () => {
   let root: string;
 
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-subdir-mem-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-subdir-mem-"));
   });
   afterEach(() => {
     rmSync(root, { recursive: true, force: true });
@@ -69,7 +69,7 @@ describe("findSubdirMemoryAncestors", () => {
   });
 
   it("returns [] for an absolute path that escapes rootDir", () => {
-    const outside = mkdtempSync(join(tmpdir(), "reasonix-subdir-out-"));
+    const outside = mkdtempSync(join(tmpdir(), "dspec-subdir-out-"));
     try {
       writeFileSync(join(outside, "foo.ts"), "");
       expect(findSubdirMemoryAncestors(join(outside, "foo.ts"), root)).toEqual([]);
@@ -98,7 +98,7 @@ describe("readSubdirMemoryContent", () => {
   let root: string;
 
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-subdir-read-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-subdir-read-"));
   });
   afterEach(() => {
     rmSync(root, { recursive: true, force: true });
@@ -144,7 +144,7 @@ describe("read_file injects subdir memory on first read per session", () => {
   let tools: ToolRegistry;
 
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-fs-mem-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-fs-mem-"));
     mkdirSync(join(root, "frontend"), { recursive: true });
     writeFileSync(join(root, "frontend", "DSPEC.md"), "use pnpm, never npm");
     writeFileSync(join(root, "frontend", "App.tsx"), "export const App = () => null;");
@@ -198,7 +198,7 @@ describe("findDirMemory — for list_directory's listed dir", () => {
   let root: string;
 
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-dir-mem-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-dir-mem-"));
   });
   afterEach(() => {
     rmSync(root, { recursive: true, force: true });
@@ -226,7 +226,7 @@ describe("findDirMemory — for list_directory's listed dir", () => {
   });
 
   it("returns [] for a dir outside rootDir", () => {
-    const outside = mkdtempSync(join(tmpdir(), "reasonix-dir-out-"));
+    const outside = mkdtempSync(join(tmpdir(), "dspec-dir-out-"));
     try {
       mkdirSync(join(outside, "sub"), { recursive: true });
       expect(findDirMemory(join(outside, "sub"), root)).toEqual([]);
@@ -241,7 +241,7 @@ describe("list_directory injects subdir memory (issue #1160)", () => {
   let tools: ToolRegistry;
 
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-ls-mem-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-ls-mem-"));
     mkdirSync(join(root, "pkg", "module"), { recursive: true });
     writeFileSync(join(root, "pkg", "AGENTS.md"), "package rules");
     writeFileSync(join(root, "pkg", "module", "AGENTS.md"), "module rules");

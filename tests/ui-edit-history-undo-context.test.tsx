@@ -20,7 +20,7 @@ afterEach(() => {
 
 describe("useEditHistory undo context", () => {
   it("notifies the caller when /undo reverts an edit batch", () => {
-    const root = mkdtempSync(join(tmpdir(), "reasonix-undo-context-"));
+    const root = mkdtempSync(join(tmpdir(), "dspec-undo-context-"));
     const target = join(root, "demo.txt");
     writeFileSync(target, "before\n", "utf8");
 
@@ -56,7 +56,7 @@ describe("useEditHistory undo context", () => {
   it("does not return a context message when /undo has nothing left to restore", () => {
     let api: ReturnType<typeof useEditHistory> | undefined;
     function Harness() {
-      api = useEditHistory({ rootDir: mkdtempSync(join(tmpdir(), "reasonix-undo-empty-")) });
+      api = useEditHistory({ rootDir: mkdtempSync(join(tmpdir(), "dspec-undo-empty-")) });
       return null;
     }
 

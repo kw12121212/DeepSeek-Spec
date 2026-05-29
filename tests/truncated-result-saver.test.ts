@@ -22,7 +22,7 @@ describe("saveTruncatedResult", () => {
   let rootDir: string;
 
   beforeEach(() => {
-    rootDir = mkdtempSync(join(tmpdir(), "reasonix-trunc-save-"));
+    rootDir = mkdtempSync(join(tmpdir(), "dspec-trunc-save-"));
   });
 
   afterEach(() => {
@@ -63,7 +63,7 @@ describe("saveTruncatedResult", () => {
   it("falls back to ~/.dspec when rootDir is the filesystem root", () => {
     const origHome = process.env.HOME;
     const origUserProfile = process.env.USERPROFILE;
-    const fakeHome = mkdtempSync(join(tmpdir(), "reasonix-trunc-home-"));
+    const fakeHome = mkdtempSync(join(tmpdir(), "dspec-trunc-home-"));
     process.env.HOME = fakeHome;
     process.env.USERPROFILE = fakeHome;
 
@@ -86,7 +86,7 @@ describe("saveTruncatedResult", () => {
     // Redirect HOME so os.homedir() points to a temp dir instead of real home.
     const origHome = process.env.HOME;
     const origUserProfile = process.env.USERPROFILE;
-    const fakeHome = mkdtempSync(join(tmpdir(), "reasonix-trunc-home-"));
+    const fakeHome = mkdtempSync(join(tmpdir(), "dspec-trunc-home-"));
     process.env.HOME = fakeHome;
     process.env.USERPROFILE = fakeHome;
 
@@ -120,7 +120,7 @@ describe("cleanupOldResults", () => {
   let rootDir: string;
 
   beforeEach(() => {
-    rootDir = mkdtempSync(join(tmpdir(), "reasonix-trunc-cln-"));
+    rootDir = mkdtempSync(join(tmpdir(), "dspec-trunc-cln-"));
     mkdirSync(storageDir(rootDir), { recursive: true });
   });
 
@@ -152,7 +152,7 @@ describe("cleanupOldResults", () => {
   });
 
   it("is a no-op on missing directory", () => {
-    const missing = mkdtempSync(join(tmpdir(), "reasonix-trunc-missing-"));
+    const missing = mkdtempSync(join(tmpdir(), "dspec-trunc-missing-"));
     rmSync(missing, { recursive: true, force: true });
     expect(() => cleanupOldResults(missing, 1000)).not.toThrow();
   });

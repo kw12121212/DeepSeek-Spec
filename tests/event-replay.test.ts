@@ -10,7 +10,7 @@ import type { LoopEvent } from "../src/loop.js";
 
 let dir: string;
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), "reasonix-replay-"));
+  dir = mkdtempSync(join(tmpdir(), "dspec-replay-"));
 });
 afterEach(() => {
   rmSync(dir, { recursive: true, force: true });

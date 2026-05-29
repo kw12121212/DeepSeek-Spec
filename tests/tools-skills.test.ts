@@ -37,8 +37,8 @@ describe("run_skill tool", () => {
   let projectRoot: string;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-skilltool-"));
-    projectRoot = mkdtempSync(join(tmpdir(), "reasonix-skilltool-proj-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-skilltool-"));
+    projectRoot = mkdtempSync(join(tmpdir(), "dspec-skilltool-proj-"));
   });
 
   afterEach(() => {
@@ -75,7 +75,7 @@ describe("run_skill tool", () => {
   });
 
   it("returns a custom path skill when customSkillPaths is passed", async () => {
-    const custom = mkdtempSync(join(tmpdir(), "reasonix-skilltool-custom-"));
+    const custom = mkdtempSync(join(tmpdir(), "dspec-skilltool-custom-"));
     try {
       const dir = join(custom, "custom-run");
       mkdirSync(dir, { recursive: true });
@@ -95,7 +95,7 @@ describe("run_skill tool", () => {
   });
 
   it("unknown skill available list includes custom skills", async () => {
-    const custom = mkdtempSync(join(tmpdir(), "reasonix-skilltool-custom-"));
+    const custom = mkdtempSync(join(tmpdir(), "dspec-skilltool-custom-"));
     try {
       const dir = join(custom, "custom-known");
       mkdirSync(dir, { recursive: true });
@@ -251,8 +251,8 @@ describe("install_skill tool", () => {
   let projectRoot: string;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-installskill-"));
-    projectRoot = mkdtempSync(join(tmpdir(), "reasonix-installskill-proj-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-installskill-"));
+    projectRoot = mkdtempSync(join(tmpdir(), "dspec-installskill-proj-"));
   });
 
   afterEach(() => {
@@ -448,7 +448,7 @@ describe("built-in subagent tools (explore / research / review / security_review
   let home: string;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-builtin-subagent-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-builtin-subagent-"));
   });
 
   afterEach(() => {

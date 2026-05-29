@@ -51,8 +51,8 @@ describe("loadHooks", () => {
   let configPath: string;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-hooks-home-"));
-    project = mkdtempSync(join(tmpdir(), "reasonix-hooks-proj-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-hooks-home-"));
+    project = mkdtempSync(join(tmpdir(), "dspec-hooks-proj-"));
     configPath = join(home, "config.json");
   });
   afterEach(() => {

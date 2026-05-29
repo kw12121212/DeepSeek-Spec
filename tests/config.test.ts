@@ -70,7 +70,7 @@ describe("config", () => {
   const originalZhipuUrl = process.env.ZHIPU_BASE_URL;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-test-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-test-"));
     path = join(dir, "config.json");
     // biome-ignore lint/performance/noDelete: the string "undefined" leaks into process.env otherwise
     delete process.env.DEEPSEEK_API_KEY;
@@ -572,17 +572,17 @@ describe("config", () => {
   it.runIf(process.platform === "win32")(
     "matches project keys case-insensitively on Windows so cross-shell rootDir casing doesn't lose entries (#402)",
     () => {
-      addProjectShellAllowed("F:\\Reasonix", "gh", path);
-      expect(loadProjectShellAllowed("f:\\reasonix", path)).toContain("gh");
-      expect(loadProjectShellAllowed("F:\\REASONIX", path)).toContain("gh");
+      addProjectShellAllowed("F:\\DeepSeek-Spec", "gh", path);
+      expect(loadProjectShellAllowed("f:\\dspec", path)).toContain("gh");
+      expect(loadProjectShellAllowed("F:\\DSPEC", path)).toContain("gh");
       // Mutations through any-cased rootDir consolidate onto the original key.
-      addProjectShellAllowed("f:\\reasonix", "deploy", path);
-      expect(loadProjectShellAllowed("F:\\Reasonix", path)).toEqual(["gh", "deploy"]);
-      expect(Object.keys(readConfig(path).projects ?? {})).toEqual(["F:\\Reasonix"]);
-      expect(removeProjectShellAllowed("f:\\REASONIX", "gh", path)).toBe(true);
-      expect(loadProjectShellAllowed("F:\\Reasonix", path)).toEqual(["deploy"]);
-      expect(clearProjectShellAllowed("F:\\REASONIX", path)).toBe(1);
-      expect(loadProjectShellAllowed("F:\\Reasonix", path)).toEqual([]);
+      addProjectShellAllowed("f:\\dspec", "deploy", path);
+      expect(loadProjectShellAllowed("F:\\DeepSeek-Spec", path)).toEqual(["gh", "deploy"]);
+      expect(Object.keys(readConfig(path).projects ?? {})).toEqual(["F:\\DeepSeek-Spec"]);
+      expect(removeProjectShellAllowed("f:\\DSPEC", "gh", path)).toBe(true);
+      expect(loadProjectShellAllowed("F:\\DeepSeek-Spec", path)).toEqual(["deploy"]);
+      expect(clearProjectShellAllowed("F:\\DSPEC", path)).toBe(1);
+      expect(loadProjectShellAllowed("F:\\DeepSeek-Spec", path)).toEqual([]);
     },
   );
 
@@ -729,7 +729,7 @@ describe("config", () => {
           baseUrl: "https://api.openai.com/v1",
           apiKey: "sk-openai1234567890abcd",
           model: "text-embedding-3-small",
-          extraBody: { user: "reasonix" },
+          extraBody: { user: "dspec" },
         },
       },
       path,
@@ -737,7 +737,7 @@ describe("config", () => {
     const loaded = loadSemanticEmbeddingUserConfig(path);
     expect(loaded.provider).toBe("openai-compat");
     expect(loaded.openaiCompat?.baseUrl).toBe("https://api.openai.com/v1");
-    expect(loaded.openaiCompat?.extraBody).toEqual({ user: "reasonix" });
+    expect(loaded.openaiCompat?.extraBody).toEqual({ user: "dspec" });
   });
 
   it("resolves ollama by default when semantic config is absent", () => {

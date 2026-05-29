@@ -1,7 +1,7 @@
 /** ACP (Agent Client Protocol) server — NDJSON framing + JSON-RPC method dispatch. */
 
 import { PassThrough } from "node:stream";
-import { resolveApprovalPrompt, toApprovalPrompt, toolKindFor } from "@reasonix/core-utils";
+import { resolveApprovalPrompt, toApprovalPrompt, toolKindFor } from "@deepseek-spec/core-utils";
 import { describe, expect, it } from "vitest";
 import { dispatchKernelEvent } from "../src/acp/dispatch.js";
 import { requestPermissionForGate } from "../src/acp/gates.js";
@@ -549,7 +549,7 @@ describe("ACP initialize handshake (end-to-end via the server)", () => {
         promptCapabilities: { image: false, audio: false, embeddedContext: true },
         mcpCapabilities: { http: false, sse: false },
       },
-      agentInfo: { name: "reasonix", title: "Reasonix", version: "0.0.0-test" },
+      agentInfo: { name: "dspec", title: "DeepSeek-Spec", version: "0.0.0-test" },
       authMethods: [],
     }));
     send({
@@ -562,7 +562,7 @@ describe("ACP initialize handshake (end-to-end via the server)", () => {
     const reply = JSON.parse(reads()[0] ?? "{}");
     expect(reply.id).toBe(0);
     expect(reply.result.protocolVersion).toBe(1);
-    expect(reply.result.agentInfo.name).toBe("reasonix");
+    expect(reply.result.agentInfo.name).toBe("dspec");
     expect(reply.result.authMethods).toEqual([]);
     server.close();
   });

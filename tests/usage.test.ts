@@ -30,7 +30,7 @@ describe("appendUsage + readUsageLog", () => {
   let path: string;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-usage-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-usage-"));
     path = join(dir, "usage.jsonl");
   });
   afterEach(() => {

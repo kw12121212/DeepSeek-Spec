@@ -60,7 +60,7 @@ describe("AT_MENTION_PATTERN", () => {
 describe("expandAtMentions", () => {
   let root: string;
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-at-mentions-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-at-mentions-"));
     mkdirSync(join(root, "src"), { recursive: true });
     writeFileSync(join(root, "src", "loop.ts"), "export const x = 1;\n");
     writeFileSync(join(root, "notes.md"), "# Notes\nhello\n");
@@ -409,7 +409,7 @@ describe("rankPickerCandidates", () => {
 describe("listFilesSync", () => {
   let root: string;
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-listfiles-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-listfiles-"));
     mkdirSync(join(root, "src"), { recursive: true });
     mkdirSync(join(root, "src", "cli"), { recursive: true });
     mkdirSync(join(root, "node_modules", "foo"), { recursive: true });
@@ -488,7 +488,7 @@ describe("listFilesSync", () => {
 describe("listFilesWithStatsAsync", () => {
   let root: string;
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-listfiles-async-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-listfiles-async-"));
     mkdirSync(join(root, "src"), { recursive: true });
     mkdirSync(join(root, "src", "cli"), { recursive: true });
     mkdirSync(join(root, "node_modules", "foo"), { recursive: true });
@@ -793,7 +793,7 @@ describe("parseAtQuery", () => {
 describe("listDirectory", () => {
   let root: string;
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-listdir-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-listdir-"));
     mkdirSync(join(root, "src", "auth"), { recursive: true });
     mkdirSync(join(root, "tests"), { recursive: true });
     mkdirSync(join(root, "node_modules"), { recursive: true });
@@ -851,7 +851,7 @@ describe("listDirectory", () => {
 describe("walkFilesStream", () => {
   let root: string;
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-stream-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-stream-"));
     mkdirSync(join(root, "a"), { recursive: true });
     mkdirSync(join(root, "b", "c"), { recursive: true });
     mkdirSync(join(root, "node_modules", "junk"), { recursive: true });

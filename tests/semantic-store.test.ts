@@ -39,7 +39,7 @@ describe("SemanticStore", () => {
   let dir: string;
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), "reasonix-store-"));
+    dir = await mkdtemp(join(tmpdir(), "dspec-store-"));
   });
 
   afterEach(async () => {

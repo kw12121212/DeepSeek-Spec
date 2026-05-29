@@ -55,8 +55,8 @@ describe("SkillStore", () => {
   let projectRoot: string;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-skills-home-"));
-    projectRoot = mkdtempSync(join(tmpdir(), "reasonix-skills-proj-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-skills-home-"));
+    projectRoot = mkdtempSync(join(tmpdir(), "dspec-skills-proj-"));
   });
 
   afterEach(() => {
@@ -170,7 +170,7 @@ describe("SkillStore", () => {
   });
 
   it("reads custom flat and dir-layout skills directly from configured roots", () => {
-    const custom = mkdtempSync(join(tmpdir(), "reasonix-skills-custom-"));
+    const custom = mkdtempSync(join(tmpdir(), "dspec-skills-custom-"));
     try {
       writeSkillDir(
         projectRoot,
@@ -199,7 +199,7 @@ describe("SkillStore", () => {
   });
 
   it("deduplicates custom roots and preserves first priority", () => {
-    const custom = mkdtempSync(join(tmpdir(), "reasonix-skills-custom-"));
+    const custom = mkdtempSync(join(tmpdir(), "dspec-skills-custom-"));
     try {
       const roots = new SkillStore({
         homeDir: home,
@@ -228,7 +228,7 @@ describe("SkillStore", () => {
   });
 
   it("keeps priority project > custom > global on same-name collisions", () => {
-    const custom = mkdtempSync(join(tmpdir(), "reasonix-skills-custom-"));
+    const custom = mkdtempSync(join(tmpdir(), "dspec-skills-custom-"));
     try {
       writeSkillDir(projectRoot, "global", "same", { description: "global" }, "G", home);
       writeSkillDir(projectRoot, "custom", "same", { description: "custom" }, "C", custom);
@@ -379,8 +379,8 @@ describe("applySkillsIndex", () => {
   let projectRoot: string;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-skills-idx-"));
-    projectRoot = mkdtempSync(join(tmpdir(), "reasonix-skills-idx-proj-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-skills-idx-"));
+    projectRoot = mkdtempSync(join(tmpdir(), "dspec-skills-idx-proj-"));
   });
 
   afterEach(() => {
@@ -498,7 +498,7 @@ describe("Skill frontmatter — runAs", () => {
   let home: string;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-skills-runas-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-skills-runas-"));
   });
 
   afterEach(() => {
@@ -611,7 +611,7 @@ describe("Skill frontmatter — runAs", () => {
     });
 
     it("reads skills from <project>/.claude/skills/", () => {
-      const project = mkdtempSync(join(tmpdir(), "reasonix-skills-proj-"));
+      const project = mkdtempSync(join(tmpdir(), "dspec-skills-proj-"));
       try {
         writeClaudeSkill(project, "project", "proj-skill", { description: "from project" }, "go");
         const store = new SkillStore({
@@ -671,7 +671,7 @@ describe("Built-in skills", () => {
   let home: string;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-skills-builtins-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-skills-builtins-"));
   });
 
   afterEach(() => {

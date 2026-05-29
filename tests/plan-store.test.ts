@@ -30,7 +30,7 @@ let originalHome: string | undefined;
 let originalUserProfile: string | undefined;
 
 beforeEach(() => {
-  tempHome = mkdtempSync(join(tmpdir(), "reasonix-plan-store-"));
+  tempHome = mkdtempSync(join(tmpdir(), "dspec-plan-store-"));
   originalHome = process.env.HOME;
   originalUserProfile = process.env.USERPROFILE;
   process.env.HOME = tempHome;

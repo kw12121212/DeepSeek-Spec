@@ -9,7 +9,7 @@ describe("sessions command", () => {
   let tmp: string;
 
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-sessions-command-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-sessions-command-"));
     vi.stubEnv("USERPROFILE", tmp);
     vi.stubEnv("HOME", tmp);
     vi.spyOn(require("node:os"), "homedir").mockReturnValue(tmp);
@@ -25,7 +25,7 @@ describe("sessions command", () => {
     appendSessionMessage("release-fix", { role: "user", content: "repair packaging" });
     patchSessionMeta("release-fix", {
       summary: "Fix release packaging after optional renderer dependency update",
-      workspace: "/work/reasonix",
+      workspace: "/work/dspec",
       branch: "GTC/fix-release",
     });
     const lines: string[] = [];
@@ -40,7 +40,7 @@ describe("sessions command", () => {
     expect(output).toContain(
       "summary: Fix release packaging after optional renderer dependency update",
     );
-    expect(output).toContain("workspace: reasonix");
+    expect(output).toContain("workspace: dspec");
     expect(output).toContain("branch: GTC/fix-release");
   });
 });

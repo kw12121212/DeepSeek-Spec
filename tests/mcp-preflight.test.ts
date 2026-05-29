@@ -12,7 +12,7 @@ function stdio(args: string[]): StdioMcpSpec {
 describe("preflightStdioSpec — filesystem MCP", () => {
   let tmp: string;
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-preflight-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-preflight-"));
   });
   afterEach(() => {
     rmSync(tmp, { recursive: true, force: true });

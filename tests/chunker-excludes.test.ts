@@ -10,7 +10,7 @@ describe("walkChunks excludes", () => {
   let root: string;
 
   beforeEach(async () => {
-    root = await mkdtemp(join(tmpdir(), "reasonix-excludes-"));
+    root = await mkdtemp(join(tmpdir(), "dspec-excludes-"));
   });
 
   afterEach(async () => {

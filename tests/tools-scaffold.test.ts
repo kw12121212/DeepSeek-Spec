@@ -16,8 +16,8 @@ interface Setup {
 }
 
 function setup(): Setup {
-  const home = mkdtempSync(join(tmpdir(), "reasonix-scaffold-"));
-  const projectRoot = mkdtempSync(join(tmpdir(), "reasonix-scaffold-proj-"));
+  const home = mkdtempSync(join(tmpdir(), "dspec-scaffold-"));
+  const projectRoot = mkdtempSync(join(tmpdir(), "dspec-scaffold-proj-"));
   const configPath = join(home, "config.json");
   const reg = new ToolRegistry();
   registerScaffoldTools(reg, { homeDir: home, projectRoot, configPath });

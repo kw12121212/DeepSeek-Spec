@@ -22,8 +22,8 @@ describe("custom memory types (#709)", () => {
   const originalEnv = process.env.DSPEC_MEMORY;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-memtype-home-"));
-    projectRoot = mkdtempSync(join(tmpdir(), "reasonix-memtype-proj-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-memtype-home-"));
+    projectRoot = mkdtempSync(join(tmpdir(), "dspec-memtype-proj-"));
     // biome-ignore lint/performance/noDelete: avoid leaking "undefined" into env
     delete process.env.DSPEC_MEMORY;
   });

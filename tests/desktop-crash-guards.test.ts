@@ -1,4 +1,4 @@
-/** #1074 — the desktop sidecar must survive an unhandled rejection / uncaught exception rather than exit(1) (which Tauri surfaces as "reasonix exited (code 1)" and forces a full reconnect). */
+/** #1074 — the desktop sidecar must survive an unhandled rejection / uncaught exception rather than exit(1) (which Tauri surfaces as "dspec exited (code 1)" and forces a full reconnect). */
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { installDesktopCrashGuards } from "../src/cli/commands/desktop.js";

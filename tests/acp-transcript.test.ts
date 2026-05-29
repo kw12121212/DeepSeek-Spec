@@ -17,18 +17,18 @@ describe("acp --transcript", () => {
   let tmpDir: string;
 
   beforeAll(() => {
-    tmpDir = mkdtempSync(join(tmpdir(), "reasonix-acp-transcript-"));
+    tmpDir = mkdtempSync(join(tmpdir(), "dspec-acp-transcript-"));
   });
 
   afterAll(() => {
     rmSync(tmpDir, { recursive: true, force: true });
   });
 
-  it("writes _meta with source 'reasonix acp' and records the ACP session sequence", async () => {
+  it("writes _meta with source 'dspec acp' and records the ACP session sequence", async () => {
     const path = join(tmpDir, "session.jsonl");
     const stream = openTranscriptFile(path, {
       version: 1,
-      source: "reasonix acp",
+      source: "dspec acp",
       model: "deepseek-chat",
       startedAt: "2026-05-13T00:00:00Z",
     });
@@ -59,7 +59,7 @@ describe("acp --transcript", () => {
     const { meta, records } = parseTranscript(readFileSync(path, "utf8"));
 
     expect(meta).not.toBeNull();
-    expect(meta?.source).toBe("reasonix acp");
+    expect(meta?.source).toBe("dspec acp");
     expect(meta?.version).toBe(1);
     expect(meta?.model).toBe("deepseek-chat");
 
@@ -87,7 +87,7 @@ describe("acp --transcript", () => {
     const path = join(tmpDir, "multi-turn.jsonl");
     const stream = openTranscriptFile(path, {
       version: 1,
-      source: "reasonix acp",
+      source: "dspec acp",
       startedAt: "2026-05-13T00:00:00Z",
     });
 

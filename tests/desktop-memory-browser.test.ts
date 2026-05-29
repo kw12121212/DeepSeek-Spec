@@ -13,8 +13,8 @@ describe("desktop memory browser", () => {
   let dspecHome: string;
 
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-memory-project-"));
-    dspecHome = join(mkdtempSync(join(tmpdir(), "reasonix-memory-home-")), ".dspec");
+    root = mkdtempSync(join(tmpdir(), "dspec-memory-project-"));
+    dspecHome = join(mkdtempSync(join(tmpdir(), "dspec-memory-home-")), ".dspec");
     mkdirSync(dspecHome, { recursive: true });
   });
 

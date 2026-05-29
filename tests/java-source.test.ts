@@ -37,7 +37,7 @@ vi.mock("node:child_process", () => ({
 let tmpDirs: string[] = [];
 
 async function tmpDir(): Promise<string> {
-  const d = await mkdtemp(join(tmpdir(), "reasonix-java-test-"));
+  const d = await mkdtemp(join(tmpdir(), "dspec-java-test-"));
   tmpDirs.push(d);
   return d;
 }

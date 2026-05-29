@@ -8,16 +8,13 @@ requirements:
   event-type-coverage:
     strength: MUST
     statement: >-
-      The Event union type MUST include events for: conversation
-      (user.message, model.turn.started, model.delta, model.final), tools
-      (tool.preparing, tool.intent, tool.dispatched, tool.denied,
-      tool.result, tool.call, tool.confirm.allow/deny/always_allow), effects
-      (effect.file.touched, effect.memory.written), planning
-      (plan.submitted, plan.step.completed), checkpoints
-      (checkpoint.created, checkpoint.restored), policy (hook.fired,
-      policy.budget.warning, policy.budget.blocked, policy.escalated),
-      session (session.opened, session.compacted, capability.registered,
-      capability.removed), and system (status, error, warning).
+      The Event union type MUST include events for: conversation (user.message, model.turn.started,
+      model.delta, model.final), tools (tool.preparing, tool.intent, tool.dispatched, tool.denied,
+      tool.result, tool.call, tool.confirm.allow/deny/always_allow), effects (effect.file.touched,
+      effect.memory.written), planning (plan.submitted, plan.step.completed), checkpoints
+      (checkpoint.created, checkpoint.restored), policy (hook.fired, policy.budget.warning,
+      policy.budget.blocked, policy.escalated), session (session.opened, session.compacted,
+      capability.registered, capability.removed), and system (status, error, warning).
     scenarios:
       all-events-defined:
         - GIVEN: the Event union type
@@ -26,8 +23,8 @@ requirements:
   event-base-fields:
     strength: MUST
     statement: >-
-      Every event MUST have id (number), ts (timestamp), turn (number), and
-      type (string) fields from EventBase.
+      Every event MUST have id (number), ts (timestamp), turn (number), and type (string) fields
+      from EventBase.
     scenarios:
       base-present:
         - GIVEN: any event object
@@ -36,9 +33,9 @@ requirements:
   conversation-reducer:
     strength: MUST
     statement: >-
-      The conversation reducer MUST build a message array from user.message,
-      model.final, tool.result, and tool.denied events, tracking pending tool
-      calls and resetting on session.compacted.
+      The conversation reducer MUST build a message array from user.message, model.final,
+      tool.result, and tool.denied events, tracking pending tool calls and resetting on
+      session.compacted.
     scenarios:
       message-assembly:
         - GIVEN: a sequence of user.message, model.final, and tool.result events
@@ -51,14 +48,13 @@ requirements:
   budget-reducer:
     strength: MUST
     statement: >-
-      The budget reducer MUST accumulate token counts and USD cost from
-      model.final events, tracking warning and blocked states.
+      The budget reducer MUST accumulate token counts and USD cost from model.final events, tracking
+      warning and blocked states.
     scenarios:
       cost-accumulation:
         - GIVEN: a model.final event with usage data
         - WHEN: the budget reducer processes it
-        - THEN: >-
-            BudgetView reflects the updated cumulative token counts and cost
+        - THEN: BudgetView reflects the updated cumulative token counts and cost
       budget-warning:
         - GIVEN: accumulated cost exceeds a warning threshold
         - WHEN: the budget reducer processes the event
@@ -66,8 +62,8 @@ requirements:
   plan-reducer:
     strength: MUST
     statement: >-
-      The plan reducer MUST build plan steps from plan.submitted events and
-      mark steps complete from plan.step.completed events.
+      The plan reducer MUST build plan steps from plan.submitted events and mark steps complete from
+      plan.step.completed events.
     scenarios:
       plan-creation:
         - GIVEN: a plan.submitted event with steps
@@ -80,9 +76,8 @@ requirements:
   workspace-reducer:
     strength: MUST
     statement: >-
-      The workspace reducer MUST track file modifications from
-      effect.file.touched events and store the last checkpoint ID from
-      checkpoint.created events.
+      The workspace reducer MUST track file modifications from effect.file.touched events and store
+      the last checkpoint ID from checkpoint.created events.
     scenarios:
       file-tracked:
         - GIVEN: an effect.file.touched event
@@ -91,32 +86,29 @@ requirements:
   apply-function:
     strength: MUST
     statement: >-
-      apply(state, event) MUST return a new ProjectionSet with all reducers
-      updated from the event, without mutating the input state.
+      apply(state, event) MUST return a new ProjectionSet with all reducers updated from the event,
+      without mutating the input state.
     scenarios:
       immutable-apply:
         - GIVEN: a ProjectionSet and an event
         - WHEN: apply is called
-        - THEN: >-
-            a new ProjectionSet is returned and the input state is unchanged
+        - THEN: a new ProjectionSet is returned and the input state is unchanged
   replay-function:
     strength: MUST
     statement: >-
-      replay(events) MUST apply all events in order starting from empty
-      projections and return the final ProjectionSet.
+      replay(events) MUST apply all events in order starting from empty projections and return the
+      final ProjectionSet.
     scenarios:
       full-replay:
         - GIVEN: an array of events
         - WHEN: replay is called
-        - THEN: >-
-            all events are applied in order and the final projection state is
-            returned
+        - THEN: all events are applied in order and the final projection state is returned
   secret-redaction:
     strength: MUST
     statement: >-
       redactEventValue MUST replace values of keys matching
-      secret|token|password|api_key|authorization|cookie|credential patterns
-      and values starting with "Bearer " with "[redacted]".
+      secret|token|password|api_key|authorization|cookie|credential patterns and values starting
+      with "Bearer " with "[redacted]".
     scenarios:
       api-key-redacted:
         - GIVEN: 'an object {"apiKey": "sk-12345"}'
@@ -130,6 +122,16 @@ requirements:
         - GIVEN: 'an object {"path": "/foo/bar"}'
         - WHEN: redactEventValue is called
         - THEN: 'the result is {"path": "/foo/bar"} unchanged'
+  test-brand-consistency:
+    strength: MUST
+    statement: >-
+      All test files, helpers, mocks, and fixtures MUST use DeepSeek-Spec naming (dspec, DSPEC_,
+      .dspec/, DeepSeekSpecConfig) with zero remaining reasonix references.
+    scenarios:
+      no-reasonix-in-tests:
+        - GIVEN: the test suite is fully renamed
+        - WHEN: grep -ri reasonix tests/ is run
+        - THEN: zero matches are returned
 mapping:
   implementation:
     - src/core/events.ts

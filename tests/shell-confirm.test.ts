@@ -1,4 +1,4 @@
-import { derivePrefix } from "@reasonix/core-utils";
+import { derivePrefix } from "@deepseek-spec/core-utils";
 import { describe, expect, it } from "vitest";
 
 describe("derivePrefix", () => {

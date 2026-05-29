@@ -10,7 +10,7 @@
  *
  * Usage:
  *   npx tsx examples/mcp-server-demo.ts          # speaks MCP on stdin/stdout
- *   reasonix chat --mcp "npx tsx examples/mcp-server-demo.ts"
+ *   dspec chat --mcp "npx tsx examples/mcp-server-demo.ts"
  *
  * Spec reference: https://spec.modelcontextprotocol.io/ (2024-11-05)
  * Only the subset this demo needs is implemented — initialize, tools/list,
@@ -103,7 +103,7 @@ async function handleRequest(
         id: id ?? 0,
         result: {
           protocolVersion: PROTOCOL_VERSION,
-          serverInfo: { name: "reasonix-demo-mcp", version: "0.0.1" },
+          serverInfo: { name: "dspec-demo-mcp", version: "0.0.1" },
           capabilities: { tools: { listChanged: false } },
         },
       };

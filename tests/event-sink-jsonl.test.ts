@@ -7,7 +7,7 @@ import type { Event } from "../src/core/events.js";
 
 let dir: string;
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), "reasonix-events-"));
+  dir = mkdtempSync(join(tmpdir(), "dspec-events-"));
 });
 afterEach(() => {
   rmSync(dir, { recursive: true, force: true });

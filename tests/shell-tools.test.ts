@@ -147,7 +147,7 @@ describe("detectShellOperator", () => {
 describe("runCommand syntax rejection", () => {
   let tmp: string;
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-shell-pipe-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-shell-pipe-"));
   });
   afterEach(() => {
     rmSync(tmp, { recursive: true, force: true });
@@ -397,7 +397,7 @@ describe("isAllowed", () => {
 describe("runCommand", () => {
   let tmp: string;
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-shell-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-shell-"));
   });
   afterEach(() => {
     rmSync(tmp, { recursive: true, force: true });
@@ -457,7 +457,7 @@ describe("runCommand", () => {
 describe("registerShellTools — dispatch integration", () => {
   let tmp: string;
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-shell-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-shell-"));
   });
   afterEach(async () => {
     for (let i = 0; i < 5; i++) {

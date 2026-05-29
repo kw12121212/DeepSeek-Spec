@@ -71,7 +71,7 @@ describe("prompt budget — cache prefix size regression net", () => {
   });
 
   it("code-mode tool list stays under the byte budget", () => {
-    const root = mkdtempSync(join(tmpdir(), "reasonix-budget-"));
+    const root = mkdtempSync(join(tmpdir(), "dspec-budget-"));
     try {
       const tools = buildCodeToolset(root);
       const { total, perTool } = totalToolBytes(tools);
@@ -92,7 +92,7 @@ describe("prompt budget — cache prefix size regression net", () => {
   });
 
   it("no single tool description exceeds 8 KiB on its own", () => {
-    const root = mkdtempSync(join(tmpdir(), "reasonix-budget-"));
+    const root = mkdtempSync(join(tmpdir(), "dspec-budget-"));
     try {
       const tools = buildCodeToolset(root);
       const { perTool } = totalToolBytes(tools);
@@ -110,7 +110,7 @@ describe("prompt budget — cache prefix size regression net", () => {
   });
 
   it("codeSystemPrompt with no memory stays under the budget too (defense in depth)", () => {
-    const root = mkdtempSync(join(tmpdir(), "reasonix-budget-"));
+    const root = mkdtempSync(join(tmpdir(), "dspec-budget-"));
     try {
       const built = codeSystemPrompt(root);
       expect(built.length).toBeLessThanOrEqual(SYSTEM_PROMPT_BUDGET_WITH_SKILLS);

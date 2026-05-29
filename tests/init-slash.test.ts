@@ -20,7 +20,7 @@ function makeLoop(): CacheFirstLoop {
 describe("/init slash handler", () => {
   let tmp: string;
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-init-slash-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-init-slash-"));
   });
   afterEach(() => {
     rmSync(tmp, { recursive: true, force: true });

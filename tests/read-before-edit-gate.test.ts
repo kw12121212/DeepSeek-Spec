@@ -13,7 +13,7 @@ describe("read-before-edit gate", () => {
   let readTracker: ReadTracker;
 
   beforeEach(async () => {
-    root = await mkdtemp(join(tmpdir(), "reasonix-rbeg-"));
+    root = await mkdtemp(join(tmpdir(), "dspec-rbeg-"));
     tools = new ToolRegistry();
     registerFilesystemTools(tools, { rootDir: root });
     readTracker = new ReadTracker();

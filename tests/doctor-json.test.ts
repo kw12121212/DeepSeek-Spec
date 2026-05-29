@@ -1,4 +1,4 @@
-/** `reasonix doctor --json` — structured report shape and exit-code semantics. */
+/** `dspec doctor --json` — structured report shape and exit-code semantics. */
 
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -54,8 +54,8 @@ describe("doctorCommand --json (integration)", () => {
   const origCwd = process.cwd();
 
   beforeEach(() => {
-    tmpHome = mkdtempSync(join(tmpdir(), "reasonix-doctor-home-"));
-    tmpCwd = mkdtempSync(join(tmpdir(), "reasonix-doctor-cwd-"));
+    tmpHome = mkdtempSync(join(tmpdir(), "dspec-doctor-home-"));
+    tmpCwd = mkdtempSync(join(tmpdir(), "dspec-doctor-cwd-"));
     vi.stubEnv("HOME", tmpHome);
     vi.stubEnv("USERPROFILE", tmpHome);
     // Ensure no API key so checkApiReach skips the network call.
@@ -126,7 +126,7 @@ describe("doctorCommand --json (integration)", () => {
         return new Response(
           JSON.stringify({
             object: "list",
-            data: [{ id: "deepseek-v4-pro:cloud", object: "model", owned_by: "reasonix" }],
+            data: [{ id: "deepseek-v4-pro:cloud", object: "model", owned_by: "dspec" }],
           }),
           { status: 200, headers: { "content-type": "application/json" } },
         );

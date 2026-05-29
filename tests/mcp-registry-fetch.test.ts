@@ -177,7 +177,7 @@ describe("openRegistry — initial open", () => {
   let cachePath: string;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-mcp-registry-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-mcp-registry-"));
     cachePath = join(dir, "cache.json");
   });
   afterEach(() => {
@@ -327,7 +327,7 @@ describe("loadMorePages", () => {
   let cachePath: string;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-mcp-registry-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-mcp-registry-"));
     cachePath = join(dir, "cache.json");
   });
   afterEach(() => {
@@ -438,7 +438,7 @@ describe("handleToFetchResult", () => {
   let dir: string;
   let cachePath: string;
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-mcp-registry-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-mcp-registry-"));
     cachePath = join(dir, "cache.json");
   });
   afterEach(() => {

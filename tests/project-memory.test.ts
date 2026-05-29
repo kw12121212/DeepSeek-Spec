@@ -24,7 +24,7 @@ describe("project-memory", () => {
   const originalEnv = process.env.DSPEC_MEMORY;
 
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-mem-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-mem-"));
     // biome-ignore lint/performance/noDelete: avoid leaking "undefined" into env
     delete process.env.DSPEC_MEMORY;
   });
@@ -110,14 +110,14 @@ describe("project-memory", () => {
     });
 
     it("prefers DSPEC.md over CLAUDE.md candidates", () => {
-      writeFileSync(join(root, "DSPEC.md"), "reasonix wins\n", "utf8");
+      writeFileSync(join(root, "DSPEC.md"), "dspec wins\n", "utf8");
       mkdirSync(join(root, ".claude"));
       writeFileSync(join(root, ".claude", "CLAUDE.md"), "claude loses\n", "utf8");
       writeFileSync(join(root, "CLAUDE.md"), "root claude loses\n", "utf8");
       writeFileSync(join(root, "AGENTS.md"), "agents loses\n", "utf8");
       writeFileSync(join(root, "AGENT.md"), "agent loses too\n", "utf8");
       const mem = readProjectMemory(root);
-      expect(mem?.content).toBe("reasonix wins");
+      expect(mem?.content).toBe("dspec wins");
       expect(mem?.path.endsWith("DSPEC.md")).toBe(true);
     });
 

@@ -110,7 +110,7 @@ describe("parseEditBlocks", () => {
 describe("applyEditBlock", () => {
   let root: string;
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-edit-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-edit-"));
   });
   afterEach(() => {
     rmSync(root, { recursive: true, force: true });
@@ -264,7 +264,7 @@ describe("applyEditBlock", () => {
 describe("snapshotBeforeEdits + restoreSnapshots", () => {
   let root: string;
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-undo-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-undo-"));
   });
   afterEach(() => {
     rmSync(root, { recursive: true, force: true });
@@ -346,7 +346,7 @@ describe("snapshotBeforeEdits + restoreSnapshots", () => {
 describe("toWholeFileEditBlock", () => {
   let root: string;
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-whole-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-whole-"));
   });
   afterEach(() => {
     rmSync(root, { recursive: true, force: true });
@@ -376,7 +376,7 @@ describe("toWholeFileEditBlock", () => {
 describe("applyEditBlocks (batch)", () => {
   let root: string;
   beforeEach(() => {
-    root = mkdtempSync(join(tmpdir(), "reasonix-edit-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-edit-"));
   });
   afterEach(() => {
     rmSync(root, { recursive: true, force: true });

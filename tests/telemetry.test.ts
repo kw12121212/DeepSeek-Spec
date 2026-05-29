@@ -80,7 +80,7 @@ describe("costUsd", () => {
   });
 
   it("uses pricingOverride for renamed third-party models", () => {
-    const dir = mkdtempSync(join(tmpdir(), "reasonix-telemetry-"));
+    const dir = mkdtempSync(join(tmpdir(), "dspec-telemetry-"));
     const path = join(dir, "config.json");
     try {
       writeConfig(
@@ -101,7 +101,7 @@ describe("costUsd", () => {
   });
 
   it("returns 0 for incomplete unknown-model pricingOverride", () => {
-    const dir = mkdtempSync(join(tmpdir(), "reasonix-telemetry-"));
+    const dir = mkdtempSync(join(tmpdir(), "dspec-telemetry-"));
     const path = join(dir, "config.json");
     try {
       writeConfig({ pricingOverride: { partial: { output: 4 } } }, path);
@@ -112,7 +112,7 @@ describe("costUsd", () => {
   });
 
   it("lets pricingOverride partially override known model pricing", () => {
-    const dir = mkdtempSync(join(tmpdir(), "reasonix-telemetry-"));
+    const dir = mkdtempSync(join(tmpdir(), "dspec-telemetry-"));
     const path = join(dir, "config.json");
     try {
       writeConfig({ pricingOverride: { "deepseek-chat": { output: 9 } } }, path);

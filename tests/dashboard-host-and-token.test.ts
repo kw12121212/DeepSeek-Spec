@@ -22,7 +22,7 @@ describe("startDashboardServer host + token (#968)", () => {
   let writeSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-dashhost-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-dashhost-"));
     writeSpy = vi.spyOn(process.stderr, "write").mockImplementation(() => true);
   });
 

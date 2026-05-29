@@ -12,7 +12,7 @@ describe("loop persists user message at step entry (issue #943)", () => {
   let tmp: string;
 
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-loop943-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-loop943-"));
     vi.stubEnv("USERPROFILE", tmp);
     vi.stubEnv("HOME", tmp);
     vi.spyOn(require("node:os"), "homedir").mockReturnValue(tmp);

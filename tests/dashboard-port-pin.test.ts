@@ -40,7 +40,7 @@ describe("startDashboardServer port pinning", () => {
   let handle: DashboardServerHandle | undefined;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-dashport-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-dashport-"));
   });
 
   afterEach(async () => {

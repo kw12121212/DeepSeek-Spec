@@ -10,7 +10,7 @@ describe("readConfig — string[] field sanitization", () => {
   let warnSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-readconfig-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-readconfig-"));
     path = join(dir, "config.json");
     warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
   });

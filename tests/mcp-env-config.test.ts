@@ -70,7 +70,7 @@ describe("buildTransportFromSpec", () => {
   });
 
   it("propagates the env overlay to the spawned child (end-to-end)", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "reasonix-mcp-env-"));
+    const dir = mkdtempSync(join(tmpdir(), "dspec-mcp-env-"));
     const scriptPath = join(dir, "emit-env.cjs");
     writeFileSync(
       scriptPath,

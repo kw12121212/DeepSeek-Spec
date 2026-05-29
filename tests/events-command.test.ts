@@ -1,4 +1,4 @@
-/** `reasonix events <name>` formatter — per-event-type detail rendering + filter / projection flags. */
+/** `dspec events <name>` formatter — per-event-type detail rendering + filter / projection flags. */
 
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -9,7 +9,7 @@ import { sessionsDir } from "../src/memory/session.js";
 
 let dir: string;
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), "reasonix-events-cmd-"));
+  dir = mkdtempSync(join(tmpdir(), "dspec-events-cmd-"));
   // Override the home dir so eventLogPath resolves into our temp area.
   process.env.HOME = dir;
   process.env.USERPROFILE = dir;

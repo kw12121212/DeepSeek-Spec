@@ -25,7 +25,7 @@ describe("pending-edits checkpoint", () => {
   let tmp: string;
 
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-pending-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-pending-"));
     vi.stubEnv("USERPROFILE", tmp);
     vi.stubEnv("HOME", tmp);
     vi.spyOn(require("node:os"), "homedir").mockReturnValue(tmp);

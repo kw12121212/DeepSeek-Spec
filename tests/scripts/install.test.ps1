@@ -21,13 +21,13 @@ $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $RootDir = Resolve-Path (Join-Path $ScriptDir "..\..")
 $InstallPs1 = Join-Path $RootDir "scripts\install.ps1"
 
-$TmpDir = Join-Path $env:TEMP "reasonix-install-test-$(Get-Random)"
+$TmpDir = Join-Path $env:TEMP "dspec-install-test-$(Get-Random)"
 New-Item -ItemType Directory -Path $TmpDir -Force | Out-Null
 
 Write-Host "testing install.ps1"
 
 # Test: missing binary exits non-zero
-$SourceBinary = Join-Path $RootDir "dist\native\windows-x64\reasonix.exe"
+$SourceBinary = Join-Path $RootDir "dist\native\windows-x64\dspec.exe"
 $hadBinary = Test-Path $SourceBinary
 if ($hadBinary) {
   Move-Item $SourceBinary "$SourceBinary.bak" -Force
@@ -49,7 +49,7 @@ if ($hadBinary) {
 # Test: successful copy with fake binary
 $FakeDir = Join-Path $RootDir "dist\native\windows-x64"
 New-Item -ItemType Directory -Path $FakeDir -Force | Out-Null
-$FakeBinary = Join-Path $FakeDir "reasonix.exe"
+$FakeBinary = Join-Path $FakeDir "dspec.exe"
 Set-Content $FakeBinary "fake"
 
 $TestPrefix = Join-Path $TmpDir "bin"
@@ -62,7 +62,7 @@ try {
   $exitCode = 1
 }
 
-$DestFile = Join-Path $TmpDir "bin\reasonix.exe"
+$DestFile = Join-Path $TmpDir "bin\dspec.exe"
 Assert-True "binary copied" (Test-Path $DestFile)
 
 # Cleanup

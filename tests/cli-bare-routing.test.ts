@@ -1,4 +1,4 @@
-/** Bare `reasonix` routing — defaults to code mode in the current directory; explicit `chat` stays chat. */
+/** Bare `dspec` routing — defaults to code mode in the current directory; explicit `chat` stays chat. */
 
 import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -30,12 +30,12 @@ describe("bare CLI routing", () => {
   let stderr: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-cli-home-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-cli-home-"));
     // macOS's tmpdir is /var/folders/... but realpath is /private/var/folders/...;
     // process.chdir followed by process.cwd() returns the resolved form, so
     // normalise here too or the toHaveBeenCalledWith({ dir: cwd, ... }) assertions
     // compare mismatched paths.
-    cwd = realpathSync(mkdtempSync(join(tmpdir(), "reasonix-cli-cwd-")));
+    cwd = realpathSync(mkdtempSync(join(tmpdir(), "dspec-cli-cwd-")));
     process.env.HOME = home;
     process.env.USERPROFILE = home;
     process.chdir(cwd);
@@ -65,7 +65,7 @@ describe("bare CLI routing", () => {
     }
   });
 
-  it("routes bare reasonix to code mode rooted at cwd", async () => {
+  it("routes bare dspec to code mode rooted at cwd", async () => {
     writeConfig({ setupCompleted: true }, join(home, ".dspec", "config.json"));
     mkdirSync(join(cwd, ".git"));
 
@@ -77,7 +77,7 @@ describe("bare CLI routing", () => {
     expect(chatCommand).not.toHaveBeenCalled();
   });
 
-  it("routes bare reasonix in a non-project directory to code mode too", async () => {
+  it("routes bare dspec in a non-project directory to code mode too", async () => {
     writeConfig({ setupCompleted: true }, join(home, ".dspec", "config.json"));
 
     await importCli([]);
@@ -111,7 +111,7 @@ describe("bare CLI routing", () => {
     );
   });
 
-  it("keeps explicit reasonix chat in chat mode even inside a project", async () => {
+  it("keeps explicit dspec chat in chat mode even inside a project", async () => {
     writeConfig({ setupCompleted: true }, join(home, ".dspec", "config.json"));
     writeFileSync(join(cwd, "package.json"), "{}\n", "utf8");
 
@@ -121,7 +121,7 @@ describe("bare CLI routing", () => {
     expect(codeCommand).not.toHaveBeenCalled();
   });
 
-  it("routes first-run bare reasonix to code mode (no wizard)", async () => {
+  it("routes first-run bare dspec to code mode (no wizard)", async () => {
     writeConfig({ setupCompleted: false }, join(home, ".dspec", "config.json"));
     mkdirSync(join(cwd, ".git"));
 

@@ -18,7 +18,7 @@ describe("buildCodeToolset", () => {
     savedKey = process.env.DEEPSEEK_API_KEY;
     // biome-ignore lint/performance/noDelete: setting to "undefined" string would mask test
     delete process.env.DEEPSEEK_API_KEY;
-    tmpRoot = mkdtempSync(join(tmpdir(), "reasonix-code-setup-"));
+    tmpRoot = mkdtempSync(join(tmpdir(), "dspec-code-setup-"));
     cfgPath = join(tmpRoot, "config.json");
   });
 

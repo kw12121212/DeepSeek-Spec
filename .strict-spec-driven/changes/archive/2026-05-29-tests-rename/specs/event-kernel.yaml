@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: event-kernel
+mapping:
+  implementation:
+    - tests/
+  tests:
+    - tests/
+operations:
+  ADDED: {}
+  MODIFIED:
+    test-brand-consistency:
+      strength: MUST
+      statement: >-
+        All test files, helpers, mocks, and fixtures MUST use DeepSeek-Spec naming (dspec, DSPEC_,
+        .dspec/, DeepSeekSpecConfig) with zero remaining reasonix references.
+      scenarios:
+        no-reasonix-in-tests:
+          - GIVEN: the test suite is fully renamed
+          - WHEN: grep -ri reasonix tests/ is run
+          - THEN: zero matches are returned
+  REMOVED: {}

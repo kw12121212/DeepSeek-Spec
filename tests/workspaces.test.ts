@@ -14,8 +14,8 @@ describe("known workspaces", () => {
   let fromSession: string;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-workspaces-home-"));
-    root = mkdtempSync(join(tmpdir(), "reasonix-workspaces-root-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-workspaces-home-"));
+    root = mkdtempSync(join(tmpdir(), "dspec-workspaces-root-"));
     current = join(root, "current");
     recent = join(root, "recent");
     fromSession = join(root, "from-session");

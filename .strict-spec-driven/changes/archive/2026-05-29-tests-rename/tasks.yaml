@@ -1,0 +1,59 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: tests-rename
+sections:
+  Implementation:
+    grep-inventory:
+      text: >-
+        Grep all test files for reasonix references and categorize by type (type names, env vars,
+        paths, binary names, descriptions).
+      status: complete
+    replace-type-names:
+      text: >-
+        Replace ReasonixConfig and other Reasonix-prefixed type names with DeepSeek-Spec equivalents
+        across tests/.
+      status: complete
+    replace-env-vars:
+      text: Replace REASONIX_* env var references with DSPEC_* across tests/.
+      status: complete
+    replace-dir-paths:
+      text: Replace .reasonix/ directory path references with .dspec/ across tests/.
+      status: complete
+    replace-binary-package-names:
+      text: Replace reasonix binary/package name references with dspec/deepseek-spec across tests/.
+      status: complete
+    replace-test-descriptions:
+      text: Update test descriptions, assertion messages, and snapshots containing Reasonix/reasonix.
+      status: complete
+    update-helpers-mocks-fixtures:
+      text: Update tests/helpers/, tests/mocks/, tests/fixtures/ for all reasonix references.
+      status: complete
+    update-test-scripts:
+      text: Update scripts/*.test.* for reasonix references if any exist.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-zero-remaining:
+      text: Verify grep -ri reasonix tests/ returns zero matches.
+      status: complete
+      command: grep -ri reasonix tests/
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

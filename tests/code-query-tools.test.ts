@@ -10,7 +10,7 @@ describe("code-query tools", () => {
   let registry: ToolRegistry;
 
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-code-query-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-code-query-"));
     registry = new ToolRegistry();
     registerCodeQueryTools(registry, { rootDir: tmp });
   });

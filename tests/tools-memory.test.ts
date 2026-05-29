@@ -13,8 +13,8 @@ describe("memory tools", () => {
   let projectRoot: string;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-memtools-home-"));
-    projectRoot = mkdtempSync(join(tmpdir(), "reasonix-memtools-proj-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-memtools-home-"));
+    projectRoot = mkdtempSync(join(tmpdir(), "dspec-memtools-proj-"));
   });
 
   afterEach(() => {

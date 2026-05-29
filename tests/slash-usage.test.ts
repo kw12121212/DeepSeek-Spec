@@ -9,7 +9,7 @@ let dir: string;
 let prevEnv: string | undefined;
 
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), "reasonix-usage-"));
+  dir = mkdtempSync(join(tmpdir(), "dspec-usage-"));
   prevEnv = process.env.DSPEC_SLASH_USAGE_PATH;
   process.env.DSPEC_SLASH_USAGE_PATH = join(dir, "slash-usage.json");
 });

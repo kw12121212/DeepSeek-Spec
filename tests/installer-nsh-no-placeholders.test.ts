@@ -9,7 +9,7 @@ const nshFiles = [
   "../desktop/src-tauri/nsis/SimpChinese.nsh",
 ];
 
-const PRODUCT_NAME = "Reasonix";
+const PRODUCT_NAME = "DeepSeek-Spec";
 const RUNTIME_STRINGS = ["appRunning", "appRunningOkKill", "failedToKillApp"] as const;
 
 describe("desktop installer NSIS language files — issue #928", () => {

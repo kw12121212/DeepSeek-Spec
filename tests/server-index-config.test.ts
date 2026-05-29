@@ -22,7 +22,7 @@ describe("/api/index-config", () => {
   let ctx: DashboardContext;
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), "reasonix-cfg-"));
+    dir = await mkdtemp(join(tmpdir(), "dspec-cfg-"));
     cfg = join(dir, "config.json");
     ctx = makeCtx(cfg);
   });
@@ -110,7 +110,7 @@ describe("/api/index-config", () => {
     let project: string;
 
     beforeEach(async () => {
-      project = await mkdtemp(join(tmpdir(), "reasonix-preview-"));
+      project = await mkdtemp(join(tmpdir(), "dspec-preview-"));
       await fs.writeFile(join(project, "main.ts"), "ok\n");
       await fs.writeFile(join(project, "drop.gen.ts"), "noise\n");
       await fs.mkdir(join(project, "node_modules"), { recursive: true });

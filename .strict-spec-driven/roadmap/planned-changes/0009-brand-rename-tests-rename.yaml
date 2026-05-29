@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: tests-rename
   milestone: 0009-brand-rename
-status: planned
+status: complete
 summary: |
   Update all test files and fixtures: rename "reasonix" references across
   79 test files, helpers, mocks, and fixtures.

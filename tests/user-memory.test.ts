@@ -26,8 +26,8 @@ describe("user-memory", () => {
   const originalUserProfile = process.env.USERPROFILE;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-umem-home-"));
-    projectRoot = mkdtempSync(join(tmpdir(), "reasonix-umem-proj-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-umem-home-"));
+    projectRoot = mkdtempSync(join(tmpdir(), "dspec-umem-proj-"));
     process.env.HOME = home;
     process.env.USERPROFILE = home;
     // biome-ignore lint/performance/noDelete: avoid leaking "undefined" into env
@@ -387,11 +387,11 @@ describe("user-memory", () => {
       const out = applyUserMemory(withProj, { homeDir: home, projectRoot });
       // Order: DSPEC.md content → global → project. Each unique
       // string should appear, and in that order.
-      const iReasonix = out.indexOf("Pinned by DSPEC.md");
+      const iDspec = out.indexOf("Pinned by DSPEC.md");
       const iGlobal = out.indexOf("g_pref");
       const iProject = out.indexOf("p_fact");
-      expect(iReasonix).toBeGreaterThan(BASE.length - 1);
-      expect(iGlobal).toBeGreaterThan(iReasonix);
+      expect(iDspec).toBeGreaterThan(BASE.length - 1);
+      expect(iGlobal).toBeGreaterThan(iDspec);
       expect(iProject).toBeGreaterThan(iGlobal);
     });
 

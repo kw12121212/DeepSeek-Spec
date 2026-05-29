@@ -1,0 +1,32 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: tests-rename
+  status: proposed
+summary:
+  what:
+    - >-
+      Rename all "reasonix" references in test files, test helpers, mocks, fixtures, and test
+      scripts to "dspec"/"DeepSeek-Spec" equivalents.
+  why:
+    - >-
+      75 test files still contain 193 "reasonix" references from the old brand. This is the last
+      remaining planned change in M9 and blocks the final-audit sweep. All other M9 changes are
+      archived.
+scope:
+  in:
+    - tests/ directory (test files, helpers/, mocks/, fixtures/), scripts/*.test.*
+  out:
+    - >-
+      Zero "reasonix" references remaining in tests/ and test scripts. All test descriptions,
+      assertions, mock configs, env var setup, path assertions, and snapshots use
+      dspec/DeepSeek-Spec naming.
+unchanged_behavior:
+  - >-
+    No behavior changes — purely mechanical string replacement in test code. No production source
+    code changes.
+roadmap:
+  milestone: 0009-brand-rename
+  planned_change: tests-rename

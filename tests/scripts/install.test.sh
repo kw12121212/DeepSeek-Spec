@@ -48,14 +48,14 @@ assert_exit "missing binary exits non-zero" 1 sh "$INSTALL_SH" --prefix "$TMPDIR
 # --- Test: successful install with --prefix ---
 TARGET="linux-x64"
 FAKE_BINDIR="$ROOT_DIR/dist/native/$TARGET"
-FAKE_BINARY="$FAKE_BINDIR/reasonix"
+FAKE_BINARY="$FAKE_BINDIR/dspec"
 mkdir -p "$FAKE_BINDIR"
 echo "#!/bin/sh" > "$FAKE_BINARY"
 echo "echo 0.52.0" >> "$FAKE_BINARY"
 chmod +x "$FAKE_BINARY"
 
 assert_exit "install with --prefix succeeds" 0 sh "$INSTALL_SH" --prefix "$TMPDIR/test-prefix"
-assert_file "binary copied and executable" "$TMPDIR/test-prefix/reasonix"
+assert_file "binary copied and executable" "$TMPDIR/test-prefix/dspec"
 
 # Cleanup fake binary
 rm -f "$FAKE_BINARY"

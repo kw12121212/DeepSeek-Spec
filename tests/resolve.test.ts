@@ -13,7 +13,7 @@ describe("resolveDefaults", () => {
   const origUserProfile = process.env.USERPROFILE;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-resolve-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-resolve-"));
     process.env.HOME = home;
     process.env.USERPROFILE = home;
   });
@@ -123,7 +123,7 @@ describe("resolveDefaults", () => {
     const origCwd = process.cwd();
 
     beforeEach(() => {
-      cwd = mkdtempSync(join(tmpdir(), "reasonix-cwd-"));
+      cwd = mkdtempSync(join(tmpdir(), "dspec-cwd-"));
       process.chdir(cwd);
     });
 

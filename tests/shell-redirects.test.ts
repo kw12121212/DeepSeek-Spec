@@ -118,7 +118,7 @@ describe("parseCommandChain — redirects", () => {
 describe("runChain — redirect execution", () => {
   let tmp: string;
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-redir-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-redir-"));
   });
   afterEach(() => {
     rmSync(tmp, { recursive: true, force: true });
@@ -234,11 +234,11 @@ describe("runChain — redirect execution", () => {
   });
 
   it("rejects relative redirect targets that escape the sandbox", async () => {
-    const outside = join(tmp, "..", "reasonix-redir-outside.txt");
+    const outside = join(tmp, "..", "dspec-redir-outside.txt");
     rmSync(outside, { force: true });
     try {
       const c = parseCommandChain(
-        "node -e \"process.stdout.write('blocked')\" > ../reasonix-redir-outside.txt",
+        "node -e \"process.stdout.write('blocked')\" > ../dspec-redir-outside.txt",
       )!;
       await expect(runChain(c, { cwd: tmp, ...baseOpts })).rejects.toThrow(
         /outside the workspace sandbox/,
@@ -317,7 +317,7 @@ describe("runChain — redirect execution", () => {
 describe("runCommand — redirect dispatch", () => {
   let tmp: string;
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-redir-rc-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-redir-rc-"));
   });
   afterEach(() => {
     rmSync(tmp, { recursive: true, force: true });
@@ -343,7 +343,7 @@ describe("runCommand — redirect dispatch", () => {
 describe("runChain — null-device redirects", () => {
   let tmp: string;
   beforeEach(() => {
-    tmp = mkdtempSync(join(tmpdir(), "reasonix-null-dev-"));
+    tmp = mkdtempSync(join(tmpdir(), "dspec-null-dev-"));
   });
   afterEach(() => {
     rmSync(tmp, { recursive: true, force: true });

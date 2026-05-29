@@ -14,7 +14,7 @@ describe("dashboard token + port persistence", () => {
   let dir: string;
   let cfgPath: string;
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-dash-persist-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-dash-persist-"));
     cfgPath = join(dir, "config.json");
   });
   afterEach(() => {
@@ -91,7 +91,7 @@ describe("loadDashboardEnabled", () => {
   let dir: string;
   let cfgPath: string;
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-dash-enabled-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-dash-enabled-"));
     cfgPath = join(dir, "config.json");
   });
   afterEach(() => {

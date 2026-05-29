@@ -28,7 +28,7 @@ describe("settings API — combined POST persistence (#274)", () => {
   let configPath: string;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-settings-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-settings-"));
     configPath = join(dir, "config.json");
     writeFileSync(configPath, JSON.stringify({ lang: "ZH", baseUrl: "https://orig" }), "utf8");
   });
