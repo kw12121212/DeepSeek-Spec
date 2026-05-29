@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: agent-loop
+mapping:
+  implementation:
+    - src/cli/ui/slash/nearest.ts
+  tests:
+    - tests/nearest.test.ts
+operations:
+  ADDED:
+    fuzzy-slash-autocomplete:
+      strength: MUST
+      statement: >-
+        Slash command autocomplete MUST include fuzzy-matched commands alongside prefix matches when
+        the input is 2 or more characters
+      scenarios:
+        fuzzy-fallback:
+          - GIVEN: user types a slash command prefix of 2+ characters that has no prefix match
+          - WHEN: the autocomplete suggestions are computed
+          - THEN: fuzzy-matched commands are included, sorted by score, after any prefix matches
+  MODIFIED: {}
+  REMOVED: {}

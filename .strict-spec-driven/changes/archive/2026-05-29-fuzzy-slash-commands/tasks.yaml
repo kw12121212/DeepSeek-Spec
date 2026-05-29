@@ -1,0 +1,43 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: fuzzy-slash-commands
+sections:
+  Implementation:
+    add-fuzzy-match:
+      text: >-
+        Add fuzzyMatch(input, target) scorer and fuzzySlashCommands(input, commands, opts) to
+        src/cli/ui/slash/nearest.ts
+      status: complete
+    integrate-suggest:
+      text: >-
+        Integrate fuzzySlashCommands into suggestSlashCommands in src/cli/ui/slash/commands.ts with
+        prefix-first merge
+      status: complete
+  Testing:
+    test-fuzzy-nearest:
+      text: Add fuzzyMatch scoring and fuzzySlashCommands tests to tests/nearest.test.ts
+      status: complete
+    test-slash-merge:
+      text: Add prefix-first ordering and fuzzy dedup tests to tests/slash-commands.test.ts
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

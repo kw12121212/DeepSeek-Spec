@@ -1,3 +1,4 @@
+import { fuzzySlashCommands } from "./nearest.js";
 import type { SlashArgContext, SlashCommandSpec, SlashGroup } from "./types.js";
 
 export const SLASH_GROUP_ORDER = [
@@ -456,6 +457,18 @@ export function suggestSlashCommands(
     return c.aliases?.some((a) => a.startsWith(p)) ?? false;
   });
   if (p === "") return orderSlashCommandsByGroup(matches);
+  // Fuzzy fallback for 2+ char inputs
+  if (p.length >= 2) {
+    const prefixSet = new Set(matches.map((c) => c.cmd));
+    const eligible = SLASH_COMMANDS.filter(
+      (c) => !(c.contextual === "code" && !codeMode) && !prefixSet.has(c.cmd),
+    );
+    const fuzzyResults = fuzzySlashCommands(p, eligible);
+    const fuzzySpecs = fuzzyResults
+      .map((f) => SLASH_COMMANDS.find((c) => c.cmd === f.cmd))
+      .filter((c): c is SlashCommandSpec => c != null);
+    matches.push(...fuzzySpecs);
+  }
   if (!counts) return matches;
   const indexOf = new Map(matches.map((s, i) => [s.cmd, i]));
   return [...matches].sort((a, b) => {

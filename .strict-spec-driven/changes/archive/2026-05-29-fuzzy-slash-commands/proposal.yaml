@@ -1,0 +1,26 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: fuzzy-slash-commands
+  status: proposed
+summary:
+  what:
+    - >-
+      Add fuzzy matching to slash command autocomplete so partial/abbreviated input always finds
+      relevant commands alongside prefix matches
+  why:
+    - >-
+      Users typing abbreviated commands like /si or /sa get zero results with prefix-only matching.
+      Fuzzy matching closes this discoverability gap.
+scope:
+  in:
+    - src/cli/ui/slash/nearest.ts src/cli/ui/slash/commands.ts
+  out:
+    - src/cli/ui/slash/nearest.ts (add fuzzyMatch and fuzzySlashCommands)
+unchanged_behavior:
+  - All other source files; existing nearestCommands() and levenshtein() remain unchanged
+roadmap:
+  milestone: 0008-ux-streamline
+  planned_change: fuzzy-slash-commands

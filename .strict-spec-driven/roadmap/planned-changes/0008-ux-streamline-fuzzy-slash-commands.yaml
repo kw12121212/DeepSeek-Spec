@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: fuzzy-slash-commands
   milestone: 0008-ux-streamline
-status: planned
+status: complete
 summary: |
   Add fuzzy matching to slash command autocomplete so partial/abbreviated input
   always finds relevant commands alongside prefix matches.

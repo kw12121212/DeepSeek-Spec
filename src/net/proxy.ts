@@ -4,8 +4,8 @@
 // HTTPS_PROXY still routes everything else through the user's proxy.
 
 import { createRequire } from "node:module";
-import { IS_NATIVE } from "../cli/native-detect.js";
 import type { Dispatcher } from "undici";
+import { IS_NATIVE } from "../cli/native-detect.js";
 
 let _undici: typeof import("undici") | null = null;
 

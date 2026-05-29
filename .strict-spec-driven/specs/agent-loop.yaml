@@ -138,6 +138,16 @@ requirements:
         - GIVEN: a fresh install with no config file and no editMode set
         - WHEN: loadEditMode() is called
         - THEN: it returns 'yolo'
+  fuzzy-slash-autocomplete:
+    strength: MUST
+    statement: >-
+      Slash command autocomplete MUST include fuzzy-matched commands alongside prefix matches when
+      the input is 2 or more characters
+    scenarios:
+      fuzzy-fallback:
+        - GIVEN: user types a slash command prefix of 2+ characters that has no prefix match
+        - WHEN: the autocomplete suggestions are computed
+        - THEN: fuzzy-matched commands are included, sorted by score, after any prefix matches
 mapping:
   implementation:
     - src/loop/dispatch.ts
