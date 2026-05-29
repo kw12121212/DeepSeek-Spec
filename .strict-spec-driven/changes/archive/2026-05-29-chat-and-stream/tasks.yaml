@@ -1,0 +1,44 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: chat-and-stream
+sections:
+  Implementation:
+    create-collect-helper:
+      text: >-
+        Create tests/real-llm/helpers/collect.ts with collectStream helper that drains an
+        AsyncGenerator<StreamChunk> into an array.
+      status: complete
+    create-chat-tests:
+      text: >-
+        Create tests/real-llm/chat.test.ts with tests for non-empty content, usage token counts,
+        finishReason=stop, and multi-turn context recall.
+      status: complete
+    create-stream-tests:
+      text: >-
+        Create tests/real-llm/stream.test.ts with tests for contentDelta assembly, usage in late
+        chunk, and final finishReason.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests (real-LLM tests excluded by default).
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — no production code changed, only new test
+        files created.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: chat-and-stream
   milestone: 0010-real-llm-test
-status: planned
+status: complete
 summary: |
   Real integration tests for basic chat completion and SSE streaming
   against the live GLM-4.7 API.

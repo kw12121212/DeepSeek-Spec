@@ -1,0 +1,27 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: chat-and-stream
+  status: proposed
+summary:
+  what:
+    - >-
+      Real integration tests for basic chat completion and SSE streaming against the live GLM-4.7
+      API
+  why:
+    - >-
+      The GLM adapter stack (GLMClient, SSE streaming, tool-call parsing) has no live integration
+      coverage. Existing tests use recorded fixtures and mocks, which can diverge from actual API
+      behavior. Live tests validate the full adapter pipeline end-to-end.
+scope:
+  in:
+    - tests/real-llm/ (new directory)
+  out:
+    - tests/real-llm/chat.test.ts, tests/real-llm/stream.test.ts, tests/real-llm/helpers/collect.ts
+unchanged_behavior:
+  - src/ (no production code changes)
+roadmap:
+  milestone: 0010-real-llm-test
+  planned_change: chat-and-stream

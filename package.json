@@ -38,7 +38,6 @@
     "chat": "tsx src/cli/index.ts chat",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:real": "vitest run tests/real-llm/",
     "test:coverage": "vitest run --coverage",
     "test:mutation": "stryker run",
     "lint": "biome check src tests",

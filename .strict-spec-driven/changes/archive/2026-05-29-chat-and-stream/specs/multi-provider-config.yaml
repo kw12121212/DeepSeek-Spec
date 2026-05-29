@@ -1,0 +1,38 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - tests/real-llm/chat.test.ts
+    - tests/real-llm/stream.test.ts
+  tests:
+    - tests/real-llm/chat.test.ts
+    - tests/real-llm/stream.test.ts
+operations:
+  ADDED:
+    real-chat-test:
+      strength: MUST
+      statement: >-
+        Real-LLM chat tests must auto-skip when tests/real-llm.config.json is absent and assert
+        non-empty content, positive usage tokens, finishReason=stop, and multi-turn context recall
+        against the live GLM-4.7 API
+      scenarios:
+        chat-skip-no-config:
+          - GIVEN: tests/real-llm.config.json does not exist
+          - WHEN: bun run test:real is executed
+          - THEN: all chat tests are skipped
+    real-stream-test:
+      strength: MUST
+      statement: >-
+        Real-LLM stream tests must auto-skip when config is absent and assert contentDelta chunk
+        assembly into full response, usage in a late chunk, and final finishReason against the live
+        GLM-4.7 API
+      scenarios:
+        stream-skip-no-config:
+          - GIVEN: tests/real-llm.config.json does not exist
+          - WHEN: bun run test:real is executed
+          - THEN: all stream tests are skipped
+  MODIFIED: {}
+  REMOVED: {}

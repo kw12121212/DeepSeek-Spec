@@ -18,7 +18,7 @@ export class GLMClient extends OpenAICompatClient {
     }
     super({
       apiKey,
-      baseUrl: opts.baseUrl ?? loadGlmBaseUrl() ?? "https://open.bigmodel.cn/api/paas/v4",
+      baseUrl: opts.baseUrl ?? loadGlmBaseUrl() ?? "https://open.bigmodel.cn/api/coding/paas/v4",
       timeoutMs: opts.timeoutMs ?? 660_000,
       fetch: opts.fetch,
     });

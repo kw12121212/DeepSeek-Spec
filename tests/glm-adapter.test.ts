@@ -18,9 +18,9 @@ function makeClient(opts: { apiKey?: string; baseUrl?: string } = {}) {
 }
 
 describe("GLMClient construction", () => {
-  it("uses default baseUrl https://open.bigmodel.cn/api/paas/v4", () => {
+  it("uses default baseUrl https://open.bigmodel.cn/api/coding/paas/v4", () => {
     const client = makeClient();
-    expect(client.baseUrl).toBe("https://open.bigmodel.cn/api/paas/v4");
+    expect(client.baseUrl).toBe("https://open.bigmodel.cn/api/coding/paas/v4");
   });
 
   it("uses explicit baseUrl when provided", () => {

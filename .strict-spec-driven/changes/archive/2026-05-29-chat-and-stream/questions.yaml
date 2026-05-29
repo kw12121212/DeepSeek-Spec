@@ -1,0 +1,18 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: chat-and-stream
+open: []
+resolved:
+  - id: multi-turn-reliability
+    question: >-
+      The multi-turn context test sends 'My name is TestBot' then asks 'What is my name?' — will
+      GLM-4.7 reliably recall the name, or does the prompt need tuning?
+    context: >-
+      Planned change details specify asserting response contains TestBot case-insensitively. Live
+      LLM responses are non-deterministic.
+    answer: >-
+      Use the simple prompt as-is. GLM-4.7 should handle basic name recall in a 2-turn conversation.
+      Adjust later if flaky.
+    status: resolved

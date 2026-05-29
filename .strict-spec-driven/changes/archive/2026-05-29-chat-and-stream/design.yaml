@@ -1,0 +1,21 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: chat-and-stream
+approach:
+  - >-
+    Create two test files and one shared helper. All tests use describe.skipIf(!hasRealLlmConfig())
+    to auto-skip when credentials are absent. Each test sets timeout: 30_000. chat.test.ts verifies
+    basic chat completion responses (content, usage, finishReason) and multi-turn context.
+    stream.test.ts verifies SSE streaming (contentDelta chunks, usage in late chunks, final
+    finishReason). A shared collectStream helper drains an AsyncGenerator into an array for stream
+    assertions.
+decisions:
+  stream-collect-helper:
+    decision: >-
+      Use a shared collectStream helper in tests/real-llm/helpers/collect.ts rather than inlining
+      collection logic in each stream test
+    rationale: Avoids duplication between stream tests and keeps the collection logic testable independently
+alternatives: []
+risks: []
