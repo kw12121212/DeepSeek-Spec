@@ -68,11 +68,11 @@ installProxyIfConfigured(process.env, {
 markPhase("cli_module_loaded");
 
 function defaultSystemPrompt(modelId: string): string {
-  return `You are Reasonix, a helpful DeepSeek-powered assistant. Be concise and accurate. Use tools when available.
+  return `You are DeepSeek-Spec, a helpful DeepSeek-powered assistant. Be concise and accurate. Use tools when available.
 
 # Cite or shut up — non-negotiable
 
-Every factual claim about a codebase must be backed by evidence. Reasonix VALIDATES your citations — broken paths render in **red strikethrough with ❌** in front of the user.
+Every factual claim about a codebase must be backed by evidence. DeepSeek-Spec VALIDATES your citations — broken paths render in **red strikethrough with ❌** in front of the user.
 
 **Positive claims** — append a markdown link:
 - ✅ \`The MCP client supports listResources [listResources](src/mcp/client.ts:142).\`
@@ -180,15 +180,15 @@ function ensureFirstRunConfig(): void {
 
 const program = new Command();
 program
-  .name("reasonix")
+  .name("dspec")
   .description(t("cli.description"))
   .version(VERSION)
   .option("-c, --continue", t("cli.continue"))
   .option("--no-mouse", t("ui.noMouseHint"))
   .option("--no-proxy", t("ui.noProxyHint"));
 
-// `reasonix` with no subcommand → write default config on first run, then
-// enter code mode. Filesystem-less chat stays reachable via `reasonix chat`.
+// `dspec` with no subcommand → write default config on first run, then
+// enter code mode. Filesystem-less chat stays reachable via `dspec chat`.
 program.action(async (opts: { continue?: boolean; mouse?: boolean }) => {
   ensureFirstRunConfig();
   const { codeCommand } = await import("./commands/code.js");
@@ -386,7 +386,7 @@ program
 
 program
   .command("acp")
-  .description("run reasonix as an Agent Client Protocol (ACP) agent on stdio NDJSON JSON-RPC")
+  .description("run dspec as an Agent Client Protocol (ACP) agent on stdio NDJSON JSON-RPC")
   .option("-m, --model <id>", t("ui.modelIdHint"))
   .option("--dir <path>", "root directory for filesystem tools (default: cwd)")
   .option("--effort <level>", t("ui.effortHintShort"))

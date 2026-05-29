@@ -1,0 +1,28 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: system-prompts-strings
+  status: proposed
+summary:
+  what:
+    - >-
+      Rename all system prompts, user-facing strings, i18n keys, dashboard HTML, and CLI help text
+      from 'Reasonix' to 'DeepSeek-Spec'
+  why:
+    - >-
+      M9 brand rename requires all user-visible text to use the new name. This planned change is the
+      next eligible item after package-identity was archived.
+scope:
+  in:
+    - src/loop.ts src/agents.ts src/i18n/ src/cli/ dashboard/index.html
+  out:
+    - >-
+      All Reasonix references in system prompts, i18n keys, dashboard meta tags, and CLI help
+      replaced with DeepSeek-Spec equivalents
+unchanged_behavior:
+  - No behavior changes — purely mechanical string rename
+roadmap:
+  milestone: 0009-brand-rename
+  planned_change: system-prompts-strings

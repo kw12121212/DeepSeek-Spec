@@ -1,5 +1,5 @@
 import { VERSION } from "../../index.js";
 
 export function versionCommand(): void {
-  console.log(`reasonix ${VERSION}`);
+  console.log(`dspec ${VERSION}`);
 }

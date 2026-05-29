@@ -6,17 +6,17 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 /** npm registry endpoint for the `latest` dist-tag of this package. */
-const REGISTRY_URL = "https://registry.npmjs.org/reasonix/latest";
+const REGISTRY_URL = "https://registry.npmjs.org/deepseek-spec/latest";
 
 /** TTL for the on-disk cache entry. 24h keeps noise low; users who
- * want a fresh check can run `reasonix update` which passes
+ * want a fresh check can run `dspec update` which passes
  * `force: true`. */
 export const LATEST_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 /** Network timeout. Short — we never block the UI waiting on this. */
 export const LATEST_FETCH_TIMEOUT_MS = 2_000;
 
-/** `name === "reasonix"` guard avoids picking up an outer package.json when loaded as a dep. */
+/** `name === "deepseek-spec"` guard avoids picking up an outer package.json when loaded as a dep. */
 function readPackageVersion(): string {
   try {
     let dir = dirname(fileURLToPath(import.meta.url));
@@ -75,7 +75,7 @@ function writeCache(entry: VersionCacheEntry, homeDirOverride?: string): void {
 }
 
 export interface GetLatestVersionOptions {
-  /** Ignore the cached entry and always fetch fresh. Used by `reasonix update`. */
+  /** Ignore the cached entry and always fetch fresh. Used by `dspec update`. */
   force?: boolean;
   /** Registry URL override (tests). */
   registryUrl?: string;

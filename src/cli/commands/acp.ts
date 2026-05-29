@@ -217,7 +217,7 @@ export async function acpCommand(opts: AcpOptions): Promise<void> {
     const defaultModel = opts.model || loadModel() || DEFAULT_MODEL;
     transcriptStream = openTranscriptFile(opts.transcript, {
       version: 1,
-      source: "reasonix acp",
+      source: "dspec acp",
       model: defaultModel,
       startedAt: new Date().toISOString(),
     });
@@ -252,7 +252,7 @@ export async function acpCommand(opts: AcpOptions): Promise<void> {
         promptCapabilities: { image: false, audio: false, embeddedContext: true },
         mcpCapabilities: { http: false, sse: false },
       },
-      agentInfo: { name: "reasonix", title: "Reasonix", version: VERSION },
+      agentInfo: { name: "dspec", title: "DeepSeek-Spec", version: VERSION },
       authMethods: [],
     };
   });

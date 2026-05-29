@@ -1,4 +1,4 @@
-// Reasonix is append-only now: the terminal owns scrollback, copy, and the
+// DeepSeek-Spec is append-only now: the terminal owns scrollback, copy, and the
 // mouse wheel. On most terminals, startup emits disables for common
 // mouse-capture modes so stale state from a prior crashed TUI can't keep
 // eating wheel events. Apple Terminal has had native crashes in its renderer

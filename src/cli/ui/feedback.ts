@@ -45,7 +45,7 @@ export function buildFeedbackIssueUrl(diagnostic: string): string {
 
 export function buildFeedbackDiagnostic(input: FeedbackDiagnosticInput): string {
   const lines: string[] = [];
-  lines.push(`**Reasonix**: ${formatVersion(input.version, input.latestVersion)}`);
+  lines.push(`**DeepSeek-Spec**: ${formatVersion(input.version, input.latestVersion)}`);
   lines.push(`**Platform**: ${input.platform} (${input.osRelease})`);
   lines.push(`**Terminal**: ${formatTerminal(input)}`);
   if (typeof input.cols === "number" && typeof input.rows === "number") {

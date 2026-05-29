@@ -1,0 +1,21 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: agent-loop
+mapping:
+  implementation:
+    - src/loop.ts,src/agents.ts
+  tests: []
+operations:
+  ADDED: {}
+  MODIFIED:
+    brand-rename-system-prompt:
+      strength: MUST
+      statement: All system prompt strings MUST reference 'DeepSeek-Spec' instead of 'Reasonix'
+      scenarios:
+        system-prompt-brand:
+          - GIVEN: the agent loop constructs a system prompt
+          - WHEN: the system prompt text is assembled
+          - THEN: it contains 'DeepSeek-Spec' and contains no occurrence of 'Reasonix'
+  REMOVED: {}

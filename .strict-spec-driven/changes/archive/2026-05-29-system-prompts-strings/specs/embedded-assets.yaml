@@ -1,0 +1,25 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: embedded-assets
+mapping:
+  implementation:
+    - dashboard/index.html
+  tests: []
+operations:
+  ADDED: {}
+  MODIFIED:
+    brand-rename-dashboard:
+      strength: MUST
+      statement: >-
+        Dashboard HTML meta tokens and visible text MUST use 'dspec-' prefix and 'DeepSeek-Spec'
+        name
+      scenarios:
+        dashboard-brand:
+          - GIVEN: the dashboard HTML is loaded
+          - WHEN: meta tags and visible text are rendered
+          - THEN: >-
+              meta token names use 'dspec-' prefix and visible text says 'DeepSeek-Spec' with no
+              occurrence of 'reasonix'
+  REMOVED: {}

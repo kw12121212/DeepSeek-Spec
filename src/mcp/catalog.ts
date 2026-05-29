@@ -48,7 +48,7 @@ export const MCP_CATALOG: CatalogEntry[] = [
     name: "everything",
     summary: "official test server — exercises every MCP feature",
     package: "@modelcontextprotocol/server-everything",
-    note: "useful for debugging your Reasonix setup",
+    note: "useful for debugging your DeepSeek-Spec setup",
   },
 ];
 

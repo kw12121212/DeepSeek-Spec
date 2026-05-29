@@ -204,6 +204,16 @@ requirements:
         - GIVEN: DSPEC_PROVIDER is set to 'glm'
         - WHEN: loadActiveProvider() is called
         - THEN: '''glm'' is returned regardless of config.json value'
+  brand-rename-i18n:
+    strength: MUST
+    statement: >-
+      All i18n strings, CLI help text, and error messages MUST reference 'DeepSeek-Spec' instead of
+      'Reasonix'
+    scenarios:
+      i18n-brand:
+        - GIVEN: the CLI displays a version, welcome, or error message
+        - WHEN: the i18n key is resolved to a user-facing string
+        - THEN: the string contains 'DeepSeek-Spec' and contains no occurrence of 'Reasonix'
 mapping:
   implementation:
     - src/config.ts

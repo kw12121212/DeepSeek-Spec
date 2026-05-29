@@ -34,7 +34,7 @@ export async function openInExternalEditor(initial: string): Promise<OpenEditorR
       detail: t("composer.editorMissing"),
     };
   }
-  const dir = mkdtempSync(join(tmpdir(), "reasonix-compose-"));
+  const dir = mkdtempSync(join(tmpdir(), "dspec-compose-"));
   const path = join(dir, "DSPEC_INPUT.md");
   try {
     writeFileSync(path, initial, "utf8");

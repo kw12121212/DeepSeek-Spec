@@ -101,7 +101,7 @@ describe("appendProjectMemory", () => {
   let dir: string;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-hashmem-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-hashmem-"));
   });
 
   afterEach(() => {
@@ -119,7 +119,7 @@ describe("appendProjectMemory", () => {
     expect(result.created).toBe(true);
     expect(result.path).toBe(path);
     const content = readFileSync(path, "utf8");
-    expect(content).toContain("# Reasonix project memory");
+    expect(content).toContain("# DeepSeek-Spec project memory");
     expect(content).toMatch(/- always use pnpm\n$/);
   });
 
@@ -168,7 +168,7 @@ describe("appendGlobalMemory", () => {
   let home: string;
 
   beforeEach(() => {
-    home = mkdtempSync(join(tmpdir(), "reasonix-globalmem-"));
+    home = mkdtempSync(join(tmpdir(), "dspec-globalmem-"));
   });
 
   afterEach(() => {
@@ -186,7 +186,7 @@ describe("appendGlobalMemory", () => {
     expect(result.created).toBe(true);
     expect(result.path).toBe(path);
     const content = readFileSync(path, "utf8");
-    expect(content).toContain("# Reasonix global memory");
+    expect(content).toContain("# DeepSeek-Spec global memory");
     expect(content).toMatch(/- always use pnpm\n$/);
   });
 

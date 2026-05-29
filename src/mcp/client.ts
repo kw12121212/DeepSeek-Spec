@@ -66,7 +66,7 @@ export class McpClient {
 
   constructor(opts: McpClientOptions) {
     this.transport = opts.transport;
-    this.clientInfo = opts.clientInfo ?? { name: "reasonix", version: VERSION };
+    this.clientInfo = opts.clientInfo ?? { name: "dspec", version: VERSION };
     const workspaceDir = opts.workspaceDir?.trim();
     if (workspaceDir) {
       this.workspaceDir = resolve(workspaceDir);

@@ -90,7 +90,7 @@ function checkProxy(): Check[] {
         id: "proxy",
         label: "http proxy   ",
         level: "ok",
-        detail: `${urlSource}=${redacted} is set but cfg.proxy.disabled — Reasonix routes direct`,
+        detail: `${urlSource}=${redacted} is set but cfg.proxy.disabled — DeepSeek-Spec routes direct`,
       },
     ];
   }
@@ -102,7 +102,7 @@ function checkProxy(): Check[] {
   const sourceSummary = [
     `defaults ${resolved.defaults.length}`,
     resolved.envSystem.length > 0 ? `env ${resolved.envSystem.length}` : null,
-    resolved.envReasonix.length > 0 ? `REASONIX ${resolved.envReasonix.length}` : null,
+    resolved.envReasonix.length > 0 ? `DSPEC ${resolved.envReasonix.length}` : null,
     resolved.extra.length > 0 ? `config ${resolved.extra.length}` : null,
   ]
     .filter(Boolean)
@@ -172,7 +172,7 @@ async function checkApiKey(): Promise<Check> {
     label: "api key      ",
     level: "fail",
     detail:
-      "not set — `reasonix setup` to save one, or export DEEPSEEK_API_KEY. Get a key at https://platform.deepseek.com/api_keys",
+      "not set — `dspec setup` to save one, or export DEEPSEEK_API_KEY. Get a key at https://platform.deepseek.com/api_keys",
   };
 }
 
@@ -183,7 +183,7 @@ async function checkConfig(): Promise<Check> {
       id: "config",
       label: "config       ",
       level: "warn",
-      detail: "missing — running with library defaults. `reasonix setup` writes one.",
+      detail: "missing — running with library defaults. `dspec setup` writes one.",
     };
   }
   try {
@@ -342,7 +342,7 @@ async function checkSessions(): Promise<Check> {
         id: "sessions",
         label: "sessions     ",
         level: "warn",
-        detail: `${detail} · ${stale} idle ≥90d (run \`reasonix prune-sessions\`)`,
+        detail: `${detail} · ${stale} idle ≥90d (run \`dspec prune-sessions\`)`,
       };
     }
     return { id: "sessions", label: "sessions     ", level: "ok", detail };
@@ -389,7 +389,7 @@ async function checkOllama(projectRoot: string): Promise<Check> {
       id: "semantic",
       label: "semantic     ",
       level: "ok",
-      detail: "not in use (no semantic index built; `reasonix index` to enable)",
+      detail: "not in use (no semantic index built; `dspec index` to enable)",
     };
   }
   const meta = readSemanticMeta(projectRoot);
@@ -472,7 +472,7 @@ function readSemanticMeta(
 
 async function checkProject(projectRoot: string): Promise<Check> {
   // Heuristic: a "real" project has either .git, DSPEC.md, or
-  // package.json. Lacking all three, `reasonix code` still works but
+  // package.json. Lacking all three, `dspec code` still works but
   // @-mentions and the project-memory pin won't surface much.
   const markers = [".git", "DSPEC.md", "package.json", "pyproject.toml", "Cargo.toml", "go.mod"];
   const found = markers.filter((m) => existsSync(join(projectRoot, m)));
@@ -481,7 +481,7 @@ async function checkProject(projectRoot: string): Promise<Check> {
       id: "project",
       label: "project      ",
       level: "warn",
-      detail: `${projectRoot} has none of: ${markers.slice(0, 3).join(", ")} … — \`reasonix code\` will still run, but @-mentions and project memory have nothing to anchor`,
+      detail: `${projectRoot} has none of: ${markers.slice(0, 3).join(", ")} … — \`dspec code\` will still run, but @-mentions and project memory have nothing to anchor`,
     };
   }
   return {
@@ -510,7 +510,7 @@ export async function doctorCommand(opts: DoctorOptions = {}): Promise<void> {
   const json = !!opts.json;
 
   if (!json) {
-    console.log(`${color(`reasonix ${VERSION}  ·  doctor`, "1")}  (cwd: ${projectRoot})`);
+    console.log(`${color(`dspec ${VERSION}  ·  doctor`, "1")}  (cwd: ${projectRoot})`);
     console.log(`  home: ${homedir()}`);
     console.log("");
   }

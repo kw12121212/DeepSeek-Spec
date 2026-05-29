@@ -433,7 +433,7 @@ function sanitizeStringArrayField(
   if (value === undefined) return;
   const fieldName = segments.join(".");
   if (!Array.isArray(value)) {
-    console.warn(`reasonix: config "${filePath}" field "${fieldName}" is not an array — ignoring`);
+    console.warn(`dspec: config "${filePath}" field "${fieldName}" is not an array — ignoring`);
     delete parent[leaf];
     return;
   }
@@ -441,7 +441,7 @@ function sanitizeStringArrayField(
   if (parsed.success) return;
   const filtered = value.filter((x): x is string => typeof x === "string");
   console.warn(
-    `reasonix: config "${filePath}" field "${fieldName}" had ${value.length - filtered.length} non-string item(s) — dropped`,
+    `dspec: config "${filePath}" field "${fieldName}" had ${value.length - filtered.length} non-string item(s) — dropped`,
   );
   parent[leaf] = filtered;
 }

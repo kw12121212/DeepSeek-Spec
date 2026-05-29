@@ -25,7 +25,7 @@ describe("/permissions slash handler", () => {
   const originalUserProfile = process.env.USERPROFILE;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-perms-slash-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-perms-slash-"));
     cfgPath = join(dir, "config.json");
     projectRoot = join(dir, "project");
     // Redirect ~/.dspec → temp dir so the handler's calls (which use
@@ -172,11 +172,11 @@ describe("/permissions slash handler", () => {
 
   it("mutating subcommands refuse without a codeRoot", () => {
     const r1 = handleSlash("permissions", ["add", "lint"], makeLoop(), {});
-    expect(r1.info).toMatch(/only available inside `reasonix code`/);
+    expect(r1.info).toMatch(/only available inside `dspec code`/);
     const r2 = handleSlash("permissions", ["remove", "lint"], makeLoop(), {});
-    expect(r2.info).toMatch(/only available inside `reasonix code`/);
+    expect(r2.info).toMatch(/only available inside `dspec code`/);
     const r3 = handleSlash("permissions", ["clear", "confirm"], makeLoop(), {});
-    expect(r3.info).toMatch(/only available inside `reasonix code`/);
+    expect(r3.info).toMatch(/only available inside `dspec code`/);
   });
 
   it("'perms' is registered as an alias for 'permissions'", () => {

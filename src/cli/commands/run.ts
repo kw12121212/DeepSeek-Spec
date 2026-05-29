@@ -32,7 +32,7 @@ export interface RunOptions {
   model: string;
   system: string;
   budgetUsd?: number;
-  /** JSONL transcript path — lets `reasonix replay` / `diff` audit this run. */
+  /** JSONL transcript path — lets `dspec replay` / `diff` audit this run. */
   transcript?: string;
   /** Zero or more MCP server specs. Each: `"name=cmd args..."` or `"cmd args..."`. */
   mcp?: string[];
@@ -128,7 +128,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
         clients.push(mcp);
         successCount++;
       } catch (err) {
-        // Non-fatal — skip and continue, same as `reasonix chat`. A
+        // Non-fatal — skip and continue, same as `dspec chat`. A
         // one-shot `run` invocation with a broken MCP server otherwise
         // fails the whole run over a side-concern tool the task might
         // not even touch.
@@ -167,7 +167,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   if (opts.transcript) {
     transcriptStream = openTranscriptFile(opts.transcript, {
       version: 1,
-      source: "reasonix run",
+      source: "dspec run",
       model: opts.model,
       startedAt: new Date().toISOString(),
     });
@@ -188,8 +188,8 @@ export async function runCommand(opts: RunOptions): Promise<void> {
       if (ev.role === "error") process.stderr.write(`\n[error] ${ev.error}\n`);
       if (ev.role === "done") process.stdout.write("\n");
       if (ev.role === "assistant_final" && ev.stats?.usage) {
-        // `reasonix run` is often used in CI / scripting — we want
-        // those turns to show up in `reasonix stats` too so the
+        // `dspec run` is often used in CI / scripting — we want
+        // those turns to show up in `dspec stats` too so the
         // dashboard reflects all DeepSeek spend, not just TUI sessions.
         appendUsage({ session: null, model: ev.stats.model, usage: ev.stats.usage });
       }
@@ -210,7 +210,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   );
   if (opts.transcript) {
     process.stdout.write(`\ntranscript: ${opts.transcript}\n`);
-    process.stdout.write(`  → npx reasonix replay ${opts.transcript}\n`);
+    process.stdout.write(`  → npx deepseek-spec replay ${opts.transcript}\n`);
   }
 
   for (const c of clients) await c.close();

@@ -294,7 +294,7 @@ describe("handleSlash", () => {
 
   it("/undo outside code mode says it's not available", () => {
     const r = handleSlash("undo", [], makeLoop());
-    expect(r.info).toMatch(/only available inside .reasonix code/);
+    expect(r.info).toMatch(/only available inside .dspec code/);
   });
 
   it("/restore with no arg opens the checkpoint picker in code mode", () => {
@@ -312,9 +312,9 @@ describe("handleSlash", () => {
   it("/restore outside code mode is unavailable regardless of args", () => {
     const noArg = handleSlash("restore", [], makeLoop());
     expect(noArg.openCheckpointPicker).toBeUndefined();
-    expect(noArg.info).toMatch(/only available inside .reasonix code/);
+    expect(noArg.info).toMatch(/only available inside .dspec code/);
     const withArg = handleSlash("restore", ["abc"], makeLoop());
-    expect(withArg.info).toMatch(/only available inside .reasonix code/);
+    expect(withArg.info).toMatch(/only available inside .dspec code/);
   });
 
   it("/undo in code mode invokes the callback", () => {
@@ -348,7 +348,7 @@ describe("handleSlash", () => {
 
   it("/commit outside code mode says it's not available", () => {
     const r = handleSlash("commit", ["foo"], makeLoop());
-    expect(r.info).toMatch(/only available inside .reasonix code/);
+    expect(r.info).toMatch(/only available inside .dspec code/);
   });
 
   it("/commit with no message prints usage", () => {
@@ -358,7 +358,7 @@ describe("handleSlash", () => {
 
   it("/apply outside code mode says it's not available", () => {
     const r = handleSlash("apply", [], makeLoop());
-    expect(r.info).toMatch(/only available inside .reasonix code/);
+    expect(r.info).toMatch(/only available inside .dspec code/);
   });
 
   it("/apply in code mode invokes the callback", () => {
@@ -370,7 +370,7 @@ describe("handleSlash", () => {
 
   it("/discard outside code mode says it's not available", () => {
     const r = handleSlash("discard", [], makeLoop());
-    expect(r.info).toMatch(/only available inside .reasonix code/);
+    expect(r.info).toMatch(/only available inside .dspec code/);
   });
 
   it("/discard in code mode invokes the callback", () => {
@@ -620,9 +620,9 @@ describe("handleSlash", () => {
   describe("/update", () => {
     it("reports pending check when latestVersion is null (offline / in flight)", () => {
       const r = handleSlash("update", [], makeLoop(), { latestVersion: null });
-      expect(r.info).toMatch(/current: reasonix/);
+      expect(r.info).toMatch(/current: dspec/);
       expect(r.info).toMatch(/not yet resolved/);
-      expect(r.info).toMatch(/reasonix update/);
+      expect(r.info).toMatch(/dspec update/);
     });
 
     it("reports up-to-date when current matches latest", () => {
@@ -634,8 +634,8 @@ describe("handleSlash", () => {
     it("prints shell command when latest is newer than current", () => {
       const r = handleSlash("update", [], makeLoop(), { latestVersion: "99.99.99" });
       expect(r.info).toMatch(/99\.99\.99/);
-      expect(r.info).toMatch(/reasonix update/);
-      expect(r.info).toMatch(/(npm install|bun add|pnpm add|yarn global add).*reasonix/);
+      expect(r.info).toMatch(/dspec update/);
+      expect(r.info).toMatch(/(npm install|bun add|pnpm add|yarn global add).*deepseek-spec/);
     });
 
     it("is surfaced by suggestSlashCommands", () => {
@@ -793,7 +793,7 @@ describe("handleSlash", () => {
     let originalUserProfile: string | undefined;
 
     beforeEach(() => {
-      tempHome = mkdtempSync(join(tmpdir(), "reasonix-mcp-toggle-"));
+      tempHome = mkdtempSync(join(tmpdir(), "dspec-mcp-toggle-"));
       originalHome = process.env.HOME;
       originalUserProfile = process.env.USERPROFILE;
       process.env.HOME = tempHome;
@@ -1011,7 +1011,7 @@ describe("handleSlash", () => {
     let originalUserProfile: string | undefined;
 
     beforeEach(() => {
-      tempHome = mkdtempSync(join(tmpdir(), "reasonix-replay-slash-"));
+      tempHome = mkdtempSync(join(tmpdir(), "dspec-replay-slash-"));
       originalHome = process.env.HOME;
       originalUserProfile = process.env.USERPROFILE;
       process.env.HOME = tempHome;
@@ -1264,7 +1264,7 @@ describe("handleSlash", () => {
     const originalUserProfile = process.env.USERPROFILE;
 
     beforeEach(() => {
-      root = mkdtempSync(join(tmpdir(), "reasonix-mem-slash-"));
+      root = mkdtempSync(join(tmpdir(), "dspec-mem-slash-"));
       process.env.HOME = root;
       process.env.USERPROFILE = root;
       // biome-ignore lint/performance/noDelete: avoid "undefined" in env
@@ -1326,7 +1326,7 @@ describe("handleSlash", () => {
   describe("/plan", () => {
     it("/plan replies 'only in code mode' when setPlanMode callback is missing", () => {
       const r = handleSlash("plan", [], makeLoop());
-      expect(r.info).toMatch(/only available inside `reasonix code`/);
+      expect(r.info).toMatch(/only available inside `dspec code`/);
     });
 
     it("/plan toggles when called with no args", () => {
@@ -1460,7 +1460,7 @@ describe("handleSlash", () => {
     let originalTheme: string | undefined;
 
     beforeEach(() => {
-      tempHome = mkdtempSync(join(tmpdir(), "reasonix-theme-slash-"));
+      tempHome = mkdtempSync(join(tmpdir(), "dspec-theme-slash-"));
       originalHome = process.env.HOME;
       originalUserProfile = process.env.USERPROFILE;
       originalTheme = process.env.DSPEC_THEME;

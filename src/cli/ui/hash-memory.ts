@@ -5,17 +5,17 @@ import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { resolveProjectMemoryWritePath } from "../../memory/project.js";
 
-const PROJECT_HEADER = `# Reasonix project memory
+const PROJECT_HEADER = `# DeepSeek-Spec project memory
 
 Notes the user pinned via the \`#\` prompt prefix. The whole file is
 loaded into the immutable system prefix every session — keep it terse.
 
 `;
 
-const GLOBAL_HEADER = `# Reasonix global memory
+const GLOBAL_HEADER = `# DeepSeek-Spec global memory
 
 Cross-project notes the user pinned via the \`#g\` prompt prefix. Loaded
-into every Reasonix session's prefix regardless of working directory.
+into every DeepSeek-Spec session's prefix regardless of working directory.
 Private to this machine — not committed anywhere.
 
 `;

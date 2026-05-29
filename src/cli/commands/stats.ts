@@ -76,7 +76,7 @@ function dashboard(opts: StatsOptions): void {
 export function renderDashboard(agg: UsageAggregate, logPath: string): string {
   const lines: string[] = [];
   const size = formatLogSize(logPath);
-  lines.push(`Reasonix usage — ${logPath}${size ? ` (${size})` : ""}`);
+  lines.push(`DeepSeek-Spec usage — ${logPath}${size ? ` (${size})` : ""}`);
   lines.push("");
   lines.push(header());
   lines.push(divider());

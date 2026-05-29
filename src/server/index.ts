@@ -53,8 +53,8 @@ export function checkAuth(
   const url = new URL(req.url ?? "/", "http://localhost");
   const queryToken = url.searchParams.get("token") ?? "";
   const headerToken =
-    typeof req.headers["x-reasonix-token"] === "string"
-      ? (req.headers["x-reasonix-token"] as string)
+    typeof req.headers["x-dspec-token"] === "string"
+      ? (req.headers["x-dspec-token"] as string)
       : "";
 
   if (isMutation) {
@@ -65,7 +65,7 @@ export function checkAuth(
         status: 403,
         body: JSON.stringify({
           error:
-            "mutation requires X-Reasonix-Token header (CSRF defence — query token alone is rejected for POST/DELETE).",
+            "mutation requires X-Dspec-Token header (CSRF defence — query token alone is rejected for POST/DELETE).",
         }),
       };
     }

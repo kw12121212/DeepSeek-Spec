@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: system-prompts-strings
   milestone: 0009-brand-rename
-status: planned
+status: complete
 summary: |
   Update all system prompts, user-facing strings, i18n keys, dashboard HTML,
   and CLI help text from "Reasonix" to "DeepSeek-Spec".

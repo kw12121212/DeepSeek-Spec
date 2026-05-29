@@ -31,7 +31,7 @@ async function call(
   }
   const headers: Record<string, string> = {};
   if (opts.token && opts.tokenInHeader) {
-    headers["X-Reasonix-Token"] = opts.token;
+    headers["X-Dspec-Token"] = opts.token;
   }
   if (opts.body !== undefined) headers["Content-Type"] = "application/json";
   const res = await fetch(u.toString(), {
@@ -69,7 +69,7 @@ describe("dashboard server: auth + CSRF", () => {
   const TOKEN = "deadbeefcafebabe1234567890abcdefdeadbeefcafebabe1234567890abcdef";
 
   beforeEach(async () => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-dashtest-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-dashtest-"));
     cfgPath = join(dir, "config.json");
     usagePath = join(dir, "usage.jsonl");
     handle = await startDashboardServer(
@@ -163,7 +163,7 @@ describe("dashboard server: endpoints", () => {
   const PROJ = "/test/project";
 
   beforeEach(async () => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-dash-ep-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-dash-ep-"));
     cfgPath = join(dir, "config.json");
     usagePath = join(dir, "usage.jsonl");
   });
@@ -230,7 +230,7 @@ describe("dashboard server: endpoints", () => {
   });
 
   it("GET /api/semantic reports incompatible on-disk index against current config", async () => {
-    const proj = mkdtempSync(join(tmpdir(), "reasonix-dash-sem-"));
+    const proj = mkdtempSync(join(tmpdir(), "dspec-dash-sem-"));
     try {
       const semanticDir = join(proj, ".dspec", "semantic");
       await mkdir(semanticDir, { recursive: true });
@@ -292,7 +292,7 @@ describe("dashboard server: endpoints", () => {
   });
 
   it("GET /api/skills lists and edits flat-format project skills (#586)", async () => {
-    const proj = mkdtempSync(join(tmpdir(), "reasonix-dash-skills-"));
+    const proj = mkdtempSync(join(tmpdir(), "dspec-dash-skills-"));
     try {
       const skillsDir = join(proj, ".dspec", "skills");
       const folderDir = join(skillsDir, "folder-skill");
@@ -356,8 +356,8 @@ describe("dashboard server: endpoints", () => {
   });
 
   it("GET /api/skills returns custom skills and path status", async () => {
-    const proj = mkdtempSync(join(tmpdir(), "reasonix-dash-skills-custom-proj-"));
-    const custom = mkdtempSync(join(tmpdir(), "reasonix-dash-skills-custom-"));
+    const proj = mkdtempSync(join(tmpdir(), "dspec-dash-skills-custom-proj-"));
+    const custom = mkdtempSync(join(tmpdir(), "dspec-dash-skills-custom-"));
     try {
       await writeFile(
         cfgPath,
@@ -385,7 +385,7 @@ describe("dashboard server: endpoints", () => {
   });
 
   it("POST /api/skills rejects content missing a description frontmatter line (#583)", async () => {
-    const proj = mkdtempSync(join(tmpdir(), "reasonix-dash-skills-desc-"));
+    const proj = mkdtempSync(join(tmpdir(), "dspec-dash-skills-desc-"));
     try {
       const audited: Array<{ action: string }> = [];
       const base = await boot({
@@ -525,7 +525,7 @@ describe("dashboard server: SPA shell", () => {
   const TOKEN = "a".repeat(64);
 
   beforeEach(async () => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-dash-spa-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-dash-spa-"));
     handle = await startDashboardServer(
       {
         mode: "standalone",
@@ -587,7 +587,7 @@ describe("dashboard server: chat bridge", () => {
   const TOKEN = "c".repeat(64);
 
   beforeEach(async () => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-dash-chat-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-dash-chat-"));
     cfgPath = join(dir, "config.json");
     usagePath = join(dir, "usage.jsonl");
   });
@@ -786,7 +786,7 @@ describe("dashboard server: v0.13 panels", () => {
   const TOKEN = "d".repeat(64);
 
   beforeEach(async () => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-dash-v013-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-dash-v013-"));
     cfgPath = join(dir, "config.json");
     usagePath = join(dir, "usage.jsonl");
     // Handlers like /api/health still walk `homedir()/.dspec/{sessions,memory,semantic}`,
@@ -893,7 +893,7 @@ describe("dashboard server: modal mirroring (workspace / checkpoint / revision)"
   const TOKEN = "e".repeat(64);
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-dash-modal-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-dash-modal-"));
     cfgPath = join(dir, "config.json");
     usagePath = join(dir, "usage.jsonl");
   });
@@ -1122,7 +1122,7 @@ describe("dashboard server: D-1 settings + auto-loop surface", () => {
   const TOKEN = "f".repeat(64);
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-d1-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-d1-"));
     cfgPath = join(dir, "config.json");
     usagePath = join(dir, "usage.jsonl");
   });
@@ -1326,7 +1326,7 @@ describe("dashboard server: checkpoint API", () => {
   let cwd: string;
 
   beforeEach(async () => {
-    dir = mkdtempSync(join(tmpdir(), "reasonix-dash-cp-"));
+    dir = mkdtempSync(join(tmpdir(), "dspec-dash-cp-"));
     cfgPath = join(dir, "config.json");
     usagePath = join(dir, "usage.jsonl");
     // Init a tiny git repo so checkpoint-create works

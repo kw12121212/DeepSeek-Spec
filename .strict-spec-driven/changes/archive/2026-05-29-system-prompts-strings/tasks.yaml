@@ -1,0 +1,50 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: system-prompts-strings
+sections:
+  Implementation:
+    rename-system-prompts:
+      text: >-
+        Replace all Reasonix references in system prompts (src/loop.ts, src/agents.ts) with
+        DeepSeek-Spec equivalents.
+      status: complete
+    rename-i18n-en:
+      text: >-
+        Replace all Reasonix references in src/i18n/EN.ts (13 occurrences) and propagate to all
+        other locale files.
+      status: complete
+    rename-dashboard-html:
+      text: >-
+        Replace reasonix-token/reasonix-mode meta tags and any Reasonix text in dashboard/index.html
+        with dspec-token/dspec-mode and DeepSeek-Spec.
+      status: complete
+    rename-cli-help:
+      text: Replace all Reasonix brand references in CLI --help text and error messages across src/cli/.
+      status: complete
+    rename-hook-comment:
+      text: Replace reasonix code in hook cwd comment in system prompt with dspec code.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Grep src/i18n/, src/loop.ts, src/agents.ts, dashboard/index.html for remaining 'reasonix'
+        references — must return zero matches.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

@@ -101,6 +101,16 @@ requirements:
         - GIVEN: docs/brand/ directory exists with reasonix-prefixed files
         - WHEN: brand rename is complete
         - THEN: all files use dspec- prefix and README references updated paths
+  brand-rename-dashboard:
+    strength: MUST
+    statement: Dashboard HTML meta tokens and visible text MUST use 'dspec-' prefix and 'DeepSeek-Spec' name
+    scenarios:
+      dashboard-brand:
+        - GIVEN: the dashboard HTML is loaded
+        - WHEN: meta tags and visible text are rendered
+        - THEN: >-
+            meta token names use 'dspec-' prefix and visible text says 'DeepSeek-Spec' with no
+            occurrence of 'reasonix'
 mapping:
   implementation:
     - src/cli/assets.ts

@@ -122,15 +122,15 @@ function driftReason(
 
 function driftMessage(drift: ReturnType<typeof classifyToolListDrift>): string {
   if (drift.kind === "append") {
-    return `tool list grew (${drift.added.length} added: ${drift.added.join(", ")}). Restart Reasonix to bridge the new tool(s).`;
+    return `tool list grew (${drift.added.length} added: ${drift.added.join(", ")}). Restart DeepSeek-Spec to bridge the new tool(s).`;
   }
   if (drift.kind === "edit") {
-    return `tool description/schema changed for ${drift.edited.join(", ")}. Restart Reasonix to apply.`;
+    return `tool description/schema changed for ${drift.edited.join(", ")}. Restart DeepSeek-Spec to apply.`;
   }
   if (drift.kind === "remove") {
-    return `tool(s) removed: ${drift.removed.join(", ")}. Restart Reasonix to drop them from the registry.`;
+    return `tool(s) removed: ${drift.removed.join(", ")}. Restart DeepSeek-Spec to drop them from the registry.`;
   }
-  return "tool list reordered or restructured — cache prefix would be invalidated. Restart Reasonix.";
+  return "tool list reordered or restructured — cache prefix would be invalidated. Restart DeepSeek-Spec.";
 }
 
 function toolsToSpecs(tools: readonly McpTool[]): import("../types.js").ToolSpec[] {

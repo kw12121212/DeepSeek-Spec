@@ -23,13 +23,13 @@ const FIXTURE = {
   editMode: "auto",
   planMode: false,
   mcpServerCount: 3,
-  sessionId: "code-reasonix",
+  sessionId: "code-dspec",
 };
 
 describe("buildFeedbackDiagnostic", () => {
   it("emits all flicker-relevant fields when supplied", () => {
     const out = buildFeedbackDiagnostic(FIXTURE);
-    expect(out).toContain("**Reasonix**: 0.34.1 (latest)");
+    expect(out).toContain("**DeepSeek-Spec**: 0.34.1 (latest)");
     expect(out).toContain("**Platform**: win32 (10.0.26200)");
     expect(out).toContain(
       "**Terminal**: Windows Terminal (TERM_PROGRAM=Windows Terminal, TERM=xterm-256color, COLORTERM=truecolor, WT_SESSION=set)",
@@ -41,7 +41,7 @@ describe("buildFeedbackDiagnostic", () => {
     expect(out).toContain("**Model**: deepseek-v4-flash · effort=high");
     expect(out).toContain("**Mode**: edit=auto · plan=off");
     expect(out).toContain("**MCP**: 3 server(s)");
-    expect(out).toContain("**Session**: code-reasonix");
+    expect(out).toContain("**Session**: code-dspec");
     expect(out).toContain("<!-- describe what you were doing when this happened -->");
   });
 
@@ -52,7 +52,7 @@ describe("buildFeedbackDiagnostic", () => {
       .filter((l) => l.startsWith("**"))
       .map((l) => l.split(":")[0]);
     expect(fieldNames).toEqual([
-      "**Reasonix**",
+      "**DeepSeek-Spec**",
       "**Platform**",
       "**Terminal**",
       "**Size**",
@@ -68,7 +68,7 @@ describe("buildFeedbackDiagnostic", () => {
 
   it("renders the latest-version comparison when behind", () => {
     const out = buildFeedbackDiagnostic({ ...FIXTURE, latestVersion: "0.35.0" });
-    expect(out).toContain("**Reasonix**: 0.34.1 (latest: 0.35.0)");
+    expect(out).toContain("**DeepSeek-Spec**: 0.34.1 (latest: 0.35.0)");
   });
 
   it("does not flag installed > cached-latest as out-of-date (issue #510)", () => {
@@ -77,7 +77,7 @@ describe("buildFeedbackDiagnostic", () => {
       version: "0.35.0",
       latestVersion: "0.31.0",
     });
-    expect(out).toContain("**Reasonix**: 0.35.0");
+    expect(out).toContain("**DeepSeek-Spec**: 0.35.0");
     expect(out).not.toContain("(latest: 0.31.0)");
     expect(out).not.toContain("(latest)");
   });
@@ -91,7 +91,7 @@ describe("buildFeedbackDiagnostic", () => {
       locale: "EN",
       model: "deepseek-v4-flash",
     });
-    expect(out).toContain("**Reasonix**: 0.34.1");
+    expect(out).toContain("**DeepSeek-Spec**: 0.34.1");
     expect(out).not.toContain("(latest");
     expect(out).not.toContain("**Size**");
     expect(out).not.toContain("**Theme**");

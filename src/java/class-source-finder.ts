@@ -221,7 +221,7 @@ export class ClassSourceFinder {
     classBytes: Buffer,
     fqn: string,
   ): Promise<string> {
-    const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), "reasonix-java-src-"));
+    const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), "dspec-java-src-"));
 
     try {
       const pkgPath = fqn.replace(/\./g, path.sep);

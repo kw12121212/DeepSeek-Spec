@@ -1,0 +1,18 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: system-prompts-strings
+open: []
+resolved:
+  - id: dashboard-meta-consumers
+    question: >-
+      Are the dashboard meta token names (reasonix-token, reasonix-mode) consumed by JS code in the
+      dashboard bundle or external consumers that would also need renaming in this change?
+    context: >-
+      Planned change details reference reasonix-token -> dspec-token in dashboard/index.html. If JS
+      reads these meta values by name, the JS must also be updated in the same pass.
+    answer: >-
+      Already renamed. dashboard/index.html already uses dspec-token and dspec-mode meta tags. No JS
+      consumer changes needed.
+    status: resolved

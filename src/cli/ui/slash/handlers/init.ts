@@ -7,7 +7,7 @@ const INIT_PROMPT = [
   "# Task: Initialize DSPEC.md",
   "",
   "I want you to generate a DSPEC.md at the project root that captures",
-  "the working knowledge a future Reasonix session needs to be productive",
+  "the working knowledge a future DeepSeek-Spec session needs to be productive",
   "here. This file is auto-pinned into your system prompt every launch,",
   "so its size and accuracy matter.",
   "",

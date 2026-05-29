@@ -10,7 +10,7 @@ let stopping = false;
 
 function defaultOutPath(): string {
   const stamp = new Date().toISOString().replace(/[:.]/g, "-").replace("Z", "");
-  return resolve(process.cwd(), `reasonix-cpu-${stamp}.cpuprofile`);
+  return resolve(process.cwd(), `dspec-cpu-${stamp}.cpuprofile`);
 }
 
 export async function startCpuProfile(pathArg?: string | true): Promise<string> {

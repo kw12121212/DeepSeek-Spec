@@ -190,6 +190,14 @@ requirements:
         - GIVEN: 5 tool calls and DSPEC_PARALLEL_MAX is 3
         - WHEN: dispatchToolCallsChunked processes them
         - THEN: calls are batched into chunks of 3
+  brand-rename-system-prompt:
+    strength: MUST
+    statement: All system prompt strings MUST reference 'DeepSeek-Spec' instead of 'Reasonix'
+    scenarios:
+      system-prompt-brand:
+        - GIVEN: the agent loop constructs a system prompt
+        - WHEN: the system prompt text is assembled
+        - THEN: it contains 'DeepSeek-Spec' and contains no occurrence of 'Reasonix'
 mapping:
   implementation:
     - src/loop/dispatch.ts

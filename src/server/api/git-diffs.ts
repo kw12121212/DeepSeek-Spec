@@ -1,7 +1,7 @@
 import { execSync } from "node:child_process";
 import type { ApiResult } from "../router.js";
 
-// TODO(#618): Source is git diff HEAD — includes user's pre-Reasonix
+// TODO(#618): Source is git diff HEAD — includes user's pre-DeepSeek-Spec
 // uncommitted changes. Read-only safe, but any "restore working tree to
 // HEAD" feature must route through CheckpointStore so it doesn't clobber
 // user's own changes.

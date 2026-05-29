@@ -230,7 +230,7 @@ export async function handleSkills(
     if (!cwd) {
       return {
         status: 503,
-        body: { error: "no active project — open `/dashboard` from `reasonix code`" },
+        body: { error: "no active project — open `/dashboard` from `dspec code`" },
       };
     }
     dir = projectSkillsDir(cwd);

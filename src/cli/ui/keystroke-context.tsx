@@ -1,7 +1,7 @@
 /**
  * KeystrokeContext — React surface in front of the raw stdin reader.
  *
- * Replaces Ink's `useInput` chain. Reasonix's components no longer
+ * Replaces Ink's `useInput` chain. DeepSeek-Spec's components no longer
  * import `useInput` from "ink"; they call `useKeystroke(handler,
  * isActive)` from this module. The provider mounted once at App
  * level owns a `StdinReader`, subscribes a single fan-out function

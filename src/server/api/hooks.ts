@@ -86,7 +86,7 @@ export async function handleHooks(
       if (!cwd) {
         return {
           status: 503,
-          body: { error: "no active project — open `/dashboard` from inside `reasonix code`" },
+          body: { error: "no active project — open `/dashboard` from inside `dspec code`" },
         };
       }
       trustProjectHooks(cwd, ctx.configPath);

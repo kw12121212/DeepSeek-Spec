@@ -35,28 +35,28 @@ export const ru: TranslationSchema = {
     replay: "Интерактивная Ink TUI для просмотра транскрипта.",
     diff: "Сравнение двух транскриптов в разделённой Ink TUI.",
     mcp: "Помощники Model Context Protocol — поиск серверов, проверка настройки.",
-    version: "Вывести версию Reasonix.",
-    update: "Проверить новую версию Reasonix и установить.",
+    version: "Вывести версию DeepSeek-Spec.",
+    update: "Проверить новую версию DeepSeek-Spec и установить.",
     index: "Построить (или инкрементально обновить) локальный семантический поисковый индекс.",
   },
   stats: {
     ...EN.stats,
-    usageHint: "запусти `reasonix chat`, `reasonix code` или `reasonix run <task>` — каждый шаг",
-    usageDetail: "добавляет одну строку в лог, а `reasonix stats` сводит всё вместе.",
+    usageHint: "запусти `dspec chat`, `dspec code` или `dspec run <task>` — каждый шаг",
+    usageDetail: "добавляет одну строку в лог, а `dspec stats` сводит всё вместе.",
   },
   run: {
     ...EN.run,
     missingApiKey:
       "DEEPSEEK_API_KEY не задан и stdin не TTY (нельзя запросить).\n" +
-      "Установи переменную окружения или запусти `reasonix chat` один раз для сохранения ключа.\n",
+      "Установи переменную окружения или запусти `dspec chat` один раз для сохранения ключа.\n",
   },
   sessions: {
     ...EN.sessions,
     emptyHint:
-      "ещё нет сохранённых сессий — запусти `reasonix chat` (сессии авто-сохраняются, если не указан --no-session).",
+      "ещё нет сохранённых сессий — запусти `dspec chat` (сессии авто-сохраняются, если не указан --no-session).",
     listHeader: "Сохранённые сессии (~/.dspec/sessions/):",
-    inspectHint: "Просмотр:  reasonix sessions <имя>",
-    resumeHint: "Возобновить: reasonix chat --session <имя>",
+    inspectHint: "Просмотр:  dspec sessions <имя>",
+    resumeHint: "Возобновить: dspec chat --session <имя>",
     noSession: 'нет сессии "{name}" (или она пуста).',
     lookedAt: "просмотрено: {path}",
     noIdleSessions: "нет неактивных сессий ≥{days} дн. Ничего не удалено.",
@@ -127,7 +127,7 @@ export const ru: TranslationSchema = {
     jsonHintReport: "вывести отчёт проверки в JSON",
     modelOverrideFlash: "переопределить модель (по умолч.: deepseek-v4-flash)",
     skipConfirmHint: "пропустить запрос подтверждения",
-    welcome: "Запускай `reasonix` в любое время — настройки сохраняются.",
+    welcome: "Запускай `dspec` в любое время — настройки сохраняются.",
     taglineChat: "Нативный агент DeepSeek",
     taglineCode: "Нативный кодинг-агент DeepSeek",
     taglineSub: "кэш-первый · flash-первый",
@@ -165,7 +165,7 @@ export const ru: TranslationSchema = {
   code: {
     ...EN.code,
     workspaceConflict:
-      "⚠ рабочая область содержит файлы другой платформы агента ({platforms}). Reasonix Code может прочитать их как содержимое проекта; перезапусти с --dir <твой-проект> если это нежелательно.\n",
+      "⚠ рабочая область содержит файлы другой платформы агента ({platforms}). DeepSeek-Spec Code может прочитать их как содержимое проекта; перезапусти с --dir <твой-проект> если это нежелательно.\n",
     systemAppendEmpty: "--system-append пуст — текст промпта не будет добавлен\n",
     systemAppendFileReadError:
       'Ошибка: не удалось прочитать --system-append-file "{filePath}": {errorDetails}\n',
@@ -294,7 +294,7 @@ export const ru: TranslationSchema = {
       description: "список сохранённых сессий (текущая отмечена ▸)",
     },
     title: { ...EN.slash.title, description: "попросить модель переименовать сессию из разговора" },
-    setup: { ...EN.slash.setup, description: "напоминает выйти и запустить `reasonix setup`" },
+    setup: { ...EN.slash.setup, description: "напоминает выйти и запустить `dspec setup`" },
     semantic: {
       ...EN.slash.semantic,
       description: "показать статус semantic_search — построен? Ollama установлен? как включить",

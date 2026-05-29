@@ -178,11 +178,11 @@ export function McpMarketplace({ onClose, postInfo, reloadMcp, pickerPorts }: Mc
           postInfo(`✓ uninstalled ${entry.name} — bridge dropped`);
         } catch (err) {
           postInfo(
-            `✓ uninstalled ${entry.name} — restart \`reasonix code\` to drop the bridge (reload failed: ${(err as Error).message})`,
+            `✓ uninstalled ${entry.name} — restart \`dspec code\` to drop the bridge (reload failed: ${(err as Error).message})`,
           );
         }
       } else {
-        postInfo(`✓ uninstalled ${entry.name} — restart \`reasonix code\` to drop the bridge`);
+        postInfo(`✓ uninstalled ${entry.name} — restart \`dspec code\` to drop the bridge`);
       }
     },
     [postInfo, reloadMcp],
@@ -240,11 +240,11 @@ export function McpMarketplace({ onClose, postInfo, reloadMcp, pickerPorts }: Mc
             }
           } catch (err) {
             postInfo(
-              `✓ installed ${entry.name} — restart \`reasonix code\` to bridge (reload failed: ${(err as Error).message})${envHint}`,
+              `✓ installed ${entry.name} — restart \`dspec code\` to bridge (reload failed: ${(err as Error).message})${envHint}`,
             );
           }
         } else {
-          postInfo(`✓ installed ${entry.name} — restart \`reasonix code\` to bridge${envHint}`);
+          postInfo(`✓ installed ${entry.name} — restart \`dspec code\` to bridge${envHint}`);
         }
       } catch (err) {
         setState((s) => ({ ...s, status: `install failed: ${(err as Error).message}` }));

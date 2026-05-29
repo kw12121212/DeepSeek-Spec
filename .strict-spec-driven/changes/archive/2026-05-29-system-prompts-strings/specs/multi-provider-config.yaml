@@ -1,0 +1,23 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - src/i18n/,src/cli/
+  tests: []
+operations:
+  ADDED: {}
+  MODIFIED:
+    brand-rename-i18n:
+      strength: MUST
+      statement: >-
+        All i18n strings, CLI help text, and error messages MUST reference 'DeepSeek-Spec' instead
+        of 'Reasonix'
+      scenarios:
+        i18n-brand:
+          - GIVEN: the CLI displays a version, welcome, or error message
+          - WHEN: the i18n key is resolved to a user-facing string
+          - THEN: the string contains 'DeepSeek-Spec' and contains no occurrence of 'Reasonix'
+  REMOVED: {}

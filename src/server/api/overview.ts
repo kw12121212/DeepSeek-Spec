@@ -8,7 +8,7 @@ import type { ApiResult } from "../router.js";
 import { type CockpitData, computeCockpit } from "./cockpit.js";
 
 export interface OverviewResponse {
-  /** Reasonix version string (drives the "vs latest" comparison in the SPA). */
+  /** DeepSeek-Spec version string (drives the "vs latest" comparison in the SPA). */
   version: string;
   /** Current runtime mode — drives whether the SPA hides "live-only" controls. */
   mode: "standalone" | "attached";

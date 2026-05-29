@@ -1,4 +1,4 @@
-/** Empty-session welcome card — REASONIX × 🐋 DeepSeek brand row + tagline + starter slash commands. */
+/** Empty-session welcome card — DSPEC × 🐋 DeepSeek brand row + tagline + starter slash commands. */
 
 import { Box, Text } from "ink";
 // biome-ignore lint/style/useImportType: tsconfig jsx=react needs React in value scope for JSX compilation
@@ -7,7 +7,7 @@ import { t } from "../../i18n/index.js";
 import { FG, TONE } from "./theme/tokens.js";
 
 export interface WelcomeBannerProps {
-  /** True when running `reasonix code`. Surfaces code-mode hints. */
+  /** True when running `dspec code`. Surfaces code-mode hints. */
   inCodeMode?: boolean;
   /** Pinned workspace root — only meaningful in code mode. Surfaced so first-time users see they can pass --dir at next launch. */
   workspaceRoot?: string;
@@ -40,7 +40,7 @@ export function WelcomeBanner({
       >
         <Box flexDirection="row" gap={2}>
           <Text color={TONE.brand} bold>
-            {"REASONIX"}
+            {"DSPEC"}
           </Text>
           <Text color={FG.faint}>{"×"}</Text>
           <Box flexDirection="row" gap={1}>

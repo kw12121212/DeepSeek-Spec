@@ -97,7 +97,7 @@ export interface SubagentToolOptions {
 }
 
 /** Memory-stable prefix — shared across spawns, cached. The model-dependent escalation contract is appended per spawn so a pro spawn doesn't get told it's running on flash (#582). */
-const SUBAGENT_BASE_SYSTEM = `You are a Reasonix subagent. The parent agent spawned you to handle one focused subtask, then return.
+const SUBAGENT_BASE_SYSTEM = `You are a DeepSeek-Spec subagent. The parent agent spawned you to handle one focused subtask, then return.
 
 Rules:
 - Stay on the task you were given. Do not expand scope.
@@ -452,7 +452,7 @@ export function formatSubagentResult(r: SubagentResult): string {
   });
 }
 
-/** Library surface only — `reasonix code` uses Skills `runAs: subagent` as the user-facing path. */
+/** Library surface only — `dspec code` uses Skills `runAs: subagent` as the user-facing path. */
 export function registerSubagentTool(
   parentRegistry: ToolRegistry,
   opts: SubagentToolOptions,
