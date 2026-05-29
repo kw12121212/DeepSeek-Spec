@@ -12,21 +12,26 @@ import "./strip-bel.js";
 
 import { Command } from "commander";
 import {
+  type ReasonixConfig,
   ensureDashboardToken,
   isReasoningEffort,
+  loadApiKey,
   loadDashboardEnabled,
+  loadGlmApiKey,
   loadProxyConfig,
   readConfig,
   saveReasoningEffort,
+  writeConfig,
 } from "../config.js";
 import { t } from "../i18n/index.js";
+import { detectSystemLanguage } from "../i18n/index.js";
 import { VERSION } from "../index.js";
 import { listSessions } from "../memory/session.js";
 import { applyMemoryStack } from "../memory/user.js";
 import { installProxyIfConfigured } from "../net/proxy.js";
 import { escalationContract } from "../prompt-fragments.js";
 import { startCpuProfile, stopAndSaveCpuProfile } from "./cpu-prof.js";
-import { resolveBareCommandMode, resolveContinueFlag, resolveDefaults } from "./resolve.js";
+import { resolveContinueFlag, resolveDefaults } from "./resolve.js";
 import { markPhase } from "./startup-profile.js";
 
 async function maybeStartCpuProfile(flag: unknown): Promise<boolean> {
@@ -154,6 +159,25 @@ function resolveDashboardToken(noConfig: boolean): string | undefined {
   return ensureDashboardToken();
 }
 
+function ensureFirstRunConfig(): void {
+  const cfg = readConfig();
+  if (cfg.setupCompleted) return;
+  const next: ReasonixConfig = {
+    ...cfg,
+    setupCompleted: true,
+    lang: cfg.lang ?? detectSystemLanguage() ?? undefined,
+    theme: cfg.theme ?? "auto",
+    editMode: cfg.editMode ?? "yolo",
+  };
+  writeConfig(next);
+
+  const deepseekKey = loadApiKey();
+  const glmKey = loadGlmApiKey();
+  if (!deepseekKey && !glmKey && !cfg.apiKey) {
+    process.stderr.write("No API key found. Set DEEPSEEK_API_KEY env or run /setup.\n");
+  }
+}
+
 const program = new Command();
 program
   .name("reasonix")
@@ -163,17 +187,10 @@ program
   .option("--no-mouse", t("ui.noMouseHint"))
   .option("--no-proxy", t("ui.noProxyHint"));
 
-// `reasonix` with no subcommand → setup wizard on first run, otherwise `code`
-// in the current directory. Filesystem-less chat stays reachable via
-// `reasonix chat`.
+// `reasonix` with no subcommand → write default config on first run, then
+// enter code mode. Filesystem-less chat stays reachable via `reasonix chat`.
 program.action(async (opts: { continue?: boolean; mouse?: boolean }) => {
-  const cfg = readConfig();
-  const mode = resolveBareCommandMode(cfg);
-  if (mode === "setup") {
-    const { setupCommand } = await import("./commands/setup.js");
-    await setupCommand({ forceKeyStep: true });
-    return;
-  }
+  ensureFirstRunConfig();
   const { codeCommand } = await import("./commands/code.js");
   await codeCommand({
     dir: process.cwd(),

@@ -34,7 +34,7 @@ milestones:
   0008-ux-streamline:
     title: 'M8: UX Streamline — Wizard Removal, QQ Cleanup, Permission Default, Fuzzy Slash'
     path: roadmap/milestones/0008-ux-streamline.yaml
-    status: proposed
+    status: complete
   0009-brand-rename:
     title: 'M9: Brand Rename - Reasonix to DeepSeek-Spec'
     path: roadmap/milestones/0009-brand-rename.yaml

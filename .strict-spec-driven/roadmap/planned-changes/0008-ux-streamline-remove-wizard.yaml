@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: remove-wizard
   milestone: 0008-ux-streamline
-status: planned
+status: complete
 summary: |
   Remove the auto-triggered first-run wizard. On first run, write default config
   and print a hint. Keep /setup as a simplified single-step API key prompt.

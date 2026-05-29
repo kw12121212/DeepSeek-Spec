@@ -84,9 +84,6 @@ export function resolveContinueFlag(
   return { session: latest.name, forceResume: true };
 }
 
-export function resolveBareCommandMode(
-  cfg: Pick<ReasonixConfig, "setupCompleted">,
-): "setup" | "code" {
-  if (!cfg.setupCompleted) return "setup";
+export function resolveBareCommandMode(): "code" {
   return "code";
 }

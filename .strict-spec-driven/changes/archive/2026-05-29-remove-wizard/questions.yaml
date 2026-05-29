@@ -1,0 +1,20 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: remove-wizard
+open: []
+resolved:
+  - id: api-key-check-scope
+    question: >-
+      Should the first-run hint check only DEEPSEEK_API_KEY, or also ZHIPU_API_KEY and config.apiKey
+      from all registered providers?
+    context: >-
+      The planned change details mention checking DEEPSEEK_API_KEY env OR config.apiKey OR
+      ZHIPU_API_KEY env for GLM. Need to confirm the provider registry is available at first-run
+      time.
+    answer: >-
+      Check all provider keys: DEEPSEEK_API_KEY, ZHIPU_API_KEY, and config.apiKey. The provider
+      registry is available at first-run time after M7, so all sources are accessible. This avoids
+      false hints for GLM/non-DeepSeek users.
+    status: resolved

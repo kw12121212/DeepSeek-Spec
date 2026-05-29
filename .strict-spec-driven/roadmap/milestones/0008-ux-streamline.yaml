@@ -38,7 +38,7 @@ risks:
     Fuzzy fallback may still return unexpected results for very short inputs (1 char) — cap at min
     length 2
   - Desktop and dashboard QQ removal may leave orphaned settings UI — verify each platform builds
-status: proposed
+status: complete
 notes:
   - All four changes are independent and can be implemented in parallel
   - QQ removal is the highest-risk item due to cross-platform surface area

@@ -1,0 +1,60 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: remove-wizard
+sections:
+  Implementation:
+    extract-validator:
+      text: Extract validateDeepSeekApiKey from Wizard.tsx into src/cli/validate-api-key.ts
+      status: complete
+    remove-wizard-resolve:
+      text: >-
+        Remove 'setup' branch from resolveBareCommandMode in src/cli/resolve.ts — always return
+        'code'
+      status: complete
+    first-run-default-config:
+      text: >-
+        Add first-run logic in src/cli/index.ts: write default config with setupCompleted:true,
+        print API key hint if no key found
+      status: complete
+    simplify-setup-command:
+      text: Simplify /setup in src/cli/commands/setup.tsx to single API key prompt
+      status: complete
+    delete-wizard:
+      text: Delete src/cli/ui/Wizard.tsx
+      status: complete
+    clean-i18n:
+      text: >-
+        Remove wizard.* i18n keys from EN.ts, zh-CN.ts, JA.ts, de.ts, ru.ts and types.ts; add
+        setup.hint key
+      status: complete
+  Testing:
+    update-bare-routing-test:
+      text: Update tests/cli-bare-routing.test.ts to assert 'code' on first run (no 'setup' return)
+      status: complete
+    delete-wizard-test:
+      text: Delete tests/wizard.test.tsx (move validateApiKey tests to new test file if needed)
+      status: complete
+    add-first-run-tests:
+      text: Add tests for first-run default config write and API key hint behavior
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

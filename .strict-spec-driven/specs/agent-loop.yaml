@@ -148,6 +148,28 @@ requirements:
         - GIVEN: user types a slash command prefix of 2+ characters that has no prefix match
         - WHEN: the autocomplete suggestions are computed
         - THEN: fuzzy-matched commands are included, sorted by score, after any prefix matches
+  first-run-default-config:
+    strength: MUST
+    statement: >-
+      On first run when setupCompleted is absent, the system MUST write a default config with
+      setupCompleted:true and print a non-blocking API key hint if no key is found in env or config
+    scenarios:
+      first-run-defaults:
+        - GIVEN: a fresh install with no config file
+        - WHEN: the CLI starts and setupCompleted is absent
+        - THEN: >-
+            default config is written with setupCompleted:true and a one-line hint is printed if no
+            API key is found
+  no-wizard-mode:
+    strength: MUST
+    statement: >-
+      resolveBareCommandMode MUST always return 'code' and never return 'setup', regardless of
+      first-run state
+    scenarios:
+      always-code-mode:
+        - GIVEN: any startup state including first run
+        - WHEN: resolveBareCommandMode is called
+        - THEN: it returns 'code' without entering a wizard flow
 mapping:
   implementation:
     - src/loop/dispatch.ts

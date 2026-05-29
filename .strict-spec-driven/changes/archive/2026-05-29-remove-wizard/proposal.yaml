@@ -1,0 +1,32 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: remove-wizard
+  status: proposed
+summary:
+  what:
+    - >-
+      Remove the auto-triggered first-run wizard. On first run, write default config and print a
+      hint. Keep /setup as a simplified single-step API key prompt.
+  why:
+    - >-
+      The multi-step wizard adds friction to first-run onboarding. A default config + non-blocking
+      hint is faster and less intrusive while still guiding new users to set their API key.
+scope:
+  in:
+    - >-
+      src/cli/resolve.ts, src/cli/index.ts, src/cli/commands/setup.tsx, src/cli/ui/Wizard.tsx,
+      src/i18n/*
+  out:
+    - >-
+      Default config written on first run, non-blocking API key hint printed, Wizard.tsx deleted,
+      /setup simplified to single API key step, wizard i18n keys removed
+unchanged_behavior:
+  - >-
+    Agent loop, tool dispatch, provider logic, all other CLI commands, existing configs with
+    setupCompleted:true
+roadmap:
+  milestone: 0008-ux-streamline
+  planned_change: remove-wizard

@@ -121,14 +121,15 @@ describe("bare CLI routing", () => {
     expect(codeCommand).not.toHaveBeenCalled();
   });
 
-  it("keeps first-run bare reasonix on the setup wizard", async () => {
+  it("routes first-run bare reasonix to code mode (no wizard)", async () => {
     writeConfig({ setupCompleted: false }, join(home, ".reasonix", "config.json"));
     mkdirSync(join(cwd, ".git"));
 
     await importCli([]);
 
-    await vi.waitFor(() => expect(setupCommand).toHaveBeenCalledWith({ forceKeyStep: true }));
-    expect(codeCommand).not.toHaveBeenCalled();
-    expect(chatCommand).not.toHaveBeenCalled();
+    await vi.waitFor(() =>
+      expect(codeCommand).toHaveBeenCalledWith({ dir: cwd, forceResume: false, noMouse: false }),
+    );
+    expect(setupCommand).not.toHaveBeenCalled();
   });
 });

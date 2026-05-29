@@ -1,0 +1,38 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: agent-loop
+mapping:
+  implementation:
+    - src/cli/index.ts,src/cli/resolve.ts
+    - src/cli/resolve.ts
+  tests:
+    - tests/cli-bare-routing.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    first-run-default-config:
+      strength: MUST
+      statement: >-
+        On first run when setupCompleted is absent, the system MUST write a default config with
+        setupCompleted:true and print a non-blocking API key hint if no key is found in env or
+        config
+      scenarios:
+        first-run-defaults:
+          - GIVEN: a fresh install with no config file
+          - WHEN: the CLI starts and setupCompleted is absent
+          - THEN: >-
+              default config is written with setupCompleted:true and a one-line hint is printed if
+              no API key is found
+    no-wizard-mode:
+      strength: MUST
+      statement: >-
+        resolveBareCommandMode MUST always return 'code' and never return 'setup', regardless of
+        first-run state
+      scenarios:
+        always-code-mode:
+          - GIVEN: any startup state including first run
+          - WHEN: resolveBareCommandMode is called
+          - THEN: it returns 'code' without entering a wizard flow
+  REMOVED: {}

@@ -329,10 +329,8 @@ export interface TranslationSchema {
       [key: string]: string;
     };
   };
-  wizard: {
-    languageTitle: string;
-    languageSubtitle: string;
-    welcomeTitle: string;
+  setup: {
+    title: string;
     apiKeyPrompt: string;
     apiKeyGetOne: string;
     apiKeySavedLocally: string;
@@ -342,39 +340,10 @@ export interface TranslationSchema {
     apiKeyRejected: string;
     apiKeyCheckFailed: string;
     apiKeyPreview: string;
-    mcpTitle: string;
-    mcpUserArgsHint: string;
-    mcpFooterMulti: string;
-    mcpArgsTitle: string;
-    mcpArgsDirMissing: string;
-    mcpArgsDirCreateHint: string;
-    mcpArgsDirCreateFailed: string;
-    mcpArgsRequiredParam: string;
-    mcpArgsEmpty: string;
-    mcpArgsNotADir: string;
-    themeTitle: string;
-    themeSubtitle: string;
-    themeSampleHeading: string;
-    themeFooter: string;
-    themeCaption: Record<string, string>;
-    reviewTitle: string;
-    reviewLabelApiKey: string;
-    reviewLabelLanguage: string;
-    reviewLabelTheme: string;
-    reviewLabelMcp: string;
-    reviewMcpNone: string;
-    reviewMcpServers: string;
-    reviewSavesTo: string;
-    reviewSaveError: string;
-    reviewFooter: string;
     savedTitle: string;
-    savedShellHint: string;
     savedFooter: string;
-    selectFooter: string;
-    stepCounter: string;
-    exitHint: string;
-    apiKeyPlaceholder: string;
-    themeSampleReasoning: string;
+    footer: string;
+    hint: string;
   };
   themePicker: {
     header: string;
