@@ -3,15 +3,15 @@
 (function () {
   "use strict";
 
-  var R = window.Reasonix;
+  var R = window.DeepSeekSpec;
   if (!R) return;
 
   var en = {
     "arch.badge": "Cache · Repair · Cost · Modules",
-    "arch.title.line1": "Reasonix Architecture",
+    "arch.title.line1": "DeepSeek-Spec Architecture",
     "arch.title.line2": "how it works under the hood",
     "arch.sub":
-      "Reasonix is <strong>opinionated, not general</strong>. Every abstraction is justified by a DeepSeek-specific behavior or economic property. The product north star: a coding agent that stays cheap enough to leave on.",
+      "DeepSeek-Spec is <strong>opinionated, not general</strong>. Every abstraction is justified by a DeepSeek-specific behavior or economic property. The product north star: a coding agent that stays cheap enough to leave on.",
 
     "arch.toc.title": "On this page",
     "arch.toc.philosophy": "Design philosophy",
@@ -32,7 +32,7 @@
 
     "ph.title": "Design philosophy",
     "ph.body1":
-      "Reasonix is <strong>opinionated, not general</strong>. Every abstraction is justified by a DeepSeek-specific behavior or economic property. If it's generic, we don't ship it.",
+      "DeepSeek-Spec is <strong>opinionated, not general</strong>. Every abstraction is justified by a DeepSeek-specific behavior or economic property. If it's generic, we don't ship it.",
     "ph.body2":
       "The product north star: <strong>coding agent that stays cheap enough to leave on</strong>. A tool that quietly burns $200/month on a background project is one nobody uses. Every subsystem below is answerable to that goal.",
 
@@ -128,10 +128,10 @@
 
   var zh = {
     "arch.badge": "缓存 · 修复 · 成本 · 模块",
-    "arch.title.line1": "Reasonix 架构",
+    "arch.title.line1": "DeepSeek-Spec 架构",
     "arch.title.line2": "底层原理详解",
     "arch.sub":
-      "Reasonix <strong>有明确取舍，不追求通用</strong>。每一个抽象都有对应的 DeepSeek 特有行为或经济特性作为依据。产品北极星：一个便宜到可以一直挂着跑的编程 Agent。",
+      "DeepSeek-Spec <strong>有明确取舍，不追求通用</strong>。每一个抽象都有对应的 DeepSeek 特有行为或经济特性作为依据。产品北极星：一个便宜到可以一直挂着跑的编程 Agent。",
 
     "arch.toc.title": "本页目录",
     "arch.toc.philosophy": "设计哲学",
@@ -152,7 +152,7 @@
 
     "ph.title": "设计哲学",
     "ph.body1":
-      "Reasonix <strong>有明确取舍，不追求通用</strong>。每一个抽象都有对应的 DeepSeek 特有行为或经济特性作为依据。不通用的，就不加进来。",
+      "DeepSeek-Spec <strong>有明确取舍，不追求通用</strong>。每一个抽象都有对应的 DeepSeek 特有行为或经济特性作为依据。不通用的，就不加进来。",
     "ph.body2":
       "产品北极星：<strong>便宜到可以一直挂着跑的编程 Agent</strong>。一个在后台项目上悄悄烧掉 $200/月的工具没人会用。以下每一个子系统都要对这个目标负责。",
 

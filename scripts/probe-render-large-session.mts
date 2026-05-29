@@ -8,7 +8,7 @@
  *     (or doesn't) under sustained parent re-render.
  */
 
-process.env.REASONIX_TRACE_RENDERS = "1";
+process.env.DSPEC_TRACE_RENDERS = "1";
 // Silences react-test-renderer's act() warning; harmless outside a test framework.
 (globalThis as Record<string, unknown>).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -30,7 +30,7 @@ const TICKS = Number(process.env.PROBE_TICKS ?? 200);
 
 if (!renderTraceEnabled) {
   console.error(
-    "[probe] REASONIX_TRACE_RENDERS did not activate before module-load. Re-run with the env var set in the shell.",
+    "[probe] DSPEC_TRACE_RENDERS did not activate before module-load. Re-run with the env var set in the shell.",
   );
   process.exit(1);
 }

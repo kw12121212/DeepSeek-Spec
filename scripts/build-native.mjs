@@ -92,8 +92,8 @@ function generateEmbedModule(files) {
   }
   lines.push("]);");
   lines.push("");
-  lines.push("if (!globalThis.__REASONIX_EMBEDDED) globalThis.__REASONIX_EMBEDDED = _loaders;");
-  lines.push("else for (const [k, v] of _loaders) globalThis.__REASONIX_EMBEDDED.set(k, v);");
+  lines.push("if (!globalThis.__DSPEC_EMBEDDED) globalThis.__DSPEC_EMBEDDED = _loaders;");
+  lines.push("else for (const [k, v] of _loaders) globalThis.__DSPEC_EMBEDDED.set(k, v);");
   lines.push("");
   return lines.join("\n");
 }

@@ -18,7 +18,7 @@ What you expected to happen.
 Steps or minimal code that reproduces it.
 
 **Environment**
-- Reasonix version (`reasonix --version`):
+- DeepSeek-Spec version (`dspec --version`):
 - Node version (`node --version`):
 - OS (Windows 11 / macOS 14 / Ubuntu 24.04 / …):
 - Shell (bash, zsh, fish, PowerShell 7, PowerShell 5.1, cmd, …):
@@ -27,4 +27,4 @@ Steps or minimal code that reproduces it.
 
 **Logs / transcript**
 If using the CLI, attach the relevant chunk of `--transcript`, or run
-`reasonix doctor` and paste the output.
+`dspec doctor` and paste the output.

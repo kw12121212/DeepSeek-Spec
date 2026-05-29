@@ -1,0 +1,46 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: final-audit
+sections:
+  Implementation:
+    grep-repo-sweep:
+      text: >
+        Grep the entire repo for 'reasonix' (case-insensitive) across all source, config, doc, and
+        script files. Exclude node_modules/, dist/, .git/. Document all matches.
+      status: complete
+    fix-stragglers:
+      text: >
+        Fix any stale 'reasonix' references found in the grep sweep that are not intentional
+        historical/descriptive references in .strict-spec-driven/ roadmap and spec verification
+        criteria.
+      status: complete
+    fix-telemetry-spec:
+      text: >
+        Update telemetry.yaml spec: change '~/.reasonix/usage.jsonl' to '~/.dspec/usage.jsonl' in
+        the usage-log-append requirement.
+      status: complete
+  Testing:
+    run-verify:
+      text: Run full project regression (lint + typecheck + test + comment-policy).
+      status: complete
+      command: bun run verify
+    run-build:
+      text: Run production build.
+      status: complete
+      command: bun run build
+    check-native-binary:
+      text: >
+        Build native binary and verify it is named 'dspec', --version prints 'dspec x.y.z', and
+        --help shows DeepSeek-Spec branding.
+      status: complete
+  Verification:
+    verify-scope:
+      text: >-
+        Confirm zero stale 'reasonix' references remain outside intentional roadmap/spec
+        descriptions.
+      status: complete
+testing_gates:
+  validation_task: run-verify
+  unit_test_task: run-verify

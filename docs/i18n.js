@@ -1,11 +1,11 @@
-// Reasonix landing — i18n auto-switch (en / zh).
+// DeepSeek-Spec landing — i18n auto-switch (en / zh).
 // Detection precedence: ?lang=xx → localStorage → navigator.language → "en".
 // Falls back gracefully when localStorage is unavailable (private mode, etc).
 
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "reasonix.lang";
+  const STORAGE_KEY = "dspec.lang";
   const DEFAULT_LANG = "en";
   const SUPPORTED = ["en", "zh"];
 
@@ -41,7 +41,7 @@
         "▸ Found it. findByEmail uses === directly. Switch to lowercase normalization.",
       "term.pending": "▸ 1 pending edit · /apply to write · /discard to drop",
 
-      "why.title": "Why Reasonix",
+      "why.title": "Why DeepSeek-Spec",
       "why.sub":
         "The loop is organized around four architectural pillars. Each one solves a problem generic agent frameworks don't even see — because they were designed for a different cache mechanic.",
       "why.cache.title": "Cache-first loop",
@@ -103,7 +103,7 @@
         "Shell commands fire on lifecycle events. Drop-in skill packs spawn sub-agents. Project memory the agent reads on every turn.",
       "feat.search.title": "Semantic search",
       "feat.search.body":
-        "<code>reasonix index</code> builds an embedding index your agent can query. Local Ollama or DeepSeek-hosted embeddings.",
+        "<code>dspec index</code> builds an embedding index your agent can query. Local Ollama or DeepSeek-hosted embeddings.",
       "feat.ckpt.title": "Auto-checkpoints",
       "feat.ckpt.body":
         "Cursor-style session-scoped rollback for AI edits. Never pollutes git history; the checkpoint stack is yours alone.",
@@ -112,14 +112,14 @@
         "Switch reasoning depth per turn. <code>max</code> for the gnarly, <code>low</code> for routine. Slash command and CLI flag.",
       "feat.replay.title": "Transcript replay",
       "feat.replay.body":
-        "<code>reasonix replay</code> plays a recorded session back through the renderer — useful for bug reports, demos, and audits.",
+        "<code>dspec replay</code> plays a recorded session back through the renderer — useful for bug reports, demos, and audits.",
       "feat.events.title": "Event log",
       "feat.events.body":
-        "<code>events.jsonl</code> sidecar with reducers and a <code>reasonix events</code> CLI. Build dashboards, audits, or your own analytics.",
+        "<code>events.jsonl</code> sidecar with reducers and a <code>dspec events</code> CLI. Build dashboards, audits, or your own analytics.",
 
       "conf.title": "Configure in five minutes",
       "conf.sub":
-        "One JSON file at <code>~/.reasonix/config.json</code>, plus per-project overrides under <code>.reasonix/</code>. Point. Click. Wire in your stack.",
+        "One JSON file at <code>~/.dspec/config.json</code>, plus per-project overrides under <code>.dspec/</code>. Point. Click. Wire in your stack.",
       "conf.read": "Read →",
       "conf.mcp.title": "MCP servers",
       "conf.mcp.body":
@@ -161,11 +161,11 @@
       "cli.f.session": "named session",
       "cli.f.resume": "pick up the latest session for this workspace",
       "cli.f.new": "force a fresh session, preserve old",
-      "cli.f.noconf": "ignore ~/.reasonix/config.json (CI)",
+      "cli.f.noconf": "ignore ~/.dspec/config.json (CI)",
 
       "comm.title": "Built by the community",
       "comm.sub":
-        "Reasonix is open source and community-developed. Every avatar on the wall below is a real PR that shipped — not a sponsorship slot.",
+        "DeepSeek-Spec is open source and community-developed. Every avatar on the wall below is a real PR that shipped — not a sponsorship slot.",
       "comm.gfi": "good first issue →",
       "comm.disc": "Discussions",
       "comm.contrib": "Contributing guide",
@@ -188,7 +188,7 @@
       "foot.issues": "Issues",
       "foot.discuss": "Discussions",
       "foot.contributors": "Contributors",
-      "foot.copyright": "© 2026 Reasonix · MIT License",
+      "foot.copyright": "© 2026 DeepSeek-Spec · MIT License",
     },
 
     zh: {
@@ -222,7 +222,7 @@
         "▸ 找到了。findByEmail 直接用 === 比对。改成小写规范化并补一条测试。",
       "term.pending": "▸ 1 处待应用编辑 · /apply 写入 · /discard 丢弃",
 
-      "why.title": "为什么选 Reasonix",
+      "why.title": "为什么选 DeepSeek-Spec",
       "why.sub":
         "整个循环围绕四根架构支柱组织。每一根解决的都是通用 agent 框架根本看不见的问题——因为它们是为另一种缓存机制设计的。",
       "why.cache.title": "缓存优先循环",
@@ -284,7 +284,7 @@
         "生命周期事件触发 shell 命令。drop-in 的 skill 包能拉子代理。每回合自动读入的项目级 memory。",
       "feat.search.title": "语义检索",
       "feat.search.body":
-        "<code>reasonix index</code> 构建 embedding 索引供 agent 查询。本地 Ollama 或 DeepSeek 托管 embedding 任选。",
+        "<code>dspec index</code> 构建 embedding 索引供 agent 查询。本地 Ollama 或 DeepSeek 托管 embedding 任选。",
       "feat.ckpt.title": "自动 checkpoint",
       "feat.ckpt.body":
         "Cursor 风格的会话级 AI 编辑回滚。不污染 git 历史；checkpoint 栈完全是你自己的。",
@@ -293,14 +293,14 @@
         "每回合切换 reasoning 深度。难活 <code>max</code>、日常 <code>low</code>。斜杠命令 + CLI flag 双入口。",
       "feat.replay.title": "Transcript 重放",
       "feat.replay.body":
-        "<code>reasonix replay</code> 把录制好的会话用渲染器重放一遍——bug 复现、演示、审计都好用。",
+        "<code>dspec replay</code> 把录制好的会话用渲染器重放一遍——bug 复现、演示、审计都好用。",
       "feat.events.title": "事件日志",
       "feat.events.body":
-        "<code>events.jsonl</code> 旁路日志，附带 reducer 和 <code>reasonix events</code> CLI。自己搭仪表盘、审计、分析都行。",
+        "<code>events.jsonl</code> 旁路日志，附带 reducer 和 <code>dspec events</code> CLI。自己搭仪表盘、审计、分析都行。",
 
       "conf.title": "五分钟配置完",
       "conf.sub":
-        "一个全局 JSON <code>~/.reasonix/config.json</code>，加上项目级 <code>.reasonix/</code> 下的覆盖。点几下，把你的工具链接进来。",
+        "一个全局 JSON <code>~/.dspec/config.json</code>，加上项目级 <code>.dspec/</code> 下的覆盖。点几下，把你的工具链接进来。",
       "conf.read": "阅读 →",
       "conf.mcp.title": "MCP 服务器",
       "conf.mcp.body":
@@ -342,11 +342,11 @@
       "cli.f.session": "命名会话",
       "cli.f.resume": "恢复本工作区的最近一个会话",
       "cli.f.new": "强制开新会话，旧会话保留",
-      "cli.f.noconf": "忽略 ~/.reasonix/config.json（CI 友好）",
+      "cli.f.noconf": "忽略 ~/.dspec/config.json（CI 友好）",
 
       "comm.title": "由社区共建",
       "comm.sub":
-        "Reasonix 是开源、社区共建的项目。下面墙上每一个头像都对应一次真实合并的 PR——不是赞助位。",
+        "DeepSeek-Spec 是开源、社区共建的项目。下面墙上每一个头像都对应一次真实合并的 PR——不是赞助位。",
       "comm.gfi": "good first issue →",
       "comm.disc": "Discussions",
       "comm.contrib": "贡献指南",
@@ -356,7 +356,7 @@
       "ctab.gh": "GitHub 仓库 →",
       "ctab.npm": "npm 包",
 
-      "foot.tag": "Reasonix 只做 DeepSeek，做到底。",
+      "foot.tag": "DeepSeek-Spec 只做 DeepSeek，做到底。",
       "foot.col.project": "项目",
       "foot.col.docs": "文档",
       "foot.col.community": "社区",
@@ -369,7 +369,7 @@
       "foot.issues": "问题反馈",
       "foot.discuss": "讨论区",
       "foot.contributors": "贡献者",
-      "foot.copyright": "© 2026 Reasonix · MIT 协议",
+      "foot.copyright": "© 2026 DeepSeek-Spec · MIT 协议",
     },
   };
 
@@ -419,7 +419,7 @@
   // default. Only places this constant matters: the user is offline AND
   // visits the site for the first time. Bumping it occasionally on
   // major version cuts is fine; the npm fetch handles everything else.
-  const VERSION_STORAGE_KEY = "reasonix.version";
+  const VERSION_STORAGE_KEY = "dspec.version";
   const VERSION_FALLBACK = "0.26";
   const versionListeners = [];
   let currentVersion = VERSION_FALLBACK;
@@ -440,7 +440,7 @@
 
   async function loadVersion() {
     try {
-      const r = await fetch("https://registry.npmjs.org/reasonix/latest", {
+      const r = await fetch("https://registry.npmjs.org/dspec/latest", {
         cache: "no-cache",
       });
       if (!r.ok) return;
@@ -490,21 +490,21 @@
   }
 
   // Public API for sibling scripts (term-anim.js).
-  window.Reasonix = window.Reasonix || {};
-  window.Reasonix.t = function (key) {
+  window.DSpec = window.DSpec || {};
+  window.DSpec.t = function (key) {
     const dict = translations[currentLang] || translations[DEFAULT_LANG];
     return dict[key];
   };
-  window.Reasonix.lang = function () {
+  window.DSpec.lang = function () {
     return currentLang;
   };
-  window.Reasonix.onLangChange = function (fn) {
+  window.DSpec.onLangChange = function (fn) {
     if (typeof fn === "function") langListeners.push(fn);
   };
-  window.Reasonix.version = function () {
+  window.DSpec.version = function () {
     return currentVersion;
   };
-  window.Reasonix.onVersionChange = function (fn) {
+  window.DSpec.onVersionChange = function (fn) {
     if (typeof fn === "function") versionListeners.push(fn);
   };
 

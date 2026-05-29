@@ -27,7 +27,7 @@ labels: bug, rendering
 
 **Terminal — the important part**
 
-Where exactly are you running `reasonix`?
+Where exactly are you running `dspec`?
 
 - [ ] **VSCode** integrated terminal — VSCode version: `?`
 - [ ] **Cursor** integrated terminal — Cursor version: `?`
@@ -50,7 +50,7 @@ issue, and paste the output here:
 <details><summary>PowerShell (Windows)</summary>
 
 ```powershell
-reasonix --version; node --version
+dspec --version; node --version
 $PSVersionTable.PSVersion.ToString()
 [System.Environment]::OSVersion.VersionString
 "TERM=$env:TERM"
@@ -67,7 +67,7 @@ $PSVersionTable.PSVersion.ToString()
 <details><summary>bash / zsh (macOS / Linux / WSL / Git Bash)</summary>
 
 ```bash
-reasonix --version; node --version
+dspec --version; node --version
 uname -a
 echo "TERM=$TERM"
 echo "TERM_PROGRAM=$TERM_PROGRAM"

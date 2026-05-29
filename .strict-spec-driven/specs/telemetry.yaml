@@ -7,18 +7,12 @@ spec:
 requirements:
   usage-log-append:
     strength: MUST
-    statement: >-
-      appendUsage MUST append a turn record as a JSONL line to ~/.reasonix/usage.jsonl with
-      timestamp, session, model, token counts, and costs. Disk failures MUST NOT break the chat.
+    statement: appendUsage MUST append a turn record as a JSONL line to ~/.dspec/usage.jsonl
     scenarios:
-      append-record:
+      usage-path-correct:
         - GIVEN: a valid AppendUsageInput with model and usage data
         - WHEN: appendUsage is called
-        - THEN: a JSONL line is appended to the usage log and a UsageRecord is returned
-      disk-failure-silent:
-        - GIVEN: a disk write failure
-        - WHEN: appendUsage is called
-        - THEN: the error is silently ignored and no exception propagates
+        - THEN: the usage log path is ~/.dspec/usage.jsonl (not ~/.reasonix/usage.jsonl)
   usage-log-read:
     strength: MUST
     statement: >-

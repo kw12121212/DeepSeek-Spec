@@ -6,7 +6,7 @@
  * actually sustains high cache hit on a long-ish session, not just
  * that the API-level append-vs-mutate primitive behaves as expected.
  *
- * Run: REASONIX_LOG_LEVEL=ERROR npx tsx scripts/probe-loop-cache.mts
+ * Run: DSPEC_LOG_LEVEL=ERROR npx tsx scripts/probe-loop-cache.mts
  * Reads DEEPSEEK_API_KEY from .env.testbak.
  */
 

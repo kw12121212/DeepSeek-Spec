@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Reasonix · Agent TUI · Terminal-native design</title>
+<title>DeepSeek-Spec · Agent TUI · Terminal-native design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -306,7 +306,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 <div class="page">
 
   <aside class="toc">
-    <h1><span class="dot">◈</span>Reasonix · TUI</h1>
+    <h1><span class="dot">◈</span>DeepSeek-Spec · TUI</h1>
     <div class="toc-section">Foundations</div>
     <ul>
       <li><a href="#vision">Vision</a></li>
@@ -475,7 +475,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 
 <div class="mock shell">
 <pre class="body">
-  <span class="fg4">◈ session-7  ·  main  ·  ~/projects/reasonix  ·  deepseek-chat</span>
+  <span class="fg4">◈ session-7  ·  main  ·  ~/projects/dspec  ·  deepseek-chat</span>
 
     <span class="pill sec-user">&nbsp;YOU&nbsp;</span>  <span class="fg4">· just now</span>
     <span class="anchor fg3">↳</span> <span class="fg1">refactor the SKIP_DIRS list out of chunker.ts so directory_tree</span>
@@ -738,7 +738,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
     <div class="tag">QUICK · <span class="cls">.tool .quick</span> · single-row, no body — fast read-only ops</div>
 <pre class="mock">  <span class="info">▎</span> <span class="pill sec-tool">&nbsp;TOOL&nbsp;</span>  <span class="b info">read_file</span>  <span class="pill path">&nbsp;src/cli/ui/App.tsx&nbsp;</span>          <span class="fg3">0.08s · 1224 lines · </span><span class="ok">ok</span>
 </pre>
-    <p class="lede">Default state for fast read-only tools (read_file, search_content, directory_tree). No body, no recall — the result is summarized in the metadata strip. If the user wants the file content, the file's at the path; reasonix won't waste rows redrawing it.</p>
+    <p class="lede">Default state for fast read-only tools (read_file, search_content, directory_tree). No body, no recall — the result is summarized in the metadata strip. If the user wants the file content, the file's at the path; dspec won't waste rows redrawing it.</p>
 
     <div class="tag">PREVIEW · <span class="cls">.tool .preview</span> · short body when output ≤ 6 lines and worth surfacing</div>
 <pre class="mock">  <span class="info">▎</span> <span class="pill sec-tool">&nbsp;TOOL&nbsp;</span>  <span class="b info">search_content</span>  <span class="pill path">&nbsp;"stormBreaker"&nbsp;</span>            <span class="fg3">0.21s · 4 hits · </span><span class="ok">ok</span>
@@ -957,7 +957,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 <pre class="mock">  <span class="fg3">▎</span> <span class="b fg2">⌑ Context</span>  <span class="fg3">·  4 user · 2 feedback · 1 reference</span>             <span class="fg3">~1.2K tok</span>  <span class="fg4">▾</span>
   <span class="fg3">▎</span>
   <span class="fg3">▎</span>   <span class="fg4">USER</span>
-  <span class="fg3">▎</span>   <span class="fg3">◇</span> <span class="fg2">Reasonix maintainer · prefers terse Mandarin replies</span>
+  <span class="fg3">▎</span>   <span class="fg3">◇</span> <span class="fg2">DeepSeek-Spec maintainer · prefers terse Mandarin replies</span>
   <span class="fg3">▎</span>   <span class="fg3">◇</span> <span class="fg2">Windows Terminal + PowerShell · CNY/RMB balance</span>
   <span class="fg3">▎</span>
   <span class="fg3">▎</span>   <span class="fg4">FEEDBACK</span>
@@ -1130,7 +1130,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 
     <h3 id="ch-record">Recording<span class="desc">REC pill replaces the mode pill while a recording is being written</span></h3>
 <pre class="mock">  <span class="fg4">─────────────────────────────────────────────────────────────────────────────</span>
-  <span class="err b">●REC</span> <span class="err">1.4 MB · 142 evt</span>   <span class="fg3">·</span>   <span class="fg2">→ ~/.reasonix/recordings/2026-04-29.jsonl</span>   <span class="fg3">·</span>   <span class="fg4">^R stop  ·  ^P pause</span>
+  <span class="err b">●REC</span> <span class="err">1.4 MB · 142 evt</span>   <span class="fg3">·</span>   <span class="fg2">→ ~/.dspec/recordings/2026-04-29.jsonl</span>   <span class="fg3">·</span>   <span class="fg4">^R stop  ·  ^P pause</span>
 </pre>
   </section>
 
@@ -1201,7 +1201,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
     <div class="tag">CARD · <span class="cls">.modal.workspace</span></div>
 <pre class="mock"><span class="band warn"> <span class="b warn">?</span>  <span class="b fg0">Switch workspace</span>                                                                    </span>
 
-  <span class="fg3">current</span>   <span class="b fg1">~/projects/reasonix</span>
+  <span class="fg3">current</span>   <span class="b fg1">~/projects/dspec</span>
   <span class="fg3">new    </span>   <span class="b warn">~/work/customer-portal</span>
 
   <span class="fg2">Switching ends the current session. Plan progress (3 of 7 done) will be</span>
@@ -1221,7 +1221,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 
       <span class="b fg0">$ npm run verify</span>
 
-  <span class="fg3">cwd     </span>   <span class="fg1">~/projects/reasonix</span>
+  <span class="fg3">cwd     </span>   <span class="fg1">~/projects/dspec</span>
   <span class="fg3">timeout </span>   <span class="fg1">120s</span>
 
   <span class="b warn">▸</span> <span class="b fg0">allow once</span>      <span class="fg3">run this command, ask again next time</span>
@@ -1286,7 +1286,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
     <div class="tag">SCREEN · <span class="cls">.welcome</span></div>
 <pre class="mock">                  <span class="brand">╔═══════════════════════════════════╗</span>
                   <span class="brand">║</span>                                   <span class="brand">║</span>
-                  <span class="brand">║</span>            <span class="b brand">◈  REASONIX</span>            <span class="brand">║</span>
+                  <span class="brand">║</span>            <span class="b brand">◈  DeepSeek-Spec</span>            <span class="brand">║</span>
                   <span class="brand">║</span>                                   <span class="brand">║</span>
                   <span class="brand">║</span>      <span class="fg2">DeepSeek-native coding agent</span> <span class="brand">║</span>
                   <span class="brand">║</span>      <span class="fg3">cache-first · flash-first</span>    <span class="brand">║</span>
@@ -1298,9 +1298,9 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
                 <span class="fg3">/help</span>   <span class="fg4">·</span>   <span class="fg3">/init</span>   <span class="fg4">·</span>   <span class="fg3">/memory</span>   <span class="fg4">·</span>   <span class="fg3">/cost</span>
 </pre>
 
-    <h3 id="o-setup">Setup wizard<span class="desc">launched on first run or via `reasonix setup`; key/value rows, ↑↓ between fields</span></h3>
+    <h3 id="o-setup">Setup wizard<span class="desc">launched on first run or via `dspec setup`; key/value rows, ↑↓ between fields</span></h3>
     <div class="tag">SCREEN · <span class="cls">.setup</span></div>
-<pre class="mock"> <span class="b brand">◈ REASONIX · setup</span>
+<pre class="mock"> <span class="b brand">◈ DeepSeek-Spec · setup</span>
 
   <span class="fg3">Provider</span>           <span class="brand">▸</span> <span class="b fg0">DeepSeek</span>      <span class="fg2">Anthropic</span>      <span class="fg2">OpenAI</span>      <span class="fg4">↩ pick</span>
 
@@ -1312,9 +1312,9 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 
   <span class="fg3">Telemetry</span>          <span class="brand">▸</span> <span class="b fg0">on</span> <span class="fg2">(anonymous)</span>     <span class="fg2">off</span>
 
-  <span class="fg3">Workspace root</span>       <span class="b fg1">~/projects/reasonix</span>
+  <span class="fg3">Workspace root</span>       <span class="b fg1">~/projects/dspec</span>
 
-  <span class="fg3">Index database</span>       <span class="ok">✓</span> <span class="fg2">~/.reasonix/index/reasonix.db</span>  <span class="fg3">12 days fresh</span>
+  <span class="fg3">Index database</span>       <span class="ok">✓</span> <span class="fg2">~/.dspec/index/dspec.db</span>  <span class="fg3">12 days fresh</span>
 
   ─────────────────────────────────────────────────────────────────────────
   <span class="fg4">↑↓ field  ·  ⏎ next  ·  esc back  ·  ctrl-s save &amp; exit</span>
@@ -1322,7 +1322,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 
     <h3 id="o-session">Session picker<span class="desc">resume an old session or start fresh; sorted newest-first</span></h3>
     <div class="tag">SCREEN · <span class="cls">.session-picker</span></div>
-<pre class="mock"> <span class="b brand">◈ REASONIX · pick a session</span>  <span class="fg3">·</span>  <span class="fg2">~/projects/reasonix</span>
+<pre class="mock"> <span class="b brand">◈ DSPEC · pick a session</span>  <span class="fg3">·</span>  <span class="fg2">~/projects/dspec</span>
 
   <span class="brand">▸</span> <span class="b fg0">session-7</span>  <span class="fg3">·</span> <span class="fg2">main</span> <span class="fg3">·</span> <span class="fg1">refactor exclude config</span>             <span class="fg3">2 min ago</span>   <span class="fg2">18 turns · $0.18</span>
     <span class="fg2">session-6</span>  <span class="fg3">·</span> <span class="fg2">main</span> <span class="fg3">·</span> <span class="fg2">TUI redesign</span>                        <span class="fg3">yesterday</span>   <span class="fg2">44 turns · $0.62</span>
@@ -1342,7 +1342,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 
     <h3 id="r-replay">Replay timeline<span class="desc">read-only; bottom strip controls playback like a video scrubber</span></h3>
     <div class="tag">SCREEN · <span class="cls">.replay</span></div>
-<pre class="mock"> <span class="b brand">◈ REASONIX · replay</span>  <span class="fg3">·</span>  <span class="fg2">session-6 · main · "TUI redesign"</span>      <span class="fg3">⏸ 12 / 44 turns</span>
+<pre class="mock"> <span class="b brand">◈ DSPEC · replay</span>  <span class="fg3">·</span>  <span class="fg2">session-6 · main · "TUI redesign"</span>      <span class="fg3">⏸ 12 / 44 turns</span>
 
   <span class="fg3">◇</span> <span class="b fg2">you</span>  <span class="fg4">· 14:22:11</span>
     <span class="fg1">abandon fullscreen mode, switch to inline scrollback</span>
@@ -1367,7 +1367,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 
 
   <span class="fg4">─────────────────────────────────────────────────────────────────────────────</span>
-  <span class="err b">●REC</span> <span class="err">1.4 MB · 142 evt</span>   <span class="fg3">·</span>   <span class="fg2">→ ~/.reasonix/recordings/2026-04-29.jsonl</span>   <span class="fg3">·</span>   <span class="fg4">^R stop · ^P pause</span>
+  <span class="err b">●REC</span> <span class="err">1.4 MB · 142 evt</span>   <span class="fg3">·</span>   <span class="fg2">→ ~/.dspec/recordings/2026-04-29.jsonl</span>   <span class="fg3">·</span>   <span class="fg4">^R stop · ^P pause</span>
 
 <span class="b brand">›</span> <span class="fg3">type a message · / for commands · @ to attach a file</span>
 </pre>
@@ -1393,10 +1393,10 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
   <!-- ════════════════════════════ MCP ════════════════════════════ -->
   <section class="section" id="mcp">
     <h2><span class="num">24</span>MCP · server browser</h2>
-    <p class="lede">Reasonix talks to MCP servers (notion / linear / github / fs / …). The browser is a focused panel — list of attached servers, their tool surface, last health-check.</p>
+    <p class="lede">DeepSeek-Spec talks to MCP servers (notion / linear / github / fs / …). The browser is a focused panel — list of attached servers, their tool surface, last health-check.</p>
 
     <div class="tag">SCREEN · <span class="cls">.mcp-browse</span></div>
-<pre class="mock" id="mcp-browse"> <span class="b brand">◈ MCP browser</span>  <span class="fg3">·</span>  <span class="fg2">~/.reasonix/mcp.json · 4 servers</span>
+<pre class="mock" id="mcp-browse"> <span class="b brand">◈ MCP browser</span>  <span class="fg3">·</span>  <span class="fg2">~/.dspec/mcp.json · 4 servers</span>
 
   <span class="brand">▸</span>  <span class="b fg0">notion</span>          <span class="ok">●</span> <span class="fg2">healthy · 142ms</span>      <span class="fg3">12 tools · 8 resources · 0 prompts</span>
                      <span class="fg3">tools/list</span>      <span class="fg3">tools/call</span>     <span class="fg3">resources/list</span>     <span class="fg3">prompts/list</span>
@@ -1558,7 +1558,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 <pre class="mock">  <span class="fg3">▎</span> <span class="b fg2">⌑ Memory</span>                                      <span class="fg3">7 entries · ~2.1K tok</span>  <span class="fg4">▾</span>
   <span class="fg3">▎</span>
   <span class="fg3">▎</span>   <span class="fg4">USER (3)</span>
-  <span class="fg3">▎</span>   <span class="brand">▸</span> <span class="b fg0">Reasonix maintainer · prefers terse Mandarin replies</span>
+  <span class="fg3">▎</span>   <span class="brand">▸</span> <span class="b fg0">DeepSeek-Spec maintainer · prefers terse Mandarin replies</span>
   <span class="fg3">▎</span>     <span class="fg2">Windows Terminal + PowerShell · CNY/RMB balance</span>
   <span class="fg3">▎</span>     <span class="fg2">Internal checkpoints over git pollution</span>
   <span class="fg3">▎</span>
@@ -1582,7 +1582,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
   <span class="info">▎</span>   <span class="ok">✓</span>  <span class="b fg1">workspace          </span>  <span class="fg2">writable, in git, on main       </span>  <span class="ok">OK</span>
   <span class="info">▎</span>   <span class="ok">✓</span>  <span class="b fg1">CLAUDE.md          </span>  <span class="fg2">found, 132 lines                </span>  <span class="ok">OK</span>
   <span class="info">▎</span>   <span class="warn">⚠</span>  <span class="b fg1">index database     </span>  <span class="fg2">12 days stale, run </span><span class="b">/reindex</span>       <span class="warn">warn</span>
-  <span class="info">▎</span>   <span class="ok">✓</span>  <span class="b fg1">permissions        </span>  <span class="fg2">~/.reasonix readable + writable </span>  <span class="ok">OK</span>
+  <span class="info">▎</span>   <span class="ok">✓</span>  <span class="b fg1">permissions        </span>  <span class="fg2">~/.dspec readable + writable </span>  <span class="ok">OK</span>
 </pre>
   </section>
 
@@ -1658,7 +1658,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
     <h3 id="md-inline">Inline<span class="desc">styling that doesn't break the line</span></h3>
 <pre class="mock">  <span class="fg1">A normal sentence with </span><span class="b fg0">bold</span><span class="fg1"> and </span><span class="i fg1">italic</span><span class="fg1"> and </span><span class="b i fg0">both</span><span class="fg1"> mixed in.</span>
   <span class="fg1">Inline code looks like </span><span class="band ghost" style="margin:0;padding:0 6px;display:inline"><span class="fg0">stringWidth(s)</span></span><span class="fg1"> — bg-elev pad, fg-0.</span>
-  <span class="fg1">A link reads as </span><span class="brand u">jump to docs</span><span class="fg3"> (https://reasonix.dev/docs)</span><span class="fg1">.</span>
+  <span class="fg1">A link reads as </span><span class="brand u">jump to docs</span><span class="fg3"> (https://dspec.dev/docs)</span><span class="fg1">.</span>
   <span class="fg1">A file ref like </span><span class="brand u">src/cli/ui/App.tsx:142</span><span class="fg1"> is sky underline.</span>
   <span class="fg1">A keyboard hint: </span><span class="band ghost" style="margin:0;padding:0 6px;display:inline"><span class="fg0">⏎</span></span><span class="fg1"> </span><span class="band ghost" style="margin:0;padding:0 6px;display:inline"><span class="fg0">esc</span></span><span class="fg1"> — same chip style as inline code.</span>
 </pre>
@@ -1831,11 +1831,11 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
   <!-- ════════════════════════════ DiffApp ════════════════════════════ -->
   <section class="section" id="diffapp">
     <h2><span class="num">35</span>DiffApp · standalone CLI</h2>
-    <p class="lede">Invoked as <span class="b">reasonix diff &lt;file&gt;</span> — a one-shot terminal app that opens a SplitDiff card with a session intro at the top and a key hint at the bottom. No composer, no agent. Quits on <span class="b">q</span> / <span class="b">esc</span> / <span class="b">^c</span>.</p>
+    <p class="lede">Invoked as <span class="b">dspec diff &lt;file&gt;</span> — a one-shot terminal app that opens a SplitDiff card with a session intro at the top and a key hint at the bottom. No composer, no agent. Quits on <span class="b">q</span> / <span class="b">esc</span> / <span class="b">^c</span>.</p>
 
-<pre class="mock">  <span class="fg4">$ reasonix diff src/cli/ui/App.tsx</span>
+<pre class="mock">  <span class="fg4">$ dspec diff src/cli/ui/App.tsx</span>
 
-  <span class="fg4">◈ diff  ·  ~/projects/reasonix  ·  src/cli/ui/App.tsx  ·  HEAD → working</span>
+  <span class="fg4">◈ diff  ·  ~/projects/dspec  ·  src/cli/ui/App.tsx  ·  HEAD → working</span>
 
 
   <span class="ok">▎</span> <span class="ok b">± Compare</span>  <span class="fg2">src/cli/ui/App.tsx</span>                            <span class="ok">+12</span><span class="fg4"> / </span><span class="err">-47</span>     <span class="fg4">▾</span>
@@ -1877,7 +1877,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 <pre class="mock">  <span class="warn">▎</span> <span class="warn b">⚠ Rate limited</span>  <span class="fg2">·  retry in </span><span class="b warn">4</span><span class="fg2">s</span>                                          <span class="fg4">▾</span>
   <span class="warn">▎</span>
   <span class="warn">▎</span>   <span class="fg2">api.deepseek.com responded 429: 60 RPM exceeded</span>
-  <span class="warn">▎</span>   <span class="fg2">Reasonix will retry automatically with backoff. esc to cancel.</span>
+  <span class="warn">▎</span>   <span class="fg2">DeepSeek-Spec will retry automatically with backoff. esc to cancel.</span>
 </pre>
   </section>
 
@@ -1905,9 +1905,9 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
     <h2><span class="num">38</span>Session ops</h2>
     <p class="lede">One-line outputs from <span class="b">/fork</span>, <span class="b">/archive</span>, <span class="b">/resume</span>, <span class="b">/reset</span>. They land as a single inline row so the chain of session state changes is readable in scrollback.</p>
 
-<pre class="mock">  <span class="ok">◍</span> <span class="b fg1">Forked</span> <span class="fg2">session-7 → session-8</span>  <span class="fg3">from turn 12 · 142 events copied</span>      <span class="fg4">reasonix --session=session-8</span>
+<pre class="mock">  <span class="ok">◍</span> <span class="b fg1">Forked</span> <span class="fg2">session-7 → session-8</span>  <span class="fg3">from turn 12 · 142 events copied</span>      <span class="fg4">dspec --session=session-8</span>
 
-  <span class="brand">⌑</span> <span class="b fg1">Archived</span> <span class="fg2">session-7</span>            <span class="fg3">~/.reasonix/sessions/session-7.jsonl  ·  /resume to bring back</span>
+  <span class="brand">⌑</span> <span class="b fg1">Archived</span> <span class="fg2">session-7</span>            <span class="fg3">~/.dspec/sessions/session-7.jsonl  ·  /resume to bring back</span>
 
   <span class="brand">↺</span> <span class="b fg1">Resumed</span> <span class="fg2">session-7</span>             <span class="fg3">at turn 12 · 142 events replayed · plan reloaded</span>
 
@@ -1918,7 +1918,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
   <!-- ════════════════════════════ Dropped surfaces ════════════════════════════ -->
   <section class="section" id="dropped">
     <h2><span class="num">39</span>Dropped surfaces</h2>
-    <p class="lede">Things that <em>used to exist</em> in older Reasonix versions but don't fit the inline + bottom-pinned model. Listed here so the absence is intentional, not a TODO.</p>
+    <p class="lede">Things that <em>used to exist</em> in older DeepSeek-Spec versions but don't fit the inline + bottom-pinned model. Listed here so the absence is intentional, not a TODO.</p>
 
     <h3>File tree sidebar</h3>
     <p style="color:var(--fg-3);font-size:12px;margin:4px 0 12px;max-width:640px">A persistent sidebar requires alt-screen (otherwise it'd scroll away with content). Replaced by <span class="b">@</span> mention picker (§19) for picking files into a turn, and <span class="b">/files</span> slash command for an on-demand printable file list. Same job, no sticky chrome required.</p>
@@ -1927,7 +1927,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
     <p style="color:var(--fg-3);font-size:12px;margin:4px 0 12px;max-width:640px">Replaced by the bottom status row (§20). Anything that was on the top bar (mode pill / cost / cache / balance) now lives one row above the input — Ink can pin it, top-row positioning can't.</p>
 
     <h3>App-managed scroll viewport</h3>
-    <p style="color:var(--fg-3);font-size:12px;margin:4px 0 12px;max-width:640px">No more <span class="b">↑ 24  ▕───●─────▏  62%  ↓ 12</span> indicator. The terminal's native scrollback is the source of truth — wheel up, ⇧+drag to select, the OS handles it. Reasonix doesn't try to clip / paginate.</p>
+    <p style="color:var(--fg-3);font-size:12px;margin:4px 0 12px;max-width:640px">No more <span class="b">↑ 24  ▕───●─────▏  62%  ↓ 12</span> indicator. The terminal's native scrollback is the source of truth — wheel up, ⇧+drag to select, the OS handles it. DeepSeek-Spec doesn't try to clip / paginate.</p>
 
     <h3>Mouse-tracking modes</h3>
     <p style="color:var(--fg-3);font-size:12px;margin:4px 0 0;max-width:640px">No <span class="b">?1002h</span> / <span class="b">?1006h</span> button-event tracking. Without alt-screen there's no point — and disabling it lets the terminal's native selection (⇧+drag, double-click word, triple-click line) just work.</p>
@@ -2019,7 +2019,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
 </pre>
 
     <h3 id="ec-fatal">Fatal crash<span class="desc">unhandled exception in the agent loop — print the trace, offer /report, exit cleanly on ^c</span></h3>
-<pre class="mock"><span class="band err"> <span class="b err">✖</span>  <span class="b fg0">Reasonix crashed</span>  <span class="fg2">·  this is a bug, not your fault</span>                           </span>
+<pre class="mock"><span class="band err"> <span class="b err">✖</span>  <span class="b fg0">DeepSeek-Spec crashed</span>  <span class="fg2">·  this is a bug, not your fault</span>                           </span>
 
   <span class="b err">TypeError: Cannot read property 'then' of undefined</span>
       <span class="fg2">at App.tsx:142:18</span>
@@ -2027,7 +2027,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
       <span class="fg3">… 4 more frames hidden</span>
 
   <span class="fg2">The session log is preserved at:</span>
-    <span class="brand u">~/.reasonix/sessions/session-7.jsonl</span>
+    <span class="brand u">~/.dspec/sessions/session-7.jsonl</span>
 
   <span class="fg4">─────────────────────────────────────────────────────────────────────────────</span>
   <span class="b ok">[r] /report</span>  <span class="fg2">file an issue with the trace + last 10 events</span>
@@ -2156,7 +2156,7 @@ main { padding: 32px 48px 40px 32px; min-width: 0; }
   </section>
 
   <footer style="padding:48px 0 24px;color:var(--fg-4);font-size:11px;text-align:center;border-top:1px solid #14171e;margin-top:32px">
-    Reasonix · Agent TUI · terminal-faithful design v0.2 · everything on this page is renderable in JetBrains Mono / Cascadia Code with truecolor
+    DeepSeek-Spec · Agent TUI · terminal-faithful design v0.2 · everything on this page is renderable in JetBrains Mono / Cascadia Code with truecolor
   </footer>
 
   </main>

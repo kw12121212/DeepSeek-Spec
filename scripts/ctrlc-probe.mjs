@@ -1,5 +1,5 @@
 // Minimal Ctrl+C probe. Usage: node scripts/ctrlc-probe.mjs
-// Reproduces the exact stdin setup Reasonix uses, then logs every byte
+// Reproduces the exact stdin setup DeepSeek-Spec uses, then logs every byte
 // it sees and exits on \x03. Tells us whether the OS even delivers
 // Ctrl+C to a Node child on this terminal.
 

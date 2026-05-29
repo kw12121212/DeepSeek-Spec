@@ -32,7 +32,7 @@ loadDotenv("./.env.testbak");
 
 const KEY = process.env.DEEPSEEK_API_KEY;
 const BASE = process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek.com";
-const MODEL = process.env.REASONIX_CACHE_PROBE_MODEL ?? "deepseek-v4-flash";
+const MODEL = process.env.DSPEC_CACHE_PROBE_MODEL ?? "deepseek-v4-flash";
 
 if (!KEY) {
   throw new Error("DEEPSEEK_API_KEY missing; set it or add .env.testbak.");

@@ -3,17 +3,17 @@
 (function () {
   "use strict";
 
-  var R = window.Reasonix;
+  var R = window.DeepSeekSpec;
   if (!R) return;
 
   var en = {
     "nav.guide": "Guide",
 
     "guide.badge": "Configuration · MCP · Skills · Memory",
-    "guide.title.line1": "Configure Reasonix",
+    "guide.title.line1": "Configure DeepSeek-Spec",
     "guide.title.line2": "in five minutes",
     "guide.sub":
-      "One JSON file at <code>~/.reasonix/config.json</code> + per-project overrides under <code>.reasonix/</code>. This page documents every key, every slash command, and the on-disk shape of skills, memory, and hooks.",
+      "One JSON file at <code>~/.dspec/config.json</code> + per-project overrides under <code>.dspec/</code>. This page documents every key, every slash command, and the on-disk shape of skills, memory, and hooks.",
 
     "guide.toc.title": "On this page",
     "guide.toc.config": "config.json",
@@ -30,9 +30,9 @@
 
     "cfg.title": "The config.json file",
     "cfg.body1":
-      "Reasonix reads a single global config from <code>~/.reasonix/config.json</code> (Windows: <code>%USERPROFILE%\\.reasonix\\config.json</code>). The file is created automatically on first run; you can hand-edit it any time. The CLI flag <code>--no-config</code> bypasses it, useful in CI.",
+      "DeepSeek-Spec reads a single global config from <code>~/.dspec/config.json</code> (Windows: <code>%USERPROFILE%\\.dspec\\config.json</code>). The file is created automatically on first run; you can hand-edit it any time. The CLI flag <code>--no-config</code> bypasses it, useful in CI.",
     "cfg.body2":
-      "Per-project overrides live under <code>&lt;project&gt;/.reasonix/</code> — skills, memory, settings.json (hooks). Project scope wins over global on name collision.",
+      "Per-project overrides live under <code>&lt;project&gt;/.dspec/</code> — skills, memory, settings.json (hooks). Project scope wins over global on name collision.",
     "cfg.shape": "Top-level keys",
     "cfg.k.lang": "UI language: en | zh",
     "cfg.k.preset": "auto | flash | pro",
@@ -44,14 +44,14 @@
     "cfg.k.mcp": "MCP server specs",
     "cfg.k.mcpoff": "names skipped at startup",
     "cfg.k.projects": "per-workspace overrides",
-    "cfg.k.semantic": "embedding provider for `reasonix index`",
+    "cfg.k.semantic": "embedding provider for `dspec index`",
     "cfg.callout.tag": "Trust dial",
     "cfg.callout.body":
       "<code>editMode</code> is the single trust dial for an entire session. <code>review</code> queues edits + gates shell. <code>auto</code> applies edits + still gates shell. <code>yolo</code> skips both gates — only use inside a sandbox.",
 
     "mcp.title": "MCP servers",
     "mcp.body1":
-      "Reasonix speaks the Model Context Protocol natively. Every entry in <code>config.mcp</code> is a single string — the same format the <code>--mcp</code> CLI flag accepts — so one parser handles both. Three transports are supported.",
+      "DeepSeek-Spec speaks the Model Context Protocol natively. Every entry in <code>config.mcp</code> is a single string — the same format the <code>--mcp</code> CLI flag accepts — so one parser handles both. Three transports are supported.",
     "mcp.h.stdio": "Stdio (subprocess)",
     "mcp.body.stdio":
       "Format: <code>name=command arg1 arg2</code>. The <code>name=</code> prefix namespaces every tool the server exposes. Args use shell-style splitting; quote any with spaces.",
@@ -95,13 +95,13 @@
     "sk.h.cmds": "Slash commands",
     "sk.cmd.list": "List every skill, scope-tagged.",
     "sk.cmd.new":
-      "Scaffold a stub at project scope. Add <code>--global</code> for <code>~/.reasonix/skills</code>.",
+      "Scaffold a stub at project scope. Add <code>--global</code> for <code>~/.dspec/skills</code>.",
     "sk.cmd.show": "Print the full body.",
     "sk.cmd.run": "Run it. Args are appended to the body as a single string.",
 
     "mem.title": "Memory",
     "mem.body1":
-      "Memory is user-private knowledge pinned into the immutable prefix — so the agent reads it on every turn without re-priming. Two scopes: <em>global</em> (cross-project facts about you) and <em>project</em> (per-workspace context). Distinct from a committable <code>REASONIX.md</code>, which lives in the repo.",
+      "Memory is user-private knowledge pinned into the immutable prefix — so the agent reads it on every turn without re-priming. Two scopes: <em>global</em> (cross-project facts about you) and <em>project</em> (per-workspace context). Distinct from a committable <code>DSPEC.md</code>, which lives in the repo.",
     "mem.h.layout": "Layout",
     "mem.idx": "index — pinned into the prefix",
     "mem.proj": "sha1(absRoot)[0..16]",
@@ -161,7 +161,7 @@
 
     "ix.title": "Semantic index",
     "ix.body1":
-      "<code>reasonix index</code> builds an embedding index the agent can query. Pick an embedding provider:",
+      "<code>dspec index</code> builds an embedding index the agent can query. Pick an embedding provider:",
     "ix.body.swap":
       "Switch by changing <code>provider</code>. Local Ollama is free and air-gapped; OpenAI-compat lets you point at any hosted embedding API.",
 
@@ -178,9 +178,9 @@
 
     "guide.badge": "配置 · MCP · Skills · Memory",
     "guide.title.line1": "五分钟",
-    "guide.title.line2": "配置完 Reasonix",
+    "guide.title.line2": "配置完 DeepSeek-Spec",
     "guide.sub":
-      "一个全局 JSON 文件 <code>~/.reasonix/config.json</code>，加上项目级 <code>.reasonix/</code> 下的覆盖。这一页把每个 key、每条斜杠命令、以及 skills / memory / hooks 在磁盘上的形状全部讲清楚。",
+      "一个全局 JSON 文件 <code>~/.dspec/config.json</code>，加上项目级 <code>.dspec/</code> 下的覆盖。这一页把每个 key、每条斜杠命令、以及 skills / memory / hooks 在磁盘上的形状全部讲清楚。",
 
     "guide.toc.title": "本页目录",
     "guide.toc.config": "config.json",
@@ -197,9 +197,9 @@
 
     "cfg.title": "config.json 配置文件",
     "cfg.body1":
-      "Reasonix 只从 <code>~/.reasonix/config.json</code> 读取全局配置（Windows：<code>%USERPROFILE%\\.reasonix\\config.json</code>）。首次运行会自动创建，之后随便手改。CLI 加 <code>--no-config</code> 即可跳过，CI 友好。",
+      "DeepSeek-Spec 只从 <code>~/.dspec/config.json</code> 读取全局配置（Windows：<code>%USERPROFILE%\\.dspec\\config.json</code>）。首次运行会自动创建，之后随便手改。CLI 加 <code>--no-config</code> 即可跳过，CI 友好。",
     "cfg.body2":
-      "项目级覆盖放在 <code>&lt;project&gt;/.reasonix/</code> 下——skills、memory、settings.json（hooks）都遵守这个目录。同名时项目级覆盖全局。",
+      "项目级覆盖放在 <code>&lt;project&gt;/.dspec/</code> 下——skills、memory、settings.json（hooks）都遵守这个目录。同名时项目级覆盖全局。",
     "cfg.shape": "顶层 key",
     "cfg.k.lang": "界面语言：en | zh",
     "cfg.k.preset": "auto | flash | pro",
@@ -211,14 +211,14 @@
     "cfg.k.mcp": "MCP 服务器列表",
     "cfg.k.mcpoff": "启动时跳过的服务器名",
     "cfg.k.projects": "按工作区的覆盖配置",
-    "cfg.k.semantic": "`reasonix index` 用的 embedding 提供方",
+    "cfg.k.semantic": "`dspec index` 用的 embedding 提供方",
     "cfg.callout.tag": "信任挡位",
     "cfg.callout.body":
       "<code>editMode</code> 是整个会话的唯一一档信任旋钮。<code>review</code> 队列改动 + 拦截 shell；<code>auto</code> 直接落盘 + 继续拦截 shell；<code>yolo</code> 两个都不拦——只在沙箱里用。",
 
     "mcp.title": "MCP 服务器",
     "mcp.body1":
-      "Reasonix 原生支持 Model Context Protocol。<code>config.mcp</code> 里每条都是一个字符串——和 <code>--mcp</code> CLI flag 用同一个 parser。支持三种传输。",
+      "DeepSeek-Spec 原生支持 Model Context Protocol。<code>config.mcp</code> 里每条都是一个字符串——和 <code>--mcp</code> CLI flag 用同一个 parser。支持三种传输。",
     "mcp.h.stdio": "Stdio（子进程）",
     "mcp.body.stdio":
       "格式：<code>name=command arg1 arg2</code>。<code>name=</code> 前缀会给该服务器暴露的所有工具加命名空间。args 走 shell 风格的分词，含空格的部分要加引号。",
@@ -265,14 +265,14 @@
     "sk.h.cmds": "斜杠命令",
     "sk.cmd.list": "按 scope 列出全部 skill。",
     "sk.cmd.new":
-      "在项目 scope 下生成 stub。加 <code>--global</code> 可写到 <code>~/.reasonix/skills</code>。",
+      "在项目 scope 下生成 stub。加 <code>--global</code> 可写到 <code>~/.dspec/skills</code>。",
     "sk.cmd.show": "打印完整 body。",
     "sk.cmd.run":
       "运行它。后续 args 会作为单一字符串拼到 body 之后。",
 
     "mem.title": "Memory",
     "mem.body1":
-      "Memory 是用户私有的知识，钉进不可变前缀——所以 agent 每回合都自动读到，不用再重新 prime。两个 scope：<em>global</em>（关于你的、跨项目事实）与 <em>project</em>（按工作区的上下文）。和提交进仓库的 <code>REASONIX.md</code> 不是一回事。",
+      "Memory 是用户私有的知识，钉进不可变前缀——所以 agent 每回合都自动读到，不用再重新 prime。两个 scope：<em>global</em>（关于你的、跨项目事实）与 <em>project</em>（按工作区的上下文）。和提交进仓库的 <code>DSPEC.md</code> 不是一回事。",
     "mem.h.layout": "目录布局",
     "mem.idx": "索引——会被钉进前缀",
     "mem.proj": "sha1(absRoot)[0..16]",
@@ -334,7 +334,7 @@
 
     "ix.title": "语义索引",
     "ix.body1":
-      "<code>reasonix index</code> 会构建一份 embedding 索引供 agent 查询。挑一个 embedding 提供方：",
+      "<code>dspec index</code> 会构建一份 embedding 索引供 agent 查询。挑一个 embedding 提供方：",
     "ix.body.swap":
       "切换只需要改 <code>provider</code>。本地 Ollama 免费且离线；OpenAI-compat 可以指向任何兼容的 embedding API。",
 

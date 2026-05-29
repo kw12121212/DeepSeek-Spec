@@ -34,7 +34,7 @@ function loadEnv(path: string): void {
   } catch {}
 }
 
-loadEnv("F:/Reasonix/.env");
+loadEnv("F:/DeepSeek-Spec/.env");
 
 const MODEL = "deepseek-chat";
 const TEST_CTX = 50_000;

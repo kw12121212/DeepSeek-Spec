@@ -29,7 +29,7 @@ function loadEnv(path) {
   } catch {}
 }
 
-loadEnv("F:/Reasonix/.env");
+loadEnv("F:/DeepSeek-Spec/.env");
 const apiKey = process.env.DEEPSEEK_API_KEY;
 if (!apiKey) {
   console.error("DEEPSEEK_API_KEY missing");

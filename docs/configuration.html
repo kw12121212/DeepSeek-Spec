@@ -3,14 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Configuration Guide — Reasonix · MCP, Skills, Memory, Hooks</title>
+    <title>Configuration Guide — DeepSeek-Spec · MCP, Skills, Memory, Hooks</title>
     <meta
       name="description"
-      content="Bilingual configuration guide for Reasonix — MCP servers, skills, memory, hooks, permissions, web search, and the full ~/.reasonix/config.json reference."
+      content="Bilingual configuration guide for DeepSeek-Spec — MCP servers, skills, memory, hooks, permissions, web search, and the full ~/.dspec/config.json reference."
     />
     <meta
       name="keywords"
-      content="Reasonix configuration, MCP setup, Model Context Protocol config, Claude Code skills, AI agent memory, lifecycle hooks, DeepSeek CLI, reasonix.config.json"
+      content="DeepSeek-Spec configuration, MCP setup, Model Context Protocol config, Claude Code skills, AI agent memory, lifecycle hooks, DeepSeek CLI, dspec.config.json"
     />
     <meta name="author" content="esengine" />
     <meta name="theme-color" content="#0b0f17" />
@@ -37,8 +37,8 @@
     />
 
     <meta property="og:type" content="article" />
-    <meta property="og:site_name" content="Reasonix" />
-    <meta property="og:title" content="Reasonix Configuration Guide" />
+    <meta property="og:site_name" content="DeepSeek-Spec" />
+    <meta property="og:title" content="DeepSeek-Spec Configuration Guide" />
     <meta
       property="og:description"
       content="MCP, skills, memory, hooks, permissions — every key, every slash command, the on-disk shape."
@@ -55,7 +55,7 @@
     <meta property="og:locale:alternate" content="zh_CN" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Reasonix Configuration Guide" />
+    <meta name="twitter:title" content="DeepSeek-Spec Configuration Guide" />
     <meta
       name="twitter:description"
       content="MCP, skills, memory, hooks, permissions — every key, every slash command."
@@ -70,8 +70,8 @@
       {
         "@context": "https://schema.org",
         "@type": "TechArticle",
-        "headline": "Reasonix Configuration Guide",
-        "description": "MCP servers, skills, memory, hooks, permissions, web search, and the full ~/.reasonix/config.json reference.",
+        "headline": "DeepSeek-Spec Configuration Guide",
+        "description": "MCP servers, skills, memory, hooks, permissions, web search, and the full ~/.dspec/config.json reference.",
         "url": "https://esengine.github.io/DeepSeek-Reasonix/configuration.html",
         "inLanguage": ["en", "zh-CN"],
         "author": {
@@ -81,12 +81,12 @@
         },
         "isPartOf": {
           "@type": "WebSite",
-          "name": "Reasonix",
+          "name": "DeepSeek-Spec",
           "url": "https://esengine.github.io/DeepSeek-Reasonix/"
         },
         "about": {
           "@type": "SoftwareApplication",
-          "name": "Reasonix"
+          "name": "DeepSeek-Spec"
         }
       }
     </script>
@@ -98,7 +98,7 @@
           {
             "@type": "ListItem",
             "position": 1,
-            "name": "Reasonix",
+            "name": "DeepSeek-Spec",
             "item": "https://esengine.github.io/DeepSeek-Reasonix/"
           },
           {
@@ -121,7 +121,7 @@
         <a class="brand" href="index.html">
           <span class="brand-mark"></span>
           <span class="brand-name">
-            <b>Reasonix</b><span>DS · v0.45.1</span>
+            <b>DeepSeek-Spec</b><span>DS · v0.45.1</span>
           </span>
         </a>
         <div class="nav-links" role="navigation">
@@ -149,13 +149,13 @@
         <div class="container">
           <div class="badge" data-i18n="guide.badge">Configuration · MCP · Skills · Memory</div>
           <h1 class="guide-title">
-            <span class="grad-text" data-i18n="guide.title.line1">Configure Reasonix</span>
+            <span class="grad-text" data-i18n="guide.title.line1">Configure DeepSeek-Spec</span>
             <br />
             <span data-i18n="guide.title.line2">in five minutes</span>
           </h1>
           <p class="guide-sub" data-i18n="guide.sub">
-            One JSON file at <code>~/.reasonix/config.json</code> + per-project overrides
-            under <code>.reasonix/</code>. This page documents every key, every slash
+            One JSON file at <code>~/.dspec/config.json</code> + per-project overrides
+            under <code>.dspec/</code>. This page documents every key, every slash
             command, and the on-disk shape of skills, memory, and hooks.
           </p>
         </div>
@@ -180,13 +180,13 @@
           <section id="config-json">
             <h2 data-i18n="cfg.title">The config.json file</h2>
             <p data-i18n="cfg.body1">
-              Reasonix reads a single global config from <code>~/.reasonix/config.json</code>
-              (Windows: <code>%USERPROFILE%\.reasonix\config.json</code>). The file is created
+              DeepSeek-Spec reads a single global config from <code>~/.dspec/config.json</code>
+              (Windows: <code>%USERPROFILE%\.dspec\config.json</code>). The file is created
               automatically on first run; you can hand-edit it any time. The CLI flag
               <code>--no-config</code> bypasses it, useful in CI.
             </p>
             <p data-i18n="cfg.body2">
-              Per-project overrides live under <code>&lt;project&gt;/.reasonix/</code> —
+              Per-project overrides live under <code>&lt;project&gt;/.dspec/</code> —
               skills, memory, settings.json (hooks). Project scope wins over global on name
               collision.
             </p>
@@ -210,7 +210,7 @@
       "shellAllowed": ["npm", "git status"]
     }
   },
-  "semantic": { ... },                <span class="hash"># <span data-i18n="cfg.k.semantic">embedding provider for `reasonix index`</span></span>
+  "semantic": { ... },                <span class="hash"># <span data-i18n="cfg.k.semantic">embedding provider for `dspec index`</span></span>
   "session": null
 }</code></pre>
             <div class="callout">
@@ -227,7 +227,7 @@
           <section id="mcp">
             <h2 data-i18n="mcp.title">MCP servers</h2>
             <p data-i18n="mcp.body1">
-              Reasonix speaks the Model Context Protocol natively. Every entry in
+              DeepSeek-Spec speaks the Model Context Protocol natively. Every entry in
               <code>config.mcp</code> is a single string — the same format the
               <code>--mcp</code> CLI flag accepts — so one parser handles both. Three
               transports are supported.
@@ -299,9 +299,9 @@
               name overlaps, <code>mcpServers</code> wins silently.
 
             <h3 data-i18n="mcp.h.cli">CLI flags &amp; slash commands</h3>
-            <pre class="code"><code>npx reasonix code --mcp "fs=npx -y @mcp/server-filesystem /tmp"
-npx reasonix mcp inspect "git=uvx mcp-server-git"
-npx reasonix mcp list</code></pre>
+            <pre class="code"><code>npx dspec code --mcp "fs=npx -y @mcp/server-filesystem /tmp"
+npx dspec mcp inspect "git=uvx mcp-server-git"
+npx dspec mcp list</code></pre>
             <table class="cmd-table">
               <thead>
                 <tr>
@@ -342,12 +342,12 @@ npx reasonix mcp list</code></pre>
               skills override global ones with the same name.
             </p>
             <h3 data-i18n="sk.h.layout">Layout</h3>
-            <pre class="code"><code>~/.reasonix/skills/<span class="hash">           # global</span>
+            <pre class="code"><code>~/.dspec/skills/<span class="hash">           # global</span>
   audit-logs.md
   refactor-react/
     SKILL.md
 
-&lt;project&gt;/.reasonix/skills/<span class="hash">    # project (overrides global)</span>
+&lt;project&gt;/.dspec/skills/<span class="hash">    # project (overrides global)</span>
   release-notes.md</code></pre>
             <p data-i18n="sk.body.layout">
               Two equivalent shapes: a flat <code>&lt;name&gt;.md</code>, or a
@@ -417,7 +417,7 @@ max-iters: 32                  <span class="hash"># <span data-i18n="sk.fm.iters
                   <td><code>/skill new &lt;name&gt;</code></td>
                   <td data-i18n="sk.cmd.new">
                     Scaffold a stub at project scope. Add <code>--global</code> for
-                    <code>~/.reasonix/skills</code>.
+                    <code>~/.dspec/skills</code>.
                   </td>
                 </tr>
                 <tr>
@@ -440,11 +440,11 @@ max-iters: 32                  <span class="hash"># <span data-i18n="sk.fm.iters
               Memory is user-private knowledge pinned into the immutable prefix — so the
               agent reads it on every turn without re-priming. Two scopes: <em>global</em>
               (cross-project facts about you) and <em>project</em> (per-workspace context).
-              Distinct from a committable <code>REASONIX.md</code>, which lives in the repo.
+              Distinct from a committable <code>DSPEC.md</code>, which lives in the repo.
             </p>
 
             <h3 data-i18n="mem.h.layout">Layout</h3>
-            <pre class="code"><code>~/.reasonix/memory/
+            <pre class="code"><code>~/.dspec/memory/
   global/
     MEMORY.md                      <span class="hash"># <span data-i18n="mem.idx">index — pinned into the prefix</span></span>
     user_role.md
@@ -508,8 +508,8 @@ created: 2026-05-09
               first, then global.
             </p>
             <h3 data-i18n="hk.h.where">Where to put them</h3>
-            <pre class="code"><code>&lt;project&gt;/.reasonix/settings.json   <span class="hash"># <span data-i18n="hk.path.proj">project scope</span></span>
-~/.reasonix/settings.json           <span class="hash"># <span data-i18n="hk.path.glob">global scope</span></span></code></pre>
+            <pre class="code"><code>&lt;project&gt;/.dspec/settings.json   <span class="hash"># <span data-i18n="hk.path.proj">project scope</span></span>
+~/.dspec/settings.json           <span class="hash"># <span data-i18n="hk.path.glob">global scope</span></span></code></pre>
 
             <h3 data-i18n="hk.h.shape">Shape</h3>
             <pre class="code"><code>{
@@ -523,7 +523,7 @@ created: 2026-05-09
       }
     ],
     "PostToolUse": [
-      { "command": "echo done >> /tmp/reasonix.log" }
+      { "command": "echo done >> /tmp/dspec.log" }
     ],
     "UserPromptSubmit": [],
     "Stop": []
@@ -646,7 +646,7 @@ created: 2026-05-09
           <section id="index">
             <h2 data-i18n="ix.title">Semantic index</h2>
             <p data-i18n="ix.body1">
-              <code>reasonix index</code> builds an embedding index the agent can query.
+              <code>dspec index</code> builds an embedding index the agent can query.
               Pick an embedding provider:
             </p>
             <pre class="code"><code>{
@@ -678,7 +678,7 @@ created: 2026-05-09
             <div class="hero-ctas">
               <a
                 class="cta primary"
-                href="https://github.com/esengine/reasonix/discussions"
+                href="https://github.com/esengine/DeepSeek-Spec/discussions"
                 target="_blank"
                 rel="noopener"
                 data-i18n="cta.disc"
@@ -707,7 +707,7 @@ created: 2026-05-09
         <div>
           <a class="brand" href="index.html" style="text-decoration:none; color:inherit">
             <span class="brand-mark"></span>
-            <span class="brand-name"><b>DeepSeek-Reasonix</b></span>
+            <span class="brand-name"><b>DeepSeek-Spec</b></span>
           </a>
           <p style="color:var(--cream-mute); font-size:13px; margin-top:14px; line-height:1.65; max-width:340px">
             DeepSeek-native AI coding agent for your terminal. Engineered around prefix-cache stability — leave it running.

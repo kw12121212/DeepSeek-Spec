@@ -1,0 +1,22 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: telemetry
+mapping:
+  implementation:
+    - src/telemetry/usage-log.ts
+  tests:
+    - tests/telemetry.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    usage-log-append:
+      strength: MUST
+      statement: appendUsage MUST append a turn record as a JSONL line to ~/.dspec/usage.jsonl
+      scenarios:
+        usage-path-correct:
+          - GIVEN: a valid AppendUsageInput with model and usage data
+          - WHEN: appendUsage is called
+          - THEN: the usage log path is ~/.dspec/usage.jsonl (not ~/.reasonix/usage.jsonl)
+  REMOVED: {}

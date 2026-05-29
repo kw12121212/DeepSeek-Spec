@@ -1,0 +1,28 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: final-audit
+  status: proposed
+summary:
+  what:
+    - Full repository grep for remaining 'reasonix' references and fix any stragglers
+  why:
+    - >-
+      All other brand rename tasks are archived but a final audit is needed to guarantee zero stale
+      references remain before closing M9
+scope:
+  in:
+    - >-
+      src/, tests/, scripts/, .github/, desktop/, dashboard/, packages/, benchmarks/,
+      .strict-spec-driven/specs/, *.json, *.yaml, *.md
+  out:
+    - >-
+      Zero 'reasonix' matches across the entire repo (excluding node_modules/, dist/, .git/); bun
+      run verify passing; dspec --version and --help showing correct branding
+unchanged_behavior:
+  - No behavioral changes — purely mechanical string fixes if any stragglers are found
+roadmap:
+  milestone: 0009-brand-rename
+  planned_change: final-audit

@@ -1,0 +1,21 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: final-audit
+open: []
+resolved:
+  - id: historical-reasonix-in-specs
+    question: >-
+      Several spec files contain 'reasonix' in verification scenarios (grep -ri reasonix ... is
+      executed) and historical notes (was reasonix). Should these be preserved as-is since they
+      describe the rename itself, or cleaned up?
+    context: >-
+      See agent-loop.yaml, event-kernel.yaml, telemetry.yaml, native-build-script.yaml,
+      multi-provider-config.yaml, embedded-assets.yaml — all contain 'reasonix' in WHEN/THEN clauses
+      testing that the rename is complete.
+    answer: >-
+      Preserve verification criteria (grep -ri reasonix ... is executed) and historical notes (was
+      reasonix). These describe the rename itself. Only fix stale references where 'reasonix'
+      appears as the current/canonical value (e.g. ~/.reasonix/usage.jsonl -> ~/.dspec/usage.jsonl).
+    status: resolved

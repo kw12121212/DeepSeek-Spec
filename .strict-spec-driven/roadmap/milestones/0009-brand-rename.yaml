@@ -57,7 +57,7 @@ risks:
     rename config dir.
   - |
     packages/dsnix/ alias package will be deleted; downstream consumers depending on it will break.
-status: proposed
+status: complete
 notes:
   - >
     Naming convention: brand DeepSeek-Spec, binary dspec, env prefix DSPEC_, config dir .dspec/, npm

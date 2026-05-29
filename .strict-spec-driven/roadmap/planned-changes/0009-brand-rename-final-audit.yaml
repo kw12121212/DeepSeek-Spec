@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: final-audit
   milestone: 0009-brand-rename
-status: planned
+status: complete
 summary: |
   Final sweep: grep the entire repository for any remaining "reasonix"
   reference. Fix any stragglers. Run bun run verify to confirm zero

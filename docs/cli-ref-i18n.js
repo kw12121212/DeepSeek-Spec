@@ -3,7 +3,7 @@
 (function () {
   "use strict";
 
-  var R = window.Reasonix;
+  var R = window.DeepSeekSpec;
   if (!R) return;
 
   var en = {
@@ -27,7 +27,7 @@
 
     "sh.title": "Shell subcommands",
     "sh.body":
-      "Run <code>reasonix --help</code> (or any subcommand with <code>--help</code>) for the full flag list. Headline subcommands:",
+      "Run <code>dspec --help</code> (or any subcommand with <code>--help</code>) for the full flag list. Headline subcommands:",
     "sh.flags.title": "Notable runtime flags (chat / code)",
 
     "sl.title": "Slash commands",
@@ -47,7 +47,7 @@
 
     "ms.title": "Mouse",
     "ms.body":
-      "Reasonix sets DECSET 1007 (alternate-scroll) only — wheel events translate to ↑/↓ keypresses for the app, but native click/drag selection is left untouched. Pass <code>--no-mouse</code> to opt out entirely.",
+      "DeepSeek-Spec sets DECSET 1007 (alternate-scroll) only — wheel events translate to ↑/↓ keypresses for the app, but native click/drag selection is left untouched. Pass <code>--no-mouse</code> to opt out entirely.",
 
     "cp.title": "Copy / paste",
     "cp.body":
@@ -105,7 +105,7 @@
 
     "ms.title": "鼠标",
     "ms.body":
-      "Reasonix 只设置 DECSET 1007（alternate-scroll）——滚轮事件转为 ↑/↓ 按键传给应用，原生点击/拖拽选择不受影响。加 <code>--no-mouse</code> 可完全关闭。",
+      "DeepSeek-Spec 只设置 DECSET 1007（alternate-scroll）——滚轮事件转为 ↑/↓ 按键传给应用，原生点击/拖拽选择不受影响。加 <code>--no-mouse</code> 可完全关闭。",
 
     "cp.title": "复制 / 粘贴",
     "cp.body":

@@ -38,7 +38,7 @@ milestones:
   0009-brand-rename:
     title: 'M9: Brand Rename - Reasonix to DeepSeek-Spec'
     path: roadmap/milestones/0009-brand-rename.yaml
-    status: proposed
+    status: complete
   0010-real-llm-test:
     title: 'M10: Real LLM Integration Tests with GLM-4.7'
     path: roadmap/milestones/0010-real-llm-test.yaml

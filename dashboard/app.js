@@ -1,4 +1,4 @@
-// Reasonix dashboard SPA — Preact 10 + HTM, bundled by tsup. CDN imports stay external.
+// DeepSeek-Spec dashboard SPA — Preact 10 + HTM, bundled by tsup. CDN imports stay external.
 
 import htm from "htm";
 import { h, render } from "preact";
@@ -189,7 +189,7 @@ function App() {
       <aside class="app-side">
         <div class="brand">
           <span class="glyph">◈</span>
-          <span class="label">REASONIX</span>
+          <span class="label">DSPEC</span>
           <span class="ver">${MODE}</span>
         </div>
         <div class="side-tabs">

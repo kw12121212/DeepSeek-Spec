@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Reasonix · Dashboard · Web-companion design</title>
+<title>DeepSeek-Spec · Dashboard · Web-companion design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ============================================================================
-   Reasonix Dashboard — design anchor for the web companion to the TUI.
+   DeepSeek-Spec Dashboard — design anchor for the web companion to the TUI.
 
    Positioning: NOT a TUI mirror. Does what the TUI cannot:
      - long-form session reading
@@ -1049,7 +1049,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 <div class="page">
 
 <aside class="toc">
-  <h1><span class="dot">◈</span>REASONIX</h1>
+  <h1><span class="dot">◈</span>DeepSeek-Spec</h1>
   <p class="sub">dashboard · web-companion design</p>
 
   <div class="toc-section">design</div>
@@ -1093,7 +1093,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 <section class="section" id="positioning">
   <h2><span class="num">§0</span>Positioning</h2>
   <p class="lede">
-    Reasonix's dashboard is the <b>rich-medium companion</b> to the TUI — not a mirror,
+    DeepSeek-Spec's dashboard is the <b>rich-medium companion</b> to the TUI — not a mirror,
     not a replacement. It does what a 13-row terminal pane cannot:
     long-form reading, real charts, multi-file editing, large-table inventory browsing.
     The TUI keeps the things terminals are good at — instant feedback, slash commands,
@@ -1218,7 +1218,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
     <div class="app">
       <aside class="app-side">
         <div class="brand">
-          <span class="glyph">◈</span><span class="label">REASONIX</span>
+          <span class="glyph">◈</span><span class="label">DeepSeek-Spec</span>
           <span class="ver">0.18.1</span>
         </div>
         <div class="side-section">workspace</div>
@@ -1250,7 +1250,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb" style="color:var(--c-ok)">feat/dashboard-v2</span>
           <span class="sep">›</span>
@@ -1300,7 +1300,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
       </aside>
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb" style="color:var(--c-ok)">feat/dashboard-v2</span>
         </div>
@@ -1381,7 +1381,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
         <tr><td><code class="mono">edit_file</code></td><td class="dim">native · fs</td><td class="path">src/cli/ui/PromptInput.tsx</td><td class="num">38</td><td class="num">14</td></tr>
         <tr><td><code class="mono">run_command</code></td><td class="dim">native · shell</td><td class="path">npm run verify</td><td class="num">11</td><td class="num">23,400</td></tr>
         <tr><td><code class="mono">grep_files</code></td><td class="dim">native · fs</td><td class="path">"workspace" src/</td><td class="num">9</td><td class="num">42</td></tr>
-        <tr><td><code class="mono">github__get_pr</code></td><td class="dim">mcp · github</td><td class="path">esengine/reasonix#13</td><td class="num">4</td><td class="num">280</td></tr>
+        <tr><td><code class="mono">github__get_pr</code></td><td class="dim">mcp · github</td><td class="path">esengine/DeepSeek-Spec#13</td><td class="num">4</td><td class="num">280</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -1390,10 +1390,10 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
     <h3>Toasts</h3>
     <p>Top-right stack, auto-dismiss in 3s. Border-left encodes kind. One-line by default; expandable for tracebacks.</p>
     <div class="toast-wrap" style="margin:6px 0 8px">
-      <div class="toast ok"><span class="g">●</span><div>Published <code class="mono" style="color:var(--c-ok)">reasonix@0.18.1</code> to npm</div><span class="x">×</span></div>
+      <div class="toast ok"><span class="g">●</span><div>Published <code class="mono" style="color:var(--c-ok)">dspec@0.18.1</code> to npm</div><span class="x">×</span></div>
       <div class="toast"><span class="g">⏵</span><div>3 events forwarded to <code class="mono">events.jsonl</code></div><span class="x">×</span></div>
       <div class="toast warn"><span class="g">▲</span><div>0.18.0 has a deprecation notice — surface to users on launch?</div><span class="x">×</span></div>
-      <div class="toast err"><span class="g">✕</span><div>Failed to load skill <code class="mono">@reasonix/python-runner</code> — ENOENT</div><span class="x">×</span></div>
+      <div class="toast err"><span class="g">✕</span><div>Failed to load skill <code class="mono">@dspec/python-runner</code> — ENOENT</div><span class="x">×</span></div>
     </div>
   </div>
 
@@ -1558,7 +1558,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
       <div>
         <div class="form-row">
           <label class="lbl">Workspace path</label>
-          <input class="input mono" value="/Users/yuhuahui/work/reasonix" />
+          <input class="input mono" value="/Users/yuhuahui/work/dspec" />
         </div>
         <div class="form-row">
           <label class="lbl">Model</label>
@@ -1577,7 +1577,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
       <div>
         <div class="form-row" style="margin-bottom:8px"><label class="lbl">Code mode</label></div>
         <div class="checkbox-row" style="margin-bottom:8px"><span class="box on">✓</span><span>Enable plan-then-edit flow</span></div>
-        <div class="checkbox-row" style="margin-bottom:8px"><span class="box on">✓</span><span>Auto-launch dashboard on <code class="mono">reasonix code</code></span></div>
+        <div class="checkbox-row" style="margin-bottom:8px"><span class="box on">✓</span><span>Auto-launch dashboard on <code class="mono">dspec code</code></span></div>
         <div class="checkbox-row" style="margin-bottom:8px"><span class="box"></span><span>Use streaming for sub-agents</span></div>
         <div style="display:flex;gap:8px;margin-top:18px">
           <button class="btn primary"><span>Save</span></button>
@@ -1618,7 +1618,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
   <div class="mock">
     <div class="app">
       <aside class="app-side">
-        <div class="brand"><span class="glyph">◈</span><span class="label">REASONIX</span><span class="ver">0.18.1</span></div>
+        <div class="brand"><span class="glyph">◈</span><span class="label">DeepSeek-Spec</span><span class="ver">0.18.1</span></div>
         <div class="side-tabs">
           <div class="side-tab active"><span class="g">◆</span><span class="label">Chat</span></div>
           <div class="side-tab"><span class="g">✎</span><span class="label">Edit review</span></div>
@@ -1633,7 +1633,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb" style="color:var(--c-ok)">feat/dashboard-v2</span>
           <span class="sep">›</span>
@@ -1659,7 +1659,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
             <div class="cc tool">
               <div class="cc-h"><span class="glyph">▣</span><span class="role">run_command</span><span class="meta">240ms · ok</span></div>
               <div class="cc-b">
-                <div class="tool-args">npm view reasonix@0.18.0 time gitHead</div>
+                <div class="tool-args">npm view dspec@0.18.0 time gitHead</div>
                 <div class="tool-out mono" style="color:var(--fg-2);font-size:12px">{"0.18.0":"2026-05-01T03:20:58.310Z"}<br>gitHead = 'f8e156c898…'</div>
               </div>
             </div>
@@ -1751,7 +1751,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
   <div class="mock">
     <div class="app" style="height:280px">
       <aside class="app-side">
-        <div class="brand"><span class="glyph">◈</span><span class="label">REASONIX</span><span class="ver">0.18.1</span></div>
+        <div class="brand"><span class="glyph">◈</span><span class="label">DeepSeek-Spec</span><span class="ver">0.18.1</span></div>
         <div class="side-tabs">
           <div class="side-tab active"><span class="g">◆</span><span class="label">Chat</span></div>
           <div class="side-tab"><span class="g">✎</span><span class="label">Edit review</span></div>
@@ -1762,7 +1762,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
       </aside>
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb" style="color:var(--c-accent)">2026-04-30-2014</span>
         </div>
@@ -1777,7 +1777,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
         </div>
         <div class="cc assistant">
           <div class="cc-h"><span class="glyph">⏵</span><span class="role">assistant</span><span class="meta">streaming continues here</span></div>
-          <div class="cc-b">…the deprecate command will mark <code class="inline">0.18.0</code> with the warning text on the registry. Once it's done, anyone who runs <code class="inline">npm install reasonix@0.18.0</code> will see the deprecation banner and get pointed at <code class="inline">0.18.1</code>.</div>
+          <div class="cc-b">…the deprecate command will mark <code class="inline">0.18.0</code> with the warning text on the registry. Once it's done, anyone who runs <code class="inline">npm install dspec@0.18.0</code> will see the deprecation banner and get pointed at <code class="inline">0.18.1</code>.</div>
         </div>
       </div>
     </div>
@@ -1839,7 +1839,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
             <p style="color:var(--fg-2);font-size:12.5px;margin:0 0 8px">The model wants to run a command that is not on the auto-approve allowlist:</p>
             <div class="code" style="margin:0 0 10px">npm publish</div>
             <div style="font-family:var(--font-mono);font-size:11.5px;color:var(--fg-3)">
-              cwd: <span style="color:var(--fg-1)">~/work/reasonix</span><br>
+              cwd: <span style="color:var(--fg-1)">~/work/dspec</span><br>
               prefix used by allowlist match: <span style="color:var(--fg-1)">npm</span>
             </div>
           </div>
@@ -1895,7 +1895,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
   <div class="mock">
     <div class="app">
       <aside class="app-side">
-        <div class="brand"><span class="glyph">◈</span><span class="label">REASONIX</span><span class="ver">0.18.1</span></div>
+        <div class="brand"><span class="glyph">◈</span><span class="label">DeepSeek-Spec</span><span class="ver">0.18.1</span></div>
         <div class="side-tabs">
           <div class="side-tab"><span class="g">◆</span><span class="label">Chat</span></div>
           <div class="side-tab"><span class="g">✎</span><span class="label">Edit review</span></div>
@@ -1911,7 +1911,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb" style="color:var(--c-ok)">feat/dashboard-v2</span>
           <span class="sep">›</span>
@@ -2057,7 +2057,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
   <div class="mock">
     <div class="app">
       <aside class="app-side">
-        <div class="brand"><span class="glyph">◈</span><span class="label">REASONIX</span><span class="ver">0.18.1</span></div>
+        <div class="brand"><span class="glyph">◈</span><span class="label">DeepSeek-Spec</span><span class="ver">0.18.1</span></div>
         <div class="side-tabs">
           <div class="side-tab"><span class="g">◆</span><span class="label">Chat</span></div>
           <div class="side-tab"><span class="g">✎</span><span class="label">Edit review</span></div>
@@ -2072,7 +2072,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb">sessions</span>
           <span class="sep">›</span>
@@ -2139,7 +2139,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
           <div class="sessions-detail">
             <div class="sessions-detail-h">
               <span class="name">2026-04-30-2014</span>
-              <span class="ws">~/work/reasonix · feat/dashboard-v2</span>
+              <span class="ws">~/work/dspec · feat/dashboard-v2</span>
               <span class="actions">
                 <button class="btn"><span class="g">↻</span><span>resume</span></button>
                 <button class="btn ghost">rename</button>
@@ -2178,7 +2178,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
             <div class="subsec" style="margin:0 0 14px">
               <h3 style="margin:0 0 6px">Recent turns</h3>
               <div style="font-family:var(--font-mono);font-size:11.5px;color:var(--fg-2);line-height:1.7">
-                <div><span style="color:var(--c-brand)">12 ›</span> /deprecate reasonix@0.18.0</div>
+                <div><span style="color:var(--c-brand)">12 ›</span> /deprecate dspec@0.18.0</div>
                 <div><span style="color:var(--c-brand)">11 ›</span> 没问题，开始 npm publish</div>
                 <div><span style="color:var(--c-brand)">10 ›</span> 可以的，按推荐路径</div>
                 <div><span style="color:var(--c-brand)">9 ›</span> 帮我查一下 0.18.0 是怎么发出去的</div>
@@ -2212,7 +2212,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
     <div class="mock" style="padding:48px 32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px">
       <div style="font-family:var(--font-mono);font-size:32px;color:var(--c-brand);letter-spacing:.2em">› ›</div>
       <div style="color:var(--fg-0);font-size:15px;font-family:var(--font-mono)">No sessions yet in this workspace</div>
-      <div style="color:var(--fg-3);font-size:12.5px;max-width:380px">Sessions are scoped to the launch directory. Open one with <code class="mono" style="color:var(--c-brand)">reasonix code</code> in the terminal, or import a transcript from another machine.</div>
+      <div style="color:var(--fg-3);font-size:12.5px;max-width:380px">Sessions are scoped to the launch directory. Open one with <code class="mono" style="color:var(--c-brand)">dspec code</code> in the terminal, or import a transcript from another machine.</div>
       <div style="display:flex;gap:8px;margin-top:6px">
         <button class="btn primary">copy launch command</button>
         <button class="btn">import transcript</button>
@@ -2356,7 +2356,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
   <div class="mock">
     <div class="app">
       <aside class="app-side">
-        <div class="brand"><span class="glyph">◈</span><span class="label">REASONIX</span><span class="ver">0.18.1</span></div>
+        <div class="brand"><span class="glyph">◈</span><span class="label">DeepSeek-Spec</span><span class="ver">0.18.1</span></div>
         <div class="side-tabs">
           <div class="side-tab"><span class="g">◆</span><span class="label">Chat</span></div>
           <div class="side-tab"><span class="g">✎</span><span class="label">Edit review</span></div>
@@ -2370,7 +2370,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb">plans</span>
           <span class="sep">›</span>
@@ -2518,7 +2518,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
   <div class="mock">
     <div class="app">
       <aside class="app-side">
-        <div class="brand"><span class="glyph">◈</span><span class="label">REASONIX</span><span class="ver">0.18.1</span></div>
+        <div class="brand"><span class="glyph">◈</span><span class="label">DeepSeek-Spec</span><span class="ver">0.18.1</span></div>
         <div class="side-tabs">
           <div class="side-tab"><span class="g">◆</span><span class="label">Chat</span></div>
           <div class="side-tab"><span class="g">✎</span><span class="label">Edit review</span></div>
@@ -2534,7 +2534,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb">usage</span>
           <span class="sep">›</span>
@@ -2661,7 +2661,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
   <div class="mock">
     <div class="app">
       <aside class="app-side">
-        <div class="brand"><span class="glyph">◈</span><span class="label">REASONIX</span><span class="ver">0.18.1</span></div>
+        <div class="brand"><span class="glyph">◈</span><span class="label">DeepSeek-Spec</span><span class="ver">0.18.1</span></div>
         <div class="side-tabs">
           <div class="side-tab"><span class="g">◆</span><span class="label">Chat</span></div>
           <div class="side-tab"><span class="g">✎</span><span class="label">Edit review</span></div>
@@ -2677,7 +2677,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb">tools</span>
           <span class="sep">›</span>
@@ -2709,7 +2709,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
                 <tr><td><code class="mono">grep_files</code></td><td class="dim">native · fs</td><td class="path">"workspace"</td><td class="num">62</td><td><span class="pill ok">ok</span></td></tr>
                 <tr><td><code class="mono">run_command</code></td><td class="dim">native · shell</td><td class="path">npm run verify</td><td class="num">128</td><td><span class="pill ok">ok</span></td></tr>
                 <tr><td><code class="mono">run_background</code></td><td class="dim">native · shell</td><td class="path">npm run dev</td><td class="num">14</td><td><span class="pill ok">ok</span></td></tr>
-                <tr><td><code class="mono">github__get_pr</code></td><td class="dim">mcp · github</td><td class="path">esengine/reasonix#13</td><td class="num">8</td><td><span class="pill ok">ok</span></td></tr>
+                <tr><td><code class="mono">github__get_pr</code></td><td class="dim">mcp · github</td><td class="path">esengine/DeepSeek-Spec#13</td><td class="num">8</td><td><span class="pill ok">ok</span></td></tr>
                 <tr><td><code class="mono">github__create_pr</code></td><td class="dim">mcp · github</td><td class="path">—</td><td class="num">0</td><td><span class="pill">idle</span></td></tr>
                 <tr><td><code class="mono">slack__post_message</code></td><td class="dim">mcp · slack</td><td class="path">#dev</td><td class="num">3</td><td><span class="pill ok">ok</span></td></tr>
                 <tr><td><code class="mono">python_runner</code></td><td class="dim">subagent</td><td class="path">—</td><td class="num">0</td><td><span class="pill err">load fail</span></td></tr>
@@ -2853,7 +2853,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
   <div class="mock">
     <div class="app">
       <aside class="app-side">
-        <div class="brand"><span class="glyph">◈</span><span class="label">REASONIX</span><span class="ver">0.18.1</span></div>
+        <div class="brand"><span class="glyph">◈</span><span class="label">DeepSeek-Spec</span><span class="ver">0.18.1</span></div>
         <div class="side-tabs">
           <div class="side-tab"><span class="g">◆</span><span class="label">Chat</span></div>
           <div class="side-tab"><span class="g">✎</span><span class="label">Edit review</span></div>
@@ -2867,7 +2867,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb">system</span>
           <span class="sep">›</span>
@@ -2899,7 +2899,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
                 <tr><td class="dim" style="padding:5px 8px">platform</td><td class="path">win32 · 10.0.26200</td></tr>
                 <tr><td class="dim" style="padding:5px 8px">node</td><td class="path">v22.7.0</td></tr>
                 <tr><td class="dim" style="padding:5px 8px">terminal</td><td class="path">Windows Terminal · ConPTY</td></tr>
-                <tr><td class="dim" style="padding:5px 8px">cwd</td><td class="path">~/work/reasonix</td></tr>
+                <tr><td class="dim" style="padding:5px 8px">cwd</td><td class="path">~/work/dspec</td></tr>
                 <tr><td class="dim" style="padding:5px 8px">tmpdir</td><td class="path">$LOCALAPPDATA/Temp</td></tr>
                 <tr><td class="dim" style="padding:5px 8px">memory</td><td class="path">1.4 / 16 GB</td></tr>
                 <tr><td class="dim" style="padding:5px 8px">tz</td><td class="path">Asia/Shanghai · +08:00</td></tr>
@@ -2947,7 +2947,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
   <div class="mock">
     <div class="app">
       <aside class="app-side">
-        <div class="brand"><span class="glyph">◈</span><span class="label">REASONIX</span><span class="ver">0.18.1</span></div>
+        <div class="brand"><span class="glyph">◈</span><span class="label">DeepSeek-Spec</span><span class="ver">0.18.1</span></div>
         <div class="side-tabs">
           <div class="side-tab"><span class="g">◆</span><span class="label">Chat</span></div>
           <div class="side-tab"><span class="g">✎</span><span class="label">Edit review</span></div>
@@ -2960,7 +2960,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb">semantic</span>
         </div>
@@ -3192,7 +3192,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
   <div class="mock">
     <div class="app">
       <aside class="app-side">
-        <div class="brand"><span class="glyph">◈</span><span class="label">REASONIX</span><span class="ver">0.18.1</span></div>
+        <div class="brand"><span class="glyph">◈</span><span class="label">DeepSeek-Spec</span><span class="ver">0.18.1</span></div>
         <div class="side-tabs">
           <div class="side-tab"><span class="g">◆</span><span class="label">Chat</span></div>
           <div class="side-tab"><span class="g">✎</span><span class="label">Edit review</span></div>
@@ -3207,7 +3207,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
       <header class="app-top">
         <div class="crumbs">
-          <span class="crumb dim">~/work/reasonix</span>
+          <span class="crumb dim">~/work/dspec</span>
           <span class="sep">›</span>
           <span class="crumb">hooks</span>
           <span class="sep">›</span>
@@ -3235,7 +3235,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
           <div class="cfg-content">
             <h3 style="margin:0 0 4px;font-family:var(--font-mono);font-size:14px;color:var(--fg-0)">Event matrix</h3>
-            <p style="font-size:12.5px;color:var(--fg-3);margin:0 0 14px">Which hook script fires on which LoopEvent. Click a cell to edit timing, glob, or to disable. Adding a new hook (left rail) drops a row; the script lives in <code class="mono" style="color:var(--c-brand)">.reasonix/hooks/</code>.</p>
+            <p style="font-size:12.5px;color:var(--fg-3);margin:0 0 14px">Which hook script fires on which LoopEvent. Click a cell to edit timing, glob, or to disable. Adding a new hook (left rail) drops a row; the script lives in <code class="mono" style="color:var(--c-brand)">.dspec/hooks/</code>.</p>
 
             <div class="matrix">
               <div class="row h">
@@ -3316,7 +3316,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
       </div>
       <div class="editor-area" style="height:280px">
         <div class="editor-line"><span class="lineno">1</span><span class="ln-content">{</span></div>
-        <div class="editor-line"><span class="lineno">2</span><span class="ln-content">  <span class="str">"$schema"</span>: <span class="str">"https://reasonix.dev/schema/settings.json"</span>,</span></div>
+        <div class="editor-line"><span class="lineno">2</span><span class="ln-content">  <span class="str">"$schema"</span>: <span class="str">"https://dspec.dev/schema/settings.json"</span>,</span></div>
         <div class="editor-line"><span class="lineno">3</span><span class="ln-content">  <span class="str">"model"</span>: <span class="str">"deepseek-chat"</span>,</span></div>
         <div class="editor-line"><span class="lineno">4</span><span class="ln-content">  <span class="str">"budgetUsd"</span>: <span class="num">100</span>,</span></div>
         <div class="editor-line"><span class="lineno">5</span><span class="ln-content">  <span class="str">"hooks"</span>: {</span></div>
@@ -3358,7 +3358,7 @@ main { padding: 32px 40px 60px 32px; min-width: 0; }
 
   <div class="subsec">
     <h3>Mobile / narrow</h3>
-    <p>Out of scope for v1. The dashboard is a localhost development tool; phone-screen layout would only matter if Reasonix ever runs as a hosted service.</p>
+    <p>Out of scope for v1. The dashboard is a localhost development tool; phone-screen layout would only matter if DeepSeek-Spec ever runs as a hosted service.</p>
   </div>
 
   <div class="subsec">

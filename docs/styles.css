@@ -1,4 +1,4 @@
-/* Reasonix landing page — bilingual (en/zh) responsive site.
+/* DeepSeek-Spec landing page — bilingual (en/zh) responsive site.
    Brand gradient: #5eead4 → #93c5fd → #c4b5fd → #f0abfc */
 
 :root {
@@ -717,7 +717,7 @@ main,
 }
 
 /* ──────────────────────────────────────────────────────────────────
- * Header bar — `◈ REASONIX v0.6.0  v4-flash  REVIEW  max  …  turn N · /help`
+ * Header bar — `◈ DSPEC v0.6.0  v4-flash  REVIEW  max  …  turn N · /help`
  * Same layout as src/cli/ui/StatsPanel.tsx Header.
  * ────────────────────────────────────────────────────────────────── */
 .thead {

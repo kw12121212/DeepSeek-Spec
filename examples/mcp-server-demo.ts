@@ -70,7 +70,7 @@ const TOOLS = [
   {
     name: "slow_count",
     description:
-      "Counts from 1 to n with a ~300 ms pause between steps, emitting notifications/progress frames along the way. Useful for demonstrating Reasonix's progress-bar UI.",
+      "Counts from 1 to n with a ~300 ms pause between steps, emitting notifications/progress frames along the way. Useful for demonstrating DeepSeek-Spec's progress-bar UI.",
     inputSchema: {
       type: "object",
       properties: {

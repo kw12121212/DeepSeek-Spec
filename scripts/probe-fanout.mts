@@ -1,7 +1,7 @@
 /**
  * Reproduces issue #675: count `run_skill` parallel fan-out when the user
  * asks an open question. Mounts the same registry + skills + subagent
- * runner that `reasonix code` uses, but headless — emits a structured
+ * runner that `dspec` uses, but headless — emits a structured
  * log of tool calls instead of rendering a TUI.
  *
  * Run: tsx scripts/probe-fanout.mts
