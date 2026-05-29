@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: remove-qq-channel
   milestone: 0008-ux-streamline
-status: planned
+status: complete
 summary: |
   Remove the entire QQ channel integration across CLI, desktop, dashboard,
   docs, and i18n.

@@ -1,0 +1,29 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: remove-qq-channel
+  status: proposed
+summary:
+  what:
+    - Remove the entire QQ channel integration from the codebase
+  why:
+    - >-
+      QQ channel integration is unused and adds maintenance burden across CLI, desktop, dashboard,
+      docs, and i18n. Removing it simplifies the codebase and reduces surface area.
+scope:
+  in:
+    - >-
+      src/qq/*, src/cli/ui/slash/*, src/config.ts, desktop/src/*, dashboard/src/*, src/i18n/*,
+      docs/qq-connect.md, README.md, README.zh-CN.md, CLAUDE.md, tests/qq-*.test.ts,
+      tests/desktop-qq-*.test.ts
+  out:
+    - >-
+      Clean codebase with zero QQ references. All QQ imports, modules, commands, config keys, i18n
+      keys, docs, and tests removed.
+unchanged_behavior:
+  - Agent loop, tool-call repair, MCP, provider logic, non-QQ i18n keys, non-QQ tests
+roadmap:
+  milestone: 0008-ux-streamline
+  planned_change: remove-qq-channel

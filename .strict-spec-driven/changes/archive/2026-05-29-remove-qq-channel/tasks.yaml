@@ -1,0 +1,67 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: remove-qq-channel
+sections:
+  Implementation:
+    delete-qq-module:
+      text: Delete src/qq/ directory (use-qq-channel.ts, channel.ts, access.ts, bot.ts, strings.ts)
+      status: complete
+    remove-qq-slash-commands:
+      text: 'Remove /qq slash command: delete handlers/qq.ts, remove from commands.ts and dispatch.ts'
+      status: complete
+    remove-qq-cli-imports:
+      text: Remove QQ imports from App.tsx, chat.tsx, desktop.ts
+      status: complete
+    remove-qq-config:
+      text: Remove QQ config functions (loadQQConfig, saveQQConfig) and QQ env vars from src/config.ts
+      status: complete
+    remove-qq-desktop:
+      text: Remove QQ integration from desktop/ (qq-settings.ts, settings UI, App.tsx, protocol.ts)
+      status: complete
+    remove-qq-dashboard:
+      text: Remove QQ integration from dashboard/ (qq-settings.ts, settings UI, App.tsx, protocol.ts)
+      status: complete
+    remove-qq-i18n:
+      text: Remove qq.* i18n keys from all locale files (EN, zh-CN, JA, de, ru) and types.ts
+      status: complete
+    remove-qq-docs:
+      text: Delete docs/qq-connect.md, docs/qq-connect.zh-CN.md; remove QQ sections from README files
+      status: complete
+    update-claude-md:
+      text: Remove 'QQ/WeChat adapters' from CLAUDE.md context description
+      status: complete
+    remove-qq-tests:
+      text: Delete QQ test files and update tests with QQ assertions
+      status: complete
+    update-config-yaml:
+      text: Remove QQ/WeChat mention from .strict-spec-driven/config.yaml context
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run type checking.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    grep-no-qq:
+      text: Grep codebase for remaining 'qq' references (case-insensitive) to confirm zero stragglers
+      status: complete
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

@@ -41,7 +41,6 @@ import type {
   SkillInfo,
 } from "./protocol";
 import { readSessionFromUrl, writeSessionToUrl } from "./lib/session-url";
-import { type QQDesktopSettingsState } from "./qq-settings";
 import { Composer, type SlashCmd } from "./ui/composer";
 import { ContextPanel } from "./ui/context-panel";
 import { JobsPop } from "./ui/jobs-pop";
@@ -230,7 +229,6 @@ type State = {
   usage: UsageStats;
   sessions: SessionInfo[];
   settings: Settings | null;
-  qq: QQDesktopSettingsState | null;
   balance: Balance | null;
   mentionResults: MentionResults | null;
   mentionPreview: MentionPreviewState | null;
@@ -761,21 +759,6 @@ export function applyIncoming(state: State, ev: IncomingEvent): State {
           isAvailable: ev.isAvailable,
         },
       };
-    case "$qq_settings":
-      return {
-        ...state,
-        qq: {
-          appId: ev.appId,
-          appSecret: ev.appSecret,
-          sandbox: ev.sandbox,
-          enabled: ev.enabled,
-          configured: ev.configured,
-          runtimeState: ev.runtimeState,
-          lastError: ev.lastError,
-          appIdPreview: ev.appIdPreview,
-          access: ev.access,
-        },
-      };
     case "$settings": {
       const prevWs = state.settings?.workspaceDir;
       const wsChanged = prevWs !== undefined && prevWs !== ev.workspaceDir;
@@ -1166,7 +1149,6 @@ function TabRuntime({
     usage: zeroUsage(),
     sessions: [],
     settings: null,
-    qq: null,
     balance: null,
     mentionResults: null,
     mentionPreview: null,
@@ -1242,14 +1224,6 @@ function TabRuntime({
   );
   const saveSettings = useCallback(
     (patch: SettingsPatch) => sendRpc({ cmd: "settings_save", ...patch }),
-    [sendRpc],
-  );
-  const loadQQSettings = useCallback(() => sendRpc({ cmd: "qq_status_get" }), [sendRpc]);
-  const connectQQ = useCallback(() => sendRpc({ cmd: "qq_connect" }), [sendRpc]);
-  const disconnectQQ = useCallback(() => sendRpc({ cmd: "qq_disconnect" }), [sendRpc]);
-  const saveQQConfig = useCallback(
-    (patch: { appId?: string; appSecret?: string; sandbox: boolean }) =>
-      sendRpc({ cmd: "qq_config_save", ...patch }),
     [sendRpc],
   );
   const saveApiKey = useCallback(
@@ -1530,11 +1504,6 @@ function TabRuntime({
     if (state.busy) return;
     sendRpc({ cmd: "jobs_list" });
   }, [active, state.busy, sendRpc]);
-
-  useEffect(() => {
-    if (!active) return;
-    loadQQSettings();
-  }, [active, loadQQSettings]);
 
   const initialUrlSession = useRef<string | null>(readSessionFromUrl());
   const urlSessionDispatched = useRef(false);
@@ -2197,17 +2166,9 @@ function TabRuntime({
             skills={state.skills}
             memory={state.memory}
             memoryDetail={state.memoryDetail}
-            qq={state.qq}
             onClose={() => setSettingsOpen(false)}
             onSave={saveSettings}
             onSaveApiKey={saveApiKey}
-            onLoadQQ={loadQQSettings}
-            onConnectQQ={connectQQ}
-            onDisconnectQQ={disconnectQQ}
-            onSaveQQConfig={saveQQConfig}
-            onOpenQQApplyLink={() =>
-              openUrl("https://q.qq.com/qqbot/openclaw/login.html").catch(() => undefined)
-            }
             onPickWorkspace={pickWorkspace}
             onAddMcpSpec={addMcpSpec}
             onRemoveMcpSpec={removeMcpSpec}

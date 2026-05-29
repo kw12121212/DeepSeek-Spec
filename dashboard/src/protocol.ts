@@ -316,19 +316,6 @@ export type SettingsEvent = {
   version: string;
 };
 
-export type QQSettingsEvent = {
-  type: "$qq_settings";
-  appId?: string;
-  appSecret?: string;
-  sandbox: boolean;
-  enabled: boolean;
-  configured: boolean;
-  runtimeState: "disconnected" | "connecting" | "connected" | "failed";
-  lastError?: string;
-  appIdPreview?: string;
-  access: string;
-};
-
 export type BalanceEvent = {
   type: "$balance";
   currency: string;
@@ -347,12 +334,6 @@ export type SettingsPatch = {
   webSearchEngine?: WebSearchEngineName;
   subagentModels?: Record<string, "flash" | "pro">;
   showSystemEvents?: boolean;
-};
-
-export type QQConfigPatch = {
-  appId?: string;
-  appSecret?: string;
-  sandbox: boolean;
 };
 
 export type UserMessageEvent = {
@@ -470,7 +451,6 @@ export type IncomingEvent = { tabId?: string } & (
   | SessionEmptyEvent
   | NeedsSetupEvent
   | SettingsEvent
-  | QQSettingsEvent
   | BalanceEvent
   | CheckpointRequiredEvent
   | RevisionRequiredEvent
@@ -517,10 +497,6 @@ export type OutgoingCommand = { tabId?: string } & (
   | { cmd: "setup_save_key"; key: string }
   | { cmd: "settings_get" }
   | ({ cmd: "settings_save" } & SettingsPatch)
-  | { cmd: "qq_status_get" }
-  | { cmd: "qq_connect" }
-  | { cmd: "qq_disconnect" }
-  | ({ cmd: "qq_config_save" } & QQConfigPatch)
   | { cmd: "mention_query"; query: string; nonce: number }
   | { cmd: "mention_preview"; path: string; nonce: number }
   | { cmd: "mention_picked"; path: string }

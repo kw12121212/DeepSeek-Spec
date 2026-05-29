@@ -1,0 +1,14 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: embedded-assets
+mapping:
+  implementation: []
+  tests: []
+operations:
+  ADDED: {}
+  MODIFIED: {}
+  REMOVED:
+    no-qq-assets:
+      reason: QQ channel integration is unused and being fully removed from the codebase

@@ -18,7 +18,6 @@ import {
   renameSession,
   resolveSession,
 } from "../../memory/session.js";
-import { QQChannel } from "../../qq/channel.js";
 import { ToolRegistry } from "../../tools.js";
 import { registerChoiceTool } from "../../tools/choice.js";
 import { registerMemoryTools } from "../../tools/memory.js";
@@ -127,12 +126,6 @@ interface RootProps extends ChatOptions {
   startupInfoHints: string[];
   /** Resolved app/native scroll behavior for chat history. */
   historyScrollMode: ResolvedHistoryScrollMode;
-  /** Pre-created QQ channel (started before TUI mounts). */
-  qqChannel?: QQChannel;
-  /** App fills this ref on mount so QQ messages flow into the TUI input queue. */
-  qqSubmitRef: { current: ((text: string) => void) | null };
-  /** App fills this ref on mount so QQ errors appear in the TUI log. */
-  qqErrorRef: { current: ((msg: string) => void) | null };
 }
 
 function Root({
@@ -244,9 +237,6 @@ function Root({
         dashboardPort={appProps.dashboardPort}
         dashboardHost={appProps.dashboardHost}
         dashboardToken={appProps.dashboardToken}
-        qqChannel={appProps.qqChannel}
-        qqSubmitRef={appProps.qqSubmitRef}
-        qqErrorRef={appProps.qqErrorRef}
         historyScrollMode={historyScrollMode}
         onSwitchSession={setActiveSession}
       />
@@ -346,28 +336,6 @@ export async function chatCommand(opts: ChatOptions): Promise<void> {
 
   markPhase("ink_render_call");
 
-  // Create QQ channel before the TUI mounts so connection setup stays
-  // outside React lifecycle timing and the WebSocket handshake remains
-  // deterministic.
-  const qqSubmitRef: { current: ((text: string) => void) | null } = { current: null };
-  const qqErrorRef: { current: ((msg: string) => void) | null } = { current: null };
-  const qqRequested = cfg.qq?.enabled === true;
-  let qqChannel: QQChannel | undefined;
-  if (qqRequested) {
-    const channel = new QQChannel({
-      onSubmitMessage: (text) => qqSubmitRef.current?.(text),
-      onError: (msg) => qqErrorRef.current?.(msg),
-    });
-    process.stderr.write("Connecting QQ bot...\n");
-    try {
-      await channel.start();
-      qqChannel = channel;
-      process.stderr.write("QQ bot connected\n");
-    } catch (err) {
-      process.stderr.write(`QQ bot failed: ${(err as Error).message}\n`);
-    }
-  }
-
   // Before render() — shims Ink's per-card useBoxMetrics resize subscribe
   // path so N cards don't accumulate N native stdout listeners.
   installResizeBroadcaster();
@@ -403,9 +371,6 @@ export async function chatCommand(opts: ChatOptions): Promise<void> {
       {...opts}
       codeMode={codeMode}
       session={resolvedSession}
-      qqChannel={qqChannel}
-      qqSubmitRef={qqSubmitRef}
-      qqErrorRef={qqErrorRef}
     />,
     { exitOnCtrlC: true, incrementalRendering: true },
   );
@@ -414,7 +379,6 @@ export async function chatCommand(opts: ChatOptions): Promise<void> {
   } finally {
     disableMouseMode();
     await runtime.closeAll();
-    qqChannel?.stop();
     await drainTtyResponses();
   }
 }

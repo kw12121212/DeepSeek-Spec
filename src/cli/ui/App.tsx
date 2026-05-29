@@ -71,8 +71,6 @@ import {
   renameSession,
   sanitizeName,
 } from "../../memory/session.js";
-import type { QQChannel } from "../../qq/channel.js";
-import { useQQChannel } from "../../qq/use-qq-channel.js";
 import type {
   ActiveModal,
   ChoiceResolution,
@@ -305,12 +303,6 @@ export interface AppProps {
   onSwitchSession?: (name: string | undefined) => void;
   /** One-time startup info rows injected by chatCommand. */
   startupInfoHints?: string[];
-  /** Pre-created QQ channel (started before TUI mounts). */
-  qqChannel?: QQChannel;
-  /** Ref filled by App on mount so QQ messages flow into the TUI input queue. */
-  qqSubmitRef?: { current: ((text: string) => void) | null };
-  /** Ref filled by App on mount so QQ errors appear in the TUI log. */
-  qqErrorRef?: { current: ((msg: string) => void) | null };
   /** Resolved chat-history scroll mode, computed by the launcher from config/env. */
   historyScrollMode?: ResolvedHistoryScrollMode;
 }
@@ -458,9 +450,6 @@ function AppInner({
   dashboardToken,
   onSwitchSession,
   startupInfoHints,
-  qqChannel,
-  qqSubmitRef,
-  qqErrorRef,
   historyScrollMode,
   themeName,
   setThemeName,
@@ -2652,71 +2641,10 @@ function AppInner({
     ) => void
   >(() => undefined);
 
-  const handleQQModelPick = useCallback(
-    (target: string): string => {
-      if (isReasoningEffort(target)) {
-        const effort: ReasoningEffort = target;
-        loop.configure({ reasoningEffort: effort });
-        agentStore.dispatch({ type: "session.effort.change", reasoningEffort: effort });
-        try {
-          saveReasoningEffort(effort);
-        } catch {}
-        return `effort: ${effort}`;
-      }
-      loop.configure({ model: target });
-      agentStore.dispatch({ type: "session.model.change", model: target });
-      try {
-        saveModel(target);
-      } catch {}
-      return `model: ${target}`;
-    },
-    [agentStore, loop],
-  );
-
-  const handleQQThemePick = useCallback(
-    (target: ThemeChoice): string => {
-      saveTheme(target);
-      const active = resolveThemePreference(target, process.env.REASONIX_THEME);
-      setThemeName(active);
-      return `theme saved: ${target}\nactive now: ${active}`;
-    },
-    [setThemeName],
-  );
-
-  const qq = useQQChannel({
-    codeMode: !!codeMode,
-    initialChannel: qqChannel,
-    log,
-    setQueuedSubmit,
-    qqSubmitRef,
-    qqErrorRef,
-    sessionName: session,
-    currentRootDir,
-    pendingGateIdRef,
-    completedStepIdsRef,
-    planStepsRef,
-    onCreateSession: onSwitchSession ? (name) => onSwitchSession(name) : undefined,
-    onSelectSession: onSwitchSession ? (name) => onSwitchSession(name) : undefined,
-    onModelPick: handleQQModelPick,
-    onThemePick: handleQQThemePick,
-    onShellConfirmRef: handleShellConfirmRef,
-    onPathConfirmRef: handlePathConfirmRef,
-    onPlanCancelRef: handlePlanCancelRef,
-    onPlanFeedbackRef: handlePlanFeedbackRef,
-    onCheckpointConfirmRef: handleCheckpointConfirmRef,
-    onCheckpointReviseRef: handleCheckpointReviseSubmitRef,
-    onPlanRevisionRef: handleReviseConfirmRef,
-    onChoiceResolveRef: handleChoiceResolveRef,
-  });
-
   const handleSubmit = useCallback(
     async (raw: string) => {
-      const incoming = qq.parseSubmit(raw);
-      if (!incoming) return;
-      let { text, fromQQ } = incoming;
-      if (incoming.handled) {
-        return;
-      }
+      if (!raw) return;
+      let text = raw;
       if (busy || submittingRef.current) {
         if (busy && text.trim()) {
           if (isBusyPromptCommand(text)) {
@@ -2950,17 +2878,12 @@ function AppInner({
           startDashboard,
           stopDashboard,
           getDashboardUrl,
-          qq: {
-            connect: qq.connect,
-            disconnect: qq.disconnect,
-            status: qq.status,
-          },
           sessionId: session,
           getEngineeringLifecycleSnapshot: codeMode
             ? () => engineeringLifecycleRef.current?.snapshot() ?? null
             : undefined,
           jobs: codeMode?.jobs,
-          postInfo: fromQQ ? qq.sendInfo : log.pushInfo,
+          postInfo: log.pushInfo,
           postDoctor: (checks) => log.showDoctor(checks),
           postUsage: (args) => log.showUsageVerbose(args),
           postKeys: (args) =>
@@ -3019,20 +2942,6 @@ function AppInner({
           refreshModels,
           generateSessionTitle: generateCurrentSessionTitle,
         });
-        if (
-          fromQQ &&
-          qq.handleRemoteSlashResult({
-            result,
-            codeMode: !!codeMode,
-            sessions: listSessionsForWorkspace(currentRootDir),
-            checkpoints: codeMode ? [...listCheckpoints(currentRootDir)].reverse() : [],
-            models,
-            restoreCodeOnlyMessage: t("app.restoreCodeOnly"),
-          })
-        ) {
-          pushHistory(text);
-          return;
-        }
         if (result.openSessionsPicker) {
           const sessions = listSessionsForWorkspace(currentRootDir);
           setSessionsPickerList(sessions);
@@ -3108,7 +3017,6 @@ function AppInner({
           resetPendingModals,
           text,
         });
-        if (fromQQ && result.info) qq.sendText(result.info);
         if (outcome.kind === "resubmit") {
           text = outcome.text;
         } else {
@@ -3182,7 +3090,6 @@ function AppInner({
       submittingRef.current = true;
       busyRef.current = true;
       setBusy(true);
-      qq.noteTurnFromQQ(fromQQ);
       abortedThisTurn.current = false;
       // Seal the in-progress history entry so this turn's edits open
       // a new one —prior turns are preserved intact for /history and
@@ -3447,7 +3354,6 @@ function AppInner({
             log.pushWarning(t("app.hookStop"), formatHookOutcomeMessage(o));
           }
         }
-        qq.maybeSendFinalReply(lastAssistantText);
       } finally {
         flush();
         // Esc aborted the turn —close any in-flight cards (streaming /
@@ -3462,7 +3368,6 @@ function AppInner({
         busyRef.current = false;
         setBusy(false);
         submittingRef.current = false;
-        qq.clearTurnReply();
         // Refresh balance lazily —don't block the return.
         refreshBalance();
       }
@@ -3517,7 +3422,6 @@ function AppInner({
       stopLoop,
       startLoop,
       getLoopStatus,
-      qq,
       isLoopActive,
       isLoopFiring,
       clearFiringFlag,
@@ -3617,23 +3521,18 @@ function AppInner({
     setStagedChoiceCustom(null);
     setStagedCheckpointRevise(null);
     pendingGateIdRef.current = null;
-    qq.resetInteractions();
     pauseGate.cancelAll();
-  }, [qq]);
+  }, []);
 
   // Drain queued submits after the in-flight turn tears down.
-  // QQ pause-gate replies are the one exception: they need to re-enter
-  // handleSubmit while the turn is still "busy" so the blocked
-  // pauseGate.ask() can be resolved from the remote reply.
   useEffect(() => {
     if (queuedSubmit === null) return;
-    const canBypassBusy = qq.canBypassBusy(queuedSubmit);
-    if ((!busy && !submittingRef.current) || canBypassBusy) {
+    if (!busy && !submittingRef.current) {
       const text = queuedSubmit;
       setQueuedSubmit(null);
       void handleSubmit(text);
     }
-  }, [busy, queuedSubmit, handleSubmit, qq]);
+  }, [busy, queuedSubmit, handleSubmit]);
 
   /**
    * PlanConfirm callback. Three outcomes, all ending with a synthetic
@@ -3887,14 +3786,11 @@ function AppInner({
   }, [handlePathConfirm]);
   // Listen for pause requests from tool functions (via PauseGate).
   // Dispatches to the correct modal based on request.kind.
-  // Also sends notifications to QQ channel when QQ is connected.
   // biome-ignore lint/correctness/useExhaustiveDependencies: setters, editModeRef, and chatScroll (store handle) are stable; the listener installs once per mount and reads only refs/setters from closure
   useEffect(() => {
     return pauseGate.on((request) => {
       const payload = request.payload as Record<string, unknown>;
       pendingGateIdRef.current = request.id;
-
-      qq.handlePauseRequest(request.kind, payload);
 
       switch (request.kind) {
         case "run_command":
@@ -4012,7 +3908,7 @@ function AppInner({
         }
       }
     });
-  }, [log, qq]);
+  }, [log]);
   // Ref-mirror of pendingPlan so the web's resolvePlanConfirm callback
   // (registered in startDashboard, frozen at boot) can read the live
   // body when the web resolves an approve/refine.

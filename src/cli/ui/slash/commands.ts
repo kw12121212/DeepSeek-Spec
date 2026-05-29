@@ -180,14 +180,6 @@ export const SLASH_COMMANDS: readonly SlashCommandSpec[] = [
     argCompleter: "skills",
   },
   {
-    cmd: "qq",
-    group: "extend",
-    argsHint: "<connect|status|disconnect>",
-    summary: "connect, inspect, or disconnect the QQ channel",
-    argCompleter: ["connect", "status", "disconnect"],
-  },
-
-  {
     cmd: "strict-init",
     group: "strict",
     summary: "initialize .strict-spec-driven/ in the current project",

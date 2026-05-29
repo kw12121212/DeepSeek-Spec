@@ -71,7 +71,6 @@ function makeState(messages: ChatMessage[] = []): AppState {
     },
     sessions: [],
     settings: null,
-    qq: null,
     balance: null,
     mentionResults: null,
     mentionPreview: null,
@@ -87,7 +86,7 @@ function makeState(messages: ChatMessage[] = []): AppState {
   };
 }
 
-describe("desktop incoming QQ/user message rendering", () => {
+describe("desktop incoming user message rendering", () => {
   it("appends remote user.message into the desktop transcript and marks the tab busy", () => {
     const state = makeState([{ kind: "assistant", turn: 1, segments: [], pending: false }]);
     const next = applyIncoming(state, {

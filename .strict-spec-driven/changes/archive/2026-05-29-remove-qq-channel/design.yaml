@@ -1,0 +1,21 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: remove-qq-channel
+approach:
+  - >-
+    Systematic deletion in dependency order: (1) delete src/qq/ module files, (2) remove QQ command
+    from slash handlers, (3) remove QQ imports from CLI/App/commands, (4) remove QQ config functions
+    and env vars, (5) remove desktop QQ integration, (6) remove dashboard QQ integration, (7) remove
+    QQ i18n keys from all locales, (8) delete QQ docs, (9) update README files, (10) update
+    CLAUDE.md context, (11) delete QQ test files and update tests with QQ assertions. Run bun run
+    verify after each major phase.
+decisions:
+  delete-not-disable:
+    decision: Fully delete QQ code rather than feature-flagging or stubbing it
+    rationale: >-
+      The QQ channel integration is confirmed unused. Feature-flagging dead code adds complexity
+      with no benefit. A clean cut avoids partial state and future confusion.
+alternatives: []
+risks: []

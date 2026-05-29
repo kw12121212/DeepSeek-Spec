@@ -371,11 +371,6 @@ export const JA: TranslationSchema = {
     },
     sessions: { description: "保存されたセッションを一覧（現在のセッションは ▸ で表示）" },
     title: { description: "会話からこのセッションの名前をモデルに変更させる" },
-    qq: {
-      description:
-        "このセッションのQQチャンネルを接続、検査、または切断（初回接続時にApp ID / App Secretの設定をガイド）",
-      argsHint: "[connect [appId appSecret [sandbox]]|status|disconnect]",
-    },
     setup: { description: "終了して `reasonix setup` を実行するよう促します" },
     semantic: {
       description: "semantic_search の状態を表示 — 構築済み？Ollama導入済み？有効化方法は？",
@@ -840,55 +835,6 @@ export const JA: TranslationSchema = {
       titleUnavailable: "/title はアクティブな永続化TUIセッションでのみ利用可能です。",
       titleStarted: "▸ セッション名を生成中…",
       titleFailed: "▸ セッションタイトルが失敗しました: {reason}",
-    },
-    qq: {
-      unavailable: "/qq はこのセッションでは利用できません。",
-      connecting: "QQ: 接続中…",
-      connectFailed: "QQ 接続に失敗しました: {reason}",
-      disconnecting: "QQ: 切断中…",
-      disconnectFailed: "QQ 切断に失敗しました: {reason}",
-      usage: "使い方: /qq connect [appId appSecret [sandbox]] | /qq status | /qq disconnect",
-      promptAppId:
-        "QQ設定: QQ Open Platform の App ID を入力し、Enter を押してください。/cancel で中断。",
-      promptAppSecret:
-        "QQ設定: QQ Open Platform の App Secret を入力し、Enter を押してください。/cancel で中断。",
-      setupWaitingAppId: "App ID の入力を待機中",
-      setupWaitingAppSecret: "App Secret の入力を待機中",
-      setupCancelled: "QQ設定をキャンセルしました。",
-      credentialsRequired: "QQ App ID と App Secret が必要です。",
-      connected: "QQ が {mode} モードで接続されました。今後の起動時に自動起動します。",
-      alreadyConnected: "QQ は既に {mode} モードで接続されています。自動起動が有効です。",
-      disconnected: "QQ を切断しました。自動起動が無効です。",
-      status:
-        "QQ: {connected}, 自動起動 {enabled}, 認証情報 {configured}, appId {appId}, {sandbox}, アクセス {access}, 現在のモード {mode}。",
-      statusSetup: "QQ: セットアップ中 — {step}",
-      stateConnected: "接続済み",
-      stateDisconnected: "切断済み",
-      stateEnabled: "有効",
-      stateDisabled: "無効",
-      stateConfigured: "設定済み",
-      stateNotConfigured: "未設定",
-      sandbox: "サンドボックス",
-      production: "本番",
-      none: "なし",
-      modeChat: "チャット",
-      modeCode: "コード",
-      accessOwner: "所有者 {owner}",
-      accessOwnerWithAllowlist: "所有者 {owner}, 許可リスト {count}",
-      accessAllowlist: "許可リスト {count}",
-      accessRuntime: "最初の送信者（ランタイムのみ, {owner}）",
-      accessOpen: "オープン（制限なし）",
-      lockAlreadyRunning:
-        "QQチャンネルは既にプロセス {pid} で実行中です。別のQQチャンネルを開始する前にそのプロセスを停止してください。",
-      unauthorizedMessage:
-        "QQ が未認証の openid {openid} からのメッセージを無視しました。現在のアクセス: {access}。",
-      runtimeBound:
-        "QQ はこの実行を最初の送信者 {openid} に一時的にバインドしました。アクセスを永続化するには設定で `qq.ownerOpenId` を設定してください。",
-      missingAppId: "QQ App ID が必要です。`/qq connect` を実行して設定してください。",
-      missingAppSecret: "QQ App Secret が必要です。`/qq connect` を実行して設定してください。",
-      authFailed: "QQ ボット認証に失敗しました — App ID と App Secret を確認してください。",
-      readyTimeout:
-        "QQ ボットが15秒以内に READY を受信しませんでした — App ID と App Secret を確認してください。",
     },
     admin: {
       doctorNeedsTui: "/doctor は TUI コンテキストが必要です（postDoctor wired）。",

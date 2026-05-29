@@ -14,7 +14,6 @@ import { handlers as modelHandlers } from "./handlers/model.js";
 import { handlers as observabilityHandlers } from "./handlers/observability.js";
 import { handlers as permissionsHandlers } from "./handlers/permissions.js";
 import { handlers as plansHandlers } from "./handlers/plans.js";
-import { handlers as qqHandlers } from "./handlers/qq.js";
 import { handlers as sessionsHandlers } from "./handlers/sessions.js";
 import { handlers as skillHandlers } from "./handlers/skill.js";
 import { handlers as strictHandlers } from "./handlers/strict.js";
@@ -40,7 +39,6 @@ const HANDLERS: Record<string, SlashHandler> = {
   ...observabilityHandlers,
   ...permissionsHandlers,
   ...plansHandlers,
-  ...qqHandlers,
   ...sessionsHandlers,
   ...themeHandlers,
   ...skillHandlers,

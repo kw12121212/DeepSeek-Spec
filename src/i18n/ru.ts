@@ -295,11 +295,6 @@ export const ru: TranslationSchema = {
       description: "список сохранённых сессий (текущая отмечена ▸)",
     },
     title: { ...EN.slash.title, description: "попросить модель переименовать сессию из разговора" },
-    qq: {
-      ...EN.slash.qq,
-      description:
-        "подключить, проверить или отключить QQ-канал для этой сессии (первое подключение проводит через App ID / App Secret настройку)",
-    },
     setup: { ...EN.slash.setup, description: "напоминает выйти и запустить `reasonix setup`" },
     semantic: {
       ...EN.slash.semantic,
