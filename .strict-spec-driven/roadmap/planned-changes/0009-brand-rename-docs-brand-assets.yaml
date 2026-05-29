@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: docs-brand-assets
   milestone: 0009-brand-rename
-status: planned
+status: complete
 summary: |
   Update all documentation (README, architecture, CLI reference), brand asset
   files (logos, icons, wordmarks), and CLAUDE.md.

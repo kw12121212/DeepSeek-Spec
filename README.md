@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/logo.svg" alt="Reasonix" width="640"/>
+  <img src="docs/logo.svg" alt="DeepSeek-Spec" width="640"/>
 </p>
 
 <p align="center">
@@ -19,14 +19,14 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/reasonix"><img src="https://img.shields.io/npm/v/reasonix.svg?style=flat-square&color=cb3837&labelColor=161b22&logo=npm&logoColor=white" alt="npm version"/></a>
-  <a href="./LICENSE"><img src="https://img.shields.io/npm/l/reasonix.svg?style=flat-square&color=8b949e&labelColor=161b22" alt="license"/></a>
-  <a href="https://www.npmjs.com/package/reasonix"><img src="https://img.shields.io/npm/dm/reasonix.svg?style=flat-square&color=3fb950&labelColor=161b22&label=downloads" alt="downloads"/></a>
-  <a href="./package.json"><img src="https://img.shields.io/node/v/reasonix.svg?style=flat-square&color=5fa04e&labelColor=161b22&logo=nodedotjs&logoColor=white" alt="node"/></a>
-  <a href="https://github.com/esengine/reasonix/stargazers"><img src="https://img.shields.io/github/stars/esengine/reasonix.svg?style=flat-square&color=dbab09&labelColor=161b22&logo=github&logoColor=white" alt="GitHub stars"/></a>
+  <a href="https://www.npmjs.com/package/deepseek-spec"><img src="https://img.shields.io/npm/v/deepseek-spec.svg?style=flat-square&color=cb3837&labelColor=161b22&logo=npm&logoColor=white" alt="npm version"/></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/npm/l/deepseek-spec.svg?style=flat-square&color=8b949e&labelColor=161b22" alt="license"/></a>
+  <a href="https://www.npmjs.com/package/deepseek-spec"><img src="https://img.shields.io/npm/dm/deepseek-spec.svg?style=flat-square&color=3fb950&labelColor=161b22&label=downloads" alt="downloads"/></a>
+  <a href="./package.json"><img src="https://img.shields.io/node/v/deepseek-spec.svg?style=flat-square&color=5fa04e&labelColor=161b22&logo=nodedotjs&logoColor=white" alt="node"/></a>
+  <a href="https://github.com/esengine/DeepSeek-Reasonix/stargazers"><img src="https://img.shields.io/github/stars/esengine/DeepSeek-Reasonix.svg?style=flat-square&color=dbab09&labelColor=161b22&logo=github&logoColor=white" alt="GitHub stars"/></a>
   <a href="https://atomgit.com/esengine/DeepSeek-Reasonix"><img src="https://atomgit.com/esengine/DeepSeek-Reasonix/star/badge.svg" alt="AtomGit stars"/></a>
-  <a href="https://github.com/esengine/reasonix/graphs/contributors"><img src="https://img.shields.io/github/contributors/esengine/reasonix.svg?style=flat-square&color=bc8cff&labelColor=161b22&logo=github&logoColor=white" alt="contributors"/></a>
-  <a href="https://github.com/esengine/reasonix/discussions"><img src="https://img.shields.io/github/discussions/esengine/reasonix.svg?style=flat-square&color=58a6ff&labelColor=161b22&logo=github&logoColor=white" alt="Discussions"/></a>
+  <a href="https://github.com/esengine/DeepSeek-Reasonix/graphs/contributors"><img src="https://img.shields.io/github/contributors/esengine/DeepSeek-Reasonix.svg?style=flat-square&color=bc8cff&labelColor=161b22&logo=github&logoColor=white" alt="contributors"/></a>
+  <a href="https://github.com/esengine/DeepSeek-Reasonix/discussions"><img src="https://img.shields.io/github/discussions/esengine/DeepSeek-Reasonix.svg?style=flat-square&color=58a6ff&labelColor=161b22&logo=github&logoColor=white" alt="Discussions"/></a>
   <a href="https://discord.gg/XF78rEME2D"><img src="https://img.shields.io/badge/discord-join-5865F2.svg?style=flat-square&labelColor=161b22&logo=discord&logoColor=white" alt="Discord"/></a>
 </p>
 
@@ -44,16 +44,16 @@
 <br/>
 
 <p align="center">
-  <img src="docs/assets/hero-terminal.svg" alt="Reasonix code mode — assistant proposes a SEARCH/REPLACE edit; nothing on disk until /apply" width="860"/>
+  <img src="docs/assets/hero-terminal.svg" alt="DeepSeek-Spec code mode — assistant proposes a SEARCH/REPLACE edit; nothing on disk until /apply" width="860"/>
 </p>
 
 <br/>
 
 > [!TIP]
-> **Cache stability isn't a feature you turn on; it's an invariant the loop is designed around.** That's the whole reason Reasonix is DeepSeek-only — every layer is tuned to the byte-stable prefix-cache mechanic.
+> **Cache stability isn't a feature you turn on; it's an invariant the loop is designed around.** That's the whole reason DeepSeek-Spec is DeepSeek-only — every layer is tuned to the byte-stable prefix-cache mechanic.
 
 > [!NOTE]
-> **Real user, single day (2026-05-01):** 435M input tokens, **99.82% cache hit**, ~$12 instead of the ~$61 the same workload would cost with no cache on `v4-flash` — see the [case study](./benchmarks/real-world-cache/README.md). DeepSeek provides the cacheable bytes; the four mechanisms in [Pillar 1](./docs/ARCHITECTURE.md#pillar-1--cache-first-loop) are how Reasonix keeps them cacheable across long sessions.
+> **Real user, single day (2026-05-01):** 435M input tokens, **99.82% cache hit**, ~$12 instead of the ~$61 the same workload would cost with no cache on `v4-flash` — see the [case study](./benchmarks/real-world-cache/README.md). DeepSeek provides the cacheable bytes; the four mechanisms in [Pillar 1](./docs/ARCHITECTURE.md#pillar-1--cache-first-loop) are how DeepSeek-Spec keeps them cacheable across long sessions.
 
 > [!IMPORTANT]
 > **Community · 加入社区** — bilingual Discord with channels for setup help (`#help` / `#求助`), workflow showcases, feature ideas, and contributor-only PR coordination. Verify your GitHub in-server to get the **Contributor** role automatically. → **<https://discord.gg/XF78rEME2D>**
@@ -64,48 +64,39 @@
 
 Requires Node ≥ 22. Works on macOS · Linux · Windows (PowerShell · Git Bash · Windows Terminal).
 
-Install Reasonix globally if you want the `reasonix` command available on your `PATH`:
+Install DeepSeek-Spec globally if you want the `dspec` command available on your `PATH`:
 
 ~~~bash
-bun add -g reasonix
-reasonix code my-project   # paste a DeepSeek API key on first run; persists after
+bun add -g deepseek-spec
+dspec code my-project   # paste a DeepSeek API key on first run; persists after
 ~~~
 
 Or run it once without installing globally:
 
 ~~~bash
 cd my-project
-bunx reasonix code          # always uses the latest package by default
+bunx deepseek-spec code          # always uses the latest package by default
 ~~~
 
-Grab a [DeepSeek API key →](https://platform.deepseek.com/api_keys) · `reasonix code --help` for flags.
+Grab a [DeepSeek API key →](https://platform.deepseek.com/api_keys) · `dspec code --help` for flags.
 
-If you use Reasonix daily, global install is the simplest path. If you just want to try it, use `bunx`.
+If you use DeepSeek-Spec daily, global install is the simplest path. If you just want to try it, use `bunx`.
 
-**Prefer fewer keystrokes?** The shorter `dsnix` alias resolves to the same CLI:
-
-~~~bash
-bun add -g dsnix       # exposes `dsnix` on PATH, depends on reasonix
-bunx dsnix@latest code      # one-shot via the shorter command
-~~~
-
-A global `bun add -g reasonix` also drops a `dsnix` shim on PATH, so the two are interchangeable.
-
-Bare `reasonix` (no subcommand) launches `code` in the current directory — typing `reasonix` and `reasonix code` are equivalent.
+Bare `dspec` (no subcommand) launches `code` in the current directory — typing `dspec` and `dspec code` are equivalent.
 
 | Command | When |
 |---|---|
-| `reasonix` / `reasonix code [dir]` | The coding agent. **Start here.** |
-| `reasonix chat` | Plain chat — no filesystem or shell tools. |
-| `reasonix run "task"` | One-shot, streams to stdout. Good for pipes. |
-| `reasonix doctor` | Health check: Node, API key, MCP wiring. |
-| `reasonix update` | Upgrade Reasonix itself. |
+| `dspec` / `dspec code [dir]` | The coding agent. **Start here.** |
+| `dspec chat` | Plain chat — no filesystem or shell tools. |
+| `dspec run "task"` | One-shot, streams to stdout. Good for pipes. |
+| `dspec doctor` | Health check: Node, API key, MCP wiring. |
+| `dspec update` | Upgrade DeepSeek-Spec itself. |
 
-Other subcommands (`replay` · `diff` · `events` · `stats` · `index` · `mcp` · `prune-sessions`) are in `reasonix --help` and the [CLI reference](https://esengine.github.io/DeepSeek-Reasonix/#cli).
+Other subcommands (`replay` · `diff` · `events` · `stats` · `index` · `mcp` · `prune-sessions`) are in `dspec --help` and the [CLI reference](https://esengine.github.io/DeepSeek-Reasonix/#cli).
 
 ### Build from source
 
-Clone and run the one-command setup script — it installs all dependencies (root + workspaces), builds the dashboard and CLI bundle, then links `reasonix` / `dsnix` onto your `PATH`:
+Clone and run the one-command setup script — it installs all dependencies (root + workspaces), builds the dashboard and CLI bundle, then links `dspec` onto your `PATH`:
 
 ~~~bash
 git clone https://github.com/kw12121212/DeepSeek-Spec.git
@@ -123,11 +114,11 @@ Requires **Bun** (preferred) or **Node ≥ 22** already on the system.
 
 ### Desktop client (prerelease)
 
-A native Tauri client for users who want a GUI over the same loop. Multi-tab, the right-panel shows files the agent has read or edited this session, the same cost / cache / token meters live at the bottom. Same DeepSeek API key, same `~/.reasonix` config — the desktop bundles its own Node runtime, no separate install step.
+A native Tauri client for users who want a GUI over the same loop. Multi-tab, the right-panel shows files the agent has read or edited this session, the same cost / cache / token meters live at the bottom. Same DeepSeek API key, same `~/.dspec` config — the desktop bundles its own Node runtime, no separate install step.
 
 Download platform installers from [GitHub Releases](https://github.com/esengine/DeepSeek-Reasonix/releases). The desktop ships as a **prerelease**: the loop and protocol are the same as the CLI, but the UI is still being polished and the installers aren't code-signed yet.
 
-- **macOS** — first launch hits Gatekeeper. One-time fix: `xattr -dr com.apple.quarantine /Applications/Reasonix.app` (or right-click → Open → confirm).
+- **macOS** — first launch hits Gatekeeper. One-time fix: `xattr -dr com.apple.quarantine /Applications/DeepSeek-Spec.app` (or right-click → Open → confirm).
 - **Windows** — SmartScreen warns "Unknown publisher". Click **More info → Run anyway**.
 - **Linux** — `.deb` and `.AppImage` ship plain, no extra step.
 
@@ -136,10 +127,10 @@ The CLI remains the canonical surface. Anything that lands in the CLI is also av
 <details>
 <summary><strong>Working in another folder · chat vs. code · author a skill</strong></summary>
 
-**Working in a different folder.** Reasonix scopes filesystem tools to the launch directory; pass `--dir` to retarget. Mid-session switching isn't supported by design (memory paths would tangle with stale roots) — quit and relaunch.
+**Working in a different folder.** DeepSeek-Spec scopes filesystem tools to the launch directory; pass `--dir` to retarget. Mid-session switching isn't supported by design (memory paths would tangle with stale roots) — quit and relaunch.
 
 ~~~bash
-bunx reasonix code --dir /path/to/project
+bunx deepseek-spec code --dir /path/to/project
 ~~~
 
 **Picking `chat` vs `code`.** `code` is the default and the only mode with filesystem / shell tools and SEARCH/REPLACE review. `chat` is the lighter, tools-off shell — reach for it when you want a thinking partner with MCP attached but no disk access.
@@ -158,15 +149,15 @@ bunx reasonix code --dir /path/to/project
 **Author your first skill.** No remote registry — write them directly. Edit the file (`description:` frontmatter + body), then `/skill list`. Add `runAs: subagent` to spawn an isolated subagent loop instead of inlining the body.
 
 ~~~bash
-/skill new my-skill              # <project>/.reasonix/skills/my-skill.md
-/skill new my-skill --global     # ~/.reasonix/skills for cross-project use
+/skill new my-skill              # <project>/.dspec/skills/my-skill.md
+/skill new my-skill --global     # ~/.dspec/skills for cross-project use
 ~~~
 
-**Claude-format skills also load.** `<project>/.claude/skills/<name>/SKILL.md` and `~/.claude/skills/` are read alongside Reasonix's native paths, so tooling that emits Claude-format skills works out of the box. Example — drop OpenSpec workflows in without an upstream adapter:
+**Claude-format skills also load.** `<project>/.claude/skills/<name>/SKILL.md` and `~/.claude/skills/` are read alongside DeepSeek-Spec's native paths, so tooling that emits Claude-format skills works out of the box. Example — drop OpenSpec workflows in without an upstream adapter:
 
 ~~~bash
 bunx openspec init --tools claude    # writes .claude/skills/openspec-*/SKILL.md
-/skill openspec-propose <task>      # then invoke from Reasonix
+/skill openspec-propose <task>      # then invoke from DeepSeek-Spec
 ~~~
 
 </details>
@@ -175,7 +166,7 @@ bunx openspec init --tools claude    # writes .claude/skills/openspec-*/SKILL.md
 
 ## Strict Spec Workflows
 
-Reasonix includes a strict-spec workflow for structured change management. Run `/strict-spec-init` to create the `.strict-spec-driven/` directory.
+DeepSeek-Spec includes a strict-spec workflow for structured change management. Run `/strict-spec-init` to create the `.strict-spec-driven/` directory.
 
 | Workflow | Commands |
 |---|---|
@@ -190,7 +181,7 @@ Config: `.strict-spec-driven/config.yaml`.
 
 ## Configuration
 
-One JSON file at `~/.reasonix/config.json` plus per-project overrides under `<project>/.reasonix/`. The full bilingual reference — every key, every slash command, the on-disk shape of skills/memory/hooks — lives at:
+One JSON file at `~/.dspec/config.json` plus per-project overrides under `<project>/.dspec/`. The full bilingual reference — every key, every slash command, the on-disk shape of skills/memory/hooks — lives at:
 
 > 📘 **[Configuration Guide](https://esengine.github.io/DeepSeek-Reasonix/configuration.html)** · [中文](https://esengine.github.io/DeepSeek-Reasonix/configuration.html?lang=zh)
 
@@ -202,11 +193,11 @@ One JSON file at `~/.reasonix/config.json` plus per-project overrides under `<pr
 | [Hooks](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#hooks) | Shell commands on lifecycle events. `PreToolUse` (gating) · `PostToolUse` · `UserPromptSubmit` · `Stop`. |
 | [Permissions](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#permissions) | Per-workspace shell allowlist. Exact-prefix match. |
 | [Web search](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#search) | Mojeek by default; switch to self-hosted SearXNG or Metaso with `/search-engine`. |
-| [Semantic index](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#index) | `reasonix index` — local Ollama or any OpenAI-compatible embedding endpoint. |
+| [Semantic index](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#index) | `dspec index` — local Ollama or any OpenAI-compatible embedding endpoint. |
 
 <br/>
 
-## What makes Reasonix different
+## What makes DeepSeek-Spec different
 
 The loop is organized around three pillars. Each one solves a problem generic agent frameworks don't even see — because they were designed for a different cache mechanic.
 
@@ -221,14 +212,14 @@ Click through to the full architecture writeup → [Pillar 1 — Cache-first loo
 ## Capabilities
 
 <p align="center">
-  <img src="docs/assets/feature-grid.svg" alt="Reasonix capabilities — cell-diff renderer, MCP, plan mode, permissions, dashboard, persistent sessions, hooks/skills/memory, semantic search, auto-checkpoints, /effort knob, transcript replay, event log" width="880"/>
+  <img src="docs/assets/feature-grid.svg" alt="DeepSeek-Spec capabilities — cell-diff renderer, MCP, plan mode, permissions, dashboard, persistent sessions, hooks/skills/memory, semantic search, auto-checkpoints, /effort knob, transcript replay, event log" width="880"/>
 </p>
 
 <br/>
 
 ## How it compares
 
-|                                   | Reasonix         | Claude Code       | Cursor              | Aider              |
+|                                   | DeepSeek-Spec    | Claude Code       | Cursor              | Aider              |
 |-----------------------------------|------------------|-------------------|---------------------|--------------------|
 | Backend                           | DeepSeek         | Anthropic         | OpenAI / Anthropic  | any (OpenRouter)   |
 | License                           | **MIT**          | closed            | closed              | Apache 2           |
@@ -259,21 +250,21 @@ For live cache-hit rates, costs, and methodology, see [`benchmarks/`](./benchmar
 ## Community
 
 > [!NOTE]
-> Reasonix is open source and community-developed. Every avatar in the Acknowledgments wall at the bottom of this file is a real PR that shipped.
+> DeepSeek-Spec is open source and community-developed. Every avatar in the Acknowledgments wall at the bottom of this file is a real PR that shipped.
 
-Scoped starter tickets — each with background, code pointers, acceptance criteria, and hints — live under the [`good first issue`](https://github.com/esengine/reasonix/labels/good%20first%20issue) label. Pick anything open.
+Scoped starter tickets — each with background, code pointers, acceptance criteria, and hints — live under the [`good first issue`](https://github.com/esengine/DeepSeek-Reasonix/labels/good%20first%20issue) label. Pick anything open.
 
 **Open Discussions — opinions wanted:**
 
-- [#20 · CLI / TUI design](https://github.com/esengine/reasonix/discussions/20) — what's broken, what's missing, what would you change?
-- [#21 · Dashboard design](https://github.com/esengine/reasonix/discussions/21) — react against the [proposed mockup](https://esengine.github.io/DeepSeek-Reasonix/design/agent-dashboard.html)
-- [#22 · Future feature wishlist](https://github.com/esengine/reasonix/discussions/22) — what would you build into Reasonix next?
+- [#20 · CLI / TUI design](https://github.com/esengine/DeepSeek-Reasonix/discussions/20) — what's broken, what's missing, what would you change?
+- [#21 · Dashboard design](https://github.com/esengine/DeepSeek-Reasonix/discussions/21) — react against the [proposed mockup](https://esengine.github.io/DeepSeek-Reasonix/design/agent-dashboard.html)
+- [#22 · Future feature wishlist](https://github.com/esengine/DeepSeek-Reasonix/discussions/22) — what would you build into DeepSeek-Spec next?
 
-**Already using Reasonix and willing to help others discover it?** Publish blog posts, articles, screenshots, talks, or videos to [**Show and tell**](https://github.com/esengine/reasonix/discussions/categories/show-and-tell). The project has no marketing budget — community word of mouth is how new users find it. Sustained advocates earn the badge below, displayed next to the contributors wall once awarded:
+**Already using DeepSeek-Spec and willing to help others discover it?** Publish blog posts, articles, screenshots, talks, or videos to [**Show and tell**](https://github.com/esengine/DeepSeek-Reasonix/discussions/categories/show-and-tell). The project has no marketing budget — community word of mouth is how new users find it. Sustained advocates earn the badge below, displayed next to the contributors wall once awarded:
 
 <p align="center">
-  <a href="https://github.com/esengine/reasonix/discussions/categories/show-and-tell">
-    <img src="https://img.shields.io/badge/REASONIX-📣%20ADVOCATE-c4b5fd?style=for-the-badge&labelColor=0d1117" alt="Reasonix Advocate badge — earned by sustained advocates"/>
+  <a href="https://github.com/esengine/DeepSeek-Reasonix/discussions/categories/show-and-tell">
+    <img src="https://img.shields.io/badge/DEEPSEEK_SPEC-📣%20ADVOCATE-c4b5fd?style=for-the-badge&labelColor=0d1117" alt="DeepSeek-Spec Advocate badge — earned by sustained advocates"/>
   </a>
 </p>
 
@@ -284,12 +275,12 @@ Scoped starter tickets — each with background, code pointers, acceptance crite
 ## Non-goals
 
 > [!IMPORTANT]
-> Reasonix is opinionated. Some things it deliberately *doesn't* do — listed here so you can pick the right tool for your work.
+> DeepSeek-Spec is opinionated. Some things it deliberately *doesn't* do — listed here so you can pick the right tool for your work.
 
 - **Multi-provider flexibility.** DeepSeek-only on purpose. Coupling to one backend is the feature, not a limitation.
 - **IDE integration.** Terminal-first. The diff lives in `git diff`, the file tree in `ls`. The dashboard is a companion, not a Cursor replacement.
 - **Hardest-leaderboard reasoning.** Claude Opus still wins some benchmarks. DeepSeek is competitive on coding; if your work is "solve this PhD proof" rather than "fix this auth bug," start with Claude.
-- **Air-gapped / fully-free.** Reasonix needs a paid DeepSeek API key. For air-gapped or zero-cost runs see Aider + Ollama or [Continue](https://continue.dev).
+- **Air-gapped / fully-free.** DeepSeek-Spec needs a paid DeepSeek API key. For air-gapped or zero-cost runs see Aider + Ollama or [Continue](https://continue.dev).
 
 <br/>
 
@@ -307,7 +298,7 @@ Scoped starter tickets — each with background, code pointers, acceptance crite
 
 ## Support
 
-If Reasonix has been useful and you'd like to say thanks, you can. It stays a coffee, not a contract — donations don't buy feature priority or change how issues get triaged.
+If DeepSeek-Spec has been useful and you'd like to say thanks, you can. It stays a coffee, not a contract — donations don't buy feature priority or change how issues get triaged.
 
 - **International** — PayPal: [paypal.me/yuhuahui](https://paypal.me/yuhuahui)
 - **国内** — 微信支付（扫码）
@@ -320,7 +311,7 @@ If Reasonix has been useful and you'd like to say thanks, you can. It stays a co
 
 ## Acknowledgments
 
-A small list of folks whose work has shaped Reasonix the most — measured
+A small list of folks whose work has shaped DeepSeek-Spec the most — measured
 by both commit count and code volume. **Listed alphabetically, no ordering
 of importance.** The full contributor graph is on
 [GitHub](https://github.com/esengine/DeepSeek-Reasonix/graphs/contributors).

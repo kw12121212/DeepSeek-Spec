@@ -1,4 +1,4 @@
-# Reasonix CLI Reference
+# DeepSeek-Spec CLI Reference
 
 Every shell subcommand, every TUI slash command, every keybinding. The in-app `/help` and `/keys` panels are the live source of truth — this page is the printable companion.
 
@@ -6,25 +6,25 @@ Every shell subcommand, every TUI slash command, every keybinding. The in-app `/
 
 ## Shell subcommands
 
-Run `reasonix --help` (or any subcommand with `--help`) for the full flag list. Headline subcommands:
+Run `dspec --help` (or any subcommand with `--help`) for the full flag list. Headline subcommands:
 
 | Subcommand | What it does |
 |---|---|
-| `reasonix code [dir]` | Code-mode TUI — file edits, plan mode, edit-gate, project-scoped sessions |
-| `reasonix chat` | Chat-only TUI — no filesystem access, no code mode |
-| `reasonix run <task>` | Headless run — read prompt, execute, exit (CI-friendly) |
-| `reasonix setup` | Interactive first-run config (API key, language, theme) |
-| `reasonix sessions [name]` | List or open a saved session |
-| `reasonix prune-sessions` | Drop sessions older than `--days N` |
-| `reasonix replay <transcript>` | Re-render a JSONL transcript without calling the model |
-| `reasonix diff <a> <b>` | Compare two transcripts (cost / cache / tokens) |
-| `reasonix events <name>` | Tail the event log for a session |
-| `reasonix stats [transcript]` | One-shot cost / cache breakdown |
-| `reasonix doctor` | Health check — API reach, config, hooks, project |
-| `reasonix commit` | `git add -A && git commit` with an LLM-written message |
-| `reasonix mcp <list\|search\|install\|inspect\|browse>` | MCP server management |
-| `reasonix index` | Build the local semantic index (Ollama or OpenAI-compatible embeddings) |
-| `reasonix version` / `reasonix update` | Version info + upgrade hint |
+| `dspec code [dir]` | Code-mode TUI — file edits, plan mode, edit-gate, project-scoped sessions |
+| `dspec chat` | Chat-only TUI — no filesystem access, no code mode |
+| `dspec run <task>` | Headless run — read prompt, execute, exit (CI-friendly) |
+| `dspec setup` | Interactive first-run config (API key, language, theme) |
+| `dspec sessions [name]` | List or open a saved session |
+| `dspec prune-sessions` | Drop sessions older than `--days N` |
+| `dspec replay <transcript>` | Re-render a JSONL transcript without calling the model |
+| `dspec diff <a> <b>` | Compare two transcripts (cost / cache / tokens) |
+| `dspec events <name>` | Tail the event log for a session |
+| `dspec stats [transcript]` | One-shot cost / cache breakdown |
+| `dspec doctor` | Health check — API reach, config, hooks, project |
+| `dspec commit` | `git add -A && git commit` with an LLM-written message |
+| `dspec mcp <list\|search\|install\|inspect\|browse>` | MCP server management |
+| `dspec index` | Build the local semantic index (Ollama or OpenAI-compatible embeddings) |
+| `dspec version` / `dspec update` | Version info + upgrade hint |
 
 ### Notable runtime flags (chat / code)
 
@@ -37,7 +37,7 @@ Run `reasonix --help` (or any subcommand with `--help`) for the full flag list. 
 | `--budget <usd>` | Per-session USD cap — warns at 80%, refuses next turn at 100% |
 | `--preset <auto\|flash\|pro>` | Model bundle (auto-escalation, locked flash, locked pro) |
 | `--mcp <spec>` | Attach an MCP server for this run (repeatable) |
-| `--no-config` | Ignore `~/.reasonix/config.json` for this run |
+| `--no-config` | Ignore `~/.dspec/config.json` for this run |
 | `--no-dashboard` | Don't auto-start the embedded web dashboard |
 | `--no-alt-screen` | Render to scrollback instead of the alt-screen buffer (preserves chat in shell history; legacy mode, can ghost on resize) |
 | `--no-mouse` | Disable DECSET 1007 (alternate-scroll); wheel reverts to native terminal scroll |
@@ -87,7 +87,7 @@ Type `/` mid-chat to open the picker. Aliases shown in parentheses. Code-mode-on
 | `/mcp` | Open the MCP hub (live + marketplace tabs) |
 | `/resource [uri]` | Browse / read MCP resources |
 | `/prompt [name]` | Browse / fetch MCP prompts |
-| `/memory [list\|show\|forget\|clear]` | Manage pinned memory (REASONIX.md + `~/.reasonix/memory`) |
+| `/memory [list\|show\|forget\|clear]` | Manage pinned memory (DSPEC.md + `~/.dspec/memory`) |
 | `/skill [list\|show\|new\|<name>]` | List / run / scaffold user skills |
 
 ### Session
@@ -100,7 +100,7 @@ Type `/` mid-chat to open the picker. Aliases shown in parentheses. Code-mode-on
 
 | Command | What it does |
 |---|---|
-| `/init [force]` | Scan project, synthesize a baseline `REASONIX.md` |
+| `/init [force]` | Scan project, synthesize a baseline `DSPEC.md` |
 | `/apply [N\|N,M\|N-M]` | Commit pending edit blocks to disk (subset selection supported) |
 | `/discard [N\|N,M\|N-M]` | Drop pending edits without writing |
 | `/walk` | Step through pending edits one block at a time (git-add-p style) |
@@ -176,7 +176,7 @@ Type `/` mid-chat to open the picker. Aliases shown in parentheses. Code-mode-on
 | Drag | Selects text natively — no modifier needed |
 | Right-click | Terminal-native (e.g. paste menu on Windows Terminal) |
 
-Reasonix sets DECSET 1007 (alternate-scroll) only — wheel events translate to ↑/↓ keypresses for the app, but native click/drag selection is left untouched. Pass `--no-mouse` to opt out entirely.
+DeepSeek-Spec sets DECSET 1007 (alternate-scroll) only — wheel events translate to ↑/↓ keypresses for the app, but native click/drag selection is left untouched. Pass `--no-mouse` to opt out entirely.
 
 ---
 

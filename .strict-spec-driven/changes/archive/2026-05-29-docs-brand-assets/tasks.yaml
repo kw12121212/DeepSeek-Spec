@@ -1,0 +1,56 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: docs-brand-assets
+sections:
+  Implementation:
+    update-readme:
+      text: >-
+        Update README.md — replace all Reasonix/reasonix references with DeepSeek-Spec/dspec, update
+        installation commands, env vars, config paths, and asset links.
+      status: complete
+    update-readme-zh:
+      text: Update README.zh-CN.md with the same brand rename changes in Chinese.
+      status: complete
+    update-architecture-doc:
+      text: Update docs/ARCHITECTURE.md brand references.
+      status: complete
+    update-cli-reference:
+      text: Update docs/CLI-REFERENCE.md command examples, env vars, and config paths.
+      status: complete
+    update-other-docs:
+      text: Update any other .md files under docs/ that reference Reasonix.
+      status: complete
+    rename-brand-assets:
+      text: >-
+        Rename 9 brand asset files in docs/brand/ from reasonix-* to dspec-* and update internal SVG
+        text if present.
+      status: complete
+    update-claude-md:
+      text: Update CLAUDE.md — Reasonix description, command examples, and source layout references.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    grep-audit:
+      text: Verify grep -ri reasonix docs/ README.md README.zh-CN.md CLAUDE.md returns zero matches.
+      status: complete
+      command: grep -ri reasonix docs/ README.md README.zh-CN.md CLAUDE.md
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

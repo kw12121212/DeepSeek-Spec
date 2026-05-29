@@ -1,8 +1,8 @@
-# Reasonix Architecture
+# DeepSeek-Spec Architecture
 
 ## Design philosophy
 
-Reasonix is **opinionated, not general**. Every abstraction is justified by a
+DeepSeek-Spec is **opinionated, not general**. Every abstraction is justified by a
 DeepSeek-specific behavior or economic property. If it's generic, we don't
 ship it.
 
@@ -55,8 +55,8 @@ same shape it would under a fully serial dispatch.
 
 | Env var | Default | Effect |
 |---|---|---|
-| `REASONIX_PARALLEL_MAX` | `3` (hard cap `16`) | Max chunk size. |
-| `REASONIX_TOOL_DISPATCH=serial` | unset | Forces serial dispatch — escape hatch. |
+| `DSPEC_PARALLEL_MAX` | `3` (hard cap `16`) | Max chunk size. |
+| `DSPEC_TOOL_DISPATCH=serial` | unset | Forces serial dispatch — escape hatch. |
 
 Built-in opt-ins: read-only filesystem (`read_file`, `list_directory`,
 `directory_tree`, `search_files`, `search_content`, `get_file_info`),
@@ -126,7 +126,7 @@ inside long multi-iter turns before the 80% emergency threshold fires.
 
 Users switch between flash and pro via `/model flash` or `/model pro`
 (persistent — applies to every turn until changed). Model can also be
-set in `.reasonix/settings.json` under the `model` key. No one-shot
+set in `.dspec/settings.json` under the `model` key. No one-shot
 arming; no forgotten revert risk when switching is explicit and sticky.
 
 > **History.** Pre-0.50.0, `/pro` offered single-turn arming — type `/pro`,
@@ -169,7 +169,7 @@ src/
 │   └── storm.ts
 ├── prompt-fragments.ts     # TUI_FORMATTING_RULES, NEGATIVE_CLAIM_RULE —
 │                           #   reused by main + subagent + skill prompts
-├── code/prompt.ts          # reasonix code main system prompt
+├── code/prompt.ts          # dspec code main system prompt
 ├── tools/                  # Tool implementations
 │   ├── filesystem.ts       # read / list / search / edit / write
 │   ├── shell.ts            # run_command + run_background (JobRegistry)
@@ -181,13 +181,13 @@ src/
 │   └── web.ts              # web_search, web_fetch (multi-engine: Mojeek, SearXNG or Metaso)
 ├── mcp/                    # MCP client + bridge (stdio + SSE)
 ├── memory.ts               # ImmutablePrefix / AppendOnlyLog / VolatileScratch
-├── project-memory.ts       # REASONIX.md loader
-├── user-memory.ts          # ~/.reasonix/memory/ store (project + global)
+├── project-memory.ts       # DSPEC.md loader
+├── user-memory.ts          # ~/.dspec/memory/ store (project + global)
 ├── skills.ts               # built-in explore + research skills
 ├── session.ts              # JSONL session persistence
 ├── telemetry.ts            # cost + cache-hit accounting + SessionSummary
 ├── tokenizer.ts            # DeepSeek V3 tokenizer (ported)
-├── usage.ts                # ~/.reasonix/usage.jsonl roll-up
+├── usage.ts                # ~/.dspec/usage.jsonl roll-up
 ├── types.ts                # ChatMessage, ToolCall, ToolSpec
 ├── index.ts                # library barrel
 └── cli/
@@ -229,7 +229,7 @@ means editing one handler file and one registry line.
 - **v0.0.x** — Pillar 1 end-to-end, repair pipeline complete, Ink TUI scaffold.
 - **v0.1** — τ-bench numbers published, streaming polish, transcript replay.
 - **v0.3** — MCP client (stdio + SSE), session persistence.
-- **v0.4.x** — `reasonix code` with SEARCH/REPLACE edits, review/auto
+- **v0.4.x** — `dspec code` with SEARCH/REPLACE edits, review/auto
   gate, background jobs, hooks.
 - **v0.5.x** — V4 model support, skills, memory, subagents, actionable
   error messages.

@@ -1,0 +1,20 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: embedded-assets
+mapping:
+  implementation: []
+  tests: []
+operations:
+  ADDED: {}
+  MODIFIED:
+    brand-assets-naming:
+      strength: MUST
+      statement: Brand asset files under docs/brand/ MUST use dspec- prefix instead of reasonix- prefix
+      scenarios:
+        brand-asset-rename:
+          - GIVEN: docs/brand/ directory exists with reasonix-prefixed files
+          - WHEN: brand rename is complete
+          - THEN: all files use dspec- prefix and README references updated paths
+  REMOVED: {}

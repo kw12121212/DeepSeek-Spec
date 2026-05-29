@@ -1,0 +1,16 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: docs-brand-assets
+open: []
+resolved:
+  - id: verify-qq-doc
+    question: >-
+      Should docs/qq-connect.md be deleted entirely (QQ channel was removed in M8) or updated with
+      new branding?
+    context: >-
+      M8 UX Streamline removed the QQ channel integration. The planned change mentions
+      'docs/qq-connect.md: if still present'. Need to decide whether to delete or update.
+    answer: File does not exist in the repo. No action needed.
+    status: resolved

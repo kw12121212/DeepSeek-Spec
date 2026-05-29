@@ -93,6 +93,14 @@ requirements:
         - GIVEN: a compiled native binary with embedded assets
         - WHEN: the smoke test checks asset loading
         - THEN: the binary reports successful tokenizer load without error output
+  brand-assets-naming:
+    strength: MUST
+    statement: Brand asset files under docs/brand/ MUST use dspec- prefix instead of reasonix- prefix
+    scenarios:
+      brand-asset-rename:
+        - GIVEN: docs/brand/ directory exists with reasonix-prefixed files
+        - WHEN: brand rename is complete
+        - THEN: all files use dspec- prefix and README references updated paths
 mapping:
   implementation:
     - src/cli/assets.ts
