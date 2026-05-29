@@ -13,9 +13,9 @@ export function resolveLoginShellPath(opts: { timeoutMs?: number } = {}): string
 
   const shell = process.env.SHELL || "/bin/bash";
   // -i forces zsh/bash to source rc files; -l also sources profile. The literal
-  // `printf '__REASONIX_PATH__=%s\\n'` framing protects us from rc files that
+  // `printf '__DSPEC_PATH__=%s\\n'` framing protects us from rc files that
   // print banners / completion notices on every interactive shell.
-  const marker = "__REASONIX_PATH__=";
+  const marker = "__DSPEC_PATH__=";
   try {
     const result = spawnSync(shell, ["-ilc", `printf '${marker}%s\\n' "$PATH"`], {
       encoding: "utf8",

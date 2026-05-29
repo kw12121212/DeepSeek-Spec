@@ -227,8 +227,8 @@ export class CacheFirstLoop {
       allowedToolNames: allowedNames,
       isMutating: (call) => this.isMutating(call),
       isStormExempt,
-      stormThreshold: parsePositiveIntEnv(process.env.REASONIX_STORM_THRESHOLD),
-      stormWindow: parsePositiveIntEnv(process.env.REASONIX_STORM_WINDOW),
+      stormThreshold: parsePositiveIntEnv(process.env.DSPEC_STORM_THRESHOLD),
+      stormWindow: parsePositiveIntEnv(process.env.DSPEC_STORM_WINDOW),
     });
 
     // Heal-on-load: oversized tool results would 400 the next call before the user types.

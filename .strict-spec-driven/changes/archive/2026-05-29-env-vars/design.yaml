@@ -1,0 +1,16 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: env-vars
+approach:
+  - >-
+    Systematic find-and-replace of all REASONIX_* env var references to DSPEC_* equivalents.
+    Single-pass rename across config.ts (primary definitions), loop.ts (storm vars), all consumer
+    files, i18n locale files, and docs. No backward-compat layer.
+decisions:
+  rename-strategy:
+    decision: Direct string replacement REASONIX_ -> DSPEC_ for all env var names. No compat shim.
+    rationale: Clean cut per milestone scope. Adding compat layer would violate M9 out-of-scope constraints.
+alternatives: []
+risks: []

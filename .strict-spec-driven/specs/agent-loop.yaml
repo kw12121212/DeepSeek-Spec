@@ -24,17 +24,17 @@ requirements:
   tool-dispatch-chunking:
     strength: MUST
     statement: >-
-      dispatchToolCallsChunked MUST batch tool calls into chunks respecting REASONIX_PARALLEL_MAX
-      (default 3, max 16) and REASONIX_TOOL_DISPATCH (default "auto", "serial" for sequential).
+      dispatchToolCallsChunked MUST batch tool calls into chunks respecting DSPEC_PARALLEL_MAX
+      (default 3, max 16) and DSPEC_TOOL_DISPATCH (default "auto", "serial" for sequential).
     scenarios:
       parallel-chunking:
-        - GIVEN: 5 tool calls and REASONIX_PARALLEL_MAX is 3
+        - GIVEN: 5 tool calls and DSPEC_PARALLEL_MAX is 3
         - WHEN: dispatchToolCallsChunked is called
         - THEN: >-
             calls are dispatched in 2 chunks (3 + 2), each tool result is persisted, and events are
             yielded for each lifecycle stage
       serial-mode:
-        - GIVEN: REASONIX_TOOL_DISPATCH is set to "serial"
+        - GIVEN: DSPEC_TOOL_DISPATCH is set to "serial"
         - WHEN: dispatchToolCallsChunked is called with multiple tool calls
         - THEN: all calls execute sequentially, one at a time
       tool-failure:
@@ -180,6 +180,16 @@ requirements:
         - GIVEN: the agent initializes
         - WHEN: resolving the global config directory
         - THEN: the path ends with '.dspec'
+  parallel-dispatch-rename:
+    strength: MUST
+    statement: >-
+      dispatchToolCallsChunked MUST batch tool calls into chunks respecting DSPEC_PARALLEL_MAX and
+      DSPEC_TOOL_DISPATCH instead of REASONIX_PARALLEL_MAX and REASONIX_TOOL_DISPATCH
+    scenarios:
+      dspec-parallel-max:
+        - GIVEN: 5 tool calls and DSPEC_PARALLEL_MAX is 3
+        - WHEN: dispatchToolCallsChunked processes them
+        - THEN: calls are batched into chunks of 3
 mapping:
   implementation:
     - src/loop/dispatch.ts

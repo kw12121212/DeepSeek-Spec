@@ -1259,7 +1259,7 @@ describe("handleSlash", () => {
 
   describe("/memory", () => {
     let root: string;
-    const originalEnv = process.env.REASONIX_MEMORY;
+    const originalEnv = process.env.DSPEC_MEMORY;
     const originalHome = process.env.HOME;
     const originalUserProfile = process.env.USERPROFILE;
 
@@ -1268,15 +1268,15 @@ describe("handleSlash", () => {
       process.env.HOME = root;
       process.env.USERPROFILE = root;
       // biome-ignore lint/performance/noDelete: avoid "undefined" in env
-      delete process.env.REASONIX_MEMORY;
+      delete process.env.DSPEC_MEMORY;
     });
     afterEach(() => {
       rmSync(root, { recursive: true, force: true });
       if (originalEnv === undefined) {
         // biome-ignore lint/performance/noDelete: same reason
-        delete process.env.REASONIX_MEMORY;
+        delete process.env.DSPEC_MEMORY;
       } else {
-        process.env.REASONIX_MEMORY = originalEnv;
+        process.env.DSPEC_MEMORY = originalEnv;
       }
       if (originalHome === undefined) {
         // biome-ignore lint/performance/noDelete: env restoration needs absence, not "undefined"
@@ -1310,9 +1310,9 @@ describe("handleSlash", () => {
       expect(r.info).toMatch(/chars/);
     });
 
-    it("says memory is disabled when REASONIX_MEMORY=off, even with a file present", () => {
+    it("says memory is disabled when DSPEC_MEMORY=off, even with a file present", () => {
       writeFileSync(join(root, "DSPEC.md"), "content", "utf8");
-      process.env.REASONIX_MEMORY = "off";
+      process.env.DSPEC_MEMORY = "off";
       const r = handleSlash("memory", [], makeLoop(), { memoryRoot: root });
       expect(r.info).toMatch(/memory is disabled/);
     });
@@ -1463,19 +1463,19 @@ describe("handleSlash", () => {
       tempHome = mkdtempSync(join(tmpdir(), "reasonix-theme-slash-"));
       originalHome = process.env.HOME;
       originalUserProfile = process.env.USERPROFILE;
-      originalTheme = process.env.REASONIX_THEME;
+      originalTheme = process.env.DSPEC_THEME;
       process.env.HOME = tempHome;
       process.env.USERPROFILE = tempHome;
-      process.env.REASONIX_THEME = "github-dark";
+      process.env.DSPEC_THEME = "github-dark";
     });
 
     afterEach(() => {
       process.env.HOME = originalHome;
       process.env.USERPROFILE = originalUserProfile;
       if (originalTheme === undefined) {
-        process.env.REASONIX_THEME = undefined;
+        process.env.DSPEC_THEME = undefined;
       } else {
-        process.env.REASONIX_THEME = originalTheme;
+        process.env.DSPEC_THEME = originalTheme;
       }
       rmSync(tempHome, { recursive: true, force: true });
     });

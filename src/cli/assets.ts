@@ -77,5 +77,5 @@ export class AssetRegistry {
 export const assets = new AssetRegistry();
 
 // Pick up build-time embedded assets from globalThis (set by native embed-assets module)
-const _embedded = (globalThis as Record<string, unknown>).__REASONIX_EMBEDDED;
+const _embedded = (globalThis as Record<string, unknown>).__DSPEC_EMBEDDED;
 if (_embedded instanceof Map) assets.setEmbeddedLoaders(_embedded as Map<string, () => Uint8Array>);

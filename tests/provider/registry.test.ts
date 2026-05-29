@@ -95,48 +95,48 @@ describe("ProviderRegistry: modelToProvider mapping", () => {
   });
 
   it("falls back to loadActiveProvider when no explicit provider given", () => {
-    const orig = process.env.REASONIX_PROVIDER;
-    process.env.REASONIX_PROVIDER = "glm";
+    const orig = process.env.DSPEC_PROVIDER;
+    process.env.DSPEC_PROVIDER = "glm";
     try {
       expect(modelToProvider("mystery-model")).toBe("glm");
     } finally {
       if (orig === undefined) {
-        process.env.REASONIX_PROVIDER = undefined;
+        process.env.DSPEC_PROVIDER = undefined;
       } else {
-        process.env.REASONIX_PROVIDER = orig;
+        process.env.DSPEC_PROVIDER = orig;
       }
     }
   });
 });
 
 describe("ProviderRegistry: loadActiveProvider", () => {
-  const origProvider = process.env.REASONIX_PROVIDER;
+  const origProvider = process.env.DSPEC_PROVIDER;
 
   afterEach(() => {
     if (origProvider === undefined) {
-      process.env.REASONIX_PROVIDER = undefined;
+      process.env.DSPEC_PROVIDER = undefined;
     } else {
-      process.env.REASONIX_PROVIDER = origProvider;
+      process.env.DSPEC_PROVIDER = origProvider;
     }
   });
 
-  it("returns glm when REASONIX_PROVIDER env is glm", () => {
-    process.env.REASONIX_PROVIDER = "glm";
+  it("returns glm when DSPEC_PROVIDER env is glm", () => {
+    process.env.DSPEC_PROVIDER = "glm";
     expect(loadActiveProvider()).toBe("glm");
   });
 
-  it("returns deepseek when REASONIX_PROVIDER env is deepseek", () => {
-    process.env.REASONIX_PROVIDER = "deepseek";
+  it("returns deepseek when DSPEC_PROVIDER env is deepseek", () => {
+    process.env.DSPEC_PROVIDER = "deepseek";
     expect(loadActiveProvider()).toBe("deepseek");
   });
 
   it("defaults to deepseek when env is unset", () => {
-    process.env.REASONIX_PROVIDER = undefined;
+    process.env.DSPEC_PROVIDER = undefined;
     expect(loadActiveProvider()).toBe("deepseek");
   });
 
   it("ignores invalid env values and falls back to deepseek", () => {
-    process.env.REASONIX_PROVIDER = "claude";
+    process.env.DSPEC_PROVIDER = "claude";
     expect(loadActiveProvider()).toBe("deepseek");
   });
 });

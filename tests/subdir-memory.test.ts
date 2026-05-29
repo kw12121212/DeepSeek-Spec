@@ -175,9 +175,9 @@ describe("read_file injects subdir memory on first read per session", () => {
     expect(out).not.toContain("[module memory:");
   });
 
-  it("respects REASONIX_MEMORY=off and skips injection entirely", async () => {
-    const prev = process.env.REASONIX_MEMORY;
-    process.env.REASONIX_MEMORY = "off";
+  it("respects DSPEC_MEMORY=off and skips injection entirely", async () => {
+    const prev = process.env.DSPEC_MEMORY;
+    process.env.DSPEC_MEMORY = "off";
     try {
       const tools2 = new ToolRegistry();
       registerFilesystemTools(tools2, { rootDir: root });
@@ -186,9 +186,9 @@ describe("read_file injects subdir memory on first read per session", () => {
     } finally {
       if (prev === undefined) {
         // biome-ignore lint/performance/noDelete: env restore
-        delete process.env.REASONIX_MEMORY;
+        delete process.env.DSPEC_MEMORY;
       } else {
-        process.env.REASONIX_MEMORY = prev;
+        process.env.DSPEC_MEMORY = prev;
       }
     }
   });

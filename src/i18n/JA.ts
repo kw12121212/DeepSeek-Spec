@@ -471,7 +471,7 @@ export const JA: TranslationSchema = {
     footer: "↑↓ 選択 · ⏎ 確定 · esc キャンセル",
     currentPref: "現在の設定",
     activeNow: "現在適用中",
-    autoDesc: "REASONIX_THEME またはデフォルトを使用",
+    autoDesc: "DSPEC_THEME またはデフォルトを使用",
   },
   planFlow: {
     approveCardTitle: "プランを承認",
@@ -1078,7 +1078,7 @@ export const JA: TranslationSchema = {
     },
     memory: {
       disabled:
-        "メモリが無効です（REASONIX_MEMORY=off が環境変数に設定されています）。変数を解除して再有効化してください — その間、DSPEC.md や ~/.dspec/memory の内容はピン留めされません。",
+        "メモリが無効です（DSPEC_MEMORY=off が環境変数に設定されています）。変数を解除して再有効化してください — その間、DSPEC.md や ~/.dspec/memory の内容はピン留めされません。",
       noRoot:
         "このセッションには作業ディレクトリがありません — `/memory` は DSPEC.md を解決するためのルートが必要です。（テストハーネスで実行中ですか？）",
       listEmpty:

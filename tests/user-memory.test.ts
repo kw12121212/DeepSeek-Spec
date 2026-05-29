@@ -21,7 +21,7 @@ const BASE = "You are a test assistant.";
 describe("user-memory", () => {
   let home: string;
   let projectRoot: string;
-  const originalEnv = process.env.REASONIX_MEMORY;
+  const originalEnv = process.env.DSPEC_MEMORY;
   const originalHome = process.env.HOME;
   const originalUserProfile = process.env.USERPROFILE;
 
@@ -31,7 +31,7 @@ describe("user-memory", () => {
     process.env.HOME = home;
     process.env.USERPROFILE = home;
     // biome-ignore lint/performance/noDelete: avoid leaking "undefined" into env
-    delete process.env.REASONIX_MEMORY;
+    delete process.env.DSPEC_MEMORY;
   });
 
   afterEach(() => {
@@ -39,9 +39,9 @@ describe("user-memory", () => {
     rmSync(projectRoot, { recursive: true, force: true });
     if (originalEnv === undefined) {
       // biome-ignore lint/performance/noDelete: same
-      delete process.env.REASONIX_MEMORY;
+      delete process.env.DSPEC_MEMORY;
     } else {
-      process.env.REASONIX_MEMORY = originalEnv;
+      process.env.DSPEC_MEMORY = originalEnv;
     }
     if (originalHome === undefined) {
       // biome-ignore lint/performance/noDelete: env restoration needs absence, not "undefined"
@@ -333,7 +333,7 @@ describe("user-memory", () => {
       expect(a).toBe(b);
     });
 
-    it("respects REASONIX_MEMORY=off", () => {
+    it("respects DSPEC_MEMORY=off", () => {
       const store = new MemoryStore({ homeDir: home, projectRoot });
       store.write({
         name: "pref_one",
@@ -342,7 +342,7 @@ describe("user-memory", () => {
         description: "d",
         body: "b",
       });
-      process.env.REASONIX_MEMORY = "off";
+      process.env.DSPEC_MEMORY = "off";
       expect(applyUserMemory(BASE, { homeDir: home, projectRoot })).toBe(BASE);
     });
 
@@ -428,20 +428,20 @@ describe("user-memory", () => {
       expect(out).toBe(BASE);
     });
 
-    it("respects REASONIX_MEMORY=off opt-out", () => {
+    it("respects DSPEC_MEMORY=off opt-out", () => {
       mkdirSync(home, { recursive: true });
       writeFileSync(join(home, "DSPEC.md"), "- secret\n", "utf8");
-      const orig = process.env.REASONIX_MEMORY;
-      process.env.REASONIX_MEMORY = "off";
+      const orig = process.env.DSPEC_MEMORY;
+      process.env.DSPEC_MEMORY = "off";
       try {
         const out = applyGlobalDSpecMemory(BASE, home);
         expect(out).toBe(BASE);
       } finally {
         if (orig === undefined) {
           // biome-ignore lint/performance/noDelete: env key must lose presence
-          delete process.env.REASONIX_MEMORY;
+          delete process.env.DSPEC_MEMORY;
         } else {
-          process.env.REASONIX_MEMORY = orig;
+          process.env.DSPEC_MEMORY = orig;
         }
       }
     });

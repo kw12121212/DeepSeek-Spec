@@ -472,7 +472,7 @@ export const zhCN: TranslationSchema = {
     footer: "↑↓ 选择 · ⏎ 确认 · Esc 取消",
     currentPref: "当前偏好",
     activeNow: "当前生效",
-    autoDesc: "使用 REASONIX_THEME 或默认主题",
+    autoDesc: "使用 DSPEC_THEME 或默认主题",
   },
   planFlow: {
     approveCardTitle: "确认计划",
@@ -1018,7 +1018,7 @@ export const zhCN: TranslationSchema = {
     },
     memory: {
       disabled:
-        "记忆已禁用（环境变量 REASONIX_MEMORY=off）。取消设置该变量以重新启用 — 此期间不会固定任何 DSPEC.md 或 ~/.dspec/memory 内容。",
+        "记忆已禁用（环境变量 DSPEC_MEMORY=off）。取消设置该变量以重新启用 — 此期间不会固定任何 DSPEC.md 或 ~/.dspec/memory 内容。",
       noRoot: "此会话无工作目录 — `/memory` 需要一个根目录来解析 DSPEC.md。（在测试环境中运行？）",
       listEmpty:
         "尚无用户记忆。模型可以调用 `remember` 保存一个，或您可以在 ~/.dspec/memory/global/ 或项目子目录中手动创建文件。",

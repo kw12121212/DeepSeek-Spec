@@ -1,0 +1,58 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: env-vars
+sections:
+  Implementation:
+    rename-env-vars-config:
+      text: Rename all REASONIX_* env vars to DSPEC_* in src/config.ts
+      status: complete
+    rename-env-vars-loop:
+      text: >-
+        Rename REASONIX_STORM_THRESHOLD and REASONIX_STORM_WINDOW in src/loop.ts and
+        src/loop/dispatch.ts
+      status: complete
+    rename-env-vars-consumers:
+      text: >-
+        Rename REASONIX_* in all remaining consumer files (src/cli/, src/memory/, src/server/,
+        src/i18n/, src/index/, src/mcp/, src/net/, src/slash-usage.ts, src/desktop/,
+        src/tokenizer.ts)
+      status: complete
+    rename-env-vars-i18n:
+      text: >-
+        Update i18n locale files (EN.ts, zh-CN.ts, JA.ts, de.ts, ru.ts) — REASONIX_ references in
+        help text and error messages
+      status: complete
+    rename-env-vars-docs:
+      text: Update docs/ files (architecture.html, src/i18n.jsx) for REASONIX_ references
+      status: complete
+    update-strict-specs:
+      text: >-
+        Update .strict-spec-driven/specs/agent-loop.yaml and multi-provider-config.yaml to replace
+        REASONIX_* with DSPEC_*
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+    grep-audit:
+      text: grep -r REASONIX_ src/ tests/ docs/ returns zero matches
+      status: complete
+      command: bash -c '! grep -r REASONIX_ src/ tests/ docs/'
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

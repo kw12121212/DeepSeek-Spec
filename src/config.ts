@@ -138,7 +138,7 @@ export interface ProxyConfig {
   disabled?: boolean;
   /** Additional NO_PROXY patterns (curl syntax). Additive on top of env NO_PROXY and the default DeepSeek-bypass whitelist. */
   noProxy?: string[];
-  /** When false, route api.deepseek.com / *.deepseek.com through the proxy too (issue #1497 — corporate firewalls that block direct egress). Default true preserves the clash/v2ray US-exit-IP 403 fix. Env `REASONIX_PROXY_DEEPSEEK_DIRECT` overrides. */
+  /** When false, route api.deepseek.com / *.deepseek.com through the proxy too (issue #1497 — corporate firewalls that block direct egress). Default true preserves the clash/v2ray US-exit-IP 403 fix. Env `DSPEC_PROXY_DEEPSEEK_DIRECT` overrides. */
   bypassDeepSeekDirect?: boolean;
 }
 
@@ -700,9 +700,9 @@ export function bridgeEndpointEnv(path: string = defaultConfigPath()): void {
   if (ep.baseUrl) process.env.DEEPSEEK_BASE_URL = ep.baseUrl;
 }
 
-/** Active provider: REASONIX_PROVIDER env → config.json provider → "deepseek". */
+/** Active provider: DSPEC_PROVIDER env → config.json provider → "deepseek". */
 export function loadActiveProvider(path: string = defaultConfigPath()): ProviderId {
-  const env = process.env.REASONIX_PROVIDER?.trim();
+  const env = process.env.DSPEC_PROVIDER?.trim();
   if (env === "deepseek" || env === "glm") return env;
   const cfg = readConfig(path).provider;
   if (cfg === "deepseek" || cfg === "glm") return cfg;
@@ -964,7 +964,7 @@ export function removeSkillPath(
 }
 
 export function searchEnabled(path: string = defaultConfigPath()): boolean {
-  const env = process.env.REASONIX_SEARCH;
+  const env = process.env.DSPEC_SEARCH;
   if (env === "off" || env === "false" || env === "0") return false;
   const cfg = readConfig(path).search;
   if (cfg === false) return false;
@@ -972,7 +972,7 @@ export function searchEnabled(path: string = defaultConfigPath()): boolean {
 }
 
 export function loadJavaSourceEnabled(path: string = defaultConfigPath()): boolean {
-  const env = process.env.REASONIX_JAVA_SOURCE;
+  const env = process.env.DSPEC_JAVA_SOURCE;
   if (env === "1" || env === "true") return true;
   const cfg = readConfig(path).javaSource;
   return cfg === true;
@@ -1421,7 +1421,7 @@ export function resolveSemanticEmbeddingConfig(
   return {
     provider: "ollama",
     baseUrl: user.ollama?.baseUrl?.trim() || process.env.OLLAMA_URL || DEFAULT_OLLAMA_URL,
-    model: user.ollama?.model?.trim() || process.env.REASONIX_EMBED_MODEL || DEFAULT_EMBED_MODEL,
+    model: user.ollama?.model?.trim() || process.env.DSPEC_EMBED_MODEL || DEFAULT_EMBED_MODEL,
     timeoutMs: DEFAULT_TIMEOUT_MS,
   };
 }
@@ -1435,7 +1435,7 @@ export function redactSemanticEmbeddingConfig(
     ollama: {
       baseUrl: normalized.ollama?.baseUrl?.trim() || process.env.OLLAMA_URL || DEFAULT_OLLAMA_URL,
       model:
-        normalized.ollama?.model?.trim() || process.env.REASONIX_EMBED_MODEL || DEFAULT_EMBED_MODEL,
+        normalized.ollama?.model?.trim() || process.env.DSPEC_EMBED_MODEL || DEFAULT_EMBED_MODEL,
     },
     openaiCompat: {
       baseUrl: normalized.openaiCompat?.baseUrl?.trim() ?? "",

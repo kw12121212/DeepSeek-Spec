@@ -1,0 +1,30 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: env-vars
+  status: proposed
+summary:
+  what:
+    - >-
+      Rename all 27 REASONIX_* environment variables to DSPEC_* across source code, i18n strings,
+      and documentation
+  why:
+    - >-
+      M9 brand rename requires consistent env var prefix. Clean cut with no backward-compat reading
+      of old names.
+scope:
+  in:
+    - >-
+      src/config.ts src/loop.ts src/ i18n files (EN.ts, zh-CN.ts, JA.ts, de.ts, ru.ts)
+      docs/CLI-REFERENCE.md
+  out:
+    - >-
+      All REASONIX_* env var references replaced with DSPEC_* equivalents; grep -r REASONIX_ src/
+      tests/ docs/ returns zero matches
+unchanged_behavior:
+  - Behavior and functionality remain identical; only the env var names change
+roadmap:
+  milestone: 0009-brand-rename
+  planned_change: env-vars

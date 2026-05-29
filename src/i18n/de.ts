@@ -487,7 +487,7 @@ export const de: TranslationSchema = {
     footer: "↑↓ auswählen · ⏎ bestätigen · Esc abbrechen",
     currentPref: "Aktuelle Einstellung",
     activeNow: "Jetzt aktiv",
-    autoDesc: "REASONIX_THEME oder Standard verwenden",
+    autoDesc: "DSPEC_THEME oder Standard verwenden",
   },
   planFlow: {
     ...EN.planFlow,
@@ -1135,7 +1135,7 @@ export const de: TranslationSchema = {
     memory: {
       ...EN.handlers.memory,
       disabled:
-        "Memory ist deaktiviert (REASONIX_MEMORY=off in der Umgebung). Entferne die Variable zur Reaktivierung — es werden weder DSPEC.md noch ~/.dspec/memory-Inhalte eingefügt.",
+        "Memory ist deaktiviert (DSPEC_MEMORY=off in der Umgebung). Entferne die Variable zur Reaktivierung — es werden weder DSPEC.md noch ~/.dspec/memory-Inhalte eingefügt.",
       noRoot:
         "Kein Arbeitsverzeichnis in dieser Sitzung — `/memory` benötigt ein Root, um DSPEC.md aufzulösen. (Läuft in einer Test-Umgebung?)",
       listEmpty:

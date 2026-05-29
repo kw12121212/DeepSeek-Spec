@@ -82,7 +82,7 @@ let cached: LoadedTokenizer | null = null;
 /** Two ../data candidates needed: dist/index.js AND dist/cli/index.js resolve to different roots. */
 function tokenizerDiskCandidates(): string[] {
   const candidates: string[] = [];
-  if (process.env.REASONIX_TOKENIZER_PATH) candidates.push(process.env.REASONIX_TOKENIZER_PATH);
+  if (process.env.DSPEC_TOKENIZER_PATH) candidates.push(process.env.DSPEC_TOKENIZER_PATH);
   try {
     const here = dirname(fileURLToPath(import.meta.url));
     candidates.push(join(here, "..", "data", "deepseek-tokenizer.json.gz"));

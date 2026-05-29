@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: env-vars
   milestone: 0009-brand-rename
-status: planned
+status: complete
 summary: |
   Rename all 21 REASONIX_* environment variables to DSPEC_* in source code
   and i18n strings. No backward-compat reading of old names.

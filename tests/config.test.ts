@@ -62,10 +62,10 @@ describe("config", () => {
   let dir: string;
   let path: string;
   const originalEnv = process.env.DEEPSEEK_API_KEY;
-  const originalSearch = process.env.REASONIX_SEARCH;
+  const originalSearch = process.env.DSPEC_SEARCH;
   const originalBaseUrl = process.env.DEEPSEEK_BASE_URL;
   const originalApiBaseUrl = process.env.DEEPSEEK_API_BASE_URL;
-  const originalProvider = process.env.REASONIX_PROVIDER;
+  const originalProvider = process.env.DSPEC_PROVIDER;
   const originalZhipuKey = process.env.ZHIPU_API_KEY;
   const originalZhipuUrl = process.env.ZHIPU_BASE_URL;
 
@@ -75,13 +75,13 @@ describe("config", () => {
     // biome-ignore lint/performance/noDelete: the string "undefined" leaks into process.env otherwise
     delete process.env.DEEPSEEK_API_KEY;
     // biome-ignore lint/performance/noDelete: same reason
-    delete process.env.REASONIX_SEARCH;
+    delete process.env.DSPEC_SEARCH;
     // biome-ignore lint/performance/noDelete: same reason
     delete process.env.DEEPSEEK_BASE_URL;
     // biome-ignore lint/performance/noDelete: same reason
     delete process.env.DEEPSEEK_API_BASE_URL;
     // biome-ignore lint/performance/noDelete: same reason
-    delete process.env.REASONIX_PROVIDER;
+    delete process.env.DSPEC_PROVIDER;
     // biome-ignore lint/performance/noDelete: same reason
     delete process.env.ZHIPU_API_KEY;
     // biome-ignore lint/performance/noDelete: same reason
@@ -98,9 +98,9 @@ describe("config", () => {
     }
     if (originalSearch === undefined) {
       // biome-ignore lint/performance/noDelete: same reason
-      delete process.env.REASONIX_SEARCH;
+      delete process.env.DSPEC_SEARCH;
     } else {
-      process.env.REASONIX_SEARCH = originalSearch;
+      process.env.DSPEC_SEARCH = originalSearch;
     }
     if (originalBaseUrl === undefined) {
       // biome-ignore lint/performance/noDelete: same reason
@@ -116,9 +116,9 @@ describe("config", () => {
     }
     if (originalProvider === undefined) {
       // biome-ignore lint/performance/noDelete: same reason
-      delete process.env.REASONIX_PROVIDER;
+      delete process.env.DSPEC_PROVIDER;
     } else {
-      process.env.REASONIX_PROVIDER = originalProvider;
+      process.env.DSPEC_PROVIDER = originalProvider;
     }
     if (originalZhipuKey === undefined) {
       // biome-ignore lint/performance/noDelete: same reason
@@ -467,23 +467,23 @@ describe("config", () => {
     expect(searchEnabled(path)).toBe(false);
   });
 
-  it("searchEnabled honours REASONIX_SEARCH=off/false/0", () => {
-    process.env.REASONIX_SEARCH = "off";
+  it("searchEnabled honours DSPEC_SEARCH=off/false/0", () => {
+    process.env.DSPEC_SEARCH = "off";
     expect(searchEnabled(path)).toBe(false);
-    process.env.REASONIX_SEARCH = "false";
+    process.env.DSPEC_SEARCH = "false";
     expect(searchEnabled(path)).toBe(false);
-    process.env.REASONIX_SEARCH = "0";
+    process.env.DSPEC_SEARCH = "0";
     expect(searchEnabled(path)).toBe(false);
   });
 
   it("searchEnabled stays true for unrelated env values", () => {
-    process.env.REASONIX_SEARCH = "on";
+    process.env.DSPEC_SEARCH = "on";
     expect(searchEnabled(path)).toBe(true);
   });
 
   it("env off beats config true", () => {
     writeConfig({ apiKey: "sk-test123abcdefghijkl", search: true }, path);
-    process.env.REASONIX_SEARCH = "off";
+    process.env.DSPEC_SEARCH = "off";
     expect(searchEnabled(path)).toBe(false);
   });
 
@@ -996,8 +996,8 @@ describe("config", () => {
       expect(loadActiveProvider(path)).toBe("deepseek");
     });
 
-    it("loadActiveProvider reads REASONIX_PROVIDER env var first", () => {
-      process.env.REASONIX_PROVIDER = "glm";
+    it("loadActiveProvider reads DSPEC_PROVIDER env var first", () => {
+      process.env.DSPEC_PROVIDER = "glm";
       expect(loadActiveProvider(path)).toBe("glm");
     });
 
@@ -1007,9 +1007,9 @@ describe("config", () => {
     });
 
     it("loadActiveProvider ignores invalid provider values", () => {
-      process.env.REASONIX_PROVIDER = "claude";
+      process.env.DSPEC_PROVIDER = "claude";
       expect(loadActiveProvider(path)).toBe("deepseek");
-      process.env.REASONIX_PROVIDER = undefined;
+      process.env.DSPEC_PROVIDER = undefined;
       writeConfig({ provider: "invalid" as never } as never, path);
       expect(loadActiveProvider(path)).toBe("deepseek");
     });

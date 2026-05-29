@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - src/config.ts src/adapters/ src/providers/registry.ts
+  tests:
+    - tests/config.test.ts tests/provider-registry.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    env-prefix-rename:
+      strength: MUST
+      statement: >-
+        loadActiveProvider() MUST resolve via DSPEC_PROVIDER env var instead of REASONIX_PROVIDER.
+        ProviderRegistry tests MUST validate DSPEC_PROVIDER env resolution.
+      scenarios:
+        dspec-provider-env:
+          - GIVEN: DSPEC_PROVIDER is set to 'glm'
+          - WHEN: loadActiveProvider() is called
+          - THEN: '''glm'' is returned regardless of config.json value'
+  REMOVED: {}

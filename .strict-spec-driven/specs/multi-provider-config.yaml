@@ -28,11 +28,11 @@ requirements:
   active-provider-resolution:
     strength: MUST
     statement: >-
-      loadActiveProvider() MUST resolve via REASONIX_PROVIDER env var, then config.json provider
-      field, then 'deepseek' default
+      loadActiveProvider() MUST resolve via DSPEC_PROVIDER env var, then config.json provider field,
+      then 'deepseek' default
     scenarios:
       env-override:
-        - GIVEN: REASONIX_PROVIDER is set to 'glm'
+        - GIVEN: DSPEC_PROVIDER is set to 'glm'
         - WHEN: loadActiveProvider() is called
         - THEN: '''glm'' is returned regardless of config.json value'
   glm-api-key-resolution:
@@ -91,12 +91,12 @@ requirements:
   provider-registry-factory:
     strength: MUST
     statement: >-
-      ProviderRegistry integration tests MUST validate REASONIX_PROVIDER env resolution, config.json
+      ProviderRegistry integration tests MUST validate DSPEC_PROVIDER env resolution, config.json
       fallback, default-to-deepseek, modelToProvider mapping, and capability flags for both
       providers
     scenarios:
       env-override-resolution:
-        - GIVEN: REASONIX_PROVIDER is set to 'glm'
+        - GIVEN: DSPEC_PROVIDER is set to 'glm'
         - WHEN: the provider registry resolves the active provider
         - THEN: GLMClient is returned
   model-validation:
@@ -194,6 +194,16 @@ requirements:
         - GIVEN: any source file in src/
         - WHEN: searched for the string '.reasonix'
         - THEN: zero matches are returned
+  env-prefix-rename:
+    strength: MUST
+    statement: >-
+      loadActiveProvider() MUST resolve via DSPEC_PROVIDER env var instead of REASONIX_PROVIDER.
+      ProviderRegistry tests MUST validate DSPEC_PROVIDER env resolution.
+    scenarios:
+      dspec-provider-env:
+        - GIVEN: DSPEC_PROVIDER is set to 'glm'
+        - WHEN: loadActiveProvider() is called
+        - THEN: '''glm'' is returned regardless of config.json value'
 mapping:
   implementation:
     - src/config.ts

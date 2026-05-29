@@ -22,8 +22,8 @@ describe("dashboard build artifacts", () => {
 
   it("index.html contains placeholder tokens", () => {
     const html = readFileSync(join(DASHBOARD_ROOT, "index.html"), "utf8");
-    expect(html).toContain("__REASONIX_TOKEN__");
-    expect(html).toContain("__REASONIX_MODE__");
+    expect(html).toContain("__DSPEC_TOKEN__");
+    expect(html).toContain("__DSPEC_MODE__");
   });
 
   it("app.js references tauri-bridge", () => {
@@ -54,8 +54,8 @@ describe("dashboard server integration", () => {
     const { renderIndexHtml } = await import("../src/server/assets.js");
     // Token is sanitized to alphanumeric only
     const html = renderIndexHtml("test-token-123", "standalone");
-    expect(html).not.toContain("__REASONIX_TOKEN__");
-    expect(html).not.toContain("__REASONIX_MODE__");
+    expect(html).not.toContain("__DSPEC_TOKEN__");
+    expect(html).not.toContain("__DSPEC_MODE__");
     expect(html).toContain("testtoken123"); // sanitized
     expect(html).toContain("standalone");
   });

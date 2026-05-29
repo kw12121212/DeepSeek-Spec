@@ -406,7 +406,7 @@ export const ru: TranslationSchema = {
     footer: "↑↓ выбор · ⏎ подтвердить · esc отмена",
     currentPref: "текущая настройка",
     activeNow: "активно сейчас",
-    autoDesc: "использовать REASONIX_THEME или по умолчанию",
+    autoDesc: "использовать DSPEC_THEME или по умолчанию",
   },
   planFlow: {
     ...EN.planFlow,

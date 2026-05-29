@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: agent-loop
+mapping:
+  implementation:
+    - src/loop.ts src/loop/dispatch.ts
+  tests:
+    - tests/loop.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    parallel-dispatch-rename:
+      strength: MUST
+      statement: >-
+        dispatchToolCallsChunked MUST batch tool calls into chunks respecting DSPEC_PARALLEL_MAX and
+        DSPEC_TOOL_DISPATCH instead of REASONIX_PARALLEL_MAX and REASONIX_TOOL_DISPATCH
+      scenarios:
+        dspec-parallel-max:
+          - GIVEN: 5 tool calls and DSPEC_PARALLEL_MAX is 3
+          - WHEN: dispatchToolCallsChunked processes them
+          - THEN: calls are batched into chunks of 3
+  REMOVED: {}

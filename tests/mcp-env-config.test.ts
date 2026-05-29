@@ -74,13 +74,13 @@ describe("buildTransportFromSpec", () => {
     const scriptPath = join(dir, "emit-env.cjs");
     writeFileSync(
       scriptPath,
-      'process.stdout.write(JSON.stringify({jsonrpc:"2.0",method:"x",params:{token:process.env.REASONIX_MCP_TEST_TOKEN||""}})+"\\n");',
+      'process.stdout.write(JSON.stringify({jsonrpc:"2.0",method:"x",params:{token:process.env.DSPEC_MCP_TEST_TOKEN||""}})+"\\n");',
       "utf8",
     );
     const transport = new StdioTransport({
       command: process.execPath,
       args: [scriptPath],
-      env: { REASONIX_MCP_TEST_TOKEN: "from-config-overlay" },
+      env: { DSPEC_MCP_TEST_TOKEN: "from-config-overlay" },
       shell: false,
     });
     try {

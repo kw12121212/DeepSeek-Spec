@@ -18,7 +18,7 @@ const theme: SlashHandler = (args) => {
   }
 
   saveTheme(next);
-  const active = resolveThemePreference(next, process.env.REASONIX_THEME);
+  const active = resolveThemePreference(next, process.env.DSPEC_THEME);
   return { info: t("app.themeSaved", { name: next, active }) };
 };
 
