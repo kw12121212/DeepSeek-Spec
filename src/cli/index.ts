@@ -12,7 +12,7 @@ import "./strip-bel.js";
 
 import { Command } from "commander";
 import {
-  type ReasonixConfig,
+  type DeepSeekSpecConfig,
   ensureDashboardToken,
   isReasoningEffort,
   loadApiKey,
@@ -162,7 +162,7 @@ function resolveDashboardToken(noConfig: boolean): string | undefined {
 function ensureFirstRunConfig(): void {
   const cfg = readConfig();
   if (cfg.setupCompleted) return;
-  const next: ReasonixConfig = {
+  const next: DeepSeekSpecConfig = {
     ...cfg,
     setupCompleted: true,
     lang: cfg.lang ?? detectSystemLanguage() ?? undefined,

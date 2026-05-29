@@ -1,7 +1,7 @@
 import {
   DEFAULT_MODEL,
+  type DeepSeekSpecConfig,
   type ReasoningEffort,
-  type ReasonixConfig,
   isReasoningEffort,
   loadReasoningEffort,
   normalizeMcpConfig,
@@ -29,7 +29,7 @@ export interface RawCliFlags {
 }
 
 export function resolveDefaults(flags: RawCliFlags): ResolvedDefaults {
-  const cfg: ReasonixConfig = flags.noConfig ? {} : readConfig();
+  const cfg: DeepSeekSpecConfig = flags.noConfig ? {} : readConfig();
   const model = flags.model?.trim() || cfg.model?.trim() || DEFAULT_MODEL;
 
   const flagEffort = flags.effort?.toLowerCase();
@@ -52,7 +52,7 @@ export function resolveDefaults(flags: RawCliFlags): ResolvedDefaults {
   return { model, reasoningEffort, mcp, session };
 }
 
-function mergeDotMcpJson(cfg: ReasonixConfig, projectRoot: string): ReasonixConfig {
+function mergeDotMcpJson(cfg: DeepSeekSpecConfig, projectRoot: string): DeepSeekSpecConfig {
   const project = loadDotMcpJson(projectRoot);
   if (!project) return cfg;
   return { ...cfg, mcpServers: { ...(cfg.mcpServers ?? {}), ...project } };

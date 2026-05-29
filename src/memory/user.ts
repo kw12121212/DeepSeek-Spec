@@ -12,7 +12,7 @@ import {
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
 import {
-  type ReasonixConfig,
+  type DeepSeekSpecConfig,
   loadResolvedSkillPaths,
   memoryTypeDefaults,
   resolveSkillPaths,
@@ -349,7 +349,7 @@ export function applyGlobalDSpecMemory(basePrompt: string, homeDir?: string): st
 }
 
 /** Read ~/.claude/CLAUDE.md — cross-project notes from Claude Code migration.
- *  Same cap as global Reasonix memory (8000 chars). */
+ *  Same cap as global DSPEC memory (8000 chars). */
 export function readGlobalClaudeMemory(
   homeDir: string = homedir(),
 ): { path: string; content: string; originalChars: number; truncated: boolean } | null {
@@ -391,13 +391,13 @@ export function applyGlobalClaudeMemory(basePrompt: string): string {
 /** Effective priority: entry's own field wins, else the config default for its type, else undefined. */
 export function effectivePriority(
   entry: MemoryEntry,
-  cfg?: ReasonixConfig,
+  cfg?: DeepSeekSpecConfig,
 ): MemoryPriority | undefined {
   if (entry.priority) return entry.priority;
   return memoryTypeDefaults(entry.type, cfg).priority;
 }
 
-function highPriorityBlock(entries: MemoryEntry[], cfg?: ReasonixConfig): string | null {
+function highPriorityBlock(entries: MemoryEntry[], cfg?: DeepSeekSpecConfig): string | null {
   const high = entries.filter((e) => effectivePriority(e, cfg) === "high");
   if (high.length === 0) return null;
   const lines: string[] = [
@@ -418,7 +418,7 @@ function highPriorityBlock(entries: MemoryEntry[], cfg?: ReasonixConfig): string
 /** Empty index → omit the whole block (otherwise we'd add bytes to the prefix hash for nothing). */
 export function applyUserMemory(
   basePrompt: string,
-  opts: { homeDir?: string; projectRoot?: string; cfg?: ReasonixConfig } = {},
+  opts: { homeDir?: string; projectRoot?: string; cfg?: DeepSeekSpecConfig } = {},
 ): string {
   if (!memoryEnabled()) return basePrompt;
   const store = new MemoryStore(opts);
@@ -458,7 +458,7 @@ export function applyUserMemory(
 export function applyMemoryStack(
   basePrompt: string,
   rootDir: string,
-  opts: { homeDir?: string; cfg?: ReasonixConfig } = {},
+  opts: { homeDir?: string; cfg?: DeepSeekSpecConfig } = {},
 ): string {
   const homeDir = opts.homeDir;
   const cfg = opts.cfg;

@@ -8,21 +8,23 @@ requirements:
   provider-field:
     strength: MUST
     statement: >-
-      ReasonixConfig MUST include a provider field accepting 'deepseek' or 'glm', defaulting to
+      DeepSeekSpecConfig MUST include a provider field accepting 'deepseek' or 'glm', defaulting to
       'deepseek'
     scenarios:
-      provider-default:
+      provider-default-rename:
         - GIVEN: a config.json with no provider field
         - WHEN: readConfig() is called
-        - THEN: the returned config has provider set to 'deepseek'
+        - THEN: the returned config has provider set to 'deepseek' (type is now DeepSeekSpecConfig)
   glm-config-section:
     strength: MUST
-    statement: ReasonixConfig MUST include a glm section with optional apiKey and baseUrl fields
+    statement: DeepSeekSpecConfig MUST include a glm section with optional apiKey and baseUrl fields
     scenarios:
-      glm-section-present:
+      glm-section-rename:
         - GIVEN: a config.json with a glm section containing apiKey and baseUrl
         - WHEN: readConfig() is called
-        - THEN: the returned config has glm.apiKey and glm.baseUrl populated
+        - THEN: >-
+            the returned config has glm.apiKey and glm.baseUrl populated (type is now
+            DeepSeekSpecConfig)
   active-provider-resolution:
     strength: MUST
     statement: >-

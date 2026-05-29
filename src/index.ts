@@ -307,7 +307,7 @@ export {
   saveBaseUrl,
   writeConfig,
 } from "./config.js";
-export type { ReasonixConfig } from "./config.js";
+export type { DeepSeekSpecConfig } from "./config.js";
 
 export type {
   ChatMessage,

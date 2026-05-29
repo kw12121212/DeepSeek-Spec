@@ -429,7 +429,7 @@ describe("config", () => {
     expect(redactKey("")).toBe("");
   });
 
-  it("round-trips the full ReasonixConfig (model, effort, mcp, session, setupCompleted)", () => {
+  it("round-trips the full DeepSeekSpecConfig (model, effort, mcp, session, setupCompleted)", () => {
     writeConfig(
       {
         apiKey: "sk-test123abcdefghijkl",

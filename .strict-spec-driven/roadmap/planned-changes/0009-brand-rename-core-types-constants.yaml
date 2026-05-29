@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: core-types-constants
   milestone: 0009-brand-rename
-status: planned
+status: complete
 summary: |
   Rename core TypeScript types, interfaces, constants, and function names:
   ReasonixConfig, REASONIX_LOGO, and all Reasonix-prefixed identifiers.

@@ -1,0 +1,33 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: core-types-constants
+  status: proposed
+summary:
+  what:
+    - >-
+      Rename core TypeScript types, interfaces, constants, and function names from Reasonix to
+      DeepSeek-Spec identifiers
+  why:
+    - >-
+      Part of M9 brand rename milestone — mechanical rename of all Reasonix-prefixed TypeScript
+      identifiers to DeepSeek-Spec equivalents after package-identity is complete
+scope:
+  in:
+    - >-
+      src/config.ts, src/memory/, src/index.ts, desktop/vite.config.ts, and all files importing
+      ReasonixConfig, REASONIX_LOGO, or Reasonix-prefixed functions
+  out:
+    - >-
+      All identifiers renamed: ReasonixConfig->DeepSeekSpecConfig, REASONIX_LOGO->DSPEC_LOGO,
+      readGlobalReasonixMemory->readGlobalDSpecMemory,
+      applyGlobalReasonixMemory->applyGlobalDSpecMemory, and all other Reasonix-prefixed exports
+unchanged_behavior:
+  - >-
+    No behavioral changes — purely mechanical rename. All logic, defaults, and interfaces remain
+    identical.
+roadmap:
+  milestone: 0009-brand-rename
+  planned_change: core-types-constants

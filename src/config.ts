@@ -147,7 +147,7 @@ export interface GlmProviderConfig {
   baseUrl?: string;
 }
 
-export interface ReasonixConfig {
+export interface DeepSeekSpecConfig {
   apiKey?: string;
   baseUrl?: string;
   /** Active provider: "deepseek" or "glm". Default "deepseek". */
@@ -312,7 +312,7 @@ const BUILTIN_TYPE_DOCS: Record<string, string> = {
 
 /** Resolve the merged registry of memory types — built-ins, overlaid by anything in `config.memory.customTypes`. */
 export function loadMemoryTypeRegistry(
-  cfg: ReasonixConfig = readConfig(),
+  cfg: DeepSeekSpecConfig = readConfig(),
 ): MemoryTypeRegistryEntry[] {
   const out: MemoryTypeRegistryEntry[] = [];
   for (const name of ["user", "feedback", "project", "reference"]) {
@@ -338,7 +338,7 @@ export function loadMemoryTypeRegistry(
 
 export function memoryTypeDefaults(
   typeName: string,
-  cfg: ReasonixConfig = readConfig(),
+  cfg: DeepSeekSpecConfig = readConfig(),
 ): { priority?: "low" | "medium" | "high"; expires?: "project_end" } {
   const found = loadMemoryTypeRegistry(cfg).find((e) => e.name === typeName);
   if (!found) return {};
@@ -446,7 +446,7 @@ function sanitizeStringArrayField(
   parent[leaf] = filtered;
 }
 
-export function readConfig(path: string = defaultConfigPath()): ReasonixConfig {
+export function readConfig(path: string = defaultConfigPath()): DeepSeekSpecConfig {
   try {
     // Strip the UTF-8 BOM if a foreign writer left one in — Windows
     // PowerShell 5's `Set-Content -Encoding UTF8` and several text
@@ -461,7 +461,7 @@ export function readConfig(path: string = defaultConfigPath()): ReasonixConfig {
       for (const segments of STRING_ARRAY_FIELDS) {
         sanitizeStringArrayField(cfg, segments, path);
       }
-      return cfg as ReasonixConfig;
+      return cfg as DeepSeekSpecConfig;
     }
   } catch {
     /* missing or malformed → empty config */
@@ -485,7 +485,7 @@ export function ensureDashboardToken(path: string = defaultConfigPath()): string
   const existing = cfg.dashboard?.token?.trim();
   if (existing && existing.length >= 16) return existing;
   const minted = randomBytes(32).toString("hex");
-  const next: ReasonixConfig = { ...cfg, dashboard: { ...cfg.dashboard, token: minted } };
+  const next: DeepSeekSpecConfig = { ...cfg, dashboard: { ...cfg.dashboard, token: minted } };
   writeConfig(next, path);
   return minted;
 }
@@ -495,7 +495,7 @@ export function saveDashboardPort(port: number, path: string = defaultConfigPath
   if (!Number.isInteger(port) || port < 1 || port > 65535) return;
   const cfg = readConfig(path);
   if (cfg.dashboard?.port === port) return;
-  const next: ReasonixConfig = { ...cfg, dashboard: { ...cfg.dashboard, port } };
+  const next: DeepSeekSpecConfig = { ...cfg, dashboard: { ...cfg.dashboard, port } };
   writeConfig(next, path);
 }
 
@@ -504,11 +504,11 @@ export function clearDashboardToken(path: string = defaultConfigPath()): void {
   const cfg = readConfig(path);
   if (!cfg.dashboard?.token) return;
   const { token: _drop, ...rest } = cfg.dashboard;
-  const next: ReasonixConfig = { ...cfg, dashboard: rest };
+  const next: DeepSeekSpecConfig = { ...cfg, dashboard: rest };
   writeConfig(next, path);
 }
 
-export function writeConfig(cfg: ReasonixConfig, path: string = defaultConfigPath()): void {
+export function writeConfig(cfg: DeepSeekSpecConfig, path: string = defaultConfigPath()): void {
   mkdirSync(dirname(path), { recursive: true });
   // Atomic — write to a sibling tmp then rename. A torn write (process
   // killed mid-write, or another reader catching the file before
@@ -527,7 +527,7 @@ export function loadLanguage(path: string = defaultConfigPath()): LanguageCode |
 
 export function mcpEnvFor(
   serverName: string | null | undefined,
-  cfg: ReasonixConfig,
+  cfg: DeepSeekSpecConfig,
 ): Record<string, string> | undefined {
   if (!serverName) return undefined;
   const entry = cfg.mcpEnv?.[serverName];
@@ -560,7 +560,10 @@ function normalizeStringRecord(value: unknown): Record<string, string> | undefin
   return Object.keys(out).length > 0 ? out : undefined;
 }
 
-export function normalizeMcpConfig(cfg: ReasonixConfig, extraLegacy?: string[]): McpServerSpec[] {
+export function normalizeMcpConfig(
+  cfg: DeepSeekSpecConfig,
+  extraLegacy?: string[],
+): McpServerSpec[] {
   const result: McpServerSpec[] = [];
   const seen = new Set<string>();
 
@@ -1009,7 +1012,7 @@ export function saveApiKey(key: string, path: string = defaultConfigPath()): voi
 }
 
 /** Windows: case-insensitive — NTFS treats `F:\Foo` and `f:\foo` as one directory (#402). */
-function findProjectKey(cfg: ReasonixConfig, rootDir: string): string | undefined {
+function findProjectKey(cfg: DeepSeekSpecConfig, rootDir: string): string | undefined {
   const projects = cfg.projects;
   if (!projects) return undefined;
   if (Object.hasOwn(projects, rootDir)) return rootDir;

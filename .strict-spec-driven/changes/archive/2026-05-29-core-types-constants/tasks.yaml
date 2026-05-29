@@ -1,0 +1,50 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: core-types-constants
+sections:
+  Implementation:
+    rename-reasonix-config:
+      text: >-
+        Rename ReasonixConfig to DeepSeekSpecConfig in src/config.ts and all consumers (~50+ files
+        in src/, tests/)
+      status: complete
+    rename-reasonix-logo:
+      text: Rename REASONIX_LOGO to DSPEC_LOGO in src/cli/ui/BootSplash.tsx
+      status: complete
+    update-public-api:
+      text: Update re-export in src/index.ts from ReasonixConfig to DeepSeekSpecConfig
+      status: complete
+    fix-memory-comment:
+      text: Update comment referencing 'Reasonix memory' in src/memory/user.ts line 352
+      status: complete
+    update-strict-specs:
+      text: Update multi-provider-config spec to use DeepSeekSpecConfig instead of ReasonixConfig
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run type checking.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify no ReasonixConfig or REASONIX_LOGO references remain in src/ (excluding env vars and
+        strings handled by other planned changes)
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

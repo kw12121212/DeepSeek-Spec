@@ -5,7 +5,7 @@ import { TextInput } from "ink";
 // biome-ignore lint/style/useImportType: JSX (jsx: "react") needs React as a runtime value
 import React, { useState } from "react";
 import {
-  type ReasonixConfig,
+  type DeepSeekSpecConfig,
   defaultConfigPath,
   isPlausibleKey,
   loadApiKey,
@@ -109,7 +109,7 @@ function SetupPrompt({
                 setValue("");
                 return;
               }
-              const cfg: ReasonixConfig = {
+              const cfg: DeepSeekSpecConfig = {
                 ...readConfig(),
                 apiKey: trimmed,
                 setupCompleted: true,
