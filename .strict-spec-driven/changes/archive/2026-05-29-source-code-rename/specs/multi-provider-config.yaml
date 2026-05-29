@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - src/mcp/*.ts, src/acp/*.ts, src/net/*.ts
+  tests:
+    - tests/
+operations:
+  ADDED: {}
+  MODIFIED:
+    brand-rename:
+      strength: MUST
+      statement: >-
+        All MCP, ACP, and network source code references to 'reasonix' are replaced with
+        DeepSeek-Spec naming
+      scenarios:
+        grep-clean:
+          - GIVEN: dependency changes are applied
+          - WHEN: grep -ri reasonix src/mcp/ src/acp/ src/net/ is executed
+          - THEN: zero matches are returned
+  REMOVED: {}

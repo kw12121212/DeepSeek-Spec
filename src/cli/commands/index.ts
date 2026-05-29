@@ -1,4 +1,4 @@
-/** `reasonix index` — progress writes go to stderr so stdout stays pipeable. */
+/** `dspec index` — progress writes go to stderr so stdout stays pipeable. */
 
 import { resolve } from "node:path";
 import { loadIndexConfig, resolveSemanticEmbeddingConfig } from "../../config.js";

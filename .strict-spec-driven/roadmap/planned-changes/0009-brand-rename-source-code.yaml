@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: source-code-rename
   milestone: 0009-brand-rename
-status: planned
+status: complete
 summary: |
   Final sweep of all src/ files for remaining "reasonix" references:
   import paths, variable names, log statements, string literals, and comments.

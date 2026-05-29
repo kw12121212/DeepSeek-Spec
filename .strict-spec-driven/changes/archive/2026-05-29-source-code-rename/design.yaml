@@ -1,0 +1,21 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: source-code-rename
+approach:
+  - >-
+    Case-insensitive grep sweep across all source directories. Replace each occurrence contextually:
+    import paths become @deepseek-spec/*, string literals become DeepSeek-Spec/dspec, URL strings
+    update to new repo/npm names, config keys update to dspec prefix. Process file-by-file to
+    maintain correct context for each replacement.
+decisions:
+  src-first:
+    decision: >-
+      Process src/ first (core runtime), then desktop/ and dashboard/ (UI layers), then benchmarks/
+      (test infrastructure) to keep each domain atomic.
+    rationale: >-
+      src/ changes are foundational — desktop/dashboard/benchmarks may import from src/ and need
+      consistent naming.
+alternatives: []
+risks: []

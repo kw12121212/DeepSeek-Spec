@@ -1,0 +1,16 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: source-code-rename
+open: []
+resolved:
+  - id: benchmark-transcripts
+    question: >-
+      Should benchmark transcript filenames (*.reasonix.*.jsonl) be renamed to *.dspec.*.jsonl, or
+      left as-is since they are historical run artifacts?
+    context: >-
+      benchmarks/tau-bench/transcripts/ contains files like t04_refund_delivered.reasonix.r3.jsonl.
+      These are historical test run transcripts.
+    answer: Rename transcript filenames to *.dspec.*.jsonl for consistency
+    status: resolved

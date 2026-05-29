@@ -1,7 +1,7 @@
 # MCP client (v0.3 foundation)
 
 Minimal [Model Context Protocol](https://spec.modelcontextprotocol.io/)
-client, hand-rolled in TypeScript. Lets Reasonix consume tools from any
+client, hand-rolled in TypeScript. Lets DeepSeek-Spec consume tools from any
 MCP server (filesystem, github, slack, puppeteer, …) while applying the
 Cache-First Loop and tool-call repair to the whole thing automatically.
 
@@ -9,9 +9,9 @@ Cache-First Loop and tool-call repair to the whole thing automatically.
 
 Same reasoning that drove `client.ts` (DeepSeek) rather than `openai`:
 
-- **Zero runtime deps** for this module. Consistent with Reasonix's
+- **Zero runtime deps** for this module. Consistent with DeepSeek-Spec's
   policy of owning the wire format where it matters.
-- **Surface tuning**: we only implement what Reasonix actually uses —
+- **Surface tuning**: we only implement what DeepSeek-Spec actually uses —
   initialize + tools/list + tools/call. Resources, prompts, sampling,
   and progress notifications are deferred.
 - **Insulation** from SDK breaking changes. The spec is more stable
@@ -42,16 +42,16 @@ tests/mcp-sse.test.ts — in-process http.Server fake for SSE
 
 | feature | status | note |
 |---|---|---|
-| CLI wiring (`reasonix chat --mcp <cmd>`) | ✅ shipped | see Usage below |
+| CLI wiring (`dspec chat --mcp <cmd>`) | ✅ shipped | see Usage below |
 | Bundled demo server | ✅ shipped | `examples/mcp-server-demo.ts`, exposes echo/add/get_time |
 | Real-subprocess integration test | ✅ shipped | `tests/mcp-integration.test.ts` |
-| Resources / `resources/list` / `resources/read` | deferred | Reasonix doesn't surface resources today |
+| Resources / `resources/list` / `resources/read` | deferred | DeepSeek-Spec doesn't surface resources today |
 | Prompts / `prompts/list` | deferred | ditto |
 | Progress notifications | deferred | long-running tool support comes with the CLI work |
 | Streaming results | deferred | current shape returns one CallToolResult per call |
 | SSE transport | ✅ shipped | `src/mcp/sse.ts` — pass `http(s)://…` to `--mcp` |
 | Streamable HTTP (2025-03-26 spec) | deferred | waiting for a real server to validate against |
-| MCP server that Reasonix exposes | never | out of scope — Reasonix is a client |
+| MCP server that DeepSeek-Spec exposes | never | out of scope — DeepSeek-Spec is a client |
 
 ## Usage (CLI)
 
@@ -60,31 +60,31 @@ first-class citizens of the loop.
 
 ```bash
 # Single server, anonymous (tools use native names):
-reasonix chat --mcp "node --import tsx examples/mcp-server-demo.ts"
+dspec chat --mcp "node --import tsx examples/mcp-server-demo.ts"
 
 # Official filesystem server:
-reasonix chat --mcp "npx -y @modelcontextprotocol/server-filesystem /tmp/safe-dir"
+dspec chat --mcp "npx -y @modelcontextprotocol/server-filesystem /tmp/safe-dir"
 
 # Multiple servers, each namespaced. Syntax: "name=command args..."
 # Tools land in a shared registry as fs_read_file, demo_add, etc.
-reasonix chat \
+dspec chat \
   --mcp "fs=npx -y @modelcontextprotocol/server-filesystem /tmp/safe" \
   --mcp "demo=node --import tsx examples/mcp-server-demo.ts"
 
 # Global prefix (only honored when there's ONE anonymous server):
-reasonix chat \
+dspec chat \
   --mcp "npx -y @modelcontextprotocol/server-filesystem /tmp" \
   --mcp-prefix fs_
 
 # Same flag works with one-shot run:
-reasonix run "list files in /tmp/safe-dir" \
+dspec run "list files in /tmp/safe-dir" \
   --mcp "npx -y @modelcontextprotocol/server-filesystem /tmp/safe-dir"
 ```
 
 Each spec is shell-split (spaces separate args; use quotes for paths with
 spaces). Windows-friendly: backslashes pass through literally outside
 quotes, so `C:\path\to\dir` works. Tools get folded into the
-`ImmutablePrefix` for the model, and every call goes through Reasonix's
+`ImmutablePrefix` for the model, and every call goes through DeepSeek-Spec's
 Cache-First loop + tool-call repair (scavenge / flatten / storm)
 automatically.
 
@@ -98,7 +98,7 @@ import {
   CacheFirstLoop,
   DeepSeekClient,
   ImmutablePrefix,
-} from "reasonix";
+} from "dspec";
 
 // 1. Spawn + connect to an MCP server
 const transport = new StdioTransport({
@@ -108,7 +108,7 @@ const transport = new StdioTransport({
 const mcp = new McpClient({ transport });
 await mcp.initialize();
 
-// 2. Bridge its tools into a Reasonix ToolRegistry
+// 2. Bridge its tools into a DeepSeek-Spec ToolRegistry
 const { registry } = await bridgeMcpTools(mcp, { namePrefix: "fs_" });
 
 // 3. Use them with the Cache-First Loop — same as any native tool
@@ -130,7 +130,7 @@ for await (const ev of loop.step("List the files in /tmp/safe-dir.")) {
 await mcp.close();
 ```
 
-The payoff: the filesystem server's tools now inherit Reasonix's
+The payoff: the filesystem server's tools now inherit DeepSeek-Spec's
 cache-first prefix stability + repair (schema flatten, tool-call
 scavenge, call-storm break) without the MCP server knowing anything
 about it.

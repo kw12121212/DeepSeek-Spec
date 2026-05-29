@@ -1,6 +1,6 @@
-/** Bridges Reasonix's internal `PauseGate` requests onto ACP `session/request_permission` round-trips. */
+/** Bridges DeepSeek-Spec's internal `PauseGate` requests onto ACP `session/request_permission` round-trips. */
 
-import { resolveApprovalPrompt, toApprovalPrompt } from "@reasonix/core-utils";
+import { resolveApprovalPrompt, toApprovalPrompt } from "@deepseek-spec/core-utils";
 import type { PauseRequest } from "../core/pause-gate.js";
 import type {
   PermissionOption,
@@ -48,11 +48,11 @@ export async function requestPermissionForGate(
   sessionId: string,
   req: PauseRequest,
 ): Promise<
-  | import("@reasonix/core-utils").ConfirmationChoice
-  | import("@reasonix/core-utils").PlanVerdict
-  | import("@reasonix/core-utils").CheckpointVerdict
-  | import("@reasonix/core-utils").RevisionVerdict
-  | import("@reasonix/core-utils").ChoiceVerdict
+  | import("@deepseek-spec/core-utils").ConfirmationChoice
+  | import("@deepseek-spec/core-utils").PlanVerdict
+  | import("@deepseek-spec/core-utils").CheckpointVerdict
+  | import("@deepseek-spec/core-utils").RevisionVerdict
+  | import("@deepseek-spec/core-utils").ChoiceVerdict
 > {
   const prompt = toApprovalPrompt(req);
 

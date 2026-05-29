@@ -154,7 +154,7 @@ export type PendingConfirm = {
   id: number;
   kind: "run_command" | "run_background";
   command: string;
-  prompt: import("@reasonix/core-utils").ApprovalPrompt;
+  prompt: import("@deepseek-spec/core-utils").ApprovalPrompt;
 };
 
 export type PendingPathAccess = {
@@ -164,7 +164,7 @@ export type PendingPathAccess = {
   toolName: string;
   sandboxRoot: string;
   allowPrefix: string;
-  prompt: import("@reasonix/core-utils").ApprovalPrompt;
+  prompt: import("@deepseek-spec/core-utils").ApprovalPrompt;
 };
 
 export type PendingChoice = {
@@ -441,7 +441,7 @@ export function reduce(state: State, action: Action): State {
           ...state.messages,
           {
             kind: "error",
-            message: `reasonix exited (code ${action.code ?? "?"})`,
+            message: `dspec exited (code ${action.code ?? "?"})`,
             id: nextErrorId(),
           },
         ],
@@ -1038,7 +1038,7 @@ export function applyIncoming(state: State, ev: IncomingEvent): State {
             kind: "error",
             message:
               `Session "${ev.name}" loaded with no messages (${sizeNote}). ` +
-              `The file ~/.reasonix/sessions/${ev.name}.jsonl exists but couldn't be parsed — ` +
+              `The file ~/.dspec/sessions/${ev.name}.jsonl exists but couldn't be parsed — ` +
               `start a new chat or restore from .jsonl.bak if you have one.`,
             id: nextErrorId(),
           },
@@ -1250,7 +1250,7 @@ function formatConversationMarkdown(messages: ChatMessage[], userLabel: string):
           })
           .filter(Boolean)
           .join("\n\n");
-        return `### Reasonix\n\n${body}`;
+        return `### DeepSeek-Spec\n\n${body}`;
       }
       if (m.kind === "error") return `### Error\n\n${m.message}`;
       return "";
@@ -1830,7 +1830,7 @@ function TabRuntime({
   const restoreScrollTop = useCallback(() => {
     const session = currentSessionRef.current;
     if (!session) return null;
-    const raw = localStorage.getItem(`reasonix.scroll.${session}`);
+    const raw = localStorage.getItem(`dspec.scroll.${session}`);
     const n = raw ? Number(raw) : Number.NaN;
     return Number.isFinite(n) ? n : null;
   }, []);
@@ -1848,7 +1848,7 @@ function TabRuntime({
     const el = threadRef.current;
     const session = state.currentSession;
     if (!el || !session) return;
-    const key = `reasonix.scroll.${session}`;
+    const key = `dspec.scroll.${session}`;
     let timer: ReturnType<typeof setTimeout>;
     const onScroll = () => {
       clearTimeout(timer);
@@ -2044,7 +2044,7 @@ function TabRuntime({
       cmd: "/feedback",
       desc: t("app.cmd.feedback"),
       run: () => {
-        void openUrl("https://github.com/esengine/DeepSeek-Reasonix/issues/new/choose").catch(
+        void openUrl("https://github.com/esengine/DeepSeek-DeepSeek-Spec/issues/new/choose").catch(
           () => undefined,
         );
       },
@@ -2088,7 +2088,7 @@ function TabRuntime({
   const elapsed = useElapsed(state.busy);
   const workspaceLabel = state.settings?.workspaceDir
     ? state.settings.workspaceDir.split(/[\\/]/).pop() || "workspace"
-    : "Reasonix";
+    : "DeepSeek-Spec";
   const session = (() => {
     if (state.currentSession) {
       const s = state.sessions.find((x) => x.name === state.currentSession);
@@ -2743,7 +2743,7 @@ function TitleBar({
         <div className="tb-meta" data-tauri-drag-region>
           <div className="brand" data-tauri-drag-region>
             <span className="mark" />
-            <span className="brand-name">Reasonix</span>
+            <span className="brand-name">DeepSeek-Spec</span>
           </div>
           {session && (
             <div className="crumbs" data-tauri-drag-region>
@@ -3248,44 +3248,44 @@ export function App() {
     total: number | null;
   } | null>(null);
   const [currency, setCurrency] = useState<"CNY" | "USD">(() => {
-    const v = localStorage.getItem("reasonix.currency");
+    const v = localStorage.getItem("dspec.currency");
     return v === "USD" ? "USD" : "CNY";
   });
   const [theme, setTheme] = useState<Theme>(() => {
-    const v = localStorage.getItem("reasonix.theme");
-    const style = localStorage.getItem("reasonix.themeStyle");
+    const v = localStorage.getItem("dspec.theme");
+    const style = localStorage.getItem("dspec.themeStyle");
     if (isThemeStyle(style)) return themeForStyle(style);
     return isTheme(v) ? v : THEME.DARK;
   });
   const [themeStyle, setThemeStyle] = useState<ThemeStyle>(() => {
-    const style = localStorage.getItem("reasonix.themeStyle");
+    const style = localStorage.getItem("dspec.themeStyle");
     if (isThemeStyle(style)) return style;
-    const storedTheme = localStorage.getItem("reasonix.theme");
+    const storedTheme = localStorage.getItem("dspec.theme");
     return defaultStyleForTheme(isTheme(storedTheme) ? storedTheme : THEME.DARK);
   });
   const [fontScale, setFontScale] = useState<FontScale>(() => {
-    const v = localStorage.getItem("reasonix.fontScale");
+    const v = localStorage.getItem("dspec.fontScale");
     return isFontScale(v) ? v : FONT_SCALE.MEDIUM;
   });
   const [fontFamily, setFontFamily] = useState<FontFamily>(() => {
-    const v = localStorage.getItem("reasonix.fontFamily");
+    const v = localStorage.getItem("dspec.fontFamily");
     return isFontFamily(v) ? v : FONT_FAMILY.SANS;
   });
   const [customFontFamily, setCustomFontFamily] = useState<string>(() => {
-    return localStorage.getItem("reasonix.customFontFamily") ?? "";
+    return localStorage.getItem("dspec.customFontFamily") ?? "";
   });
   const {
     collapsed: sideCollapsed,
     toggle: onToggleSide,
     requireCollapsed: requireSideCollapsed,
     releaseCollapsed: releaseSideCollapsed,
-  } = useAutoCollapse("reasonix.sideCollapsed");
+  } = useAutoCollapse("dspec.sideCollapsed");
   const {
     collapsed: ctxCollapsed,
     toggle: onToggleCtx,
     requireCollapsed: requireCtxCollapsed,
     releaseCollapsed: releaseCtxCollapsed,
-  } = useAutoCollapse("reasonix.ctxCollapsed");
+  } = useAutoCollapse("dspec.ctxCollapsed");
 
   const { width: sideWidth, onMouseDown: onSideResizeDown } = useResizable("side", sideCollapsed);
   const { width: ctxWidth, onMouseDown: onCtxResizeDown } = useResizable("ctx", ctxCollapsed);
@@ -3297,8 +3297,8 @@ export function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.dataset.themeStyle = themeStyle;
-    localStorage.setItem("reasonix.theme", theme);
-    localStorage.setItem("reasonix.themeStyle", themeStyle);
+    localStorage.setItem("dspec.theme", theme);
+    localStorage.setItem("dspec.themeStyle", themeStyle);
   }, [theme, themeStyle]);
 
   // Sync --composer-max-width to .app (separate from inline style to avoid React override)
@@ -3351,7 +3351,7 @@ export function App() {
   useEffect(() => {
     // Chromium webview supports `zoom`; scales every px-based size without touching CSS rules.
     document.documentElement.style.setProperty("zoom", String(FONT_SCALE_ZOOM[fontScale]));
-    localStorage.setItem("reasonix.fontScale", fontScale);
+    localStorage.setItem("dspec.fontScale", fontScale);
   }, [fontScale]);
 
   useEffect(() => {
@@ -3361,8 +3361,8 @@ export function App() {
         ? custom
         : FONT_FAMILY_STACK[fontFamily] ?? FONT_FAMILY_STACK.sans;
     document.documentElement.style.setProperty("--font-sans", stack);
-    localStorage.setItem("reasonix.fontFamily", fontFamily);
-    localStorage.setItem("reasonix.customFontFamily", customFontFamily);
+    localStorage.setItem("dspec.fontFamily", fontFamily);
+    localStorage.setItem("dspec.customFontFamily", customFontFamily);
   }, [fontFamily, customFontFamily]);
 
   useEffect(() => {
@@ -3370,8 +3370,8 @@ export function App() {
       const detail = (e as CustomEvent).detail;
       if (detail === "CNY" || detail === "USD") setCurrency(detail);
     };
-    window.addEventListener("reasonix:currency", onCur);
-    return () => window.removeEventListener("reasonix:currency", onCur);
+    window.addEventListener("dspec:currency", onCur);
+    return () => window.removeEventListener("dspec:currency", onCur);
   }, []);
 
   const deliverToTab = useCallback((tabId: string, action: TabAction) => {
@@ -3560,14 +3560,14 @@ export function App() {
                 )
               : prev,
           );
-          console.warn("[reasonix stderr]", e.payload.data);
+          console.warn("[dspec stderr]", e.payload.data);
         }),
         listen<{ code: number | null }>("rpc:exit", (e) => {
           for (const tabId of dispatchersRef.current.keys()) flushTabDeltas(tabId);
           if (dispatchersRef.current.size === 0) {
             setStartupFailure(
               coerceStartupFailure(
-                new Error(`reasonix exited (code ${e.payload.code ?? "?"})`),
+                new Error(`dspec exited (code ${e.payload.code ?? "?"})`),
                 startupStderrRef.current,
               ),
             );
@@ -3677,8 +3677,8 @@ export function App() {
   const onToggleCurrency = useCallback(() => {
     setCurrency((c) => {
       const next = c === "CNY" ? "USD" : "CNY";
-      localStorage.setItem("reasonix.currency", next);
-      window.dispatchEvent(new CustomEvent("reasonix:currency", { detail: next }));
+      localStorage.setItem("dspec.currency", next);
+      window.dispatchEvent(new CustomEvent("dspec:currency", { detail: next }));
       return next;
     });
   }, []);

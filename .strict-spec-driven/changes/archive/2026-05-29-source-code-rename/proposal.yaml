@@ -1,0 +1,31 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: source-code-rename
+  status: proposed
+summary:
+  what:
+    - >-
+      Sweep all src/, desktop/src/, dashboard/src/, and benchmarks/ files for remaining 'reasonix'
+      references and replace with the correct DeepSeek-Spec naming
+  why:
+    - >-
+      All four dependency changes (env-vars, config-dir-paths, core-types-constants,
+      system-prompts-strings) are archived. This sweep catches stragglers across ~56 source files to
+      complete the brand rename.
+scope:
+  in:
+    - >-
+      src/ (29 files), desktop/src/ (15 files), dashboard/src/ (12 files), benchmarks/ (5+ files),
+      plus desktop/src-tauri/ configs
+  out:
+    - >-
+      Zero 'reasonix' matches in grep -ri reasonix src/ desktop/ dashboard/ benchmarks/ (excluding
+      node_modules/, dist/, package-lock.json)
+unchanged_behavior:
+  - No behavior changes — purely mechanical rename. No backward-compat aliases added.
+roadmap:
+  milestone: 0009-brand-rename
+  planned_change: source-code-rename

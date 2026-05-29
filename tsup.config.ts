@@ -9,7 +9,7 @@ export default defineConfig([
     sourcemap: true,
     target: "node22",
     outDir: "dist",
-    noExternal: ["@reasonix/core-utils", "ink"],
+    noExternal: ["@deepseek-spec/core-utils", "ink"],
   },
   {
     entry: ["src/cli/index.ts"],

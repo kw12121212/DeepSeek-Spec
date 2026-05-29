@@ -10,9 +10,9 @@ let eventIdCounter = 0;
 let currentTurn = 1;
 
 // 模式检测
-const modeMeta = document.querySelector('meta[name="reasonix-mode"]');
+const modeMeta = document.querySelector('meta[name="dspec-mode"]');
 const rawMode = modeMeta?.getAttribute("content") ?? "";
-const isServerMode = rawMode !== "" && rawMode !== "__REASONIX_MODE__";
+const isServerMode = rawMode !== "" && rawMode !== "__DSPEC_MODE__";
 const MODE = isServerMode ? "server" : "mock";
 
 /** Web vs. native dispatcher hint — `true` whenever the dashboard is served by the CLI server, false in the Tauri desktop wrapper where native dialogs work. */
@@ -231,9 +231,9 @@ function sseToIncoming(ev: any): Record<string, any>[] {
 function connectSSE(): void {
   if (sse) sse.close();
   const token =
-    document.querySelector('meta[name="reasonix-token"]')?.getAttribute("content") ?? "";
+    document.querySelector('meta[name="dspec-token"]')?.getAttribute("content") ?? "";
   const sseUrl =
-    token && token !== "__REASONIX_TOKEN__"
+    token && token !== "__DSPEC_TOKEN__"
       ? `/api/events?token=${encodeURIComponent(token)}`
       : "/api/events";
   sse = new EventSource(sseUrl);
@@ -299,12 +299,12 @@ function startStatsPolling(): void {
 
 // REST API 辅助
 async function apiFetch(endpoint: string, options?: RequestInit): Promise<any> {
-  const token = document.querySelector('meta[name="reasonix-token"]')?.getAttribute("content");
+  const token = document.querySelector('meta[name="dspec-token"]')?.getAttribute("content");
   const headers: Record<string, string> = {
     ...((options?.headers as Record<string, string>) ?? {}),
   };
-  if (token && token !== "__REASONIX_TOKEN__") {
-    headers["x-reasonix-token"] = token;
+  if (token && token !== "__DSPEC_TOKEN__") {
+    headers["x-dspec-token"] = token;
   }
   if (options?.body && !headers["content-type"]) {
     headers["content-type"] = "application/json";
@@ -1099,13 +1099,13 @@ const mockSettings = {
 };
 
 const mockMessages: any[] = [
-  { kind: "user", text: "你好 Reasonix，帮我列出这个项目的主要技术栈以及前端架构体系。" },
+  { kind: "user", text: "你好 DeepSeek-Spec，帮我列出这个项目的主要技术栈以及前端架构体系。" },
   {
     kind: "assistant",
     turn: 1,
     segments: [
       { kind: "reasoning", text: "用户询问项目的技术栈和前端架构。" },
-      { kind: "text", text: "你好！**DeepSeek-Reasonix** 是一个以 DeepSeek 为内核的智能代码助手…" },
+      { kind: "text", text: "你好！**DeepSeek-Spec** 是一个以 DeepSeek 为内核的智能代码助手…" },
     ],
     pending: false,
   },

@@ -4,8 +4,8 @@ import { getThreadMaxWidth } from "./thread-layout";
 const MIN_WIDTH = 160;
 const MAX_WIDTH_PCT = 0.4;
 const CSS_VAR = { side: "--side-width", ctx: "--ctx-width" } as const;
-const PERSIST_KEY_SIDE = "reasonix.sideWidth";
-const PERSIST_KEY_CTX = "reasonix.ctxWidth";
+const PERSIST_KEY_SIDE = "dspec.sideWidth";
+const PERSIST_KEY_CTX = "dspec.ctxWidth";
 
 export function useResizable(
   side: "side" | "ctx",

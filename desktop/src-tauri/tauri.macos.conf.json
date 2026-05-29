@@ -2,7 +2,7 @@
   "app": {
     "windows": [
       {
-        "title": "Reasonix",
+        "title": "DeepSeek-Spec",
         "width": 1024,
         "height": 720,
         "minWidth": 480,

@@ -43,7 +43,7 @@ export interface Turn {
   toolName?: string;
 }
 
-export type RunMode = "baseline" | "reasonix";
+export type RunMode = "baseline" | "dspec";
 
 export interface RunResult {
   taskId: string;
@@ -68,8 +68,8 @@ export interface BenchMeta {
   userSimModel: string;
   taskCount: number;
   repeatsPerTask: number;
-  /** Reasonix version written into the report for reproducibility. */
-  reasonixVersion: string;
+  /** DSpec version written into the report for reproducibility. */
+  dspecVersion: string;
 }
 
 export interface BenchReport {

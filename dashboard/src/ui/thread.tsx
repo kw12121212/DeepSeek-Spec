@@ -1,5 +1,5 @@
-import { isCompactionSummary, stripCompactionMarker } from "@reasonix/core-utils/compaction";
-import { derivePrefix } from "@reasonix/core-utils/derive-prefix";
+import { isCompactionSummary, stripCompactionMarker } from "@deepseek-spec/core-utils/compaction";
+import { derivePrefix } from "@deepseek-spec/core-utils/derive-prefix";
 import { memo, useState, type ReactNode } from "react";
 import { Copy } from "lucide-react";
 import { I } from "../icons";
@@ -106,7 +106,7 @@ export const AssistantMsg = memo(function AssistantMsg({
       <div className="avatar">DS</div>
       <div className="body">
         <div className="who">
-          <span className="name">Reasonix</span>
+          <span className="name">DeepSeek-Spec</span>
           {model ? <span className="model">{model}</span> : null}
           {time ? <span className="time">{time}</span> : null}
         </div>

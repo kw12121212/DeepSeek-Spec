@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Reasonix",
+  "productName": "DeepSeek-Spec",
   "version": "0.52.0",
   "identifier": "dev.dspec.desktop",
   "build": {
@@ -13,7 +13,7 @@
     "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "Reasonix",
+        "title": "DeepSeek-Spec",
         "width": 1024,
         "height": 720,
         "minWidth": 480,
@@ -62,7 +62,7 @@
       "active": true,
       "endpoints": [
         "https://pub-147fb53b9c1e4bbf891a257968619ea7.r2.dev/latest/latest.json",
-        "https://github.com/esengine/reasonix/releases/latest/download/latest.json"
+        "https://github.com/esengine/DeepSeek-Spec/releases/latest/download/latest.json"
       ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDI5RkE3RDJDQTgzMkFDNkMKUldSc3JES29MSDM2S1pwcjR2MnZZMW15eG5ydnQrRUJtdjdteFJiaHF6cnE0NzYyb09Wc2k0ZHEK"
     }

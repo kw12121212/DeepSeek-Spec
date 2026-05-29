@@ -66,7 +66,7 @@ async function main(): Promise<void> {
   const total = report.results.length;
   console.log(`────────────────────────────────────────`);
   console.log(`Results: ${passed}/${total} passed`);
-  console.log(`Version: ${report.meta.reasonixVersion}`);
+  console.log(`Version: ${report.meta.dspecVersion}`);
   console.log(`Date:    ${report.meta.date}`);
 
   if (args.outPath) {

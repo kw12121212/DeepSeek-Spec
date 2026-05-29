@@ -27,10 +27,10 @@ function parseArgs(argv: string[]): CliArgs {
 }
 
 function renderHeader(report: EvalReport): string {
-  return `# Reasonix Behavior-Stability Evaluation
+  return `# DSpec Behavior-Stability Evaluation
 
 **Date:** ${report.meta.date}
-**Version:** ${report.meta.reasonixVersion}
+**Version:** ${report.meta.dspecVersion}
 `;
 }
 

@@ -299,19 +299,19 @@ describe("resolveNoProxy", () => {
     const r = resolveNoProxy({});
     expect(r.defaults).toHaveLength(DEFAULT_NO_PROXY.length);
     expect(r.envSystem).toHaveLength(0);
-    expect(r.envReasonix).toHaveLength(0);
+    expect(r.envDspec).toHaveLength(0);
     expect(r.extra).toHaveLength(0);
     expect(r.all.length).toBe(DEFAULT_NO_PROXY.length);
   });
 
-  it("partitions patterns by source (defaults / env / REASONIX / extra)", () => {
+  it("partitions patterns by source (defaults / env / DSPEC / extra)", () => {
     const r = resolveNoProxy(
       { NO_PROXY: "system.example", DSPEC_NO_PROXY: "app.example" },
       { extraNoProxy: ["config.example"] },
     );
     expect(r.defaults.map((p) => p.raw)).toContain("api.deepseek.com");
     expect(r.envSystem.map((p) => p.raw)).toEqual(["system.example"]);
-    expect(r.envReasonix.map((p) => p.raw)).toEqual(["app.example"]);
+    expect(r.envDspec.map((p) => p.raw)).toEqual(["app.example"]);
     expect(r.extra.map((p) => p.raw)).toEqual(["config.example"]);
     expect(r.all.map((p) => p.raw)).toEqual([
       ...r.defaults.map((p) => p.raw),

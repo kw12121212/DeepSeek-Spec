@@ -19,7 +19,7 @@ export interface EvalResult {
 export interface EvalReport {
   meta: {
     date: string;
-    reasonixVersion: string;
+    dspecVersion: string;
     model?: string;
   };
   results: EvalResult[];

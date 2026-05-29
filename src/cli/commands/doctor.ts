@@ -102,7 +102,7 @@ function checkProxy(): Check[] {
   const sourceSummary = [
     `defaults ${resolved.defaults.length}`,
     resolved.envSystem.length > 0 ? `env ${resolved.envSystem.length}` : null,
-    resolved.envReasonix.length > 0 ? `DSPEC ${resolved.envReasonix.length}` : null,
+    resolved.envDspec.length > 0 ? `DSPEC ${resolved.envDspec.length}` : null,
     resolved.extra.length > 0 ? `config ${resolved.extra.length}` : null,
   ]
     .filter(Boolean)

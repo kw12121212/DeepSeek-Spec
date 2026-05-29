@@ -19,8 +19,8 @@ import {
   themeForStyle,
 } from "./theme";
 
-const stored = localStorage.getItem("reasonix.theme");
-const storedStyle = localStorage.getItem("reasonix.themeStyle");
+const stored = localStorage.getItem("dspec.theme");
+const storedStyle = localStorage.getItem("dspec.themeStyle");
 if (isThemeStyle(storedStyle)) {
   document.documentElement.dataset.themeStyle = storedStyle;
   document.documentElement.dataset.theme = themeForStyle(storedStyle);

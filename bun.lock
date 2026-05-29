@@ -43,7 +43,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "^1.9.4",
-        "@reasonix/core-utils": "workspace:*",
+        "@deepseek-spec/core-utils": "workspace:*",
         "@stryker-mutator/core": "^9.6.1",
         "@stryker-mutator/vitest-runner": "^9.6.1",
         "@testing-library/react": "^16.3.2",
@@ -75,21 +75,11 @@
       },
     },
     "packages/core-utils": {
-      "name": "@reasonix/core-utils",
+      "name": "@deepseek-spec/core-utils",
       "version": "0.1.0",
       "devDependencies": {
         "@types/node": "^22.9.0",
         "typescript": "^5.6.3",
-      },
-    },
-    "packages/dsnix": {
-      "name": "dsnix",
-      "version": "0.52.0",
-      "bin": {
-        "dsnix": "bin.cjs",
-      },
-      "dependencies": {
-        "reasonix": "0.52.0",
       },
     },
     "packages/ink": {
@@ -245,6 +235,8 @@
 
     "@csstools/css-tokenizer": ["@csstools/css-tokenizer@4.0.0", "https://registry.npmmirror.com/@csstools/css-tokenizer/-/css-tokenizer-4.0.0.tgz", {}, "sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA=="],
 
+    "@deepseek-spec/core-utils": ["@deepseek-spec/core-utils@workspace:packages/core-utils"],
+
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.21.5", "https://registry.npmmirror.com/@esbuild/aix-ppc64/-/aix-ppc64-0.21.5.tgz", { "os": "aix", "cpu": "ppc64" }, "sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ=="],
 
     "@esbuild/android-arm": ["@esbuild/android-arm@0.21.5", "https://registry.npmmirror.com/@esbuild/android-arm/-/android-arm-0.21.5.tgz", { "os": "android", "cpu": "arm" }, "sha512-vCPvzSjpPHEi1siZdlvAlsPxXl7WbOVUBBAowWug4rJHb68Ox8KualB+1ocNvT5fjv6wpkX6o/iEpbDrf68zcg=="],
@@ -346,8 +338,6 @@
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "https://registry.npmmirror.com/@jridgewell/trace-mapping/-/trace-mapping-0.3.31.tgz", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
     "@pkgjs/parseargs": ["@pkgjs/parseargs@0.11.0", "https://registry.npmmirror.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz", {}, "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg=="],
-
-    "@reasonix/core-utils": ["@reasonix/core-utils@workspace:packages/core-utils"],
 
     "@rollup/rollup-android-arm-eabi": ["@rollup/rollup-android-arm-eabi@4.60.4", "https://registry.npmmirror.com/@rollup/rollup-android-arm-eabi/-/rollup-android-arm-eabi-4.60.4.tgz", { "os": "android", "cpu": "arm" }, "sha512-F5QXMSiFebS9hKZj02XhWLLnRpJ3B3AROP0tWbFBSj+6kCbg5m9j5JoHKd4mmSVy5mS/IMQloYgYxCuJC0fxEQ=="],
 
@@ -562,8 +552,6 @@
     "domhandler": ["domhandler@5.0.3", "https://registry.npmmirror.com/domhandler/-/domhandler-5.0.3.tgz", { "dependencies": { "domelementtype": "^2.3.0" } }, "sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w=="],
 
     "domutils": ["domutils@3.2.2", "https://registry.npmmirror.com/domutils/-/domutils-3.2.2.tgz", { "dependencies": { "dom-serializer": "^2.0.0", "domelementtype": "^2.3.0", "domhandler": "^5.0.3" } }, "sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw=="],
-
-    "dsnix": ["dsnix@workspace:packages/dsnix"],
 
     "dunder-proto": ["dunder-proto@1.0.1", "https://registry.npmmirror.com/dunder-proto/-/dunder-proto-1.0.1.tgz", { "dependencies": { "call-bind-apply-helpers": "^1.0.1", "es-errors": "^1.3.0", "gopd": "^1.2.0" } }, "sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A=="],
 
@@ -824,8 +812,6 @@
     "react-test-renderer": ["react-test-renderer@19.2.6", "https://registry.npmmirror.com/react-test-renderer/-/react-test-renderer-19.2.6.tgz", { "dependencies": { "react-is": "^19.2.6", "scheduler": "^0.27.0" }, "peerDependencies": { "react": "^19.2.6" } }, "sha512-GbS6V23YduFTPiWJ5xICbKEjRcqx1Z90js/V5miqhz7qp/d6xSe9Dd6NjSQODFRdzdsqRMPW82E/sFpPRbY5Mw=="],
 
     "readdirp": ["readdirp@4.1.2", "https://registry.npmmirror.com/readdirp/-/readdirp-4.1.2.tgz", {}, "sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg=="],
-
-    "reasonix": ["reasonix@0.52.0", "https://registry.npmmirror.com/reasonix/-/reasonix-0.52.0.tgz", { "dependencies": { "@alcalzone/ansi-tokenize": "^0.3.0", "auto-bind": "^5.0.1", "bidi-js": "^1.0.3", "chalk": "^5.3.0", "cli-boxes": "^4.0.1", "cli-highlight": "^2.1.11", "code-excerpt": "^4.0.0", "commander": "^12.1.0", "emoji-regex": "^10.4.0", "eventsource-parser": "^3.0.0", "get-east-asian-width": "^1.3.0", "iconv-lite": "^0.7.2", "ignore": "^7.0.5", "indent-string": "^5.0.0", "lodash-es": "^4.17.21", "node-html-parser": "^7.1.0", "picomatch": "^4.0.4", "react": "^19.2.6", "react-reconciler": "^0.32.0", "semver": "^7.6.3", "signal-exit": "^4.1.0", "slice-ansi": "^7.1.0", "stack-utils": "^2.0.6", "string-width": "^7.2.0", "strip-ansi": "^7.1.0", "supports-hyperlinks": "^4.0.0", "undici": "^8.2.0", "usehooks-ts": "^3.1.0", "web-tree-sitter": "^0.26.9", "wrap-ansi": "^9.0.0", "ws": "^8.20.1", "yoga-layout": "^3.2.1", "zod": "^4.4.1" }, "bin": { "reasonix": "dist/cli/index.js", "dsnix": "dist/cli/index.js" } }, "sha512-5FDVRi5Pu3iOle76qw57/SCXtKjKGybicVcBdcB0mjz6oZ4zZW1Azt3E2z7j6RH2n1WTlkDuhj+AWhAje8Bnxw=="],
 
     "require-directory": ["require-directory@2.1.1", "https://registry.npmmirror.com/require-directory/-/require-directory-2.1.1.tgz", {}, "sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q=="],
 

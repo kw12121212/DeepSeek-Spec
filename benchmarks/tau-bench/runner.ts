@@ -37,7 +37,7 @@ interface CliArgs {
 function parseArgs(argv: string[]): CliArgs {
   const out: CliArgs = {
     taskFilter: null,
-    modes: ["baseline", "reasonix"],
+    modes: ["baseline", "dspec"],
     repeats: 1,
     model: "deepseek-chat",
     userSimModel: "deepseek-chat",
@@ -51,7 +51,7 @@ function parseArgs(argv: string[]): CliArgs {
     if (a === "--task") out.taskFilter = argv[++i] ?? null;
     else if (a === "--mode") {
       const v = (argv[++i] ?? "").toLowerCase();
-      if (v === "baseline" || v === "reasonix") out.modes = [v];
+      if (v === "baseline" || v === "dspec") out.modes = [v];
     } else if (a === "--repeats") out.repeats = Number.parseInt(argv[++i] ?? "1", 10);
     else if (a === "--model") out.model = argv[++i] ?? out.model;
     else if (a === "--user-model") out.userSimModel = argv[++i] ?? out.userSimModel;
@@ -78,7 +78,7 @@ function buildTools(task: TaskDefinition, db: WorldState) {
   return task.tools.map((factory) => factory(db));
 }
 
-async function runReasonix(ctx: RunContext): Promise<RunResult> {
+async function runDspec(ctx: RunContext): Promise<RunResult> {
   const { client, task, db, args, transcriptStream } = ctx;
   const tools = buildTools(task, db);
   const registry = new ToolRegistry();
@@ -97,7 +97,7 @@ async function runReasonix(ctx: RunContext): Promise<RunResult> {
   });
   const prefixHash = prefix.fingerprint;
 
-  return runAgentLoop(ctx, "reasonix", async (userMsg) => {
+  return runAgentLoop(ctx, "dspec", async (userMsg) => {
     const stepTurns: Turn[] = [];
     let finalText = "";
     for await (const ev of loop.step(userMsg)) {
@@ -112,7 +112,7 @@ async function runReasonix(ctx: RunContext): Promise<RunResult> {
         finalText = ev.content || finalText;
         break;
       } else if (ev.role === "error") {
-        throw new Error(ev.error ?? "reasonix loop error");
+        throw new Error(ev.error ?? "dspec loop error");
       }
     }
     return {
@@ -141,9 +141,9 @@ async function runBaseline(ctx: RunContext): Promise<RunResult> {
     const res = await agent.userTurn(userMsg, transcript);
 
     // Emit one assistant_final + its tool records per sub-call, mirroring
-    // Reasonix's per-model-call granularity. This keeps diff apples-to-
+    // DSpec's per-model-call granularity. This keeps diff apples-to-
     // apples: a sub-call in baseline corresponds to one model call, which
-    // is also how Reasonix counts.
+    // is also how DSpec counts.
     if (transcriptStream) {
       for (const sc of res.subCalls) {
         const ts = new Date().toISOString();
@@ -313,7 +313,7 @@ async function runDry(args: CliArgs): Promise<BenchReport> {
         pass: true,
         turns: 0,
         toolCalls: tools.length,
-        cacheHitRatio: mode === "reasonix" ? 0.9 : 0.1,
+        cacheHitRatio: mode === "dspec" ? 0.9 : 0.1,
         costUsd: 0,
         claudeEquivalentUsd: 0,
         promptTokens: 0,
@@ -354,7 +354,7 @@ function buildMeta(args: CliArgs, taskCount: number): BenchReport["meta"] {
     userSimModel: args.userSimModel,
     taskCount,
     repeatsPerTask: args.repeats,
-    reasonixVersion: VERSION,
+    dspecVersion: VERSION,
   };
 }
 
@@ -396,7 +396,7 @@ async function main(): Promise<void> {
         }
 
         const ctx: RunContext = { client, task, db, transcript, args, transcriptStream };
-        const runner = mode === "reasonix" ? runReasonix : runBaseline;
+        const runner = mode === "dspec" ? runDspec : runBaseline;
         const started = Date.now();
         let result: RunResult;
         try {

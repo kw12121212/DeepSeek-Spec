@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { isAbsolute, join, resolve } from "node:path";
 import { stdin } from "node:process";
 import { createInterface } from "node:readline";
-import { toApprovalPrompt } from "@reasonix/core-utils";
+import { toApprovalPrompt } from "@deepseek-spec/core-utils";
 import {
   type FileWithStats,
   listDirectory,
@@ -333,7 +333,7 @@ interface ConfirmRequiredEvent {
   id: number;
   kind: "run_command" | "run_background";
   command: string;
-  prompt?: import("@reasonix/core-utils").ApprovalPrompt;
+  prompt?: import("@deepseek-spec/core-utils").ApprovalPrompt;
 }
 
 interface PathAccessRequiredEvent {
@@ -344,7 +344,7 @@ interface PathAccessRequiredEvent {
   toolName: string;
   sandboxRoot: string;
   allowPrefix: string;
-  prompt?: import("@reasonix/core-utils").ApprovalPrompt;
+  prompt?: import("@deepseek-spec/core-utils").ApprovalPrompt;
 }
 
 interface ChoiceRequiredEvent {

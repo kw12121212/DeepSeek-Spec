@@ -6,7 +6,7 @@ tool-use eval that compares, on the same tasks:
 1. **Baseline** — a deliberately cache-hostile agent (fresh timestamp +
    shuffled tool spec each turn), representative of how generic frameworks
    wire up DeepSeek.
-2. **Reasonix** — the same tools and system prompt, driven through
+2. **DSpec** — the same tools and system prompt, driven through
    `CacheFirstLoop` so the byte prefix stays stable turn-over-turn.
 
 Both modes share the same `DeepSeekClient`, so the *only* meaningful
@@ -59,11 +59,11 @@ npx tsx benchmarks/tau-bench/runner.ts --task t01_address_happy --verbose
 # render the report
 npx tsx benchmarks/tau-bench/report.ts benchmarks/tau-bench/results-<date>.json
 
-# emit per-run transcripts so you can reasonix replay / diff them
+# emit per-run transcripts so you can dspec replay / diff them
 npx tsx benchmarks/tau-bench/runner.ts --transcripts-dir ./transcripts
-npx reasonix diff \
+npx dspec diff \
   ./transcripts/t01_address_happy.baseline.r1.jsonl \
-  ./transcripts/t01_address_happy.reasonix.r1.jsonl \
+  ./transcripts/t01_address_happy.dspec.r1.jsonl \
   --md diff.md
 ```
 
@@ -72,8 +72,8 @@ The runner writes `benchmarks/tau-bench/results-<iso-timestamp>.json`. Point
 
 When `--transcripts-dir <path>` is set, each `(task, mode, repeat)` run also
 writes a `<taskId>.<mode>.r<n>.jsonl` transcript into that directory —
-these carry per-turn `usage`, `cost`, and (for Reasonix) the
-`prefixHash`, so `reasonix replay` and `reasonix diff` can rebuild the
+these carry per-turn `usage`, `cost`, and (for DSpec) the
+`prefixHash`, so `dspec replay` and `dspec diff` can rebuild the
 economics offline.
 
 ## CLI flags
@@ -81,7 +81,7 @@ economics offline.
 | flag | default | meaning |
 |---|---|---|
 | `--task <id>` | all | run only one task by id |
-| `--mode baseline` \| `reasonix` | both | restrict to one mode |
+| `--mode baseline` \| `dspec` | both | restrict to one mode |
 | `--repeats <N>` | 1 | repeat each (task, mode) pair N times |
 | `--model <id>` | deepseek-chat | agent model |
 | `--user-model <id>` | deepseek-chat | user-simulator model |
@@ -108,7 +108,7 @@ triples that.
 Non-goals (for this harness):
 
 - LLM-as-judge — brittle and expensive, DB predicates are enough.
-- Streaming comparison — the harness uses `stream: false` in Reasonix mode
+- Streaming comparison — the harness uses `stream: false` in DSpec mode
   so both runners make the exact same request shape.
 - Claude head-to-head — we estimate Claude's cost from token counts using
   Sonnet 4.6 pricing (see `src/telemetry.ts`); running Claude for real is

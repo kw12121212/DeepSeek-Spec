@@ -46,11 +46,11 @@ The augmentation adds ~87 tokens to the prefix (the `[edit_claim]`/`[test_run]` 
 
 Both have the same kind of tail (a new user message). B's tail is smaller because the model emitted a slightly different response continuation seed; nonetheless, the structural point holds: **augmenting tool_results moves bytes from "uncached" (this-turn-only) to "cached" (re-used by every subsequent turn)**.
 
-In real Reasonix sessions with multi-thousand-token histories, the absolute cache-hit ratio is dominated by history size; the marginal effect of an extra ~80 tokens per edit is to *raise* it slightly, not lower it.
+In real DSpec sessions with multi-thousand-token histories, the absolute cache-hit ratio is dominated by history size; the marginal effect of an extra ~80 tokens per edit is to *raise* it slightly, not lower it.
 
 ## Pass criterion (revised)
 
-The original RFC threshold of "≥92% absolute" doesn't apply cleanly to this synthetic harness — the transcript is only ~460 tokens, far smaller than a typical Reasonix session, which inflates the tail's relative weight.
+The original RFC threshold of "≥92% absolute" doesn't apply cleanly to this synthetic harness — the transcript is only ~460 tokens, far smaller than a typical DSpec session, which inflates the tail's relative weight.
 
 The substantive criterion is **no degradation**:
 

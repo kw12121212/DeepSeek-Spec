@@ -109,6 +109,14 @@ requirements:
         - GIVEN: a compiled native binary exists
         - WHEN: the binary is run with --help
         - THEN: the process exits with code 0
+  brand-rename:
+    strength: MUST
+    statement: Benchmark source files use 'dspec' instead of 'reasonix' for RunMode and related identifiers
+    scenarios:
+      grep-clean:
+        - GIVEN: dependency changes are applied
+        - WHEN: grep -ri reasonix benchmarks/ --include='*.ts' is executed
+        - THEN: zero matches are returned
 mapping:
   implementation:
     - scripts/build-native.mjs

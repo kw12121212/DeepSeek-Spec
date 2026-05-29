@@ -10,7 +10,7 @@ describe("desktop startup failure screen (#1752)", () => {
     const retry = vi.fn();
     render(<StartupFailure details={["spawn: dist/cli/index.js not found"]} onRetry={retry} />);
 
-    expect(screen.getByRole("alert").textContent).toContain("Reasonix could not start");
+    expect(screen.getByRole("alert").textContent).toContain("DeepSeek-Spec could not start");
     expect(screen.getByText("spawn: dist/cli/index.js not found")).toBeTruthy();
 
     fireEvent.click(screen.getByRole("button", { name: "Retry" }));

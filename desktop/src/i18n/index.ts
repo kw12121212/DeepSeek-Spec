@@ -14,7 +14,7 @@ const LANG_LABELS: Record<Lang, string> = {
   de: "Deutsch",
   ja: "日本語",
 };
-const STORAGE_KEY = "reasonix.lang";
+const STORAGE_KEY = "dspec.lang";
 
 type Listener = () => void;
 const listeners: Listener[] = [];

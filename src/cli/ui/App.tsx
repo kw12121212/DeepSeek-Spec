@@ -1,6 +1,6 @@
 import { type WriteStream, statSync } from "node:fs";
 import { resolve } from "node:path";
-import { derivePrefix, toApprovalPrompt } from "@reasonix/core-utils";
+import { derivePrefix, toApprovalPrompt } from "@deepseek-spec/core-utils";
 import { Box, Text, useStdin, useStdout } from "ink";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {

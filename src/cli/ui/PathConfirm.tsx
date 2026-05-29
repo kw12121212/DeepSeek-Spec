@@ -10,7 +10,7 @@ import { FG } from "./theme/tokens.js";
 export type PathConfirmChoice = "run_once" | "always_allow" | "deny";
 
 export interface PathConfirmProps {
-  prompt: import("@reasonix/core-utils").ApprovalPrompt;
+  prompt: import("@deepseek-spec/core-utils").ApprovalPrompt;
   onChoose: (choice: PathConfirmChoice, denyContext?: string) => void;
 }
 

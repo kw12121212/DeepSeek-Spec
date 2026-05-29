@@ -1,6 +1,6 @@
-import type { ApprovalPrompt } from "@reasonix/core-utils";
-import { isCompactionSummary, stripCompactionMarker } from "@reasonix/core-utils/compaction";
-import { derivePrefix } from "@reasonix/core-utils/derive-prefix";
+import type { ApprovalPrompt } from "@deepseek-spec/core-utils";
+import { isCompactionSummary, stripCompactionMarker } from "@deepseek-spec/core-utils/compaction";
+import { derivePrefix } from "@deepseek-spec/core-utils/derive-prefix";
 import { Copy } from "lucide-react";
 import { type ReactNode, memo, useState } from "react";
 import type {
@@ -140,7 +140,7 @@ export const AssistantMsg = memo(function AssistantMsg({
       <div className="avatar">DS</div>
       <div className="body">
         <div className="who">
-          <span className="name">Reasonix</span>
+          <span className="name">DeepSeek-Spec</span>
           {model ? <span className="model">{model}</span> : null}
           {time ? <span className="time">{time}</span> : null}
         </div>

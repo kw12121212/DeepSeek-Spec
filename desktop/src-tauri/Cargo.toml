@@ -1,5 +1,5 @@
 [package]
-name = "reasonix-desktop"
+name = "dspec-desktop"
 version = "0.52.0"
 edition = "2021"
 publish = false

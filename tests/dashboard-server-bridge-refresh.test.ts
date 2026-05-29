@@ -60,10 +60,10 @@ async function loadBridge(options?: {
   vi.stubGlobal("document", {
     documentElement: { dataset: {} },
     querySelector: (selector: string) => {
-      if (selector === 'meta[name="reasonix-mode"]') {
+      if (selector === 'meta[name="dspec-mode"]') {
         return { getAttribute: () => "server" };
       }
-      if (selector === 'meta[name="reasonix-token"]') {
+      if (selector === 'meta[name="dspec-token"]') {
         return { getAttribute: () => "testtoken" };
       }
       return null;

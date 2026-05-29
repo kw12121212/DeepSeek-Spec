@@ -8,9 +8,8 @@ requirements:
   usage-log-append:
     strength: MUST
     statement: >-
-      appendUsage MUST append a turn record as a JSONL line to
-      ~/.reasonix/usage.jsonl with timestamp, session, model, token counts,
-      and costs. Disk failures MUST NOT break the chat.
+      appendUsage MUST append a turn record as a JSONL line to ~/.reasonix/usage.jsonl with
+      timestamp, session, model, token counts, and costs. Disk failures MUST NOT break the chat.
     scenarios:
       append-record:
         - GIVEN: a valid AppendUsageInput with model and usage data
@@ -23,8 +22,8 @@ requirements:
   usage-log-read:
     strength: MUST
     statement: >-
-      readUsageLog MUST read and parse all usage records, skipping malformed
-      JSON lines. Returns an empty array if the file does not exist.
+      readUsageLog MUST read and parse all usage records, skipping malformed JSON lines. Returns an
+      empty array if the file does not exist.
     scenarios:
       read-records:
         - GIVEN: a usage.jsonl with 10 valid records
@@ -41,8 +40,8 @@ requirements:
   log-compaction:
     strength: MUST
     statement: >-
-      appendUsage MUST compact the log when it exceeds 5MB, retaining only the
-      last 365 days of records.
+      appendUsage MUST compact the log when it exceeds 5MB, retaining only the last 365 days of
+      records.
     scenarios:
       auto-compact:
         - GIVEN: a usage.jsonl exceeding 5MB
@@ -51,9 +50,8 @@ requirements:
   cost-calculation:
     strength: MUST
     statement: >-
-      costUsd MUST return the total USD cost for a model and usage. Returns 0
-      when pricing data is unavailable. pricingFor MUST return undefined when
-      the model is not in pricing tables.
+      costUsd MUST return the total USD cost for a model and usage. Returns 0 when pricing data is
+      unavailable. pricingFor MUST return undefined when the model is not in pricing tables.
     scenarios:
       known-model:
         - GIVEN: model "deepseek-v4-pro" with known pricing and usage data
@@ -66,8 +64,8 @@ requirements:
   cache-savings:
     strength: MUST
     statement: >-
-      cacheSavingsUsd MUST calculate the USD savings from cache hit tokens
-      compared to full input token pricing.
+      cacheSavingsUsd MUST calculate the USD savings from cache hit tokens compared to full input
+      token pricing.
     scenarios:
       savings-positive:
         - GIVEN: a model with cache pricing and 1000 cache hit tokens
@@ -76,9 +74,9 @@ requirements:
   session-stats:
     strength: MUST
     statement: >-
-      SessionStats MUST track per-turn usage and cost, support carryover
-      seeding for session resumption, and provide totalCost, savingsVsClaude,
-      and aggregateCacheHitRatio getters. Must auto-trim to MAX_TURNS (200).
+      SessionStats MUST track per-turn usage and cost, support carryover seeding for session
+      resumption, and provide totalCost, savingsVsClaude, and aggregateCacheHitRatio getters. Must
+      auto-trim to MAX_TURNS (200).
     scenarios:
       cumulative-cost:
         - GIVEN: 3 turns with known costs
@@ -95,21 +93,18 @@ requirements:
   aggregate-usage:
     strength: MUST
     statement: >-
-      aggregateUsage MUST create rolling window aggregates (today, week,
-      month, all-time) with breakdowns by model and session.
+      aggregateUsage MUST create rolling window aggregates (today, week, month, all-time) with
+      breakdowns by model and session.
     scenarios:
       time-buckets:
         - GIVEN: usage records spanning 60 days
         - WHEN: aggregateUsage is called
-        - THEN: >-
-            today, week (last 7 days), month (last 30 days), and all-time
-            buckets are populated
+        - THEN: today, week (last 7 days), month (last 30 days), and all-time buckets are populated
   subagent-distillation:
     strength: MUST
     statement: >-
-      computeSpawnDistillation MUST calculate token compression metrics for a
-      subagent spawn. summarizeSubagentSession MUST aggregate multiple spawn
-      metrics.
+      computeSpawnDistillation MUST calculate token compression metrics for a subagent spawn.
+      summarizeSubagentSession MUST aggregate multiple spawn metrics.
     scenarios:
       compression-ratio:
         - GIVEN: a subagent result with completion and output tokens
@@ -118,13 +113,21 @@ requirements:
   spawn-storm-detection:
     strength: MUST
     statement: >-
-      countSpawnStorms MUST count turns with >=threshold spawns (detecting
-      runaway parallel spawning).
+      countSpawnStorms MUST count turns with >=threshold spawns (detecting runaway parallel
+      spawning).
     scenarios:
       storm-counted:
         - GIVEN: 3 turns with 5, 2, and 6 spawns respectively and threshold 5
         - WHEN: countSpawnStorms is called
         - THEN: 2 storms are counted
+  brand-rename:
+    strength: MUST
+    statement: All telemetry source code references to 'reasonix' are replaced with DeepSeek-Spec naming
+    scenarios:
+      grep-clean:
+        - GIVEN: dependency changes are applied
+        - WHEN: grep -ri reasonix src/telemetry/ is executed
+        - THEN: zero matches are returned
 mapping:
   implementation:
     - src/telemetry/usage.ts

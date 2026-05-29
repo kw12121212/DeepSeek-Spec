@@ -34,7 +34,7 @@ Almost entirely additive, no behavior change.
 This is where most of the actual integration risk lives.
 
 **Changes:**
-- `src/tools/filesystem.ts:518` — `edit_file` registration wraps in a gate. When `REASONIX_STRICT_TDD=1`:
+- `src/tools/filesystem.ts:518` — `edit_file` registration wraps in a gate. When `DSPEC_STRICT_TDD=1`:
   1. Look up most recent `test_run` for `test_id` from in-memory event list (cheaper than re-reading jsonl).
   2. Verify a matching `edit_claim` followed it.
   3. On dispatch refusal, throw a structured error the model can read.
@@ -43,8 +43,8 @@ This is where most of the actual integration risk lives.
   - At end-of-turn (just before the next assistant call), spawn one `vitest --run -t a -t b -t c` covering all collected ids.
   - Parse `--reporter=json` output, emit one `test_run` event per id.
   - On any red, revert the offending edits via the existing checkpoint mechanism (`src/checkpoints.ts`), emit a `repair` event so the storm-breaker engages.
-- `/refactor` mode — session flag in `LoopState`. When true, gate is bypassed; on session exit, run `npm run verify` (or `reasonix.config.ts`'s `verify_command`).
-- `reasonix.config.ts` schema — add `verify_command` and `test_command_for(test_id)`.
+- `/refactor` mode — session flag in `LoopState`. When true, gate is bypassed; on session exit, run `npm run verify` (or `dspec.config.ts`'s `verify_command`).
+- `dspec.config.ts` schema — add `verify_command` and `test_command_for(test_id)`.
 
 **Tests:**
 - Integration on a synthetic session fixture: green path, red revert, multi-edit batch, `/refactor` bypass, edit before any test_id (refused).
@@ -77,10 +77,10 @@ This is where most of the actual integration risk lives.
 
 - After stage 3 lands: minor release with flag *off* by default.
 - Two minor releases of soak — collect any hangs / false-refusals via telemetry, fix in patches.
-- Flip default-on; keep `REASONIX_STRICT_TDD=0` opt-out for two more minor releases.
+- Flip default-on; keep `DSPEC_STRICT_TDD=0` opt-out for two more minor releases.
 
 ## Cross-cutting risks not pinned to a stage
 
-1. **Untested codebases.** `reasonix doctor` should detect (no `tests/` dir, no `vitest.config.*`) and refuse to enable strict mode at all on first run. Otherwise the flag is unusable.
+1. **Untested codebases.** `dspec doctor` should detect (no `tests/` dir, no `vitest.config.*`) and refuse to enable strict mode at all on first run. Otherwise the flag is unusable.
 2. **Greenfield test-file location.** Spike Exp 3 showed the model picks reasonable but inconsistent paths when none is specified. The plan-step `test_file_path` field is the fix, but a user editing a single file with no plan still has the gap. Stage 2 should refuse `edit_file` when strict + no `test_file_path` is in scope.
-3. **MCP-served edit tools.** Reasonix supports MCP-hosted tools (`src/mcp.ts`). If an MCP server exposes its own write/edit tool, the kernel gate doesn't apply. Stage 2 should at minimum log a warning; longer-term, MCP write tools could opt into the same gate via a hook.
+3. **MCP-served edit tools.** DSpec supports MCP-hosted tools (`src/mcp.ts`). If an MCP server exposes its own write/edit tool, the kernel gate doesn't apply. Stage 2 should at minimum log a warning; longer-term, MCP write tools could opt into the same gate via a hook.

@@ -10,8 +10,8 @@ export default defineConfig({
       name: "dev-html-rewrite",
       transformIndexHtml(html: string) {
         return html
-          .replace('/assets/app.js?token=__REASONIX_TOKEN__', '/src/main.tsx')
-          .replace('/assets/app.css?token=__REASONIX_TOKEN__', '/src/styles.css');
+          .replace('/assets/app.js?token=__DSPEC_TOKEN__', '/src/main.tsx')
+          .replace('/assets/app.css?token=__DSPEC_TOKEN__', '/src/styles.css');
       },
     },
   ],
@@ -20,9 +20,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@reasonix/core-utils/compaction": resolve(__dirname, "../packages/core-utils/src/compaction.ts"),
-      "@reasonix/core-utils/derive-prefix": resolve(__dirname, "../packages/core-utils/src/derive-prefix.ts"),
-      "@reasonix/core-utils": resolve(__dirname, "../packages/core-utils/src/index.ts"),
+      "@deepseek-spec/core-utils/compaction": resolve(__dirname, "../packages/core-utils/src/compaction.ts"),
+      "@deepseek-spec/core-utils/derive-prefix": resolve(__dirname, "../packages/core-utils/src/derive-prefix.ts"),
+      "@deepseek-spec/core-utils": resolve(__dirname, "../packages/core-utils/src/index.ts"),
       "@tauri-apps/api/core": resolve(__dirname, "src/lib/tauri-bridge.ts"),
       "@tauri-apps/api/event": resolve(__dirname, "src/lib/tauri-bridge.ts"),
       "@tauri-apps/api/window": resolve(__dirname, "src/lib/tauri-bridge.ts"),

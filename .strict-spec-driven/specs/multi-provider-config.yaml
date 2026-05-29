@@ -214,6 +214,16 @@ requirements:
         - GIVEN: the CLI displays a version, welcome, or error message
         - WHEN: the i18n key is resolved to a user-facing string
         - THEN: the string contains 'DeepSeek-Spec' and contains no occurrence of 'Reasonix'
+  brand-rename:
+    strength: MUST
+    statement: >-
+      All MCP, ACP, and network source code references to 'reasonix' are replaced with DeepSeek-Spec
+      naming
+    scenarios:
+      grep-clean:
+        - GIVEN: dependency changes are applied
+        - WHEN: grep -ri reasonix src/mcp/ src/acp/ src/net/ is executed
+        - THEN: zero matches are returned
 mapping:
   implementation:
     - src/config.ts

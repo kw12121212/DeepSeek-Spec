@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { t } from "../i18n";
 
-const SPLASH_FLAG = "reasonix.splash.shown";
+const SPLASH_FLAG = "dspec.splash.shown";
 
 export function shouldShowSplash(): boolean {
   try {
@@ -55,7 +55,7 @@ export function Splash({ onDone }: { onDone: () => void }) {
     <div className="splash" data-leaving={leaving} onClick={skipClick}>
       <div className="splash-card">
         <div className="splash-mark" />
-        <div className="splash-name">Reasonix</div>
+        <div className="splash-name">DeepSeek-Spec</div>
         <div className="splash-sub">{t("app.splashSubtitle")}</div>
         <div className="splash-dots">
           <span />

@@ -45,7 +45,7 @@ function persist(counts: Record<string, number>): void {
   }
 }
 
-/** Read-modify-write so two concurrent reasonix processes don't clobber each other's counts. */
+/** Read-modify-write so two concurrent dspec processes don't clobber each other's counts. */
 export function recordSlashUse(name: string): SlashUsageCounts {
   const counts: Record<string, number> = { ...loadSlashUsage() };
   counts[name] = (counts[name] ?? 0) + 1;

@@ -1,4 +1,4 @@
-{"role":"_meta","meta":{"version":1,"source":"bench/reasonix","model":"deepseek-chat","task":"t01_address_happy","mode":"reasonix","repeat":3,"startedAt":"2026-04-29T16:08:22.300Z"}}
+{"role":"_meta","meta":{"version":1,"source":"bench/dspec","model":"deepseek-chat","task":"t01_address_happy","mode":"dspec","repeat":3,"startedAt":"2026-04-29T16:08:22.300Z"}}
 {"ts":"2026-04-29T16:08:23.242Z","turn":1,"role":"user","content":"Hi, I need to update the shipping address on my order o_1002. Could you help me with that?"}
 {"ts":"2026-04-29T16:08:24.786Z","turn":1,"role":"assistant_final","content":"I'd be happy to help you update the shipping address for order o_1002. First, I need to verify your identity. Could you please tell me your name and any other identifying information so I can look up the order?","usage":{"prompt_tokens":774,"completion_tokens":79,"total_tokens":853,"prompt_cache_hit_tokens":768,"prompt_cache_miss_tokens":6},"cost":0.000044300000000000006,"model":"deepseek-chat","prefixHash":"fcb40cfd555bf805"}
 {"ts":"2026-04-29T16:08:24.786Z","turn":1,"role":"done","content":"I'd be happy to help you update the shipping address for order o_1002. First, I need to verify your identity. Could you please tell me your name and any other identifying information so I can look up the order?"}
@@ -8,7 +8,7 @@
 {"ts":"2026-04-29T16:08:27.679Z","turn":2,"role":"tool","content":"{\"orderId\":\"o_1002\",\"userId\":\"u_bo\",\"status\":\"processing\",\"address\":\"22 Oak Rd, NYC, NY 10001\",\"item\":\"running shoes 10\",\"price\":140}","tool":"lookup_order","args":"{\"orderId\": \"o_1002\"}"}
 {"ts":"2026-04-29T16:08:27.679Z","turn":2,"role":"status","content":"tool result uploaded · model thinking before next response…"}
 {"ts":"2026-04-29T16:08:27.736Z","turn":2,"role":"error","content":"","error":"Bad request (DeepSeek 400): The `reasoning_content` in the thinking mode must be passed back to the API."}
-{"role":"_meta","meta":{"version":1,"source":"bench/reasonix","model":"deepseek-chat","task":"t01_address_happy","mode":"reasonix","repeat":3,"startedAt":"2026-04-29T16:20:41.502Z"}}
+{"role":"_meta","meta":{"version":1,"source":"bench/dspec","model":"deepseek-chat","task":"t01_address_happy","mode":"dspec","repeat":3,"startedAt":"2026-04-29T16:20:41.502Z"}}
 {"ts":"2026-04-29T16:20:42.785Z","turn":1,"role":"user","content":"Hi, I need to update the shipping address on my order o_1002. Could you help me with that?"}
 {"ts":"2026-04-29T16:20:44.758Z","turn":1,"role":"assistant_final","content":"I'd be happy to help! Let me first look up your order details.","usage":{"prompt_tokens":774,"completion_tokens":94,"total_tokens":868,"prompt_cache_hit_tokens":768,"prompt_cache_miss_tokens":6},"cost":0.00004847,"model":"deepseek-chat","prefixHash":"fcb40cfd555bf805"}
 {"ts":"2026-04-29T16:20:44.758Z","turn":1,"role":"tool_start","content":"","tool":"lookup_order","args":"{\"orderId\": \"o_1002\"}"}

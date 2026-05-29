@@ -1,6 +1,6 @@
 # Real-world cache hit — single user, single day
 
-A real Reasonix user shared their DeepSeek dashboard for **2026-05-01**.
+A real DSpec user shared their DeepSeek dashboard for **2026-05-01**.
 Used with permission, anonymized.
 
 ![DeepSeek usage dashboard, 2026-05-01](2026-05-01-deepseek-dashboard.png)
@@ -17,7 +17,7 @@ Used with permission, anonymized.
 **Cache hit ratio (input):**
 `435,033,856 / (435,033,856 + 767,616)` = **99.82%**
 
-## Cost — using the prices Reasonix bills against (`src/telemetry/stats.ts`)
+## Cost — using the prices DSpec bills against (`src/telemetry/stats.ts`)
 
 USD per 1M tokens — `inputCacheHit / inputCacheMiss / output`:
 - `deepseek-v4-flash` — `0.0028 / 0.14 / 0.28`
@@ -51,7 +51,7 @@ hit rates:
 - Cline / Continue and other XML-tool-call clients: lower still — every tool
   result inlines into the conversation, shifting bytes the cache keys on.
 
-99.82% is what falls out of these four design choices in Reasonix:
+99.82% is what falls out of these four design choices in DSpec:
 
 1. **`ImmutablePrefix`** (`src/memory.ts`) — system prompt + tool specs are
    frozen at session start. Same byte sequence every turn.

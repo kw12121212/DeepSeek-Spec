@@ -5,7 +5,7 @@
     "userSimModel": "deepseek-chat",
     "taskCount": 8,
     "repeatsPerTask": 3,
-    "reasonixVersion": "0.16.0"
+    "dspecVersion": "0.16.0"
   },
   "results": [
     {
@@ -24,7 +24,7 @@
     },
     {
       "taskId": "t01_address_happy",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 2,
       "toolCalls": 3,
@@ -52,7 +52,7 @@
     },
     {
       "taskId": "t01_address_happy",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 3,
       "toolCalls": 3,
@@ -80,7 +80,7 @@
     },
     {
       "taskId": "t01_address_happy",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 3,
       "toolCalls": 3,
@@ -108,7 +108,7 @@
     },
     {
       "taskId": "t02_address_not_allowed",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 8,
       "toolCalls": 3,
@@ -136,7 +136,7 @@
     },
     {
       "taskId": "t02_address_not_allowed",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 8,
       "toolCalls": 2,
@@ -164,7 +164,7 @@
     },
     {
       "taskId": "t02_address_not_allowed",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 7,
       "toolCalls": 2,
@@ -192,7 +192,7 @@
     },
     {
       "taskId": "t03_cancel_processing",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 2,
       "toolCalls": 3,
@@ -220,7 +220,7 @@
     },
     {
       "taskId": "t03_cancel_processing",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 3,
       "toolCalls": 3,
@@ -248,7 +248,7 @@
     },
     {
       "taskId": "t03_cancel_processing",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 2,
       "toolCalls": 3,
@@ -276,7 +276,7 @@
     },
     {
       "taskId": "t04_refund_delivered",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 3,
       "toolCalls": 3,
@@ -304,7 +304,7 @@
     },
     {
       "taskId": "t04_refund_delivered",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 2,
       "toolCalls": 3,
@@ -332,7 +332,7 @@
     },
     {
       "taskId": "t04_refund_delivered",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 2,
       "toolCalls": 3,
@@ -360,7 +360,7 @@
     },
     {
       "taskId": "t05_refund_not_delivered",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 7,
       "toolCalls": 2,
@@ -388,7 +388,7 @@
     },
     {
       "taskId": "t05_refund_not_delivered",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 8,
       "toolCalls": 3,
@@ -416,7 +416,7 @@
     },
     {
       "taskId": "t05_refund_not_delivered",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 7,
       "toolCalls": 2,
@@ -444,7 +444,7 @@
     },
     {
       "taskId": "t06_multi_order_lookup",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 4,
       "toolCalls": 2,
@@ -472,7 +472,7 @@
     },
     {
       "taskId": "t06_multi_order_lookup",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 3,
       "toolCalls": 2,
@@ -500,7 +500,7 @@
     },
     {
       "taskId": "t06_multi_order_lookup",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 3,
       "toolCalls": 2,
@@ -528,7 +528,7 @@
     },
     {
       "taskId": "t07_wrong_identity",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 8,
       "toolCalls": 2,
@@ -556,7 +556,7 @@
     },
     {
       "taskId": "t07_wrong_identity",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 4,
       "toolCalls": 2,
@@ -584,7 +584,7 @@
     },
     {
       "taskId": "t07_wrong_identity",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 6,
       "toolCalls": 2,
@@ -612,7 +612,7 @@
     },
     {
       "taskId": "t08_address_then_cancel",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 2,
       "toolCalls": 3,
@@ -640,7 +640,7 @@
     },
     {
       "taskId": "t08_address_then_cancel",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 3,
       "toolCalls": 4,
@@ -668,7 +668,7 @@
     },
     {
       "taskId": "t08_address_then_cancel",
-      "mode": "reasonix",
+      "mode": "dspec",
       "pass": true,
       "turns": 3,
       "toolCalls": 4,

@@ -8,7 +8,7 @@ import type {
   ConfirmationChoice,
   PlanVerdict,
   RevisionVerdict,
-} from "@reasonix/core-utils";
+} from "@deepseek-spec/core-utils";
 
 export type { ConfirmationChoice, PlanVerdict, CheckpointVerdict, RevisionVerdict, ChoiceVerdict };
 

@@ -1,4 +1,4 @@
-import { COMPACTION_SUMMARY_MARKER } from "@reasonix/core-utils";
+import { COMPACTION_SUMMARY_MARKER } from "@deepseek-spec/core-utils";
 import { Usage } from "./client.js";
 import { healLoadedMessages } from "./loop.js";
 import { stripHallucinatedToolMarkup } from "./loop.js";

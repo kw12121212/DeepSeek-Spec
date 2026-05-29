@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: native-build-script
+mapping:
+  implementation:
+    - >-
+      benchmarks/tau-bench/types.ts, benchmarks/tau-bench/runner.ts,
+      benchmarks/tau-bench/baseline.ts
+  tests:
+    - tests/
+operations:
+  ADDED: {}
+  MODIFIED:
+    brand-rename:
+      strength: MUST
+      statement: Benchmark source files use 'dspec' instead of 'reasonix' for RunMode and related identifiers
+      scenarios:
+        grep-clean:
+          - GIVEN: dependency changes are applied
+          - WHEN: grep -ri reasonix benchmarks/ --include='*.ts' is executed
+          - THEN: zero matches are returned
+  REMOVED: {}

@@ -57,7 +57,7 @@ async function main(): Promise<void> {
   const opts = parseArgs(process.argv.slice(2));
   const key = loadApiKey();
   if (!key) {
-    console.error("DEEPSEEK_API_KEY missing — run `reasonix setup` first");
+    console.error("DEEPSEEK_API_KEY missing — run `dspec setup` first");
     process.exit(1);
   }
   process.env.DEEPSEEK_API_KEY = key;

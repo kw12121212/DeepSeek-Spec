@@ -32,7 +32,7 @@ export async function runScenarios(
   return {
     meta: {
       date: new Date().toISOString(),
-      reasonixVersion: VERSION,
+      dspecVersion: VERSION,
     },
     results,
   };

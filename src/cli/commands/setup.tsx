@@ -1,4 +1,4 @@
-/** `reasonix setup` — single-step API key prompt. */
+/** `dspec setup` — single-step API key prompt. */
 
 import { Box, Text, render, useApp, useInput } from "ink";
 import { TextInput } from "ink";

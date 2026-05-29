@@ -198,6 +198,18 @@ requirements:
         - GIVEN: the agent loop constructs a system prompt
         - WHEN: the system prompt text is assembled
         - THEN: it contains 'DeepSeek-Spec' and contains no occurrence of 'Reasonix'
+  brand-rename:
+    strength: MUST
+    statement: >-
+      All source code references to 'reasonix' in src/loop/ and src/core/ are replaced with
+      DeepSeek-Spec naming conventions
+    scenarios:
+      grep-clean:
+        - GIVEN: >-
+            all dependency changes (env-vars, config-dir-paths, core-types-constants,
+            system-prompts-strings) are applied
+        - WHEN: grep -ri reasonix src/loop/ src/core/ is executed
+        - THEN: zero matches are returned
 mapping:
   implementation:
     - src/loop/dispatch.ts

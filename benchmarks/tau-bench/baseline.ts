@@ -32,7 +32,7 @@ export interface BaselineSubCall {
 export interface BaselineTurnResult {
   assistantMessage: string;
   toolCallsExecuted: { name: string; args: string; result: string }[];
-  /** Per-sub-call breakdown so bench transcripts match Reasonix loop-event granularity. */
+  /** Per-sub-call breakdown so bench transcripts match DSpec loop-event granularity. */
   subCalls: BaselineSubCall[];
   /** Turn number (1-based) assigned by the agent. */
   turnNo: number;

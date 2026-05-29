@@ -63,10 +63,10 @@ function aggregate(results: RunResult[]): Agg {
 }
 
 function renderSummary(report: BenchReport): string {
-  const byMode: Record<RunMode, RunResult[]> = { baseline: [], reasonix: [] };
+  const byMode: Record<RunMode, RunResult[]> = { baseline: [], dspec: [] };
   for (const r of report.results) byMode[r.mode].push(r);
   const b = aggregate(byMode.baseline);
-  const rx = aggregate(byMode.reasonix);
+  const rx = aggregate(byMode.dspec);
 
   const costRatio = b.avgCost > 0 ? rx.avgCost / b.avgCost : 0;
   const claudeSavings = b.avgClaudeCost > 0 ? (1 - rx.avgCost / b.avgClaudeCost) * 100 : 0;
@@ -74,7 +74,7 @@ function renderSummary(report: BenchReport): string {
   return `
 ## Summary
 
-| metric | baseline | reasonix | delta |
+| metric | baseline | dspec | delta |
 |---|---:|---:|---:|
 | runs | ${b.runs} | ${rx.runs} | — |
 | pass rate | ${pct(b.passes, b.runs)} | ${pct(rx.passes, rx.runs)} | ${signPct(rx.passes, rx.runs, b.passes, b.runs)} |
@@ -83,8 +83,8 @@ function renderSummary(report: BenchReport): string {
 | mean turns | ${fmt(b.avgTurns, 1)} | ${fmt(rx.avgTurns, 1)} | — |
 | mean tool calls | ${fmt(b.avgToolCalls, 1)} | ${fmt(rx.avgToolCalls, 1)} | — |
 
-**Reasonix vs Claude Sonnet 4.6 (estimated, same token counts):**
-Claude would cost ~$${fmt(rx.avgClaudeCost, 6)} / task, so Reasonix saves ~${fmt(
+**DSpec vs Claude Sonnet 4.6 (estimated, same token counts):**
+Claude would cost ~$${fmt(rx.avgClaudeCost, 6)} / task, so DSpec saves ~${fmt(
     claudeSavings,
     1,
   )}%.
@@ -117,13 +117,13 @@ function renderPerTask(report: BenchReport): string {
 
 function renderHeader(report: BenchReport): string {
   const m = report.meta;
-  return `# Reasonix tool-use eval (τ-bench-lite)
+  return `# DSpec tool-use eval (τ-bench-lite)
 
 **Date:** ${m.date}
 **Agent model:** \`${m.model}\`
 **User-simulator model:** \`${m.userSimModel}\`
 **Tasks:** ${m.taskCount}, repeats × ${m.repeatsPerTask}
-**Reasonix version:** ${m.reasonixVersion}
+**DSpec version:** ${m.dspecVersion}
 `;
 }
 

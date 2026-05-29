@@ -80,7 +80,7 @@ function initialState(): Parameters<typeof reduce>[0] {
   };
 }
 
-function makeShellPrompt(command: string): import("@reasonix/core-utils").ApprovalPrompt {
+function makeShellPrompt(command: string): import("@deepseek-spec/core-utils").ApprovalPrompt {
   return {
     id: 1,
     kind: "shell",
@@ -106,7 +106,7 @@ function makeShellPrompt(command: string): import("@reasonix/core-utils").Approv
 function makePathPrompt(
   path: string,
   intent: "read" | "write",
-): import("@reasonix/core-utils").ApprovalPrompt {
+): import("@deepseek-spec/core-utils").ApprovalPrompt {
   return {
     id: 2,
     kind: "path",

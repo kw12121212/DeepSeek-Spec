@@ -111,6 +111,18 @@ requirements:
         - THEN: >-
             meta token names use 'dspec-' prefix and visible text says 'DeepSeek-Spec' with no
             occurrence of 'reasonix'
+  brand-rename:
+    strength: MUST
+    statement: >-
+      CLI, desktop, and dashboard source code references to 'reasonix' are replaced with
+      DeepSeek-Spec naming
+    scenarios:
+      grep-clean:
+        - GIVEN: dependency changes are applied
+        - WHEN: >-
+            grep -ri reasonix src/cli/ src/index.ts desktop/src/ desktop/src-tauri/ dashboard/src/
+            is executed
+        - THEN: zero matches are returned
 mapping:
   implementation:
     - src/cli/assets.ts

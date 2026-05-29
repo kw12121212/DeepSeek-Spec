@@ -10,7 +10,7 @@ const MODEL = "deepseek-chat";
 // DeepSeek's prefix cache only kicks in past ~1024 tokens of repeated
 // prefix, so the system prompt has to be substantial. Padded with
 // realistic-shape filler so the test exercises the same code path a
-// real Reasonix session would.
+// real DSpec session would.
 const SYSTEM = [
   "You are a precise senior software engineer assisting with TypeScript codebases.",
   "Style: terse, concrete, no filler. Don't restate the question. Don't apologise.",
@@ -116,7 +116,7 @@ interface Turn {
 }
 
 const TURNS: Turn[] = [
-  { label: "1 · cold start (toolset A)        ", tools: TOOLSET_A, user: "What does Reasonix optimise for, in one sentence?" },
+  { label: "1 · cold start (toolset A)        ", tools: TOOLSET_A, user: "What does DSpec optimise for, in one sentence?" },
   { label: "2 · same prefix (toolset A)        ", tools: TOOLSET_A, user: "And why DeepSeek-only?" },
   { label: "3 · drift: ADDED tool (toolset A+) ", tools: TOOLSET_A_PLUS, user: "What's a flaky test, in one sentence?" },
   { label: "4 · same prefix again (toolset A+) ", tools: TOOLSET_A_PLUS, user: "And how do you stabilise one?" },

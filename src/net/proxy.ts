@@ -28,7 +28,7 @@ const PROXY_ENV_KEYS = [
 const NO_PROXY_ENV_KEYS = ["NO_PROXY", "no_proxy"] as const;
 
 // Loopback bypass protects the dashboard, MCP stdio sidecars' HTTP probes, and
-// `reasonix doctor` reachability checks; non-negotiable.
+// `dspec doctor` reachability checks; non-negotiable.
 const LOOPBACK_NO_PROXY = ["localhost", "127.0.0.1", "::1"] as const;
 
 // DeepSeek's API origin is in CN; routing it through a user's clash/v2ray
@@ -200,9 +200,9 @@ export interface ProxyInstallResult {
 export interface ResolvedNoProxy {
   defaults: NoProxyPattern[];
   envSystem: NoProxyPattern[];
-  envReasonix: NoProxyPattern[];
+  envDspec: NoProxyPattern[];
   extra: NoProxyPattern[];
-  /** Defaults + env + REASONIX + extra concatenated. The same list `installProxyIfConfigured` uses. */
+  /** Defaults + env + DSPEC + extra concatenated. The same list `installProxyIfConfigured` uses. */
   all: NoProxyPattern[];
 }
 
@@ -236,16 +236,14 @@ export function resolveNoProxy(
     : LOOPBACK_NO_PROXY;
   const defaults = parseNoProxy(defaultHosts.join(","));
   const envSystem = parseNoProxy(detectNoProxyRaw(env));
-  const envReasonix = parseNoProxy(
-    typeof env.DSPEC_NO_PROXY === "string" ? env.DSPEC_NO_PROXY : null,
-  );
+  const envDspec = parseNoProxy(typeof env.DSPEC_NO_PROXY === "string" ? env.DSPEC_NO_PROXY : null);
   const extra = parseNoProxy((opts.extraNoProxy ?? []).join(","));
   return {
     defaults,
     envSystem,
-    envReasonix,
+    envDspec,
     extra,
-    all: [...defaults, ...envSystem, ...envReasonix, ...extra],
+    all: [...defaults, ...envSystem, ...envDspec, ...extra],
   };
 }
 
