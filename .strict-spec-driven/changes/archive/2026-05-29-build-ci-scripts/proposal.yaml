@@ -1,0 +1,31 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: build-ci-scripts
+  status: proposed
+summary:
+  what:
+    - >-
+      Rename binary name, CI asset names, download URLs, and install paths from reasonix to dspec in
+      build scripts, CI workflows, and install scripts
+  why:
+    - >-
+      M9 brand rename requires all build/CI/install references to use the new dspec binary name and
+      DeepSeek-Spec repo paths
+scope:
+  in:
+    - >-
+      .github/workflows/build-native.yml, scripts/build-native.mjs, scripts/install.sh,
+      scripts/install.ps1, scripts/install.test.sh, scripts/postinstall.mjs, and other
+      scripts/*.mjs/*.mts files that reference reasonix
+  out:
+    - >-
+      All listed files updated: reasonix -> dspec binary names, dspec-* asset names, DeepSeek-Spec
+      download URLs, updated verification messages
+unchanged_behavior:
+  - Source code in src/, test logic, runtime behavior, and non-brand-related configuration
+roadmap:
+  milestone: 0009-brand-rename
+  planned_change: build-ci-scripts

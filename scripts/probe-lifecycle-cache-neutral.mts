@@ -98,7 +98,7 @@ async function call(label: string, system: string, turn: number): Promise<number
 }
 
 async function main(): Promise<void> {
-  const root = mkdtempSync(join(tmpdir(), "reasonix-cache-neutral-"));
+  const root = mkdtempSync(join(tmpdir(), "dspec-cache-neutral-"));
   try {
     const offSystem = codeSystemPrompt(root, { engineeringLifecycleMode: "off" });
     const strictSystem = codeSystemPrompt(root, { engineeringLifecycleMode: "strict" });

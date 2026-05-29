@@ -111,7 +111,7 @@ function buildTarget(target, embed) {
   }
 
   const ext = target.startsWith("bun-windows-") ? ".exe" : "";
-  const binaryName = (process.env.BINARY_NAME || "deepseek-spec");
+  const binaryName = (process.env.BINARY_NAME || "dspec");
   const outPath = join(OUT_DIR, target, `${binaryName}${ext}`);
 
   mkdirSync(join(OUT_DIR, target), { recursive: true });

@@ -1,0 +1,60 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: build-ci-scripts
+sections:
+  Implementation:
+    rename-build-native-mjs:
+      text: >-
+        Update scripts/build-native.mjs: binary output name reasonix -> dspec and internal path
+        references
+      status: complete
+    rename-ci-workflow:
+      text: >-
+        Update .github/workflows/build-native.yml: binary output path, asset naming
+        reasonix-<version>-<target> -> dspec-<version>-<target>
+      status: complete
+    rename-install-sh:
+      text: >-
+        Update scripts/install.sh: download URL repo path, binary name, curl target, install path,
+        verification message
+      status: complete
+    rename-install-ps1:
+      text: >-
+        Update scripts/install.ps1: $BinaryName reasonix.exe -> dspec.exe, Write-Host messages,
+        download URL
+      status: complete
+    rename-install-test-sh:
+      text: 'Update scripts/install.test.sh: fixture binary name reasonix -> dspec, assertion updates'
+      status: complete
+    rename-postinstall-mjs:
+      text: 'Update scripts/postinstall.mjs: any reasonix brand references'
+      status: complete
+    rename-other-scripts:
+      text: 'Update other scripts/*.mjs/*.mts files: reasonix- prefixed temp directory names'
+      status: complete
+    grep-verification:
+      text: Verify grep -ri reasonix scripts/ .github/ returns zero matches
+      status: complete
+      command: 'grep -ri reasonix scripts/ .github/ || echo ''PASS: no reasonix references found'''
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

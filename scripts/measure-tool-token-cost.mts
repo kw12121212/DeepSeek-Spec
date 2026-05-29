@@ -30,8 +30,8 @@ class AutoGate extends PauseGate {
   }
 }
 
-const root = mkdtempSync(join(tmpdir(), "reasonix-tokencost-"));
-const home = mkdtempSync(join(tmpdir(), "reasonix-tokencost-home-"));
+const root = mkdtempSync(join(tmpdir(), "dspec-tokencost-"));
+const home = mkdtempSync(join(tmpdir(), "dspec-tokencost-home-"));
 
 try {
   mkdirSync(join(root, "src"), { recursive: true });

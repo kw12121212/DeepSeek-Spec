@@ -1,10 +1,10 @@
-# Install a locally built Reasonix native binary to %USERPROFILE%\bin.
+# Install a locally built DeepSeek-Spec native binary to %USERPROFILE%\bin.
 # Usage: scripts\install.ps1
 
 $ErrorActionPreference = "Stop"
 
 $Target = "windows-x64"
-$BinaryName = "reasonix.exe"
+$BinaryName = "dspec.exe"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $RootDir = Resolve-Path (Join-Path $ScriptDir "..")
 $SourceBinary = Join-Path $RootDir "dist\native\$Target\$BinaryName"
@@ -31,4 +31,4 @@ if ($UserPath -notlike "*$DestDir*") {
   Write-Host "Added $DestDir to user PATH (restart your shell to apply)."
 }
 
-Write-Host "installed reasonix to $DestPath"
+Write-Host "installed dspec to $DestPath"

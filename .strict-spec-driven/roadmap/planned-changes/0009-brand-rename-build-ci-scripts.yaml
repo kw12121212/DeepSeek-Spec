@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: build-ci-scripts
   milestone: 0009-brand-rename
-status: planned
+status: complete
 summary: |
   Update build scripts, CI workflows, and install scripts: binary name
   "reasonix" -> "dspec", asset names, download URLs, and install paths.

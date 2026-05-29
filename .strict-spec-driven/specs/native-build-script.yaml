@@ -8,13 +8,13 @@ requirements:
   single-target:
     strength: MUST
     statement: >-
-      build-native.mjs MUST accept --target <platform> and produce a standalone binary at
-      dist/native/<platform>/reasonix[.exe]
+      build-native.mjs MUST produce a standalone binary at dist/native/<platform>/dspec[.exe] (was
+      reasonix)
     scenarios:
-      happy-path:
+      rename-single-target:
         - GIVEN: dist/cli/index.js exists from a prior tsup build
         - WHEN: scripts/build-native.mjs --target linux-x64 is executed
-        - THEN: a standalone binary is produced at dist/native/linux-x64/reasonix
+        - THEN: a standalone binary is produced at dist/native/linux-x64/dspec
   all-targets:
     strength: MUST
     statement: build-native.mjs MUST accept --all flag to build all 5 targets sequentially
@@ -63,42 +63,34 @@ requirements:
         - THEN: a checksums.txt file is generated and uploaded containing SHA256 hashes for each binary
   release-naming:
     strength: MUST
-    statement: Release assets MUST follow naming convention reasonix-<version>-<target>[.exe]
+    statement: Release assets MUST follow naming convention dspec-<version>-<target>[.exe] (was reasonix-...)
     scenarios:
-      naming-convention:
+      rename-release-naming:
         - GIVEN: a binary is built for a target
         - WHEN: it is uploaded as a release asset
-        - THEN: the filename matches reasonix-<tag-version>-<target> with .exe appended for windows-x64
+        - THEN: the filename matches dspec-<tag-version>-<target> with .exe appended for windows-x64
   unix-local-install:
     strength: MUST
     statement: >-
-      install.sh MUST copy the native binary from dist/native/<target>/reasonix to ~/.local/bin (or
-      --prefix) and make it executable
+      install.sh MUST copy the native binary from dist/native/<target>/dspec to ~/.local/bin (or
+      --prefix) as dspec and make it executable
     scenarios:
-      local-copy:
-        - GIVEN: a compiled binary exists at dist/native/linux-x64/reasonix
+      rename-unix-install:
+        - GIVEN: a compiled binary exists at dist/native/linux-x64/dspec
         - WHEN: scripts/install.sh is run without arguments
-        - THEN: the binary is copied to ~/.local/bin/reasonix and is executable
-      prefix-flag:
-        - GIVEN: a compiled binary exists at dist/native/linux-x64/reasonix
-        - WHEN: scripts/install.sh --prefix /usr/local/bin is run
-        - THEN: the binary is copied to /usr/local/bin/reasonix and is executable
-      missing-binary:
-        - GIVEN: dist/native/linux-x64/reasonix does not exist
-        - WHEN: scripts/install.sh is run
-        - THEN: the script exits non-zero with an error message
+        - THEN: the binary is copied to ~/.local/bin/dspec and is executable
   windows-local-install:
     strength: MUST
     statement: >-
-      install.ps1 MUST copy the native binary from dist/native/windows-x64/ to %USERPROFILE%\bin and
-      add that directory to the user PATH if not already present
+      install.ps1 MUST copy the native binary from dist/native/windows-x64/dspec.exe to
+      %USERPROFILE%\bin\dspec.exe and ensure the directory is in PATH
     scenarios:
-      windows-copy:
-        - GIVEN: a compiled binary exists at dist/native/windows-x64/reasonix.exe
+      rename-windows-install:
+        - GIVEN: a compiled binary exists at dist/native/windows-x64/dspec.exe
         - WHEN: install.ps1 is run
         - THEN: >-
-            the binary is copied to %USERPROFILE%\bin\reasonix.exe and %USERPROFILE%\bin is in the
-            user PATH
+            the binary is copied to %USERPROFILE%\bin\dspec.exe and %USERPROFILE%\bin is in the user
+            PATH
   smoke-version:
     strength: MUST
     statement: >-

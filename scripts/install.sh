@@ -38,11 +38,11 @@ esac
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-BINARY="$ROOT_DIR/dist/native/$TARGET/deepseek-spec"
+BINARY="$ROOT_DIR/dist/native/$TARGET/dspec"
 
 if [ ! -f "$BINARY" ]; then
   echo "error: binary not found at $BINARY" >&2
-  echo "Run './setup.sh' to build from source, or 'BINARY_NAME=deepseek-spec bun run build:native --target $TARGET' first." >&2
+  echo "Run './setup.sh' to build from source, or 'bun run build:native --target $TARGET' first." >&2
   exit 1
 fi
 
@@ -50,8 +50,8 @@ fi
 mkdir -p "$PREFIX"
 
 # Copy and make executable
-DEST="$PREFIX/deepseek-spec"
+DEST="$PREFIX/dspec"
 cp "$BINARY" "$DEST"
 chmod +x "$DEST"
 
-echo "installed deepseek-spec to $DEST"
+echo "installed dspec to $DEST"

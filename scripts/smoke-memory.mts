@@ -31,8 +31,8 @@ function check(label: string, cond: unknown, detail?: string) {
 }
 
 async function main() {
-  const home = mkdtempSync(join(tmpdir(), "reasonix-smoke-home-"));
-  const projectRoot = mkdtempSync(join(tmpdir(), "reasonix-smoke-proj-"));
+  const home = mkdtempSync(join(tmpdir(), "dspec-smoke-home-"));
+  const projectRoot = mkdtempSync(join(tmpdir(), "dspec-smoke-proj-"));
   process.stdout.write(`home:    ${home}\nproject: ${projectRoot}\n\n`);
 
   try {

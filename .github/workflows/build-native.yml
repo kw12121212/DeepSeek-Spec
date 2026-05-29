@@ -52,8 +52,8 @@ jobs:
           if [[ "$TARGET" == windows-* ]]; then
             EXT=".exe"
           fi
-          BIN="dist/native/${TARGET}/reasonix${EXT}"
-          ASSET="reasonix-${VERSION}-${TARGET}${EXT}"
+          BIN="dist/native/${TARGET}/dspec${EXT}"
+          ASSET="dspec-${VERSION}-${TARGET}${EXT}"
           cp "$BIN" "$ASSET"
           echo "asset=${ASSET}" >> "$GITHUB_ENV"
 
