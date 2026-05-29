@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: error-handling
   milestone: 0010-real-llm-test
-status: planned
+status: complete
 summary: |
   Real integration test for invalid auth against the live GLM-4.7 API.
 details: |

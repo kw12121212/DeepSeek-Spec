@@ -1,0 +1,34 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: error-handling
+sections:
+  Implementation:
+    create-errors-test:
+      text: >-
+        Create tests/real-llm/errors.test.ts with describe.skipIf(!hasRealLlmConfig()), invalid API
+        key test asserting 401/403 rejection
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify error test auto-skips without config and passes with valid config (manual if no real
+        key).
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

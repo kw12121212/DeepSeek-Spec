@@ -1,0 +1,26 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: error-handling
+  status: proposed
+summary:
+  what:
+    - Real integration test for invalid auth against the live GLM-4.7 API
+  why:
+    - >-
+      Validates that GLMClient throws a readable error containing the HTTP status when given an
+      invalid API key — currently no real-LLM test covers the auth error path
+scope:
+  in:
+    - tests/real-llm/errors.test.ts (new)
+  out:
+    - >-
+      tests/real-llm/errors.test.ts created and passing with valid config, auto-skipping without
+      config
+unchanged_behavior:
+  - All existing tests, src/ code, and other real-LLM test files
+roadmap:
+  milestone: 0010-real-llm-test
+  planned_change: error-handling

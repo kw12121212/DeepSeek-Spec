@@ -1,0 +1,30 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - tests/real-llm/errors.test.ts
+  tests:
+    - tests/real-llm/errors.test.ts
+operations:
+  ADDED:
+    real-error-test:
+      strength: MUST
+      statement: >-
+        Real-LLM error tests must auto-skip when config is absent and assert that an invalid API key
+        produces a rejection containing 401 or 403 against the live GLM-4.7 API
+      scenarios:
+        error-skip-no-config:
+          - GIVEN: tests/real-llm.config.json does not exist
+          - WHEN: bun run test:real is executed
+          - THEN: all error tests are skipped
+        error-invalid-key:
+          - GIVEN: a valid real-llm config exists with a real baseUrl
+          - WHEN: >-
+              GLMClient is created with apiKey 'invalid.key123' and the real baseUrl, then a chat
+              request is sent
+          - THEN: the rejection message contains '401' or '403'
+  MODIFIED: {}
+  REMOVED: {}
