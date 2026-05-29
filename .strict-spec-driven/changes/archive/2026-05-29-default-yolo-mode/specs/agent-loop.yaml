@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: agent-loop
+mapping:
+  implementation:
+    - src/config.ts
+  tests:
+    - tests/config.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    default-yolo-mode:
+      strength: MUST
+      statement: >-
+        When no editMode is set in config, the system MUST default to 'yolo' mode (auto-apply edits,
+        allow all shell commands) rather than 'review' mode
+      scenarios:
+        fresh-install-default:
+          - GIVEN: a fresh install with no config file and no editMode set
+          - WHEN: loadEditMode() is called
+          - THEN: it returns 'yolo'
+  REMOVED: {}

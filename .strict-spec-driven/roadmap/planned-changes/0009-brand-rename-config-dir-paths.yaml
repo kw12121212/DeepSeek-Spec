@@ -1,0 +1,37 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: config-dir-paths
+  milestone: 0009-brand-rename
+status: planned
+summary: |
+  Rename .reasonix/ to .dspec/ in all file system path constants, directory
+  creation logic, and .gitignore. Clean cut, no migration hints.
+details: |
+  Directory rename mapping:
+  - ~/.reasonix/ -> ~/.dspec/ (global: config.json, sessions/, memory/, skills/)
+  - .reasonix/ -> .dspec/ (project-local: settings.json, skills/, semantic/)
+  - REASONIX.md -> DSPEC.md (project memory file name)
+
+  Primary files to modify:
+  - src/config.ts:
+    - defaultConfigPath(): ".reasonix" -> ".dspec" in join(homedir(), ...)
+    - All path constants referencing ".reasonix"
+  - src/memory/: path references in memory store modules
+    - readGlobalReasonixMemory -> readGlobalDSpecMemory
+    - applyGlobalReasonixMemory -> applyGlobalDSpecMemory
+  - src/cli/index.ts: config directory creation on first run
+  - src/index/: semantic index path
+
+  .gitignore:
+  - .reasonix/ -> .dspec/ entry
+  - REASONIX.md -> DSPEC.md entry
+
+  No migration hint or detection of old ~/.reasonix/ directory.
+  Users with existing data must manually: mv ~/.reasonix ~/.dspec
+
+  Verification: grep -r "\.reasonix" src/ .gitignore returns zero matches.
+depends_on:
+  - package-identity

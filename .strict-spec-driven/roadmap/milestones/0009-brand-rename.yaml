@@ -1,0 +1,68 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0009-brand-rename:
+    title: 'M9: Brand Rename - Reasonix to DeepSeek-Spec'
+goal: |
+  Rename the entire project brand from "Reasonix" to "DeepSeek-Spec". This
+  covers the npm package name, CLI binary, environment variable prefix,
+  configuration directory, source code types/constants, system prompts,
+  documentation, CI/build scripts, desktop app, dashboard, brand assets,
+  benchmarks, and test fixtures. After this milestone, the product is
+  consistently named "DeepSeek-Spec" everywhere with no dead references.
+  Clean cut: no backward-compat aliases, shims, or migration hints.
+scope:
+  in:
+    - 'npm package: reasonix to deepseek-spec'
+    - 'npm scope: @reasonix to @deepseek-spec'
+    - 'CLI binary: reasonix/dsnix to dspec'
+    - 'Env var prefix: REASONIX_* to DSPEC_*'
+    - 'Config dir: .reasonix/ to .dspec/'
+    - 'Memory file: REASONIX.md to DSPEC.md'
+    - 'Config type: ReasonixConfig to DeepSeekSpecConfig'
+    - 'System prompts: Reasonix Code to DeepSeek-Spec'
+    - 'Desktop app: reasonix-desktop to dspec-desktop'
+    - 'Dashboard: reasonix-dashboard-v2 to dspec-dashboard'
+    - 'Workspace packages: @reasonix/core-utils, packages/dsnix'
+    - 'Benchmarks: tau-bench RunMode and result files'
+    - All user-facing strings, i18n, docs, brand assets
+    - CI workflows, build scripts, install scripts
+    - Test files and fixtures
+    - .strict-spec-driven/config.yaml context
+  out:
+    - Any backward compat (reasonix alias, old env var reading, migration hints)
+    - npm deprecation notice on old reasonix package
+    - GitHub repo rename (user decision)
+    - Code signing / notarization updates
+done_criteria:
+  - grep -ri reasonix src/ tests/ docs/ scripts/ .github/ package.json returns zero matches
+  - grep -ri reasonix desktop/ dashboard/ packages/ benchmarks/ returns zero matches
+  - dspec --version prints the version correctly
+  - dspec --help shows DeepSeek-Spec branding
+  - All DSPEC_* env vars work; REASONIX_* is not referenced anywhere
+  - ~/.dspec/ is used for config; ~/.reasonix/ is not referenced
+  - bun run verify passes with zero regressions
+  - Native build produces dspec binary
+planned_changes: {}
+dependencies: []
+risks:
+  - >
+    Scope is large (~4,400 occurrences across 170+ files) - a missed reference could cause runtime
+    failures. Final grep audit is mandatory.
+  - >
+    Clean cut means existing npm install -g reasonix users, REASONIX_* env vars, and ~/.reasonix/
+    dirs all stop working. Users must reinstall (npm install -g deepseek-spec), update env vars, and
+    rename config dir.
+  - |
+    packages/dsnix/ alias package will be deleted; downstream consumers depending on it will break.
+status: proposed
+notes:
+  - >
+    Naming convention: brand DeepSeek-Spec, binary dspec, env prefix DSPEC_, config dir .dspec/, npm
+    package deepseek-spec, npm scope @deepseek-spec, desktop dspec-desktop, dashboard
+    dspec-dashboard
+  - |
+    Clean cut: no reasonix alias, no old env var reading, no migration hints
+  - This is a mechanical rename with no behavior changes

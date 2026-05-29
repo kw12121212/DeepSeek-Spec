@@ -1,0 +1,47 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: config-and-vitest
+  milestone: 0010-real-llm-test
+status: planned
+summary: |
+  Create the real-LLM test config file, example template, gitignore entry,
+  config reader helper, and vitest exclusion so real-LLM tests are opt-in
+  and never run by default or in CI.
+details: |
+  1. Create tests/real-llm.config.json.example:
+     { "zhipuApiKey": "your-id.secret-here", "model": "glm-4.7" }
+     Optional field: "baseUrl" (string, for non-production endpoints).
+
+  2. Add "tests/real-llm.config.json" to .gitignore.
+
+  3. Create tests/real-llm/helpers/config.ts with three exports:
+     - readRealLlmConfig(): reads and validates tests/real-llm.config.json.
+       Throws if zhipuApiKey is missing or doesn't match id.secret pattern
+       (two base64url segments joined by a dot). Returns
+       { zhipuApiKey: string, model: string, baseUrl?: string }.
+     - hasRealLlmConfig(): returns boolean — true when the config file exists
+       and is valid. Used by describe.skipIf().
+     - createRealLlmClient(): instantiates GLMClient with
+       { apiKey: config.zhipuApiKey, baseUrl: config.baseUrl }.
+       The GLMClient constructor already accepts GLMClientOptions.apiKey
+       directly, no env var or config.json dependency needed.
+
+  4. Update vitest.config.ts: add test.exclude array containing
+     "tests/real-llm/**" so "bun run test" (and "bun run verify") never
+     touch real-LLM tests.
+
+  5. Add script to package.json:
+     "test:real": "vitest run tests/real-llm/"
+
+  Files to create:
+  - tests/real-llm.config.json.example
+  - tests/real-llm/helpers/config.ts
+
+  Files to modify:
+  - .gitignore (add tests/real-llm.config.json)
+  - vitest.config.ts (add exclude)
+  - package.json (add test:real script)
+depends_on: []

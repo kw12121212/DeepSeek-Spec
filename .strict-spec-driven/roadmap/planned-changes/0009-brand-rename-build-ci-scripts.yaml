@@ -1,0 +1,43 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: build-ci-scripts
+  milestone: 0009-brand-rename
+status: planned
+summary: |
+  Update build scripts, CI workflows, and install scripts: binary name
+  "reasonix" -> "dspec", asset names, download URLs, and install paths.
+details: |
+  .github/workflows/build-native.yml:
+  - Binary output: "dist/native/${TARGET}/reasonix${EXT}" -> "dspec${EXT}"
+  - Asset name: "reasonix-${VERSION}-${TARGET}${EXT}" -> "dspec-..."
+
+  scripts/build-native.mjs:
+  - Output binary name "reasonix" -> "dspec"
+  - Any internal path references
+
+  scripts/install.sh:
+  - Download URL: update repo path from "DeepSeek-Reasonix" to "DeepSeek-Spec"
+  - Binary name in curl target and install path
+  - Verification message: "installed reasonix" -> "installed dspec"
+
+  scripts/install.ps1:
+  - $BinaryName = "reasonix.exe" -> "dspec.exe"
+  - Write-Host message update
+  - Download URL update
+
+  scripts/install.test.sh:
+  - Test fixture binary name: "reasonix" -> "dspec"
+  - Assertions updating accordingly
+
+  scripts/postinstall.mjs:
+  - Any "reasonix" brand references
+
+  scripts/ other .mjs/.mts files:
+  - Temporary directory names using "reasonix-" prefix for testing
+
+  Verification: grep -ri reasonix scripts/ .github/ returns zero matches.
+depends_on:
+  - package-identity

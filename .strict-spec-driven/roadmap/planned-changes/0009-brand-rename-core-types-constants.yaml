@@ -1,0 +1,38 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: core-types-constants
+  milestone: 0009-brand-rename
+status: planned
+summary: |
+  Rename core TypeScript types, interfaces, constants, and function names:
+  ReasonixConfig, REASONIX_LOGO, and all Reasonix-prefixed identifiers.
+details: |
+  Key renames in src/config.ts:
+  - ReasonixConfig (interface/type) -> DeepSeekSpecConfig
+    (defined ~line 160-301, referenced by ~50+ files)
+  - All export names containing "Reasonix"
+
+  Key renames in src/memory/:
+  - readGlobalReasonixMemory -> readGlobalDSpecMemory
+  - applyGlobalReasonixMemory -> applyGlobalDSpecMemory
+
+  Key renames in src/index.ts or equivalent:
+  - REASONIX_LOGO -> DSPEC_LOGO (ASCII art logo constant)
+
+  Desktop-specific:
+  - desktop/vite.config.ts: @reasonix/core-utils path alias -> @deepseek-spec/core-utils
+
+  All files that import or use these identifiers must be updated:
+  - src/loop.ts, src/agents.ts, src/tools/*, src/cli/*
+  - src/adapters/*, src/ports/*, src/repair/*
+  - src/mcp/*, src/code/*, src/server/*, src/frame/*
+  - desktop/ dashboard/ internal references
+
+  Verification: grep -ri "reasonix" src/ --include="*.ts" --include="*.tsx"
+  after this change should only find string literals and comments (handled
+  by system-prompts-strings and source-code-rename tasks).
+depends_on:
+  - package-identity

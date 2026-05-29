@@ -1,0 +1,41 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: source-code-rename
+  milestone: 0009-brand-rename
+status: planned
+summary: |
+  Final sweep of all src/ files for remaining "reasonix" references:
+  import paths, variable names, log statements, string literals, and comments.
+details: |
+  After targeted changes (env-vars, types, prompts, paths), sweep src/ for
+  any remaining "reasonix" (case-insensitive). Expected catch areas:
+
+  - Import paths: "@reasonix/core-utils" -> "@deepseek-spec/core-utils"
+    (all files importing from the workspace package)
+  - String literals in log statements, debug output, error messages
+  - URL strings: "github.com/esengine/reasonix", npmjs URLs
+  - Data paths or identifiers containing "reasonix"
+  - Comments mentioning "reasonix" (rare per code conventions)
+  - Constants or helper function names missed by core-types-constants
+
+  Desktop-specific:
+  - desktop/vite.config.ts: path alias references
+  - desktop/src-tauri/: any remaining "reasonix" in config or source
+
+  Dashboard-specific:
+  - dashboard/ source files referencing "reasonix"
+
+  Benchmarks:
+  - benchmarks/tau-bench/types.ts: RunMode "reasonix" -> "dspec"
+  - benchmarks/tau-bench/results.json: update mode values
+
+  Verification: grep -ri reasonix src/ desktop/ dashboard/ benchmarks/
+  returns zero matches (excluding node_modules/).
+depends_on:
+  - env-vars
+  - config-dir-paths
+  - core-types-constants
+  - system-prompts-strings

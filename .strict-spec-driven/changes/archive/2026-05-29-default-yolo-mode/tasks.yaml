@@ -1,0 +1,42 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: default-yolo-mode
+sections:
+  Implementation:
+    change-default:
+      text: >-
+        src/config.ts: change loadEditMode() fallback return from 'review' to 'yolo' (line 1183) and
+        update the comment on line 1179
+      status: complete
+    update-default-test:
+      text: 'tests/config.test.ts: update ''defaults to review'' test (line 598-599) to expect ''yolo'''
+      status: complete
+    update-coercion-test:
+      text: >-
+        tests/config.test.ts: update 'coerces unknown values back to review' test (line 615-617) to
+        expect 'yolo'
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — grep for any remaining hardcoded 'review'
+        default expectations.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

@@ -1,0 +1,50 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0010-real-llm-test:
+    title: 'M10: Real LLM Integration Tests with GLM-4.7'
+goal: |
+  Add real (non-mocked) LLM integration tests that call the GLM-4.7 API over
+  the network. Tests read developer-supplied credentials from a project-local
+  config file (tests/real-llm.config.json, gitignored). All real-LLM tests
+  auto-skip when the config file is absent, so CI and contributors without
+  keys continue to pass. This milestone validates the full adapter stack —
+  GLMClient, SSE streaming, tool-call parsing — against live GLM responses
+  without any recorded fixtures.
+scope:
+  in:
+    - Create tests/real-llm.config.json (gitignored) as the credential source
+    - Create tests/real-llm/ directory with real integration tests against glm-4.7
+    - Test basic chat, streaming, multi-turn context, tool calls, auth error
+    - Auto-skip when config file is missing (no CI breakage)
+    - Add vitest exclude so real-LLM tests are not part of default test run
+  out:
+    - Changes to provider adapters, registry, or core loop code
+    - New provider support or configuration changes
+    - Mocked/fixture-based tests (those already exist in tests/provider/)
+    - CI pipeline changes that require API keys
+    - Rate limit (429) or context-length tests (covered by fixtures, unreliable live)
+    - Stream abort tests (fragile against real API)
+done_criteria:
+  - tests/real-llm.config.json.example exists with documented fields
+  - tests/real-llm.config.json is in .gitignore
+  - bun run test passes without real-llm.config.json (real-LLM tests excluded)
+  - bun run test:real skips all tests when config absent
+  - With a valid config, bun run test:real sends requests to glm-4.7 and asserts responses
+  - 'Test files: chat.test.ts, stream.test.ts, tool-calls.test.ts, errors.test.ts'
+  - bun run verify passes with zero regressions
+planned_changes: {}
+dependencies:
+  - 0007-multi-provider-api
+risks:
+  - GLM API rate limits or transient failures may cause flaky tests — use 30s timeouts
+  - Real API responses are non-deterministic — assertions verify structure not content
+  - GLM may not reliably trigger tool calls for simple prompts — may need prompt tuning
+status: proposed
+notes:
+  - Config file approach lets each developer manage their own key without env var pollution
+  - 'Tests are opt-in: only developers with a ZHIPU_API_KEY run them'
+  - Vitest exclude pattern is simpler than vitest projects — less config churn
+  - Error tests only cover 401 to avoid wasting API quota on 429/context-length

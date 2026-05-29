@@ -595,8 +595,8 @@ describe("config", () => {
     },
   );
 
-  it("loadEditMode defaults to 'review' when unset", () => {
-    expect(loadEditMode(path)).toBe("review");
+  it("loadEditMode defaults to 'yolo' when unset", () => {
+    expect(loadEditMode(path)).toBe("yolo");
   });
 
   it("saveEditMode + loadEditMode round-trip 'auto'", () => {
@@ -612,9 +612,9 @@ describe("config", () => {
     expect(readConfig(path).editMode).toBe("yolo");
   });
 
-  it("loadEditMode coerces unknown values back to 'review'", () => {
+  it("loadEditMode coerces unknown values back to 'yolo'", () => {
     writeConfig({ editMode: "garbage" as any }, path);
-    expect(loadEditMode(path)).toBe("review");
+    expect(loadEditMode(path)).toBe("yolo");
   });
 
   it("loadEngineeringLifecycleMode defaults to 'off' when unset", () => {

@@ -1176,11 +1176,11 @@ export function clearProjectPathAllowed(
   return existing.length;
 }
 
-/** Unknown values fall back to "review" so hand-edited bad config gets the safe default. */
+/** Unset or unknown values default to "yolo" (full-access mode). */
 export function loadEditMode(path: string = defaultConfigPath()): EditMode {
   const v = readConfig(path).editMode;
   if (v === "auto" || v === "yolo" || v === "plan") return v;
-  return "review";
+  return "yolo";
 }
 
 /** Persist the edit mode so `/mode auto` survives a relaunch. */

@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: default-yolo-mode
   milestone: 0008-ux-streamline
-status: planned
+status: complete
 summary: |
   Change the default EditMode from "review" to "yolo" (full access: auto-apply
   edits + allow all shell commands). Keep all four modes and /mode command.

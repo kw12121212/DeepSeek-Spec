@@ -1,0 +1,27 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: default-yolo-mode
+  status: proposed
+summary:
+  what:
+    - >-
+      Change the default EditMode from review to yolo so new installs start with full auto-apply
+      edits and all shell commands allowed
+  why:
+    - >-
+      Reduces first-run friction — the current review default forces users to approve every edit,
+      which is unnecessary for a DeepSeek-native coding agent where the user is already in a
+      terminal
+scope:
+  in:
+    - src/config.ts loadEditMode() fallback value and test assertions
+  out:
+    - Fresh installs default to yolo mode; existing configs with explicit editMode are unaffected
+unchanged_behavior:
+  - All four modes (review/auto/yolo/plan), the /mode command, and config file reading logic
+roadmap:
+  milestone: 0008-ux-streamline
+  planned_change: default-yolo-mode

@@ -1,0 +1,57 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: env-vars
+  milestone: 0009-brand-rename
+status: planned
+summary: |
+  Rename all 21 REASONIX_* environment variables to DSPEC_* in source code
+  and i18n strings. No backward-compat reading of old names.
+details: |
+  21 env vars to rename (defined and consumed across src/):
+  REASONIX_PROVIDER -> DSPEC_PROVIDER
+  REASONIX_DEBUG_MCP -> DSPEC_DEBUG_MCP
+  REASONIX_PARALLEL_MAX -> DSPEC_PARALLEL_MAX
+  REASONIX_TOOL_DISPATCH -> DSPEC_TOOL_DISPATCH
+  REASONIX_STORM_THRESHOLD -> DSPEC_STORM_THRESHOLD
+  REASONIX_STORM_WINDOW -> DSPEC_STORM_WINDOW
+  REASONIX_PROFILE_STARTUP -> DSPEC_PROFILE_STARTUP
+  REASONIX_DASHBOARD_HOST -> DSPEC_DASHBOARD_HOST
+  REASONIX_DASHBOARD_TOKEN -> DSPEC_DASHBOARD_TOKEN
+  REASONIX_EMBED_MODEL -> DSPEC_EMBED_MODEL
+  REASONIX_TOKENIZER_PATH -> DSPEC_TOKENIZER_PATH
+  REASONIX_MEMORY -> DSPEC_MEMORY
+  REASONIX_LANG -> DSPEC_LANG
+  REASONIX_THEME -> DSPEC_THEME
+  REASONIX_COMMIT_LOG -> DSPEC_COMMIT_LOG
+  REASONIX_ACCESSIBILITY -> DSPEC_ACCESSIBILITY
+  REASONIX_DISABLE_MOUSE -> DSPEC_DISABLE_MOUSE
+  REASONIX_MOUSE_MODE -> DSPEC_MOUSE_MODE
+  REASONIX_DEBUG_REPAINTS -> DSPEC_DEBUG_REPAINTS
+  REASONIX_TMUX_TRUECOLOR -> DSPEC_TMUX_TRUECOLOR
+  REASONIX_SEARCH -> DSPEC_SEARCH
+  REASONIX_JAVA_SOURCE -> DSPEC_JAVA_SOURCE
+  REASONIX_PROXY_DEEPSEEK_DIRECT -> DSPEC_PROXY_DEEPSEEK_DIRECT
+  REASONIX_NO_PROXY -> DSPEC_NO_PROXY
+  REASONIX_SLASH_USAGE_PATH -> DSPEC_SLASH_USAGE_PATH
+  REASONIX_TRACE_RENDERS -> DSPEC_TRACE_RENDERS
+  REASONIX_NO_OPEN -> DSPEC_NO_OPEN
+  REASONIX_ACP_SYSTEM_APPEND -> DSPEC_ACP_SYSTEM_APPEND
+
+  Primary definition files:
+  - src/config.ts: most env var reads via process.env.REASONIX_*
+  - src/loop.ts: REASONIX_STORM_THRESHOLD, REASONIX_STORM_WINDOW
+
+  Consumer files (all files that reference these vars) must be updated
+  in the same pass to avoid broken references.
+
+  i18n strings mentioning REASONIX_ env var names in help text or error
+  messages must also be updated (EN.ts, zh-CN.ts, JA.ts, de.ts, ru.ts).
+
+  Also update any docs/CLI-REFERENCE.md entries that document these env vars.
+
+  Verification: grep -r REASONIX_ src/ tests/ docs/ returns zero matches.
+depends_on:
+  - package-identity

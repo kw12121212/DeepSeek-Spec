@@ -1,0 +1,45 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: package-identity
+  milestone: 0009-brand-rename
+status: planned
+summary: |
+  Rename npm package identity: root package.json, workspace packages,
+  and delete packages/dsnix/. Clean cut, no backward-compat aliases.
+details: |
+  Root package.json changes:
+  - name: "reasonix" -> "deepseek-spec"
+  - bin: { reasonix, dsnix } -> { dspec }
+    (remove reasonix and dsnix entries entirely, add dspec)
+  - description: update brand name to "DeepSeek-Spec"
+  - repository.url: "esengine/DeepSeek-Reasonix" -> "esengine/DeepSeek-Spec"
+  - bugs.url: same repo path update
+  - homepage: same repo path update
+  - devDependencies: "@reasonix/core-utils" -> "@deepseek-spec/core-utils"
+
+  packages/core-utils/package.json:
+  - name: "@reasonix/core-utils" -> "@deepseek-spec/core-utils"
+  - repository, bugs, homepage URLs: same repo path update
+
+  packages/dsnix/:
+  - DELETE the entire directory. dspec is now the primary binary,
+    no alias package needed.
+
+  desktop/package.json:
+  - name: "reasonix-desktop" -> "dspec-desktop"
+
+  desktop/src-tauri/tauri.conf.json:
+  - identifier: "dev.reasonix.desktop" -> "dev.dspec.desktop"
+
+  dashboard/package.json:
+  - name: "reasonix-dashboard-v2" -> "dspec-dashboard"
+
+  .strict-spec-driven/config.yaml:
+  - context text: "Reasonix (npm: reasonix)" -> "DeepSeek-Spec (npm: deepseek-spec)"
+
+  Verification: grep -ri reasonix package.json packages/ desktop/package.json
+  dashboard/package.json returns zero matches.
+depends_on: []

@@ -1,0 +1,32 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: tests-rename
+  milestone: 0009-brand-rename
+status: planned
+summary: |
+  Update all test files and fixtures: rename "reasonix" references across
+  79 test files, helpers, mocks, and fixtures.
+details: |
+  Test files to update (79 files in tests/):
+  - Test descriptions containing "Reasonix" or "reasonix"
+  - Assertion messages
+  - Mock configurations using old type names (ReasonixConfig)
+  - Environment variable setup using REASONIX_*
+  - File path assertions referencing .reasonix/ directories
+  - Snapshot/inline snapshots with old brand names
+
+  Test infrastructure:
+  - tests/helpers/: helper functions referencing "reasonix"
+  - tests/mocks/: mock modules with old type imports
+  - tests/fixtures/: fixture directories and files
+
+  Test scripts in scripts/:
+  - scripts/install.test.sh: "reasonix" binary name references
+  - Any other test helper scripts with "reasonix"
+
+  Verification: grep -ri reasonix tests/ scripts/*.test.* returns zero matches.
+depends_on:
+  - source-code-rename

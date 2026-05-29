@@ -1,0 +1,45 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: docs-brand-assets
+  milestone: 0009-brand-rename
+status: planned
+summary: |
+  Update all documentation (README, architecture, CLI reference), brand asset
+  files (logos, icons, wordmarks), and CLAUDE.md.
+details: |
+  Documentation files:
+  - README.md: all "Reasonix" -> "DeepSeek-Spec", all "reasonix" commands
+    -> "dspec", env var names, config paths, installation instructions
+    (~37 references)
+  - README.zh-CN.md: same updates in Chinese
+  - docs/ARCHITECTURE.md: brand references
+  - docs/CLI-REFERENCE.md: command examples, env var names, config paths
+  - docs/qq-connect.md: if still present
+  - Any other .md files
+
+  Brand assets (docs/brand/):
+  Rename all 9 files:
+  - reasonix-icon.ico -> dspec-icon.ico
+  - reasonix-icon.png -> dspec-icon.png
+  - reasonix-icon.svg -> dspec-icon.svg
+  - reasonix-logo-square-light.png -> dspec-logo-square-light.png
+  - reasonix-logo-square-light.svg -> dspec-logo-square-light.svg
+  - reasonix-logo-square.png -> dspec-logo-square.png
+  - reasonix-logo-square.svg -> dspec-logo-square.svg
+  - reasonix-wordmark.png -> dspec-wordmark.png
+  - reasonix-wordmark.svg -> dspec-wordmark.svg
+  - Update internal SVG text containing "Reasonix" if present
+  - Update README references to these asset paths
+
+  CLAUDE.md:
+  - "Reasonix is a DeepSeek-native coding agent" -> "DeepSeek-Spec is..."
+  - All command examples using "reasonix" -> "dspec"
+  - Source layout table header text
+
+  Verification: grep -ri reasonix docs/ README.md README.zh-CN.md CLAUDE.md
+  returns zero matches.
+depends_on:
+  - package-identity

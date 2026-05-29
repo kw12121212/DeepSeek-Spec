@@ -1,0 +1,50 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: final-audit
+  milestone: 0009-brand-rename
+status: planned
+summary: |
+  Final sweep: grep the entire repository for any remaining "reasonix"
+  reference. Fix any stragglers. Run bun run verify to confirm zero
+  regressions. Verify native binary name and --version output.
+details: |
+  After all previous rename tasks are complete:
+
+  1. Full repo grep for "reasonix" (case-insensitive):
+     grep -ri reasonix --include="*.ts" --include="*.tsx" --include="*.js"
+       --include="*.mjs" --include="*.mts" --include="*.json"
+       --include="*.yaml" --include="*.yml" --include="*.md"
+       --include="*.sh" --include="*.ps1" --include="*.html"
+       --include="*.svg" --include="*.css" .
+     Must return zero matches (excluding node_modules/, dist/, .git/).
+
+  2. Check .strict-spec-driven/ specs and roadmap for any remaining
+     "Reasonix" references that should be "DeepSeek-Spec".
+     NOTE: Do NOT rename milestone/planned-change file contents that
+     describe the rename itself (those intentionally reference the old name).
+
+  3. Run: bun run verify
+     Must pass (lint + typecheck + test + comment-policy).
+
+  4. Run: bun run build
+     Must succeed.
+
+  5. Run: bun run build:native --target linux-x64 (or equivalent)
+     Output binary must be named "dspec".
+
+  6. Run: ./dspec --version
+     Must print "dspec x.y.z".
+
+  7. Run: ./dspec --help
+     Must show "DeepSeek-Spec" branding.
+
+  If any matches found in steps 1-2, fix them immediately.
+  If verify/build fails, fix and re-run until clean.
+depends_on:
+  - source-code-rename
+  - tests-rename
+  - build-ci-scripts
+  - docs-brand-assets

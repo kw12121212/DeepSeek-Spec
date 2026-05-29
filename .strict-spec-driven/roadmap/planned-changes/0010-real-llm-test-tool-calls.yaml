@@ -1,0 +1,31 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: tool-calls
+  milestone: 0010-real-llm-test
+status: planned
+summary: |
+  Real integration test for tool call generation against the live GLM-4.7 API.
+details: |
+  All tests use describe.skipIf(!hasRealLlmConfig())() and set
+  { timeout: 30_000 } per test.
+
+  tests/real-llm/tool-calls.test.ts:
+  - "invokes a tool when prompted":
+    Send { model: "glm-4.7", messages: [{ role: "user", content: "What is the weather in Beijing?" }],
+      tools: [{ type: "function", function: { name: "get_weather",
+        description: "Get weather for a city",
+        parameters: { type: "object", properties: { city: { type: "string" } },
+          required: ["city"] } } }] }
+    Assert: response.toolCalls is a non-empty array.
+    Assert: toolCalls[0].function.name === "get_weather".
+    Assert: JSON.parse(toolCalls[0].function.arguments) has a "city" field.
+    Assert: the city value contains "Beijing" or "北京" (case-insensitive).
+
+  This is a single test file — multi-turn is already covered in
+  chat-and-stream (chat.test.ts multi-turn test). No separate multi-turn
+  file needed for tool calls.
+depends_on:
+  - config-and-vitest

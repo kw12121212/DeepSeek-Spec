@@ -8,16 +8,15 @@ requirements:
   streaming-response:
     strength: MUST
     statement: >-
-      streamModelResponse MUST yield delta events for reasoning, content, and
-      tool calls during streaming, and return a final result with assembled
-      content, reasoning, tool calls, and usage.
+      streamModelResponse MUST yield delta events for reasoning, content, and tool calls during
+      streaming, and return a final result with assembled content, reasoning, tool calls, and usage.
     scenarios:
       stream-deltas:
         - GIVEN: a valid model client and conversation context
         - WHEN: streamModelResponse is called
         - THEN: >-
-            LoopEvent deltas are yielded during streaming and the generator
-            returns a StreamModelResult with assembled content and usage
+            LoopEvent deltas are yielded during streaming and the generator returns a
+            StreamModelResult with assembled content and usage
       abort-propagation:
         - GIVEN: an AbortSignal is provided via options
         - WHEN: the signal is triggered during streaming
@@ -25,16 +24,15 @@ requirements:
   tool-dispatch-chunking:
     strength: MUST
     statement: >-
-      dispatchToolCallsChunked MUST batch tool calls into chunks respecting
-      REASONIX_PARALLEL_MAX (default 3, max 16) and REASONIX_TOOL_DISPATCH
-      (default "auto", "serial" for sequential).
+      dispatchToolCallsChunked MUST batch tool calls into chunks respecting REASONIX_PARALLEL_MAX
+      (default 3, max 16) and REASONIX_TOOL_DISPATCH (default "auto", "serial" for sequential).
     scenarios:
       parallel-chunking:
         - GIVEN: 5 tool calls and REASONIX_PARALLEL_MAX is 3
         - WHEN: dispatchToolCallsChunked is called
         - THEN: >-
-            calls are dispatched in 2 chunks (3 + 2), each tool result is
-            persisted, and events are yielded for each lifecycle stage
+            calls are dispatched in 2 chunks (3 + 2), each tool result is persisted, and events are
+            yielded for each lifecycle stage
       serial-mode:
         - GIVEN: REASONIX_TOOL_DISPATCH is set to "serial"
         - WHEN: dispatchToolCallsChunked is called with multiple tool calls
@@ -42,21 +40,17 @@ requirements:
       tool-failure:
         - GIVEN: a tool call that throws an error
         - WHEN: it is dispatched
-        - THEN: >-
-            a structured error result is yielded and persisted without crashing
-            the loop
+        - THEN: a structured error result is yielded and persisted without crashing the loop
   tool-call-pairing:
     strength: MUST
     statement: >-
-      fixToolCallPairing MUST remove unpaired tool calls and stray tool results
-      that would be rejected by the model API, returning the cleaned messages
-      and counts of dropped items.
+      fixToolCallPairing MUST remove unpaired tool calls and stray tool results that would be
+      rejected by the model API, returning the cleaned messages and counts of dropped items.
     scenarios:
       unpaired-removed:
         - GIVEN: messages with an assistant tool call but no matching tool result
         - WHEN: fixToolCallPairing is called
-        - THEN: >-
-            the unpaired tool call is removed and droppedAssistantCalls > 0
+        - THEN: the unpaired tool call is removed and droppedAssistantCalls > 0
       stray-result-removed:
         - GIVEN: messages with a tool result but no preceding tool call
         - WHEN: fixToolCallPairing is called
@@ -64,40 +58,35 @@ requirements:
   message-healing:
     strength: MUST
     statement: >-
-      healLoadedMessages MUST shrink oversized tool results exceeding maxChars
-      and return the healed messages with a healedCount.
+      healLoadedMessages MUST shrink oversized tool results exceeding maxChars and return the healed
+      messages with a healedCount.
     scenarios:
       oversize-shrunk:
         - GIVEN: tool results exceeding maxChars
         - WHEN: healLoadedMessages is called
         - THEN: >-
-            oversized results are truncated, healedCount reflects how many were
-            modified, and no result exceeds maxChars
+            oversized results are truncated, healedCount reflects how many were modified, and no
+            result exceeds maxChars
   token-based-healing:
     strength: MUST
     statement: >-
-      healLoadedMessagesByTokens MUST shrink oversized tool results exceeding
-      maxTokens and return the healed messages with tokensSaved and charsSaved
-      counts.
+      healLoadedMessagesByTokens MUST shrink oversized tool results exceeding maxTokens and return
+      the healed messages with tokensSaved and charsSaved counts.
     scenarios:
       token-shrunk:
         - GIVEN: tool results exceeding maxTokens
         - WHEN: healLoadedMessagesByTokens is called
-        - THEN: >-
-            oversized results are truncated and tokensSaved reflects the token
-            reduction achieved
+        - THEN: oversized results are truncated and tokensSaved reflects the token reduction achieved
   reasoning-stamping:
     strength: MUST
     statement: >-
-      stampMissingReasoningForThinkingMode MUST add an empty reasoning_content
-      field to assistant turns that lack it when the model is a thinking-mode
-      model.
+      stampMissingReasoningForThinkingMode MUST add an empty reasoning_content field to assistant
+      turns that lack it when the model is a thinking-mode model.
     scenarios:
       stamp-added:
         - GIVEN: an assistant message without reasoning_content and a thinking-mode model
         - WHEN: stampMissingReasoningForThinkingMode is called
-        - THEN: >-
-            the message gets reasoning_content: "" added and stampedCount > 0
+        - THEN: 'the message gets reasoning_content: "" added and stampedCount > 0'
       non-thinking-skipped:
         - GIVEN: an assistant message without reasoning_content and a non-thinking model
         - WHEN: stampMissingReasoningForThinkingMode is called
@@ -105,21 +94,21 @@ requirements:
   reasoning-retention:
     strength: MUST
     statement: >-
-      stripDroppableReasoningContent MUST remove reasoning_content from
-      non-tool-call assistant turns before the last user message, preserving
-      reasoning for tool-call turns required by the model API.
+      stripDroppableReasoningContent MUST remove reasoning_content from non-tool-call assistant
+      turns before the last user message, preserving reasoning for tool-call turns required by the
+      model API.
     scenarios:
       pre-user-pruned:
         - GIVEN: assistant turns with reasoning_content before the last user message
         - WHEN: stripDroppableReasoningContent is called
         - THEN: >-
-            reasoning_content is removed from non-tool-call turns, tool-call
-            turns are preserved, and prunedCount > 0
+            reasoning_content is removed from non-tool-call turns, tool-call turns are preserved,
+            and prunedCount > 0
   thinking-mode-detection:
     strength: MUST
     statement: >-
-      isThinkingModeModel MUST return true for model IDs containing "reasoner"
-      or matching DeepSeek v4 thinking-capable models.
+      isThinkingModeModel MUST return true for model IDs containing "reasoner" or matching DeepSeek
+      v4 thinking-capable models.
     scenarios:
       reasoner-model:
         - GIVEN: model ID "deepseek-reasoner"
@@ -132,13 +121,23 @@ requirements:
   hallucinated-markup-stripping:
     strength: MUST
     statement: >-
-      stripHallucinatedToolMarkup MUST remove DSML/function_calls XML tags from
-      text that the model erroneously emits outside tool call blocks.
+      stripHallucinatedToolMarkup MUST remove DSML/function_calls XML tags from text that the model
+      erroneously emits outside tool call blocks.
     scenarios:
       dsml-stripped:
         - GIVEN: text containing <|DSML|invoke>... tags
         - WHEN: stripHallucinatedToolMarkup is called
         - THEN: the DSML tags are removed from the output string
+  default-yolo-mode:
+    strength: MUST
+    statement: >-
+      When no editMode is set in config, the system MUST default to 'yolo' mode (auto-apply edits,
+      allow all shell commands) rather than 'review' mode
+    scenarios:
+      fresh-install-default:
+        - GIVEN: a fresh install with no config file and no editMode set
+        - WHEN: loadEditMode() is called
+        - THEN: it returns 'yolo'
 mapping:
   implementation:
     - src/loop/dispatch.ts
