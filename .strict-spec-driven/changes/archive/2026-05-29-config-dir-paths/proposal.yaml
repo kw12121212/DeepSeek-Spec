@@ -1,0 +1,33 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: config-dir-paths
+  status: proposed
+summary:
+  what:
+    - >-
+      Rename all .reasonix/ directory references to .dspec/ in file system path constants, directory
+      creation logic, and .gitignore. Includes renaming REASONIX.md to DSPEC.md.
+  why:
+    - >-
+      The package has been renamed to deepseek-spec (package-identity change complete). Config
+      directory paths must match the new brand. This is a dependency for subsequent
+      source-code-rename.
+scope:
+  in:
+    - >-
+      src/config.ts, src/memory/*, src/cli/index.ts, src/index/*, .gitignore, and any other files
+      referencing '.reasonix' directory paths
+  out:
+    - >-
+      All directory references use .dspec/ and REASONIX.md references use DSPEC.md. grep -r
+      '\.reasonix' src/ .gitignore returns zero matches.
+unchanged_behavior:
+  - >-
+    Runtime behavior, API, TUI, and tool functionality remain identical. Only string literals for
+    paths change.
+roadmap:
+  milestone: 0009-brand-rename
+  planned_change: config-dir-paths

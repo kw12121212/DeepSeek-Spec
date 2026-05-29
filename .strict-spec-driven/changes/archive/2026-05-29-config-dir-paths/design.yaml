@@ -1,0 +1,21 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: config-dir-paths
+approach:
+  - >-
+    Global find-and-replace of '.reasonix' path string literals to '.dspec' and 'REASONIX.md' to
+    'DSPEC.md' across all source files. Focus on src/config.ts path constants, src/memory/ store
+    modules, src/cli/index.ts directory creation, src/index/ semantic paths, and .gitignore entries.
+decisions:
+  path-constants:
+    decision: >-
+      Use a single centralized path constant for the config directory name (.dspec) rather than
+      inline strings
+    rationale: >-
+      Centralizing the directory name in one constant prevents future misses and makes subsequent
+      renames trivial. The config module already centralizes paths, so extending that pattern is
+      natural.
+alternatives: []
+risks: []

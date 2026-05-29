@@ -54,7 +54,7 @@ export const de: TranslationSchema = {
     ...EN.sessions,
     emptyHint:
       "Noch keine gespeicherten Sitzungen – starte `reasonix chat` (Sitzungen werden automatisch gespeichert, außer mit --no-session).",
-    listHeader: "Gespeicherte Sitzungen (~/.reasonix/sessions/):",
+    listHeader: "Gespeicherte Sitzungen (~/.dspec/sessions/):",
     inspectHint: "Ansehen:       reasonix sessions <name>",
     resumeHint: "Fortsetzen:    reasonix chat --session <name>",
     noSession: 'Keine Sitzung namens "{name}" (oder sie ist leer).',
@@ -84,7 +84,7 @@ export const de: TranslationSchema = {
     ephemeralHint: "Sitzungsspeicherung für diesen Durchlauf deaktivieren",
     mcpSpecHint: "MCP-Server-Spezifikation (wiederholbar)",
     mcpPrefixHint: "Präfix für MCP-Toolnamen",
-    noConfigHint: "Ignoriere bei diesem Durchlauf die Datei ~/.reasonix/config.json",
+    noConfigHint: "Ignoriere bei diesem Durchlauf die Datei ~/.dspec/config.json",
     effortHintShort: "Reasoning-Effort – niedrig|mittel|hoch|maximal",
     budgetHintShort: "Sitzungs-USD-Obergrenze",
     transcriptHintShort: "Pfad zum JSONL-Transkript",
@@ -223,7 +223,7 @@ export const de: TranslationSchema = {
     memory: {
       ...EN.slash.memory,
       argsHint: "[Liste|<Name> anzeigen|<Name> vergessen|<Bereich> löschen – Bestätigen]",
-      description: "Pinned Memory anzeigen / verwalten (REASONIX.md + ~/.reasonix/memory)",
+      description: "Pinned Memory anzeigen / verwalten (DSPEC.md + ~/.dspec/memory)",
     },
     skill: {
       ...EN.slash.skill,
@@ -234,14 +234,14 @@ export const de: TranslationSchema = {
       ...EN.slash.hooks,
       argsHint: "[Neu laden]",
       description:
-        "Aktive Hooks auflisten (settings.json unter .reasonix/) · reload liest von Platte neu",
+        "Aktive Hooks auflisten (settings.json unter .dspec/) · reload liest von Platte neu",
     },
     permissions: {
       ...EN.slash.permissions,
       argsHint:
         "[Liste|<Präfix> hinzufügen|<Präfix|N> entfernen|Löschen (Bestätigung erforderlich)]",
       description:
-        "Shell-Allowlist anzeigen / bearbeiten (builtin schreibgeschützt · pro Projekt: ~/.reasonix/config.json)",
+        "Shell-Allowlist anzeigen / bearbeiten (builtin schreibgeschützt · pro Projekt: ~/.dspec/config.json)",
     },
     dashboard: {
       ...EN.slash.dashboard,
@@ -337,7 +337,7 @@ export const de: TranslationSchema = {
     init: {
       ...EN.slash.init,
       description:
-        "Projekt scannen und eine REASONIX.md-Baseline erstellen (Modell schreibt; mit /apply reviewen). `force` überschreibt vorhandene Datei.",
+        "Projekt scannen und eine DSPEC.md-Baseline erstellen (Modell schreibt; mit /apply reviewen). `force` überschreibt vorhandene Datei.",
     },
     apply: {
       ...EN.slash.apply,
@@ -766,7 +766,7 @@ export const de: TranslationSchema = {
       newInfoArchived:
         '▸ neues Gespräch — {count} Nachricht(en) aus dem Kontext entfernt. Vorheriges Transkript als "{archived}" archiviert (sichtbar unter Sitzungen).',
       newInfoSystemReloaded:
-        " · REASONIX.md / Projekt-Memory neu geladen (nächster Turn zahlt einen Cache-Fehler)",
+        " · DSPEC.md / Projekt-Memory neu geladen (nächster Turn zahlt einen Cache-Fehler)",
       helpTitle: "Befehle:",
       helpShellTitle: "Shell-Kürzel:",
       helpShell: "  !<befehl>                 <befehl> im Sandbox-Root ausführen; Ausgabe kommt",
@@ -784,11 +784,11 @@ export const de: TranslationSchema = {
         "                             Befehlspräfix für dieses Projekt auf die Whitelist zu setzen. Kein globales Allow-All-Flag.",
       helpMemoryTitle: "Kurzzeit-Memory:",
       helpMemoryPin:
-        "  #<notiz>                  <notiz> an <projekt>/REASONIX.md anhängen (commitierbar).",
+        "  #<notiz>                  <notiz> an <projekt>/DSPEC.md anhängen (commitierbar).",
       helpMemoryPinEx:
         "                             Beispiel: #findByEmail muss case-insensitive sein",
       helpMemoryGlobal:
-        "  #g <notiz>                <notiz> an ~/.reasonix/REASONIX.md anhängen (global, niemals committed).",
+        "  #g <notiz>                <notiz> an ~/.dspec/DSPEC.md anhängen (global, niemals committed).",
       helpMemoryGlobalEx:
         "                             Beispiel: #g immer pnpm, nicht npm verwenden",
       helpMemoryPinBoth:
@@ -847,7 +847,7 @@ export const de: TranslationSchema = {
       hooksDropHint:
         "Lege eine settings.json mit einem `hooks`-Schlüssel in einem der folgenden Pfade ab:",
       hooksProject: "  · {path} (Projekt)",
-      hooksProjectFallback: "  · <projekt>/.reasonix/settings.json (Projekt)",
+      hooksProjectFallback: "  · <projekt>/.dspec/settings.json (Projekt)",
       hooksGlobal: "  · {path} (global)",
       hooksEvents: "Ereignisse: PreToolUse, PostToolUse, UserPromptSubmit, Stop",
       hooksExitCodes: "Exit 0 = bestanden · Exit 2 = blockieren (Pre*) · andere = warnen",
@@ -961,7 +961,7 @@ export const de: TranslationSchema = {
     permissions: {
       ...EN.handlers.permissions,
       mutateCodeOnly:
-        "/permissions add / remove / clear sind nur innerhalb von `reasonix code` verfügbar — sie bearbeiten die projektbezogene Allowlist (`~/.reasonix/config.json` projects[<root>].shellAllowed).",
+        "/permissions add / remove / clear sind nur innerhalb von `reasonix code` verfügbar — sie bearbeiten die projektbezogene Allowlist (`~/.dspec/config.json` projects[<root>].shellAllowed).",
       addUsage:
         'Verwendung: /permissions add <präfix>   (mehrere Tokens OK: /permissions add "git push origin")',
       addAlready: "▸ bereits erlaubt: {prefix}",
@@ -1135,11 +1135,11 @@ export const de: TranslationSchema = {
     memory: {
       ...EN.handlers.memory,
       disabled:
-        "Memory ist deaktiviert (REASONIX_MEMORY=off in der Umgebung). Entferne die Variable zur Reaktivierung — es werden weder REASONIX.md noch ~/.reasonix/memory-Inhalte eingefügt.",
+        "Memory ist deaktiviert (REASONIX_MEMORY=off in der Umgebung). Entferne die Variable zur Reaktivierung — es werden weder DSPEC.md noch ~/.dspec/memory-Inhalte eingefügt.",
       noRoot:
-        "Kein Arbeitsverzeichnis in dieser Sitzung — `/memory` benötigt ein Root, um REASONIX.md aufzulösen. (Läuft in einer Test-Umgebung?)",
+        "Kein Arbeitsverzeichnis in dieser Sitzung — `/memory` benötigt ein Root, um DSPEC.md aufzulösen. (Läuft in einer Test-Umgebung?)",
       listEmpty:
-        "Noch keine Benutzer-Memories. Das Modell kann `remember` aufrufen, um einen zu speichern, oder du kannst Dateien manuell in ~/.reasonix/memory/global/ oder dem projektspezifischen Unterverzeichnis erstellen.",
+        "Noch keine Benutzer-Memories. Das Modell kann `remember` aufrufen, um einen zu speichern, oder du kannst Dateien manuell in ~/.dspec/memory/global/ oder dem projektspezifischen Unterverzeichnis erstellen.",
       listHeader: "Benutzer-Memories ({count}):",
       listFooter: "Body anzeigen: /memory show <name>   Löschen: /memory forget <name>",
       showUsage: "Verwendung: /memory show <name>  oder  /memory show <scope>/<name>",
@@ -1158,9 +1158,8 @@ export const de: TranslationSchema = {
       noMemory: "Kein Memory in {root} eingefügt.",
       layers: "Drei Ebenen sind verfügbar:",
       layerProject: "  1. {file} — commitierbares Team-Memory (im Repo).",
-      layerGlobal: "  2. ~/.reasonix/memory/global/ — dein projektübergreifendes privates Memory.",
-      layerProjectHash:
-        "  3. ~/.reasonix/memory/<projekt-hash>/ — privates Memory dieses Projekts.",
+      layerGlobal: "  2. ~/.dspec/memory/global/ — dein projektübergreifendes privates Memory.",
+      layerProjectHash: "  3. ~/.dspec/memory/<projekt-hash>/ — privates Memory dieses Projekts.",
       askModel: "Bitte das Modell, etwas zu `remember`, oder bearbeite die Dateien direkt.",
       changesNote:
         "Änderungen werden beim nächsten /new oder Start wirksam — der System-Prompt wird einmal pro Sitzung gehasht, um den Prefix-Cache warm zu halten.",
@@ -1198,11 +1197,11 @@ export const de: TranslationSchema = {
       ...EN.handlers.init,
       codeOnly:
         "/init funktioniert nur im Code-Modus (es benötigt Dateisystem-Werkzeuge).\nFühre `reasonix code [pfad]` aus, um eine Sitzung zu starten, die im\nProjekt verwurzelt ist, das du initialisieren möchtest, und führe dann /init aus.",
-      exists: "▸ REASONIX.md existiert bereits unter {path}",
+      exists: "▸ DSPEC.md existiert bereits unter {path}",
       existsForce: "  /init force   von Grund auf neu generieren (überschreibt)",
       existsEdit: "  Oder bearbeite es von Hand — es ist nur Markdown. Die aktuelle Datei wird",
       existsPinned: "  bei jedem Start unverändert in den System-Prompt eingefügt.",
-      info: "▸ /init — Modell scannt das Projekt und synthetisiert REASONIX.md.\n  Das Ergebnis landet als ausstehender Edit; mit /apply oder /walk reviewen.",
+      info: "▸ /init — Modell scannt das Projekt und synthetisiert DSPEC.md.\n  Das Ergebnis landet als ausstehender Edit; mit /apply oder /walk reviewen.",
     },
     webSearchEngine: {
       ...EN.handlers.webSearchEngine,
@@ -1241,7 +1240,7 @@ export const de: TranslationSchema = {
       switchedBraveNote:
         " Setze BRAVE_SEARCH_API_KEY (oder BRAVE_API_KEY) oder `braveApiKey` in der Konfiguration; 2000 kostenlose Zugriffe pro Monat unter https://brave.com/search/api/.",
       keyNeeded:
-        'Kein API-Schlüssel für "{engine}" konfiguriert.\n\n  1. Setze die {envVar}-Umgebungsvariable\n  2. Oder gib ihn inline an:  /search-engine {engine} <dein-schlüssel>\n  3. Oder füge "{engine}ApiKey" zu ~/.reasonix/config.json hinzu\n\nWiederhole dann /search-engine {engine}.',
+        'Kein API-Schlüssel für "{engine}" konfiguriert.\n\n  1. Setze die {envVar}-Umgebungsvariable\n  2. Oder gib ihn inline an:  /search-engine {engine} <dein-schlüssel>\n  3. Oder füge "{engine}ApiKey" zu ~/.dspec/config.json hinzu\n\nWiederhole dann /search-engine {engine}.',
       keySaved: " API-Schlüssel in der Konfiguration gespeichert.",
       confirmed:
         'Websuchmaschine auf "{engine}" gesetzt{detail}. Der nächste Assistenten-Turn übernimmt die Änderung.',
@@ -1251,9 +1250,8 @@ export const de: TranslationSchema = {
       ...EN.handlers.skill,
       listEmpty: "Keine Skills gefunden. Reasonix liest Skills von:",
       listProjectScope:
-        "  · <projekt>/.reasonix/skills/<name>/SKILL.md  (oder <name>.md)  — Projekt-Bereich",
-      listGlobalScope:
-        "  · ~/.reasonix/skills/<name>/SKILL.md  (oder <name>.md)  — globaler Bereich",
+        "  · <projekt>/.dspec/skills/<name>/SKILL.md  (oder <name>.md)  — Projekt-Bereich",
+      listGlobalScope: "  · ~/.dspec/skills/<name>/SKILL.md  (oder <name>.md)  — globaler Bereich",
       listProjectOnly: "  (Projekt-Bereich ist nur in `reasonix code` aktiv)",
       listFrontmatter: "Die Frontmatter jeder Datei benötigt mindestens `name` und `description`.",
       listInvoke:
@@ -1359,8 +1357,7 @@ export const de: TranslationSchema = {
     allowOnce: "Einmal erlauben",
     allowOnceDesc: "Diesen Zugriff erlauben; das Verzeichnis für den Rest dieser Sitzung merken",
     allowAlways: "Immer erlauben",
-    allowAlwaysDesc:
-      "`{prefix}` für dieses Projekt merken (gespeichert in ~/.reasonix/config.json)",
+    allowAlwaysDesc: "`{prefix}` für dieses Projekt merken (gespeichert in ~/.dspec/config.json)",
     deny: "ablehnen",
     denyDesc: "Tab drücken, um dem Modell den Grund mitzuteilen",
     pathLabel: "Pfad",
@@ -1605,7 +1602,7 @@ export const de: TranslationSchema = {
     metasoApiError:
       "web_search: Metaso-API-Fehler (Code {code}: {message}) — versuche es später erneut",
     tavilyMissingKey:
-      "web_search: Tavily-Backend benötigt einen API-Schlüssel — setze TAVILY_API_KEY-Umgebungsvariable oder `tavilyApiKey` in ~/.reasonix/config.json; kostenlose 1000/Monat-Registrierung unter https://tavily.com",
+      "web_search: Tavily-Backend benötigt einen API-Schlüssel — setze TAVILY_API_KEY-Umgebungsvariable oder `tavilyApiKey` in ~/.dspec/config.json; kostenlose 1000/Monat-Registrierung unter https://tavily.com",
     tavilyUnauthorized:
       "web_search: Tavily-API-Schlüssel abgelehnt — überprüfe TAVILY_API_KEY oder erhalte einen unter https://tavily.com",
     tavilyRateLimit:
@@ -1615,7 +1612,7 @@ export const de: TranslationSchema = {
     tavilyParseError:
       "web_search: Tavily hat unparsbare Antwort zurückgegeben (HTTP {status}) — versuche es später erneut",
     perplexityMissingKey:
-      "web_search: Perplexity-Backend benötigt einen API-Schlüssel — setze PERPLEXITY_API_KEY-Umgebungsvariable oder `perplexityApiKey` in ~/.reasonix/config.json; erhalte einen unter https://perplexity.ai/settings/api",
+      "web_search: Perplexity-Backend benötigt einen API-Schlüssel — setze PERPLEXITY_API_KEY-Umgebungsvariable oder `perplexityApiKey` in ~/.dspec/config.json; erhalte einen unter https://perplexity.ai/settings/api",
     perplexityUnauthorized:
       "web_search: Perplexity-API-Schlüssel abgelehnt — überprüfe PERPLEXITY_API_KEY oder erhalte einen unter https://perplexity.ai/settings/api",
     perplexityRateLimit:
@@ -1625,7 +1622,7 @@ export const de: TranslationSchema = {
     perplexityParseError:
       "web_search: Perplexity hat unparsbare Antwort zurückgegeben (HTTP {status}) — versuche es später erneut",
     exaMissingKey:
-      "web_search: Exa-Backend benötigt einen API-Schlüssel — setze EXA_API_KEY-Umgebungsvariable oder `exaApiKey` in ~/.reasonix/config.json; kostenlose 1000/Monat-Registrierung unter https://exa.ai",
+      "web_search: Exa-Backend benötigt einen API-Schlüssel — setze EXA_API_KEY-Umgebungsvariable oder `exaApiKey` in ~/.dspec/config.json; kostenlose 1000/Monat-Registrierung unter https://exa.ai",
     exaUnauthorized:
       "web_search: Exa-API-Schlüssel abgelehnt — überprüfe EXA_API_KEY oder erhalte einen unter https://exa.ai",
     exaRateLimit:
@@ -1635,7 +1632,7 @@ export const de: TranslationSchema = {
     exaParseError:
       "web_search: Exa hat unparsbare Antwort zurückgegeben (HTTP {status}) — versuche es später erneut",
     braveMissingKey:
-      "web_search: Für Brave Search ist ein API-Schlüssel erforderlich — setze die Umgebungsvariable BRAVE_SEARCH_API_KEY (oder BRAVE_API_KEY) oder `braveApiKey` in ~/.reasonix/config.json; kostenlose Anmeldung mit 2000 Einheiten pro Monat unter https://brave.com/search/api/",
+      "web_search: Für Brave Search ist ein API-Schlüssel erforderlich — setze die Umgebungsvariable BRAVE_SEARCH_API_KEY (oder BRAVE_API_KEY) oder `braveApiKey` in ~/.dspec/config.json; kostenlose Anmeldung mit 2000 Einheiten pro Monat unter https://brave.com/search/api/",
     braveUnauthorized:
       "web_search: Brave-Such-API-Schlüssel abgelehnt — überprüfe BRAVE_SEARCH_API_KEY oder beantrage einen unter https://brave.com/search/api/",
     braveRateLimit:

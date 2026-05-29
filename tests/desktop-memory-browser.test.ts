@@ -10,23 +10,23 @@ import { MemoryStore } from "../src/memory/user.js";
 
 describe("desktop memory browser", () => {
   let root: string;
-  let reasonixHome: string;
+  let dspecHome: string;
 
   beforeEach(() => {
     root = mkdtempSync(join(tmpdir(), "reasonix-memory-project-"));
-    reasonixHome = join(mkdtempSync(join(tmpdir(), "reasonix-memory-home-")), ".reasonix");
-    mkdirSync(reasonixHome, { recursive: true });
+    dspecHome = join(mkdtempSync(join(tmpdir(), "reasonix-memory-home-")), ".dspec");
+    mkdirSync(dspecHome, { recursive: true });
   });
 
   afterEach(() => {
     rmSync(root, { recursive: true, force: true });
-    rmSync(reasonixHome, { recursive: true, force: true });
+    rmSync(dspecHome, { recursive: true, force: true });
   });
 
-  it("lists project REASONIX.md, global REASONIX.md, and structured memory entries", () => {
-    writeFileSync(join(root, "REASONIX.md"), "project note", "utf8");
-    writeFileSync(join(reasonixHome, "REASONIX.md"), "global note", "utf8");
-    const store = new MemoryStore({ homeDir: reasonixHome, projectRoot: root });
+  it("lists project DSPEC.md, global DSPEC.md, and structured memory entries", () => {
+    writeFileSync(join(root, "DSPEC.md"), "project note", "utf8");
+    writeFileSync(join(dspecHome, "DSPEC.md"), "global note", "utf8");
+    const store = new MemoryStore({ homeDir: dspecHome, projectRoot: root });
     store.write({
       name: "cli_pref",
       scope: "global",
@@ -42,11 +42,11 @@ describe("desktop memory browser", () => {
       body: "Run npm run verify before release.",
     });
 
-    const entries = collectMemoryEntriesForWorkspace(root, { reasonixHome });
+    const entries = collectMemoryEntriesForWorkspace(root, { dspecHome });
 
     expect(entries.map((e) => `${e.kind}:${e.scope}:${e.name}`)).toEqual([
-      "project_file:project:REASONIX.md",
-      "global_file:global:REASONIX.md",
+      "project_file:project:DSPEC.md",
+      "global_file:global:DSPEC.md",
       "structured:global:cli_pref",
       "structured:project:build_cmd",
     ]);
@@ -55,20 +55,20 @@ describe("desktop memory browser", () => {
   });
 
   it("reads details only for listed memory files", () => {
-    writeFileSync(join(root, "REASONIX.md"), "project note", "utf8");
-    const entries = collectMemoryEntriesForWorkspace(root, { reasonixHome });
+    writeFileSync(join(root, "DSPEC.md"), "project note", "utf8");
+    const entries = collectMemoryEntriesForWorkspace(root, { dspecHome });
 
-    const detail = readMemoryEntryDetail({ path: entries[0]!.path }, root, { reasonixHome });
+    const detail = readMemoryEntryDetail({ path: entries[0]!.path }, root, { dspecHome });
 
     expect(detail).toMatchObject({
       kind: "project_file",
       scope: "project",
-      name: "REASONIX.md",
+      name: "DSPEC.md",
       body: "project note",
     });
     expect(() =>
-      readMemoryEntryDetail({ path: join(reasonixHome, "not-listed.md") }, root, {
-        reasonixHome,
+      readMemoryEntryDetail({ path: join(dspecHome, "not-listed.md") }, root, {
+        dspecHome,
       }),
     ).toThrow(/not available/);
   });

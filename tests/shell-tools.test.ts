@@ -60,13 +60,13 @@ describe("tokenizeCommand", () => {
   });
 
   // Issue #265 — `\` was eaten as a generic escape inside `"..."`, so
-  // Windows path separators got dropped (`thron\.reasonix` → `thron.reasonix`).
+  // Windows path separators got dropped (`thron\.dspec` → `thron.dspec`).
   // Only `\"` and `\\` are escapes now; everything else is literal.
   it("preserves Windows path backslashes inside double quotes", () => {
-    expect(tokenizeCommand('dir /b "C:\\Users\\thron\\.reasonix"')).toEqual([
+    expect(tokenizeCommand('dir /b "C:\\Users\\thron\\.dspec"')).toEqual([
       "dir",
       "/b",
-      "C:\\Users\\thron\\.reasonix",
+      "C:\\Users\\thron\\.dspec",
     ]);
   });
 
@@ -966,7 +966,7 @@ describe("prepareSpawn", () => {
   });
 
   it("preserves Windows path backslashes through tokenize → prepareSpawn (issue #265)", () => {
-    const argv = tokenizeCommand('dir /b "C:\\Users\\thron\\.reasonix"');
+    const argv = tokenizeCommand('dir /b "C:\\Users\\thron\\.dspec"');
     const out = prepareSpawn(argv, {
       platform: "win32",
       env: { PATH: "C:\\nope", PATHEXT: ".EXE" },
@@ -974,7 +974,7 @@ describe("prepareSpawn", () => {
       isFile: () => false,
     });
     expect(out.bin).toBe("cmd.exe");
-    expect(out.args[3]).toBe("chcp 65001 >nul & dir /b C:\\Users\\thron\\.reasonix");
+    expect(out.args[3]).toBe("chcp 65001 >nul & dir /b C:\\Users\\thron\\.dspec");
   });
 
   it("routes bare unresolved Windows commands through cmd.exe (builtins)", () => {
@@ -983,14 +983,14 @@ describe("prepareSpawn", () => {
     // direct spawn ENOENTs. Wrapping in cmd.exe lets them resolve,
     // and gives unknown commands a proper "'x' is not recognized"
     // exit code instead of a raw spawn failure.
-    const out = prepareSpawn(["dir", ".reasonix"], {
+    const out = prepareSpawn(["dir", ".dspec"], {
       platform: "win32",
       env: { PATH: "C:\\nope", PATHEXT: ".EXE" },
       pathDelimiter: ";",
       isFile: () => false,
     });
     expect(out.bin).toBe("cmd.exe");
-    expect(out.args).toEqual(["/d", "/s", "/c", "chcp 65001 >nul & dir .reasonix"]);
+    expect(out.args).toEqual(["/d", "/s", "/c", "chcp 65001 >nul & dir .dspec"]);
     expect(out.spawnOverrides.windowsVerbatimArguments).toBe(true);
   });
 

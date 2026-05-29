@@ -1,0 +1,23 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: agent-loop
+mapping:
+  implementation:
+    - src/config.ts, src/memory/*.ts, src/cli/index.ts
+  tests: []
+operations:
+  ADDED: {}
+  MODIFIED:
+    config-dir-path:
+      strength: MUST
+      statement: >-
+        The config directory path MUST resolve to ~/.dspec/ for global config and .dspec/ for
+        project-local config
+      scenarios:
+        global-config-path:
+          - GIVEN: the agent initializes
+          - WHEN: resolving the global config directory
+          - THEN: the path ends with '.dspec'
+  REMOVED: {}

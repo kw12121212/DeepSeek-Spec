@@ -48,7 +48,7 @@ export const JA: TranslationSchema = {
   sessions: {
     emptyHint:
       "保存されたセッションはまだありません — `reasonix chat` を実行してください（--no-session を付けない限り自動保存されます）。",
-    listHeader: "保存されたセッション (~/.reasonix/sessions/):",
+    listHeader: "保存されたセッション (~/.dspec/sessions/):",
     inspectHint: "詳細表示:  reasonix sessions <name>",
     resumeHint: "再開:   reasonix chat --session <name>",
     noSession: '"{name}" という名前のセッションはありません（または空です）。',
@@ -225,7 +225,7 @@ export const JA: TranslationSchema = {
     ephemeralHint: "この実行のセッション永続化を無効化",
     mcpSpecHint: "MCPサーバー指定（繰り返し可）",
     mcpPrefixHint: "MCPツール名にこの文字列をプレフィックスとして付与",
-    noConfigHint: "この実行では ~/.reasonix/config.json を無視",
+    noConfigHint: "この実行では ~/.dspec/config.json を無視",
     effortHintShort: "推論努力 — low|medium|high|max",
     budgetHintShort: "セッションUSD上限",
     transcriptHintShort: "JSONLトランスクリプトパス",
@@ -313,7 +313,7 @@ export const JA: TranslationSchema = {
       argsHint: "[name]",
     },
     memory: {
-      description: "ピン留めメモリの表示/管理 (REASONIX.md + ~/.reasonix/memory)",
+      description: "ピン留めメモリの表示/管理 (DSPEC.md + ~/.dspec/memory)",
       argsHint: "[list|show <name>|forget <name>|clear <scope> confirm]",
     },
     skill: {
@@ -322,12 +322,12 @@ export const JA: TranslationSchema = {
     },
     hooks: {
       description:
-        "アクティブなフックを一覧 (.reasonix/ 下の settings.json) · reload でディスクから再読込",
+        "アクティブなフックを一覧 (.dspec/ 下の settings.json) · reload でディスクから再読込",
       argsHint: "[reload]",
     },
     permissions: {
       description:
-        "シェル許可リストの表示/編集（ビルトインは読取専用 · プロジェクト毎: ~/.reasonix/config.json）",
+        "シェル許可リストの表示/編集（ビルトインは読取専用 · プロジェクト毎: ~/.dspec/config.json）",
       argsHint: "[list|add <prefix>|remove <prefix|N>|clear confirm]",
     },
     dashboard: {
@@ -384,7 +384,7 @@ export const JA: TranslationSchema = {
     exit: { description: "TUIを終了" },
     init: {
       description:
-        "プロジェクトをスキャンしてベースラインの REASONIX.md を生成（モデルが作成; /apply でレビュー）。`force` で既存ファイルを上書き。",
+        "プロジェクトをスキャンしてベースラインの DSPEC.md を生成（モデルが作成; /apply でレビュー）。`force` で既存ファイルを上書き。",
       argsHint: "[force]",
     },
     apply: {
@@ -733,7 +733,7 @@ export const JA: TranslationSchema = {
       newInfoArchived:
         '▸ 新しい会話 — コンテキストから {count} 件のメッセージを削除しました。以前のトランスクリプトは "{archived}" としてアーカイブされました（Sessions で表示可能）。',
       newInfoSystemReloaded:
-        " · REASONIX.md / プロジェクトメモリを再読み込みしました（次のターンでキャッシュミス1回）",
+        " · DSPEC.md / プロジェクトメモリを再読み込みしました（次のターンでキャッシュミス1回）",
       helpTitle: "コマンド:",
       helpShellTitle: "シェルショートカット:",
       helpShell: "  !<cmd>                   サンドボックスルートで <cmd> を実行; 出力は",
@@ -750,10 +750,10 @@ export const JA: TranslationSchema = {
         "                             そのコマンドプレフィックスをこのプロジェクトで許可。全許可フラグはありません。",
       helpMemoryTitle: "クイックメモリ:",
       helpMemoryPin:
-        "  #<note>                  <note> を <project>/REASONIX.md に追記（コミット可能）。",
+        "  #<note>                  <note> を <project>/DSPEC.md に追記（コミット可能）。",
       helpMemoryPinEx: "                             例: #findByEmail は大文字小文字を区別しない",
       helpMemoryGlobal:
-        "  #g <note>                <note> を ~/.reasonix/REASONIX.md に追記（グローバル、コミット不可）。",
+        "  #g <note>                <note> を ~/.dspec/DSPEC.md に追記（グローバル、コミット不可）。",
       helpMemoryGlobalEx: "                             例: #g npm ではなく pnpm を使う",
       helpMemoryPinBoth:
         "                             どちらも今後の全セッションのプレフィックスにピン留めされます。/memory より高速。",
@@ -807,7 +807,7 @@ export const JA: TranslationSchema = {
       hooksNone: "フックが設定されていません。",
       hooksDropHint: "`hooks` キーを持つ settings.json を以下のいずれかに配置してください:",
       hooksProject: "  · {path}（プロジェクト）",
-      hooksProjectFallback: "  · <project>/.reasonix/settings.json（プロジェクト）",
+      hooksProjectFallback: "  · <project>/.dspec/settings.json（プロジェクト）",
       hooksGlobal: "  · {path}（グローバル）",
       hooksEvents: "イベント: PreToolUse, PostToolUse, UserPromptSubmit, Stop",
       hooksExitCodes: "exit 0 = 通過 · exit 2 = ブロック (Pre*) · その他 = 警告",
@@ -916,7 +916,7 @@ export const JA: TranslationSchema = {
     },
     permissions: {
       mutateCodeOnly:
-        "/permissions add / remove / clear は `reasonix code` 内でのみ利用可能です — プロジェクトスコープの許可リストを編集します（`~/.reasonix/config.json` projects[<root>].shellAllowed）。",
+        "/permissions add / remove / clear は `reasonix code` 内でのみ利用可能です — プロジェクトスコープの許可リストを編集します（`~/.dspec/config.json` projects[<root>].shellAllowed）。",
       addUsage:
         '使い方: /permissions add <prefix>   （複数トークン可: /permissions add "git push origin"）',
       addAlready: "▸ 既に許可済み: {prefix}",
@@ -1078,11 +1078,11 @@ export const JA: TranslationSchema = {
     },
     memory: {
       disabled:
-        "メモリが無効です（REASONIX_MEMORY=off が環境変数に設定されています）。変数を解除して再有効化してください — その間、REASONIX.md や ~/.reasonix/memory の内容はピン留めされません。",
+        "メモリが無効です（REASONIX_MEMORY=off が環境変数に設定されています）。変数を解除して再有効化してください — その間、DSPEC.md や ~/.dspec/memory の内容はピン留めされません。",
       noRoot:
-        "このセッションには作業ディレクトリがありません — `/memory` は REASONIX.md を解決するためのルートが必要です。（テストハーネスで実行中ですか？）",
+        "このセッションには作業ディレクトリがありません — `/memory` は DSPEC.md を解決するためのルートが必要です。（テストハーネスで実行中ですか？）",
       listEmpty:
-        "まだユーザーメモリがありません。モデルが `remember` を呼び出して保存するか、~/.reasonix/memory/global/ またはプロジェクトごとのサブディレクトリに手動でファイルを作成できます。",
+        "まだユーザーメモリがありません。モデルが `remember` を呼び出して保存するか、~/.dspec/memory/global/ またはプロジェクトごとのサブディレクトリに手動でファイルを作成できます。",
       listHeader: "ユーザーメモリ ({count}):",
       listFooter: "本文表示: /memory show <name>   削除: /memory forget <name>",
       showUsage: "使い方: /memory show <name>  または  /memory show <scope>/<name>",
@@ -1100,9 +1100,9 @@ export const JA: TranslationSchema = {
       noMemory: "{root} にピン留めされたメモリはありません。",
       layers: "3つのレイヤーが利用可能です:",
       layerProject: "  1. {file} — コミット可能なチームメモリ（リポジトリ内）。",
-      layerGlobal: "  2. ~/.reasonix/memory/global/ — プロジェクト横断のプライベートメモリ。",
+      layerGlobal: "  2. ~/.dspec/memory/global/ — プロジェクト横断のプライベートメモリ。",
       layerProjectHash:
-        "  3. ~/.reasonix/memory/<project-hash>/ — このプロジェクトのプライベートメモリ。",
+        "  3. ~/.dspec/memory/<project-hash>/ — このプロジェクトのプライベートメモリ。",
       askModel: "モデルに `remember` を依頼するか、手動でファイルを編集してください。",
       changesNote:
         "変更は次回の /new または起動時に反映されます — プレフィックスキャッシュを保温するため、システムプロンプトはセッションごとに1回ハッシュ化されます。",
@@ -1137,11 +1137,11 @@ export const JA: TranslationSchema = {
     init: {
       codeOnly:
         "/init はコードモードでのみ動作します（ファイルシステムツールが必要です）。\n初期化したいプロジェクトをルートとして `reasonix code [path]` でセッションを開始し、/init を実行してください。",
-      exists: "▸ REASONIX.md は既に {path} に存在します",
+      exists: "▸ DSPEC.md は既に {path} に存在します",
       existsForce: "  /init force   ゼロから再生成（上書き）",
       existsEdit: "  または手動で編集してください — 単なるmarkdownです。現在のファイルは",
       existsPinned: "  起動のたびにシステムプロンプトにそのままピン留めされます。",
-      info: "▸ /init — モデルがプロジェクトをスキャンして REASONIX.md を生成します。\n  結果は保留中の編集として届きます; /apply または /walk でレビューしてください。",
+      info: "▸ /init — モデルがプロジェクトをスキャンして DSPEC.md を生成します。\n  結果は保留中の編集として届きます; /apply または /walk でレビューしてください。",
     },
     webSearchEngine: {
       currentEngine: "現在のWeb検索エンジン: {engine}",
@@ -1173,7 +1173,7 @@ export const JA: TranslationSchema = {
       switchedExaNote:
         " EXA_API_KEY または `exaApiKey` を設定してください; https://exa.ai で登録。",
       keyNeeded:
-        '"{engine}" のAPIキーが設定されていません。\n\n  1. {envVar} 環境変数を設定\n  2. またはインラインで提供:  /search-engine {engine} <your-key>\n  3. または "{engine}ApiKey" を ~/.reasonix/config.json に追加\n\nその後 /search-engine {engine} を再試行してください。',
+        '"{engine}" のAPIキーが設定されていません。\n\n  1. {envVar} 環境変数を設定\n  2. またはインラインで提供:  /search-engine {engine} <your-key>\n  3. または "{engine}ApiKey" を ~/.dspec/config.json に追加\n\nその後 /search-engine {engine} を再試行してください。',
       keySaved: " APIキーを設定に保存しました。",
       confirmed:
         'Web検索エンジンを "{engine}"{detail} に設定しました。次のアシスタントターンで反映されます。',
@@ -1182,9 +1182,9 @@ export const JA: TranslationSchema = {
     skill: {
       listEmpty: "スキルが見つかりません。Reasonix は以下からスキルを読み取ります:",
       listProjectScope:
-        "  · <project>/.reasonix/skills/<name>/SKILL.md  （または <name>.md） — プロジェクトスコープ",
+        "  · <project>/.dspec/skills/<name>/SKILL.md  （または <name>.md） — プロジェクトスコープ",
       listGlobalScope:
-        "  · ~/.reasonix/skills/<name>/SKILL.md  （または <name>.md） — グローバルスコープ",
+        "  · ~/.dspec/skills/<name>/SKILL.md  （または <name>.md） — グローバルスコープ",
       listProjectOnly: "  （プロジェクトスコープは `reasonix code` 内でのみアクティブ）",
       listFrontmatter:
         "各ファイルのフロントマターには少なくとも `name` と `description` が必要です。",
@@ -1288,7 +1288,7 @@ export const JA: TranslationSchema = {
     allowOnce: "一度だけ許可",
     allowOnceDesc: "このアクセスを許可; このセッションの残りでディレクトリを記憶",
     allowAlways: "常に許可",
-    allowAlwaysDesc: "`{prefix}` をこのプロジェクトで記憶（~/.reasonix/config.json に永続化）",
+    allowAlwaysDesc: "`{prefix}` をこのプロジェクトで記憶（~/.dspec/config.json に永続化）",
     deny: "拒否",
     denyDesc: "Tab を押してモデルに理由を伝えるコンテキストを追加",
     pathLabel: "パス",
@@ -1518,7 +1518,7 @@ export const JA: TranslationSchema = {
     metasoApiError:
       "web_search: Metaso APIエラー (コード {code}: {message}) \u2014 後で再試行してください",
     tavilyMissingKey:
-      "web_search: TavilyバックエンドにはAPIキーが必要です \u2014 TAVILY_API_KEY 環境変数または ~/.reasonix/config.json の `tavilyApiKey` を設定してください。無料1000回/月の登録は https://tavily.com から",
+      "web_search: TavilyバックエンドにはAPIキーが必要です \u2014 TAVILY_API_KEY 環境変数または ~/.dspec/config.json の `tavilyApiKey` を設定してください。無料1000回/月の登録は https://tavily.com から",
     tavilyUnauthorized:
       "web_search: Tavily APIキーが拒否されました \u2014 TAVILY_API_KEY を確認するか、https://tavily.com から取得してください",
     tavilyRateLimit:
@@ -1528,7 +1528,7 @@ export const JA: TranslationSchema = {
     tavilyParseError:
       "web_search: Tavilyが解析不能なレスポンスを返しました (HTTP {status}) \u2014 後で再試行してください",
     perplexityMissingKey:
-      "web_search: PerplexityバックエンドにはAPIキーが必要です \u2014 PERPLEXITY_API_KEY 環境変数または ~/.reasonix/config.json の `perplexityApiKey` を設定してください。https://perplexity.ai/settings/api から取得できます",
+      "web_search: PerplexityバックエンドにはAPIキーが必要です \u2014 PERPLEXITY_API_KEY 環境変数または ~/.dspec/config.json の `perplexityApiKey` を設定してください。https://perplexity.ai/settings/api から取得できます",
     perplexityUnauthorized:
       "web_search: Perplexity APIキーが拒否されました \u2014 PERPLEXITY_API_KEY を確認するか、https://perplexity.ai/settings/api から取得してください",
     perplexityRateLimit:
@@ -1538,7 +1538,7 @@ export const JA: TranslationSchema = {
     perplexityParseError:
       "web_search: Perplexityが解析不能なレスポンスを返しました (HTTP {status}) \u2014 後で再試行してください",
     exaMissingKey:
-      "web_search: ExaバックエンドにはAPIキーが必要です \u2014 EXA_API_KEY 環境変数または ~/.reasonix/config.json の `exaApiKey` を設定してください。無料1000回/月の登録は https://exa.ai から",
+      "web_search: ExaバックエンドにはAPIキーが必要です \u2014 EXA_API_KEY 環境変数または ~/.dspec/config.json の `exaApiKey` を設定してください。無料1000回/月の登録は https://exa.ai から",
     exaUnauthorized:
       "web_search: Exa APIキーが拒否されました \u2014 EXA_API_KEY を確認するか、https://exa.ai から取得してください",
     exaRateLimit:
@@ -1548,7 +1548,7 @@ export const JA: TranslationSchema = {
     exaParseError:
       "web_search: Exaが解析不能なレスポンスを返しました (HTTP {status}) \u2014 後で再試行してください",
     braveMissingKey:
-      "web_search: Brave SearchにはAPIキーが必要です \u2014 BRAVE_SEARCH_API_KEY（または BRAVE_API_KEY）環境変数、または ~/.reasonix/config.json の `braveApiKey` を設定してください。https://brave.com/search/api/ で月2000回まで無料登録できます",
+      "web_search: Brave SearchにはAPIキーが必要です \u2014 BRAVE_SEARCH_API_KEY（または BRAVE_API_KEY）環境変数、または ~/.dspec/config.json の `braveApiKey` を設定してください。https://brave.com/search/api/ で月2000回まで無料登録できます",
     braveUnauthorized:
       "web_search: Brave Search APIキーが拒否されました \u2014 BRAVE_SEARCH_API_KEY を確認するか、https://brave.com/search/api/ から取得してください",
     braveRateLimit:

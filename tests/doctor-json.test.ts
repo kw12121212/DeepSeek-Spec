@@ -111,7 +111,7 @@ describe("doctorCommand --json (integration)", () => {
   });
 
   it("accepts /models as api reach when /user/balance is unavailable", async () => {
-    const configDir = join(tmpHome, ".reasonix");
+    const configDir = join(tmpHome, ".dspec");
     mkdirSync(configDir, { recursive: true });
     writeFileSync(
       join(configDir, "config.json"),

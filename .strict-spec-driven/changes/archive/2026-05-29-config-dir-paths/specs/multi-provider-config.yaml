@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - src/config.ts, src/memory/*.ts, src/cli/index.ts, src/index/*.ts, .gitignore
+  tests:
+    - tests/config.test.ts, tests/memory.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    dir-path-rename:
+      strength: MUST
+      statement: >-
+        All file system path constants MUST use '.dspec' as the config directory name and 'DSPEC.md'
+        as the memory file name
+      scenarios:
+        old-dir-not-referenced:
+          - GIVEN: any source file in src/
+          - WHEN: searched for the string '.reasonix'
+          - THEN: zero matches are returned
+  REMOVED: {}

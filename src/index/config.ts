@@ -54,7 +54,7 @@ export const DEFAULT_INDEX_EXCLUDES = {
     "coverage",
     ".turbo",
     ".vercel",
-    ".reasonix",
+    ".dspec",
   ] as const,
   files: [
     "package-lock.json",

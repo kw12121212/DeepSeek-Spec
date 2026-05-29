@@ -459,7 +459,7 @@ function readSemanticMeta(
   projectRoot: string,
 ): { provider: "ollama" | "openai-compat"; model: string } | null {
   try {
-    const raw = readFileSync(join(projectRoot, ".reasonix", "semantic", "index.meta.json"), "utf8");
+    const raw = readFileSync(join(projectRoot, ".dspec", "semantic", "index.meta.json"), "utf8");
     const parsed = JSON.parse(raw) as { provider?: string; model?: string };
     return {
       provider: parsed.provider === "openai-compat" ? "openai-compat" : "ollama",
@@ -471,10 +471,10 @@ function readSemanticMeta(
 }
 
 async function checkProject(projectRoot: string): Promise<Check> {
-  // Heuristic: a "real" project has either .git, REASONIX.md, or
+  // Heuristic: a "real" project has either .git, DSPEC.md, or
   // package.json. Lacking all three, `reasonix code` still works but
   // @-mentions and the project-memory pin won't surface much.
-  const markers = [".git", "REASONIX.md", "package.json", "pyproject.toml", "Cargo.toml", "go.mod"];
+  const markers = [".git", "DSPEC.md", "package.json", "pyproject.toml", "Cargo.toml", "go.mod"];
   const found = markers.filter((m) => existsSync(join(projectRoot, m)));
   if (found.length === 0) {
     return {

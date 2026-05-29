@@ -206,7 +206,7 @@ export interface ResolvedNoProxy {
   all: NoProxyPattern[];
 }
 
-/** Env `REASONIX_PROXY_DEEPSEEK_DIRECT` (1/0/true/false/yes/no/on/off) overrides config when set; defaults true. Per issue #1497, corporate firewalls need the env knob since they often can't edit `~/.reasonix/config.json` ergonomically. */
+/** Env `REASONIX_PROXY_DEEPSEEK_DIRECT` (1/0/true/false/yes/no/on/off) overrides config when set; defaults true. Per issue #1497, corporate firewalls need the env knob since they often can't edit `~/.dspec/config.json` ergonomically. */
 export function resolveBypassDeepSeekDirect(
   env: NodeJS.ProcessEnv,
   configValue: boolean | undefined,

@@ -1,4 +1,4 @@
-/** `~/.reasonix/memory/` store + prefix-loading composer — temp homeDir per test. */
+/** `~/.dspec/memory/` store + prefix-loading composer — temp homeDir per test. */
 
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -9,7 +9,7 @@ import {
   MEMORY_INDEX_FILE,
   MEMORY_INDEX_MAX_CHARS,
   MemoryStore,
-  applyGlobalReasonixMemory,
+  applyGlobalDSpecMemory,
   applyMemoryStack,
   applyUserMemory,
   projectHash,
@@ -362,9 +362,9 @@ describe("user-memory", () => {
   });
 
   describe("applyMemoryStack", () => {
-    it("composes REASONIX.md → global memory → project memory", () => {
-      writeFileSync(join(projectRoot, "REASONIX.md"), "Pinned by REASONIX.md\n", "utf8");
-      // applyMemoryStack uses ~/.reasonix by default — redirect via HOME
+    it("composes DSPEC.md → global memory → project memory", () => {
+      writeFileSync(join(projectRoot, "DSPEC.md"), "Pinned by DSPEC.md\n", "utf8");
+      // applyMemoryStack uses ~/.dspec by default — redirect via HOME
       // isn't portable across Windows; use the public applyUserMemory
       // directly for the global/project part and compose manually to
       // check ordering is what the helper produces.
@@ -385,9 +385,9 @@ describe("user-memory", () => {
         body: "b",
       });
       const out = applyUserMemory(withProj, { homeDir: home, projectRoot });
-      // Order: REASONIX.md content → global → project. Each unique
+      // Order: DSPEC.md content → global → project. Each unique
       // string should appear, and in that order.
-      const iReasonix = out.indexOf("Pinned by REASONIX.md");
+      const iReasonix = out.indexOf("Pinned by DSPEC.md");
       const iGlobal = out.indexOf("g_pref");
       const iProject = out.indexOf("p_fact");
       expect(iReasonix).toBeGreaterThan(BASE.length - 1);
@@ -397,7 +397,7 @@ describe("user-memory", () => {
 
     it("applyMemoryStack injects no memory blocks when no memory is set", () => {
       // homeDir override required — otherwise the helper falls back to the
-      // dev's real ~/.reasonix and bleeds in whatever memory they have.
+      // dev's real ~/.dspec and bleeds in whatever memory they have.
       const out = applyMemoryStack(BASE, projectRoot, { homeDir: home });
       expect(out).toContain(BASE);
       expect(out).not.toMatch(/# Project memory/);
@@ -406,35 +406,35 @@ describe("user-memory", () => {
     });
   });
 
-  describe("applyGlobalReasonixMemory", () => {
-    it("loads ~/.reasonix/REASONIX.md when present", () => {
+  describe("applyGlobalDSpecMemory", () => {
+    it("loads ~/.dspec/DSPEC.md when present", () => {
       mkdirSync(home, { recursive: true });
-      writeFileSync(join(home, "REASONIX.md"), "- always pnpm not npm\n", "utf8");
-      const out = applyGlobalReasonixMemory(BASE, home);
+      writeFileSync(join(home, "DSPEC.md"), "- always pnpm not npm\n", "utf8");
+      const out = applyGlobalDSpecMemory(BASE, home);
       expect(out).toContain("# Global memory");
       expect(out).toContain("always pnpm not npm");
       expect(out.startsWith(BASE)).toBe(true);
     });
 
     it("returns BASE unchanged when the file is missing", () => {
-      const out = applyGlobalReasonixMemory(BASE, home);
+      const out = applyGlobalDSpecMemory(BASE, home);
       expect(out).toBe(BASE);
     });
 
     it("returns BASE unchanged when the file is empty / whitespace-only", () => {
       mkdirSync(home, { recursive: true });
-      writeFileSync(join(home, "REASONIX.md"), "   \n  \n", "utf8");
-      const out = applyGlobalReasonixMemory(BASE, home);
+      writeFileSync(join(home, "DSPEC.md"), "   \n  \n", "utf8");
+      const out = applyGlobalDSpecMemory(BASE, home);
       expect(out).toBe(BASE);
     });
 
     it("respects REASONIX_MEMORY=off opt-out", () => {
       mkdirSync(home, { recursive: true });
-      writeFileSync(join(home, "REASONIX.md"), "- secret\n", "utf8");
+      writeFileSync(join(home, "DSPEC.md"), "- secret\n", "utf8");
       const orig = process.env.REASONIX_MEMORY;
       process.env.REASONIX_MEMORY = "off";
       try {
-        const out = applyGlobalReasonixMemory(BASE, home);
+        const out = applyGlobalDSpecMemory(BASE, home);
         expect(out).toBe(BASE);
       } finally {
         if (orig === undefined) {

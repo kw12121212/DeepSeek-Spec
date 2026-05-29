@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: config-dir-paths
   milestone: 0009-brand-rename
-status: planned
+status: complete
 summary: |
   Rename .reasonix/ to .dspec/ in all file system path constants, directory
   creation logic, and .gitignore. Clean cut, no migration hints.

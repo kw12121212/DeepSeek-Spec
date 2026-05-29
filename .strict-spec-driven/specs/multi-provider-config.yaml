@@ -182,6 +182,16 @@ requirements:
         - THEN: >-
             no thinking parameters are sent in the request and no reasoning_content is parsed from
             the response
+  dir-path-rename:
+    strength: MUST
+    statement: >-
+      All file system path constants MUST use '.dspec' as the config directory name and 'DSPEC.md'
+      as the memory file name
+    scenarios:
+      old-dir-not-referenced:
+        - GIVEN: any source file in src/
+        - WHEN: searched for the string '.reasonix'
+        - THEN: zero matches are returned
 mapping:
   implementation:
     - src/config.ts

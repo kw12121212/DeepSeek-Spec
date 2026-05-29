@@ -5,7 +5,7 @@ import {
   type MemoryEntry,
   type MemoryScope,
   MemoryStore,
-  readGlobalReasonixMemory,
+  readGlobalDSpecMemory,
 } from "../memory/user.js";
 
 export type MemoryEntryKind = "project_file" | "global_file" | "structured";
@@ -25,8 +25,8 @@ export interface MemoryEntryDetail extends MemoryEntryInfo {
 }
 
 export interface MemoryBrowserOptions {
-  /** Absolute ~/.reasonix directory. Tests override this; production uses homedir(). */
-  reasonixHome?: string;
+  /** Absolute ~/.dspec directory. Tests override this; production uses homedir(). */
+  dspecHome?: string;
 }
 
 export function collectMemoryEntriesForWorkspace(
@@ -46,7 +46,7 @@ export function collectMemoryEntriesForWorkspace(
     });
   }
 
-  const global = readGlobalReasonixMemory(opts.reasonixHome);
+  const global = readGlobalDSpecMemory(opts.dspecHome);
   if (global) {
     out.push({
       kind: "global_file",
@@ -58,7 +58,7 @@ export function collectMemoryEntriesForWorkspace(
     });
   }
 
-  const store = new MemoryStore({ homeDir: opts.reasonixHome, projectRoot });
+  const store = new MemoryStore({ homeDir: opts.dspecHome, projectRoot });
   for (const entry of store.list()) {
     out.push(structuredInfo(store, entry));
   }
@@ -77,7 +77,7 @@ export function readMemoryEntryDetail(
   if (!entry) throw new Error(`memory path not available: ${request.path}`);
 
   if (entry.kind === "structured") {
-    const store = new MemoryStore({ homeDir: opts.reasonixHome, projectRoot });
+    const store = new MemoryStore({ homeDir: opts.dspecHome, projectRoot });
     const structured = store.read(entry.scope, entry.name);
     return {
       ...entry,

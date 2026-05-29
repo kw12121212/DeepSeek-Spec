@@ -28,8 +28,8 @@ function useHomeFallback(rootDir: string): boolean {
 /** Resolve the absolute storage directory for truncated results. */
 export function storageDir(rootDir: string): string {
   const base = useHomeFallback(rootDir)
-    ? join(homedir(), ".reasonix")
-    : join(resolve(rootDir), ".reasonix");
+    ? join(homedir(), ".dspec")
+    : join(resolve(rootDir), ".dspec");
   return join(base, TRUNCATED_DIR);
 }
 
@@ -41,7 +41,7 @@ function resultFilename(toolName: string): string {
   return `${ts}-${suffix}-${safeName}.txt`;
 }
 
-/** Save truncated result to .reasonix/truncated-results/; returns relative path. */
+/** Save truncated result to .dspec/truncated-results/; returns relative path. */
 export function saveTruncatedResult(content: string, toolName: string, rootDir: string): string {
   // Tidy old files before writing a new one so the directory doesn't grow unbounded.
   cleanupOldResults(rootDir);

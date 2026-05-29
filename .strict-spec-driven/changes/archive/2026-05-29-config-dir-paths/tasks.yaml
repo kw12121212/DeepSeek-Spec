@@ -1,0 +1,47 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: config-dir-paths
+sections:
+  Implementation:
+    rename-config-dir-constants:
+      text: Rename '.reasonix' to '.dspec' in all path constants in src/config.ts
+      status: complete
+    rename-memory-paths:
+      text: >-
+        Rename '.reasonix' directory references in src/memory/ modules and function names
+        (readGlobalReasonixMemory -> readGlobalDSpecMemory, etc.)
+      status: complete
+    rename-cli-dir-creation:
+      text: Update directory creation logic in src/cli/index.ts to use '.dspec'
+      status: complete
+    rename-index-paths:
+      text: Update semantic index paths in src/index/ to use '.dspec'
+      status: complete
+    rename-gitignore:
+      text: 'Update .gitignore: .reasonix/ -> .dspec/, REASONIX.md -> DSPEC.md'
+      status: complete
+    sweep-remaining-references:
+      text: Grep all src/ for remaining '.reasonix' path references and fix any stragglers
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: 'Verify: grep -r ''.reasonix'' src/ .gitignore returns zero matches'
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

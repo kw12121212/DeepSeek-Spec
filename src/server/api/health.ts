@@ -66,11 +66,11 @@ export async function handleHealth(
     return { status: 405, body: { error: "GET only" } };
   }
   const home = homedir();
-  const reasonixHome = join(home, ".reasonix");
+  const dspecHome = join(home, ".dspec");
 
-  const sessionsStat = dirSize(join(reasonixHome, "sessions"));
-  const memoryStat = dirSize(join(reasonixHome, "memory"));
-  const semanticStat = dirSize(join(reasonixHome, "semantic"));
+  const sessionsStat = dirSize(join(dspecHome, "sessions"));
+  const memoryStat = dirSize(join(dspecHome, "memory"));
+  const semanticStat = dirSize(join(dspecHome, "semantic"));
 
   let usageBytes = 0;
   if (existsSync(ctx.usageLogPath)) {
@@ -88,7 +88,7 @@ export async function handleHealth(
     body: {
       version: VERSION,
       latestVersion: ctx.getLatestVersion?.() ?? null,
-      reasonixHome,
+      dspecHome,
       sessions: {
         path: sessionsStat.path,
         count: sessions.length,

@@ -100,7 +100,7 @@ export interface CacheFirstLoopOptions {
   hookCwd?: string;
   /** PauseGate bridge — defaults to singleton, injectable for tests. */
   confirmationGate?: PauseGate;
-  /** Re-runs the prompt builder (applyMemoryStack / codeSystemPrompt) on /new so REASONIX.md edits take effect without a restart. Accepting a cache miss is the price. */
+  /** Re-runs the prompt builder (applyMemoryStack / codeSystemPrompt) on /new so DSPEC.md edits take effect without a restart. Accepting a cache miss is the price. */
   rebuildSystem?: () => string;
 }
 
@@ -335,7 +335,7 @@ export class CacheFirstLoop {
     }
   }
 
-  /** "New chat" — drops in-memory messages, archives the on-disk transcript so it survives in Sessions, keeps sessionName so the prefix cache stays warm. Re-runs the system-prompt builder if one was wired (issue #778: REASONIX.md edits otherwise need a restart). */
+  /** "New chat" — drops in-memory messages, archives the on-disk transcript so it survives in Sessions, keeps sessionName so the prefix cache stays warm. Re-runs the system-prompt builder if one was wired (issue #778: DSPEC.md edits otherwise need a restart). */
   clearLog(): { dropped: number; archived: string | null; systemRebuilt: boolean } {
     const dropped = this.log.length;
     this.log.compactInPlace([]);

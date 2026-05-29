@@ -43,7 +43,7 @@ export interface HookConfig {
   cwd?: string;
 }
 
-/** Shape of `<scope>/.reasonix/settings.json` — only `hooks` for now. */
+/** Shape of `<scope>/.dspec/settings.json` — only `hooks` for now. */
 export interface HookSettings {
   hooks?: Partial<Record<HookEvent, HookConfig[]>>;
 }
@@ -81,9 +81,9 @@ export interface HookReport {
 }
 
 export const HOOK_SETTINGS_FILENAME = "settings.json";
-export const HOOK_SETTINGS_DIRNAME = ".reasonix";
+export const HOOK_SETTINGS_DIRNAME = ".dspec";
 
-/** Where the global settings.json lives. Equivalent to `~/.reasonix/settings.json`. */
+/** Where the global settings.json lives. Equivalent to `~/.dspec/settings.json`. */
 export function globalSettingsPath(homeDirOverride?: string): string {
   return join(homeDirOverride ?? homedir(), HOOK_SETTINGS_DIRNAME, HOOK_SETTINGS_FILENAME);
 }

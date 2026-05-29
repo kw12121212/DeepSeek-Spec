@@ -811,14 +811,14 @@ describe("handleSlash", () => {
       });
       expect(r.info).toMatch(/notion disabled/);
       expect(r.info).toMatch(/next launch/);
-      const cfgPath = join(tempHome, ".reasonix", "config.json");
+      const cfgPath = join(tempHome, ".dspec", "config.json");
       const cfg = JSON.parse(readFileSync(cfgPath, "utf8"));
       expect(cfg.mcpDisabled).toEqual(["notion"]);
     });
 
     it("/mcp enable <name> removes from disabled and clears the array when empty", () => {
-      const cfgPath = join(tempHome, ".reasonix", "config.json");
-      mkdirSync(join(tempHome, ".reasonix"), { recursive: true });
+      const cfgPath = join(tempHome, ".dspec", "config.json");
+      mkdirSync(join(tempHome, ".dspec"), { recursive: true });
       writeFileSync(cfgPath, JSON.stringify({ mcpDisabled: ["notion", "linear"] }));
       const r = handleSlash("mcp", ["enable", "notion"], makeLoop(), {
         mcpSpecs: ["notion=npx -y @scope/notion", "linear=npx -y @scope/linear"],
@@ -829,8 +829,8 @@ describe("handleSlash", () => {
     });
 
     it("/mcp enable removes the array entirely when last entry clears", () => {
-      const cfgPath = join(tempHome, ".reasonix", "config.json");
-      mkdirSync(join(tempHome, ".reasonix"), { recursive: true });
+      const cfgPath = join(tempHome, ".dspec", "config.json");
+      mkdirSync(join(tempHome, ".dspec"), { recursive: true });
       writeFileSync(cfgPath, JSON.stringify({ mcpDisabled: ["notion"] }));
       handleSlash("mcp", ["enable", "notion"], makeLoop(), {
         mcpSpecs: ["notion=npx -y @scope/notion"],
@@ -855,8 +855,8 @@ describe("handleSlash", () => {
     });
 
     it("/mcp disable on already-disabled is idempotent", () => {
-      const cfgPath = join(tempHome, ".reasonix", "config.json");
-      mkdirSync(join(tempHome, ".reasonix"), { recursive: true });
+      const cfgPath = join(tempHome, ".dspec", "config.json");
+      mkdirSync(join(tempHome, ".dspec"), { recursive: true });
       writeFileSync(cfgPath, JSON.stringify({ mcpDisabled: ["notion"] }));
       const r = handleSlash("mcp", ["disable", "notion"], makeLoop(), {
         mcpSpecs: ["notion=cmd"],
@@ -1040,7 +1040,7 @@ describe("handleSlash", () => {
       stamp: string,
       payload: Record<string, unknown>,
     ): void {
-      const dir = join(tempHome, ".reasonix", "sessions");
+      const dir = join(tempHome, ".dspec", "sessions");
       const fs = require("node:fs") as typeof import("node:fs");
       fs.mkdirSync(dir, { recursive: true });
       fs.writeFileSync(
@@ -1128,7 +1128,7 @@ describe("handleSlash", () => {
     it("/plans surfaces the summary as the active plan label", () => {
       const loop = loopWithSession("plans-summary");
       const fs = require("node:fs") as typeof import("node:fs");
-      const dir = join(tempHome, ".reasonix", "sessions");
+      const dir = join(tempHome, ".dspec", "sessions");
       fs.mkdirSync(dir, { recursive: true });
       fs.writeFileSync(
         join(dir, "plans-summary.plan.json"),
@@ -1151,7 +1151,7 @@ describe("handleSlash", () => {
     it("/plans surfaces active step evidence and pending evidence state", () => {
       const loop = loopWithSession("plans-active-evidence");
       const fs = require("node:fs") as typeof import("node:fs");
-      const dir = join(tempHome, ".reasonix", "sessions");
+      const dir = join(tempHome, ".dspec", "sessions");
       fs.mkdirSync(dir, { recursive: true });
       fs.writeFileSync(
         join(dir, "plans-active-evidence.plan.json"),
@@ -1292,26 +1292,26 @@ describe("handleSlash", () => {
       }
     });
 
-    it("prints a how-to when no memory (REASONIX.md or ~/.reasonix/memory) exists", () => {
+    it("prints a how-to when no memory (DSPEC.md or ~/.dspec/memory) exists", () => {
       const r = handleSlash("memory", [], makeLoop(), { memoryRoot: root });
       expect(r.info).toMatch(/no memory pinned/);
-      expect(r.info).toMatch(/REASONIX\.md/);
+      expect(r.info).toMatch(/DSPEC\.md/);
     });
 
-    it("prints the REASONIX.md contents + path when present", () => {
+    it("prints the DSPEC.md contents + path when present", () => {
       writeFileSync(
-        join(root, "REASONIX.md"),
+        join(root, "DSPEC.md"),
         "# House rules\nSnake case only in this repo.\n",
         "utf8",
       );
       const r = handleSlash("memory", [], makeLoop(), { memoryRoot: root });
-      expect(r.info).toMatch(/▸ REASONIX\.md:/);
+      expect(r.info).toMatch(/▸ DSPEC\.md:/);
       expect(r.info).toContain("Snake case only");
       expect(r.info).toMatch(/chars/);
     });
 
     it("says memory is disabled when REASONIX_MEMORY=off, even with a file present", () => {
-      writeFileSync(join(root, "REASONIX.md"), "content", "utf8");
+      writeFileSync(join(root, "DSPEC.md"), "content", "utf8");
       process.env.REASONIX_MEMORY = "off";
       const r = handleSlash("memory", [], makeLoop(), { memoryRoot: root });
       expect(r.info).toMatch(/memory is disabled/);

@@ -54,7 +54,7 @@ export const ru: TranslationSchema = {
     ...EN.sessions,
     emptyHint:
       "ещё нет сохранённых сессий — запусти `reasonix chat` (сессии авто-сохраняются, если не указан --no-session).",
-    listHeader: "Сохранённые сессии (~/.reasonix/sessions/):",
+    listHeader: "Сохранённые сессии (~/.dspec/sessions/):",
     inspectHint: "Просмотр:  reasonix sessions <имя>",
     resumeHint: "Возобновить: reasonix chat --session <имя>",
     noSession: 'нет сессии "{name}" (или она пуста).',
@@ -83,7 +83,7 @@ export const ru: TranslationSchema = {
     ephemeralHint: "отключить сохранение сессии для этого запуска",
     mcpSpecHint: "спецификация MCP-сервера (можно повторять)",
     mcpPrefixHint: "добавить этот префикс к именам MCP-инструментов",
-    noConfigHint: "игнорировать ~/.reasonix/config.json для этого запуска",
+    noConfigHint: "игнорировать ~/.dspec/config.json для этого запуска",
     effortHintShort: "уровень рассуждений — низ|сред|выс|макс",
     budgetHintShort: "лимит сессии в USD",
     transcriptHintShort: "путь к JSONL-транскрипту",
@@ -211,7 +211,7 @@ export const ru: TranslationSchema = {
     },
     memory: {
       ...EN.slash.memory,
-      description: "показать / управлять закреплённой памятью (REASONIX.md + ~/.reasonix/memory)",
+      description: "показать / управлять закреплённой памятью (DSPEC.md + ~/.dspec/memory)",
       argsHint: "[list|show <имя>|forget <имя>|clear <область> confirm]",
     },
     skill: {
@@ -221,13 +221,12 @@ export const ru: TranslationSchema = {
     },
     hooks: {
       ...EN.slash.hooks,
-      description:
-        "список активных хуков (settings.json в .reasonix/) · reload перечитывает с диска",
+      description: "список активных хуков (settings.json в .dspec/) · reload перечитывает с диска",
     },
     permissions: {
       ...EN.slash.permissions,
       description:
-        "показать / редактировать белый список команд (встроенные только для чтения · на проект: ~/.reasonix/config.json)",
+        "показать / редактировать белый список команд (встроенные только для чтения · на проект: ~/.dspec/config.json)",
     },
     dashboard: {
       ...EN.slash.dashboard,
@@ -314,7 +313,7 @@ export const ru: TranslationSchema = {
     init: {
       ...EN.slash.init,
       description:
-        "просканировать проект и синтезировать базовый REASONIX.md (модель пишет; просмотр через /apply). `force` перезаписывает существующий файл.",
+        "просканировать проект и синтезировать базовый DSPEC.md (модель пишет; просмотр через /apply). `force` перезаписывает существующий файл.",
     },
     apply: {
       ...EN.slash.apply,
@@ -500,7 +499,7 @@ export const ru: TranslationSchema = {
   webErrors: {
     ...EN.webErrors,
     braveMissingKey:
-      "web_search: Для работы Brave Search требуется ключ API — задайте переменную среды BRAVE_SEARCH_API_KEY (или BRAVE_API_KEY) или параметр `braveApiKey` в файле ~/.reasonix/config.json; бесплатная регистрация с лимитом 2000 запросов в месяц на сайте https://brave.com/search/api/",
+      "web_search: Для работы Brave Search требуется ключ API — задайте переменную среды BRAVE_SEARCH_API_KEY (или BRAVE_API_KEY) или параметр `braveApiKey` в файле ~/.dspec/config.json; бесплатная регистрация с лимитом 2000 запросов в месяц на сайте https://brave.com/search/api/",
     braveUnauthorized:
       "web_search: Ключ API Brave Search отклонен — проверьте значение BRAVE_SEARCH_API_KEY или получите новый ключ на сайте https://brave.com/search/api/",
     braveRateLimit:

@@ -1,15 +1,15 @@
-/** Reads REASONIX.md → AGENTS.md → AGENT.md (first that exists); writes prefer the file already on disk. */
+/** Reads DSPEC.md → AGENTS.md → AGENT.md (first that exists); writes prefer the file already on disk. */
 
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { basename, join } from "node:path";
 
 /** Default WRITE target — created when no candidate exists yet. */
-export const PROJECT_MEMORY_FILE = "REASONIX.md";
+export const PROJECT_MEMORY_FILE = "DSPEC.md";
 
 /** READ candidates, in priority order. AGENTS.md is the open spec at agents.md (Linux Foundation).
  *  CLAUDE.md candidates support migration from Claude Code (project-root or .claude/ subdirectory). */
 export const PROJECT_MEMORY_FILES = [
-  "REASONIX.md",
+  "DSPEC.md",
   ".claude/CLAUDE.md",
   "CLAUDE.md",
   "AGENTS.md",
@@ -49,7 +49,7 @@ export function findProjectMemoryPath(rootDir: string): string | null {
   return null;
 }
 
-/** Path callers should write to: an existing candidate wins, otherwise rootDir/REASONIX.md. */
+/** Path callers should write to: an existing candidate wins, otherwise rootDir/DSPEC.md. */
 export function resolveProjectMemoryWritePath(rootDir: string): string {
   return findProjectMemoryPath(rootDir) ?? join(rootDir, PROJECT_MEMORY_FILE);
 }

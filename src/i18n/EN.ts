@@ -46,7 +46,7 @@ export const EN: TranslationSchema = {
   sessions: {
     emptyHint:
       "no saved sessions yet — run `reasonix chat` (sessions are auto-saved unless --no-session).",
-    listHeader: "Saved sessions (~/.reasonix/sessions/):",
+    listHeader: "Saved sessions (~/.dspec/sessions/):",
     inspectHint: "Inspect:  reasonix sessions <name>",
     resumeHint: "Resume:   reasonix chat --session <name>",
     noSession: 'no session named "{name}" (or it\u2019s empty).',
@@ -206,7 +206,7 @@ export const EN: TranslationSchema = {
     ephemeralHint: "disable session persistence for this run",
     mcpSpecHint: "MCP server spec (repeatable)",
     mcpPrefixHint: "prefix MCP tool names with this string",
-    noConfigHint: "ignore ~/.reasonix/config.json for this run",
+    noConfigHint: "ignore ~/.dspec/config.json for this run",
     effortHintShort: "reasoning effort — low|medium|high|max",
     budgetHintShort: "session USD cap",
     transcriptHintShort: "JSONL transcript path",
@@ -294,7 +294,7 @@ export const EN: TranslationSchema = {
       argsHint: "[name]",
     },
     memory: {
-      description: "show / manage pinned memory (REASONIX.md + ~/.reasonix/memory)",
+      description: "show / manage pinned memory (DSPEC.md + ~/.dspec/memory)",
       argsHint: "[list|show <name>|forget <name>|clear <scope> confirm]",
     },
     skill: {
@@ -302,12 +302,12 @@ export const EN: TranslationSchema = {
       argsHint: "[list|paths|show <name>|<name> [args]]",
     },
     hooks: {
-      description: "list active hooks (settings.json under .reasonix/) · reload re-reads from disk",
+      description: "list active hooks (settings.json under .dspec/) · reload re-reads from disk",
       argsHint: "[reload]",
     },
     permissions: {
       description:
-        "show / edit shell allowlist (builtin read-only · per-project: ~/.reasonix/config.json)",
+        "show / edit shell allowlist (builtin read-only · per-project: ~/.dspec/config.json)",
       argsHint: "[list|add <prefix>|remove <prefix|N>|clear confirm]",
     },
     dashboard: {
@@ -362,7 +362,7 @@ export const EN: TranslationSchema = {
     exit: { description: "quit the TUI" },
     init: {
       description:
-        "scan the project and synthesize a baseline REASONIX.md (model writes; review with /apply). `force` overwrites an existing file.",
+        "scan the project and synthesize a baseline DSPEC.md (model writes; review with /apply). `force` overwrites an existing file.",
       argsHint: "[force]",
     },
     apply: {
@@ -743,7 +743,7 @@ export const EN: TranslationSchema = {
       newInfoArchived:
         '▸ new conversation — dropped {count} message(s) from context. Prior transcript archived as "{archived}" (visible under Sessions).',
       newInfoSystemReloaded:
-        " · REASONIX.md / project memory reloaded (next turn pays one cache miss)",
+        " · DSPEC.md / project memory reloaded (next turn pays one cache miss)",
       helpTitle: "Commands:",
       helpShellTitle: "Shell shortcut:",
       helpShell: "  !<cmd>                   run <cmd> in the sandbox root; output goes into",
@@ -761,11 +761,11 @@ export const EN: TranslationSchema = {
         "                             command prefix for this project. No global allow-all flag.",
       helpMemoryTitle: "Quick memory:",
       helpMemoryPin:
-        "  #<note>                  append <note> to <project>/REASONIX.md (committable).",
+        "  #<note>                  append <note> to <project>/DSPEC.md (committable).",
       helpMemoryPinEx:
         "                             Example: #findByEmail must be case-insensitive",
       helpMemoryGlobal:
-        "  #g <note>                append <note> to ~/.reasonix/REASONIX.md (global, never committed).",
+        "  #g <note>                append <note> to ~/.dspec/DSPEC.md (global, never committed).",
       helpMemoryGlobalEx: "                             Example: #g always run pnpm not npm",
       helpMemoryPinBoth:
         "                             Both pin into every future session's prefix. Faster than /memory.",
@@ -818,7 +818,7 @@ export const EN: TranslationSchema = {
       hooksNone: "no hooks configured.",
       hooksDropHint: "drop a settings.json with a `hooks` key into either of:",
       hooksProject: "  · {path} (project)",
-      hooksProjectFallback: "  · <project>/.reasonix/settings.json (project)",
+      hooksProjectFallback: "  · <project>/.dspec/settings.json (project)",
       hooksGlobal: "  · {path} (global)",
       hooksEvents: "events: PreToolUse, PostToolUse, UserPromptSubmit, Stop",
       hooksExitCodes: "exit 0 = pass · exit 2 = block (Pre*) · other = warn",
@@ -921,7 +921,7 @@ export const EN: TranslationSchema = {
     },
     permissions: {
       mutateCodeOnly:
-        "/permissions add / remove / clear are only available inside `reasonix code` — they edit the project-scoped allowlist (`~/.reasonix/config.json` projects[<root>].shellAllowed).",
+        "/permissions add / remove / clear are only available inside `reasonix code` — they edit the project-scoped allowlist (`~/.dspec/config.json` projects[<root>].shellAllowed).",
       addUsage:
         'usage: /permissions add <prefix>   (multi-token OK: /permissions add "git push origin")',
       addAlready: "▸ already allowed: {prefix}",
@@ -1077,11 +1077,11 @@ export const EN: TranslationSchema = {
     },
     memory: {
       disabled:
-        "memory is disabled (REASONIX_MEMORY=off in env). Unset the var to re-enable — no REASONIX.md or ~/.reasonix/memory content will be pinned in the meantime.",
+        "memory is disabled (REASONIX_MEMORY=off in env). Unset the var to re-enable — no DSPEC.md or ~/.dspec/memory content will be pinned in the meantime.",
       noRoot:
-        "no working directory on this session — `/memory` needs a root to resolve REASONIX.md from. (Running in a test harness?)",
+        "no working directory on this session — `/memory` needs a root to resolve DSPEC.md from. (Running in a test harness?)",
       listEmpty:
-        "no user memories yet. The model can call `remember` to save one, or you can create files by hand in ~/.reasonix/memory/global/ or the per-project subdir.",
+        "no user memories yet. The model can call `remember` to save one, or you can create files by hand in ~/.dspec/memory/global/ or the per-project subdir.",
       listHeader: "User memories ({count}):",
       listFooter: "View body: /memory show <name>   Delete: /memory forget <name>",
       showUsage: "usage: /memory show <name>  or  /memory show <scope>/<name>",
@@ -1099,8 +1099,8 @@ export const EN: TranslationSchema = {
       noMemory: "no memory pinned in {root}.",
       layers: "Three layers are available:",
       layerProject: "  1. {file} — committable team memory (in the repo).",
-      layerGlobal: "  2. ~/.reasonix/memory/global/ — your cross-project private memory.",
-      layerProjectHash: "  3. ~/.reasonix/memory/<project-hash>/ — this project's private memory.",
+      layerGlobal: "  2. ~/.dspec/memory/global/ — your cross-project private memory.",
+      layerProjectHash: "  3. ~/.dspec/memory/<project-hash>/ — this project's private memory.",
       askModel: "Ask the model to `remember` something, or hand-edit files directly.",
       changesNote:
         "Changes take effect on next /new or launch — the system prompt is hashed once per session to keep the prefix cache warm.",
@@ -1135,11 +1135,11 @@ export const EN: TranslationSchema = {
     init: {
       codeOnly:
         "/init only works in code mode (it needs filesystem tools).\nRun `reasonix code [path]` to start a session rooted at the\nproject you want to initialize, then run /init.",
-      exists: "▸ REASONIX.md already exists at {path}",
+      exists: "▸ DSPEC.md already exists at {path}",
       existsForce: "  /init force   regenerate from scratch (overwrites)",
       existsEdit: "  Or edit it by hand — it's just markdown. The current file is",
       existsPinned: "  pinned into the system prompt every launch as-is.",
-      info: "▸ /init — model will scan the project and synthesize REASONIX.md.\n  The result lands as a pending edit; review with /apply or /walk.",
+      info: "▸ /init — model will scan the project and synthesize DSPEC.md.\n  The result lands as a pending edit; review with /apply or /walk.",
     },
     webSearchEngine: {
       currentEngine: "Current web search engine: {engine}",
@@ -1179,7 +1179,7 @@ export const EN: TranslationSchema = {
       switchedBraveNote:
         " Set BRAVE_SEARCH_API_KEY (or BRAVE_API_KEY) or `braveApiKey` in config; free 2000/mo at https://brave.com/search/api/.",
       keyNeeded:
-        'No API key configured for "{engine}".\n\n  1. Set the {envVar} environment variable\n  2. Or provide one inline:  /search-engine {engine} <your-key>\n  3. Or add "{engine}ApiKey" to ~/.reasonix/config.json\n\nThen retry /search-engine {engine}.',
+        'No API key configured for "{engine}".\n\n  1. Set the {envVar} environment variable\n  2. Or provide one inline:  /search-engine {engine} <your-key>\n  3. Or add "{engine}ApiKey" to ~/.dspec/config.json\n\nThen retry /search-engine {engine}.',
       keySaved: " API key saved to config.",
       confirmed:
         'Web search engine set to "{engine}"{detail}. Next assistant turn will pick up the change.',
@@ -1188,8 +1188,8 @@ export const EN: TranslationSchema = {
     skill: {
       listEmpty: "no skills found. Reasonix reads skills from:",
       listProjectScope:
-        "  · <project>/.reasonix/skills/<name>/SKILL.md  (or <name>.md)  — project scope",
-      listGlobalScope: "  · ~/.reasonix/skills/<name>/SKILL.md  (or <name>.md)  — global scope",
+        "  · <project>/.dspec/skills/<name>/SKILL.md  (or <name>.md)  — project scope",
+      listGlobalScope: "  · ~/.dspec/skills/<name>/SKILL.md  (or <name>.md)  — global scope",
       listProjectOnly: "  (project scope is only active in `reasonix code`)",
       listFrontmatter: "Each file's frontmatter needs at least `name` and `description`.",
       listInvoke:
@@ -1289,7 +1289,7 @@ export const EN: TranslationSchema = {
     allowOnce: "allow once",
     allowOnceDesc: "permit this access; remember the directory for the rest of this session",
     allowAlways: "allow always",
-    allowAlwaysDesc: "remember `{prefix}` for this project (persisted in ~/.reasonix/config.json)",
+    allowAlwaysDesc: "remember `{prefix}` for this project (persisted in ~/.dspec/config.json)",
     deny: "deny",
     denyDesc: "press Tab to add context telling the model why",
     pathLabel: "path",
@@ -1519,7 +1519,7 @@ export const EN: TranslationSchema = {
       "web_search: Metaso returned unparseable response (HTTP {status}) \u2014 try again later",
     metasoApiError: "web_search: Metaso API error (code {code}: {message}) \u2014 try again later",
     tavilyMissingKey:
-      "web_search: Tavily backend requires an API key \u2014 set TAVILY_API_KEY env var or `tavilyApiKey` in ~/.reasonix/config.json; free 1000/mo signup at https://tavily.com",
+      "web_search: Tavily backend requires an API key \u2014 set TAVILY_API_KEY env var or `tavilyApiKey` in ~/.dspec/config.json; free 1000/mo signup at https://tavily.com",
     tavilyUnauthorized:
       "web_search: Tavily API key rejected \u2014 check TAVILY_API_KEY or get one at https://tavily.com",
     tavilyRateLimit:
@@ -1529,7 +1529,7 @@ export const EN: TranslationSchema = {
     tavilyParseError:
       "web_search: Tavily returned unparseable response (HTTP {status}) \u2014 try again later",
     perplexityMissingKey:
-      "web_search: Perplexity backend requires an API key \u2014 set PERPLEXITY_API_KEY env var or `perplexityApiKey` in ~/.reasonix/config.json; get one at https://perplexity.ai/settings/api",
+      "web_search: Perplexity backend requires an API key \u2014 set PERPLEXITY_API_KEY env var or `perplexityApiKey` in ~/.dspec/config.json; get one at https://perplexity.ai/settings/api",
     perplexityUnauthorized:
       "web_search: Perplexity API key rejected \u2014 check PERPLEXITY_API_KEY or get one at https://perplexity.ai/settings/api",
     perplexityRateLimit:
@@ -1539,7 +1539,7 @@ export const EN: TranslationSchema = {
     perplexityParseError:
       "web_search: Perplexity returned unparseable response (HTTP {status}) \u2014 try again later",
     exaMissingKey:
-      "web_search: Exa backend requires an API key \u2014 set EXA_API_KEY env var or `exaApiKey` in ~/.reasonix/config.json; free 1000/mo signup at https://exa.ai",
+      "web_search: Exa backend requires an API key \u2014 set EXA_API_KEY env var or `exaApiKey` in ~/.dspec/config.json; free 1000/mo signup at https://exa.ai",
     exaUnauthorized:
       "web_search: Exa API key rejected \u2014 check EXA_API_KEY or get one at https://exa.ai",
     exaRateLimit:
@@ -1549,7 +1549,7 @@ export const EN: TranslationSchema = {
     exaParseError:
       "web_search: Exa returned unparseable response (HTTP {status}) \u2014 try again later",
     braveMissingKey:
-      "web_search: Brave Search requires an API key \u2014 set BRAVE_SEARCH_API_KEY (or BRAVE_API_KEY) env var or `braveApiKey` in ~/.reasonix/config.json; free 2000/mo signup at https://brave.com/search/api/",
+      "web_search: Brave Search requires an API key \u2014 set BRAVE_SEARCH_API_KEY (or BRAVE_API_KEY) env var or `braveApiKey` in ~/.dspec/config.json; free 2000/mo signup at https://brave.com/search/api/",
     braveUnauthorized:
       "web_search: Brave Search API key rejected \u2014 check BRAVE_SEARCH_API_KEY or get one at https://brave.com/search/api/",
     braveRateLimit:

@@ -126,7 +126,7 @@ export class SkillStore {
     const out: Array<{ dir: string; scope: Exclude<SkillScope, "builtin"> }> = [];
     if (this.projectRoot) {
       out.push({
-        dir: join(this.projectRoot, ".reasonix", SKILLS_DIRNAME),
+        dir: join(this.projectRoot, ".dspec", SKILLS_DIRNAME),
         scope: "project",
       });
       // #870: pick up `.agents/skills` automatically — common convention shared
@@ -142,7 +142,7 @@ export class SkillStore {
       });
     }
     for (const dir of this.customSkillPaths) out.push({ dir, scope: "custom" });
-    out.push({ dir: join(this.homeDir, ".reasonix", SKILLS_DIRNAME), scope: "global" });
+    out.push({ dir: join(this.homeDir, ".dspec", SKILLS_DIRNAME), scope: "global" });
     out.push({ dir: join(this.homeDir, ".agents", SKILLS_DIRNAME), scope: "global" });
     out.push({ dir: join(this.homeDir, ".claude", SKILLS_DIRNAME), scope: "global" });
     return out.map((root, priority) => ({ ...root, priority, status: skillPathStatus(root.dir) }));
@@ -207,8 +207,8 @@ export class SkillStore {
     }
     const root =
       scope === "project"
-        ? join(this.projectRoot ?? "", ".reasonix", SKILLS_DIRNAME)
-        : join(this.homeDir, ".reasonix", SKILLS_DIRNAME);
+        ? join(this.projectRoot ?? "", ".dspec", SKILLS_DIRNAME)
+        : join(this.homeDir, ".dspec", SKILLS_DIRNAME);
     const flat = join(root, `${name}.md`);
     const folder = join(root, name, SKILL_FILE);
     if (existsSync(folder)) {
