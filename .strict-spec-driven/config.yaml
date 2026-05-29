@@ -2,7 +2,7 @@ schema: strict-spec-driven/config/v1
 schema_version: 1
 artifact_type: workflow_config
 context: |
-  Reasonix (npm: reasonix) — a DeepSeek-native AI coding agent for the terminal.
+  DeepSeek-Spec (npm: deepseek-spec) — a DeepSeek-native AI coding agent for the terminal.
   TypeScript monorepo (Node ≥22, tsup, vitest, biome, ink/React TUI).
   Four pillars: cache-first loop (prefix-cache hit ≈99%), flash-first cost control,
   tool-call repair, and R1 thought distillation. Key domains: agent loop (src/loop.ts),

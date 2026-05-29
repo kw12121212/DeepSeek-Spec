@@ -1,0 +1,58 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: package-identity
+sections:
+  Implementation:
+    rename-root-package-json:
+      text: >-
+        Rename root package.json: name to deepseek-spec, bin to { dspec }, update
+        description/repository/bugs/homepage URLs, update devDependencies @reasonix/core-utils to
+        @deepseek-spec/core-utils
+      status: complete
+    rename-core-utils-package-json:
+      text: >-
+        Rename packages/core-utils/package.json: name to @deepseek-spec/core-utils, update
+        repository/bugs/homepage URLs
+      status: complete
+    delete-packages-dsnix:
+      text: Delete packages/dsnix/ directory entirely
+      status: complete
+    rename-desktop-package-json:
+      text: 'Rename desktop/package.json: name to dspec-desktop'
+      status: complete
+    rename-desktop-tauri-conf:
+      text: 'Rename desktop/src-tauri/tauri.conf.json: identifier to dev.dspec.desktop'
+      status: complete
+    rename-dashboard-package-json:
+      text: 'Rename dashboard/package.json: name to dspec-dashboard'
+      status: complete
+    update-strict-config-context:
+      text: Update .strict-spec-driven/config.yaml context text from Reasonix to DeepSeek-Spec
+      status: complete
+    grep-verify:
+      text: >-
+        Verify grep -ri reasonix across all package.json, tauri.conf.json, and config.yaml returns
+        zero matches
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

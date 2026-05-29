@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: package-identity
   milestone: 0009-brand-rename
-status: planned
+status: complete
 summary: |
   Rename npm package identity: root package.json, workspace packages,
   and delete packages/dsnix/. Clean cut, no backward-compat aliases.

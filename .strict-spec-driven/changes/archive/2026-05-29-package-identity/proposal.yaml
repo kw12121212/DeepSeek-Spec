@@ -1,0 +1,31 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: package-identity
+  status: proposed
+summary:
+  what:
+    - >-
+      Rename npm package identity across root package.json, workspace packages, desktop, dashboard,
+      and delete packages/dsnix/
+  why:
+    - >-
+      package-identity is the foundation for the entire M9 brand rename milestone — all other
+      planned changes (env-vars, config-dir-paths, core-types-constants, etc.) depend on this being
+      done first
+scope:
+  in:
+    - >-
+      package.json, packages/core-utils/package.json, packages/dsnix/, desktop/package.json,
+      desktop/src-tauri/tauri.conf.json, dashboard/package.json, .strict-spec-driven/config.yaml
+  out:
+    - >-
+      All package identity fields updated from reasonix to deepseek-spec/dspec, packages/dsnix/
+      deleted
+unchanged_behavior:
+  - All source code, tests, CI scripts, and behavioral logic
+roadmap:
+  milestone: 0009-brand-rename
+  planned_change: package-identity

@@ -1,11 +1,10 @@
 {
-  "name": "reasonix",
+  "name": "deepseek-spec",
   "version": "0.52.0",
-  "description": "DeepSeek-native coding agent: cache-first loop, flash-first cost control, tool-call repair.",
+  "description": "DeepSeek-Spec: DeepSeek-native coding agent with cache-first loop, flash-first cost control, tool-call repair.",
   "type": "module",
   "bin": {
-    "reasonix": "dist/cli/index.js",
-    "dsnix": "dist/cli/index.js"
+    "dspec": "dist/cli/index.js"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -68,12 +67,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/esengine/DeepSeek-Reasonix.git"
+    "url": "git+https://github.com/esengine/DeepSeek-Spec.git"
   },
   "bugs": {
-    "url": "https://github.com/esengine/DeepSeek-Reasonix/issues"
+    "url": "https://github.com/esengine/DeepSeek-Spec/issues"
   },
-  "homepage": "https://github.com/esengine/DeepSeek-Reasonix#readme",
+  "homepage": "https://github.com/esengine/DeepSeek-Spec#readme",
   "engines": {
     "node": ">=22"
   },
@@ -116,7 +115,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@reasonix/core-utils": "workspace:*",
+    "@deepseek-spec/core-utils": "workspace:*",
     "@stryker-mutator/core": "^9.6.1",
     "@stryker-mutator/vitest-runner": "^9.6.1",
     "@testing-library/react": "^16.3.2",
