@@ -1,0 +1,26 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: config-and-vitest
+  status: proposed
+summary:
+  what:
+    - >-
+      Create the real-LLM test config file, example template, gitignore entry, config reader helper,
+      and vitest exclusion so real-LLM tests are opt-in and never run by default or in CI.
+  why:
+    - >-
+      All other M10 planned changes (chat-and-stream, error-handling, tool-calls) depend on this
+      infrastructure. Without it, no real LLM test can run.
+scope:
+  in:
+    - .gitignore, vitest.config.ts, package.json
+  out:
+    - tests/real-llm.config.json.example, tests/real-llm/helpers/config.ts
+unchanged_behavior:
+  - All production source code under src/. All existing strict specs.
+roadmap:
+  milestone: 0010-real-llm-test
+  planned_change: config-and-vitest

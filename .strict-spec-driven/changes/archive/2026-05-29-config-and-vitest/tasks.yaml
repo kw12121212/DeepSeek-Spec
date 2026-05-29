@@ -1,0 +1,48 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: config-and-vitest
+sections:
+  Implementation:
+    create-config-example:
+      text: Create tests/real-llm.config.json.example with zhipuApiKey and model fields.
+      status: complete
+    update-gitignore:
+      text: Add tests/real-llm.config.json to .gitignore.
+      status: complete
+    create-config-helper:
+      text: >-
+        Create tests/real-llm/helpers/config.ts with readRealLlmConfig, hasRealLlmConfig, and
+        createRealLlmClient exports.
+      status: complete
+    update-vitest-config:
+      text: Add tests/real-llm/** to vitest exclude in vitest.config.ts.
+      status: complete
+    add-test-real-script:
+      text: Add test:real script to package.json.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run default test suite (real-LLM tests must be excluded).
+      status: complete
+      command: bun run test
+    test-config-helper:
+      text: Verify config helper validates API key format and skips when config absent.
+      status: complete
+      command: bun run test tests/real-llm-config-helper.test.ts
+  Verification:
+    verify-scope:
+      text: Verify no production source files were modified.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

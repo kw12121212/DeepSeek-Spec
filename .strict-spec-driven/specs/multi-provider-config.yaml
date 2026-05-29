@@ -224,6 +224,21 @@ requirements:
         - GIVEN: dependency changes are applied
         - WHEN: grep -ri reasonix src/mcp/ src/acp/ src/net/ is executed
         - THEN: zero matches are returned
+  real-llm-test-infra:
+    strength: MUST
+    statement: >-
+      Real-LLM test infrastructure MUST provide readRealLlmConfig, hasRealLlmConfig, and
+      createRealLlmClient helpers that read from tests/real-llm.config.json and auto-skip when
+      absent.
+    scenarios:
+      config-absent-skip:
+        - GIVEN: tests/real-llm.config.json does not exist
+        - WHEN: hasRealLlmConfig() is called
+        - THEN: returns false
+      config-valid-read:
+        - GIVEN: tests/real-llm.config.json exists with valid zhipuApiKey and model
+        - WHEN: readRealLlmConfig() is called
+        - THEN: returns { zhipuApiKey, model, baseUrl? }
 mapping:
   implementation:
     - src/config.ts

@@ -1,0 +1,4 @@
+{
+  "zhipuApiKey": "your-id.secret-here",
+  "model": "glm-4.7"
+}

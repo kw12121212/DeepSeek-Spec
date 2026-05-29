@@ -51,3 +51,6 @@ desktop/src-tauri/binaries/
 *.cpuprofile
 
 .probe-snapshots/
+
+# Real LLM test credentials — never committed.
+tests/real-llm.config.json

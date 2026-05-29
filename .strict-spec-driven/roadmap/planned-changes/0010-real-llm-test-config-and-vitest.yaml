@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: config-and-vitest
   milestone: 0010-real-llm-test
-status: planned
+status: complete
 summary: |
   Create the real-LLM test config file, example template, gitignore entry,
   config reader helper, and vitest exclusion so real-LLM tests are opt-in

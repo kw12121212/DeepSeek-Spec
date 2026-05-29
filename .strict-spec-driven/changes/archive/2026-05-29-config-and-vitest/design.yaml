@@ -1,0 +1,28 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: config-and-vitest
+approach:
+  - >-
+    Create a minimal config reader in tests/real-llm/helpers/config.ts that reads
+    tests/real-llm.config.json, validates the API key format, and exports a helper to instantiate
+    GLMClient. Exclude tests/real-llm/** from default vitest run. Add a test:real script for opt-in
+    execution.
+decisions:
+  config-format:
+    decision: >-
+      Use tests/real-llm.config.json (JSON, not YAML) for consistency with the project's existing
+      config.json pattern and easy programmatic parsing.
+    rationale: >-
+      JSON is the simplest format that requires no additional dependencies and matches the project's
+      existing config conventions.
+  validate-api-key:
+    decision: >-
+      Validate zhipuApiKey matches id.secret pattern (two base64url segments joined by a dot) to
+      catch copy-paste errors early.
+    rationale: >-
+      Prevents developers from accidentally committing malformed keys or running tests with invalid
+      credentials.
+alternatives: []
+risks: []
