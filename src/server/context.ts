@@ -3,6 +3,9 @@
 import type { McpServerSummary } from "../cli/ui/slash/types.js";
 import type { EditMode } from "../config.js";
 import type { CacheFirstLoop } from "../loop.js";
+import type { HistoryStore } from "../scheduler/history.js";
+import type { Scheduler } from "../scheduler/scheduler.js";
+import type { TaskStore } from "../scheduler/store.js";
 import type { ToolRegistry } from "../tools.js";
 import type { JobRegistry } from "../tools/jobs.js";
 
@@ -91,6 +94,10 @@ export interface DashboardContext {
   ) => Promise<unknown>;
   /** Without this, registry has the tool but the prefix shown to the model stays stale until restart. */
   addToolToPrefix?: (spec: import("../types.js").ToolSpec) => boolean;
+
+  scheduler?: Scheduler;
+  taskStore?: TaskStore;
+  historyStore?: HistoryStore;
 }
 
 export type ChoiceResolution =

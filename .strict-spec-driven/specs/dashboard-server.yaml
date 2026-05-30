@@ -8,8 +8,8 @@ requirements:
   startup-binding:
     strength: MUST
     statement: >-
-      The dashboard server MUST bind to 127.0.0.1 on an ephemeral port (or
-      configured port) and generate a 32-byte hex auth token on startup.
+      The dashboard server MUST bind to 127.0.0.1 on an ephemeral port (or configured port) and
+      generate a 32-byte hex auth token on startup.
     scenarios:
       ephemeral-port:
         - GIVEN: no port is configured
@@ -18,9 +18,9 @@ requirements:
   token-auth:
     strength: MUST
     statement: >-
-      All API requests MUST be authenticated via token — read requests accept
-      token via query parameter or X-Dspec-Token header; mutation requests
-      (POST/DELETE/PUT) require header-only token for CSRF protection.
+      All API requests MUST be authenticated via token — read requests accept token via query
+      parameter or X-Dspec-Token header; mutation requests (POST/DELETE/PUT) require header-only
+      token for CSRF protection.
     scenarios:
       missing-token-rejected:
         - GIVEN: a running server with a generated token
@@ -36,9 +36,7 @@ requirements:
         - THEN: the request is accepted
   constant-time-compare:
     strength: MUST
-    statement: >-
-      Token comparison MUST use constant-time comparison to prevent timing
-      attacks.
+    statement: Token comparison MUST use constant-time comparison to prevent timing attacks.
     scenarios:
       timing-safe:
         - GIVEN: a valid token and an invalid token of the same length
@@ -47,8 +45,8 @@ requirements:
   spa-serving:
     strength: MUST
     statement: >-
-      The server MUST serve the SPA from / and /index.html with token-gated
-      access, and serve static assets from /assets/ without token gating.
+      The server MUST serve the SPA from / and /index.html with token-gated access, and serve static
+      assets from /assets/ without token gating.
     scenarios:
       root-serves-spa:
         - GIVEN: a running server with built assets
@@ -57,9 +55,8 @@ requirements:
   sse-events:
     strength: MUST
     statement: >-
-      The /api/events SSE endpoint MUST stream live events including
-      assistant_delta, tool_start, modal_up/down, busy_change, and status
-      updates to connected clients.
+      The /api/events SSE endpoint MUST stream live events including assistant_delta, tool_start,
+      modal_up/down, busy_change, and status updates to connected clients.
     scenarios:
       delta-stream:
         - GIVEN: a connected SSE client
@@ -68,9 +65,9 @@ requirements:
   modal-system:
     strength: MUST
     statement: >-
-      The modal API MUST support shell confirmations, path confirmations, choice
-      dialogs, edit reviews, checkpoints, and picker interactions. Modal state
-      MUST be resolved via the /api/modal endpoint.
+      The modal API MUST support shell confirmations, path confirmations, choice dialogs, edit
+      reviews, checkpoints, and picker interactions. Modal state MUST be resolved via the /api/modal
+      endpoint.
     scenarios:
       shell-confirm:
         - GIVEN: a shell command requiring user confirmation
@@ -79,9 +76,8 @@ requirements:
   session-api:
     strength: MUST
     statement: >-
-      The /api/sessions endpoint MUST list sessions, switch active sessions,
-      and delete sessions. The /api/overview endpoint MUST return bundled state
-      for the active session.
+      The /api/sessions endpoint MUST list sessions, switch active sessions, and delete sessions.
+      The /api/overview endpoint MUST return bundled state for the active session.
     scenarios:
       list-sessions:
         - GIVEN: 3 existing sessions
@@ -90,8 +86,8 @@ requirements:
   submit-api:
     strength: MUST
     statement: >-
-      The /api/submit endpoint MUST accept user prompts and inject them into
-      the active agent session.
+      The /api/submit endpoint MUST accept user prompts and inject them into the active agent
+      session.
     scenarios:
       submit-prompt:
         - GIVEN: an active agent session
@@ -99,8 +95,7 @@ requirements:
         - THEN: the prompt is processed by the agent loop
   abort-api:
     strength: MUST
-    statement: >-
-      The /api/abort endpoint MUST abort the current agent turn.
+    statement: The /api/abort endpoint MUST abort the current agent turn.
     scenarios:
       abort-turn:
         - GIVEN: an agent loop mid-turn
@@ -108,9 +103,7 @@ requirements:
         - THEN: the current turn is cancelled via AbortSignal
   checkpoint-api:
     strength: MUST
-    statement: >-
-      The /api/checkpoints endpoints MUST create, list, show diffs for, and
-      restore checkpoints.
+    statement: The /api/checkpoints endpoints MUST create, list, show diffs for, and restore checkpoints.
     scenarios:
       create-and-restore:
         - GIVEN: a running session with file changes
@@ -119,8 +112,8 @@ requirements:
   settings-api:
     strength: MUST
     statement: >-
-      The /api/settings endpoint MUST read and update configuration including
-      API key, model, budget, and skill preferences.
+      The /api/settings endpoint MUST read and update configuration including API key, model,
+      budget, and skill preferences.
     scenarios:
       update-model:
         - GIVEN: an active session with model "deepseek-v4-flash"
@@ -129,8 +122,8 @@ requirements:
   files-api:
     strength: MUST
     statement: >-
-      The /api/files, /api/browse, and /api/file-read endpoints MUST provide
-      file listing, directory browsing, and file content reading.
+      The /api/files, /api/browse, and /api/file-read endpoints MUST provide file listing, directory
+      browsing, and file content reading.
     scenarios:
       read-file:
         - GIVEN: a file in the project directory
@@ -138,9 +131,7 @@ requirements:
         - THEN: the file content is returned
   mcp-api:
     strength: MUST
-    statement: >-
-      The /api/mcp endpoint MUST list MCP server status and allow
-      enabling/disabling servers.
+    statement: The /api/mcp endpoint MUST list MCP server status and allow enabling/disabling servers.
     scenarios:
       list-mcp:
         - GIVEN: 2 configured MCP servers
@@ -148,9 +139,7 @@ requirements:
         - THEN: server status (connected/disconnected) is returned for each
   usage-api:
     strength: MUST
-    statement: >-
-      The /api/usage endpoint MUST return cumulative token usage and cost
-      metrics.
+    statement: The /api/usage endpoint MUST return cumulative token usage and cost metrics.
     scenarios:
       usage-metrics:
         - GIVEN: a session with 3 completed turns
@@ -159,8 +148,8 @@ requirements:
   context-update:
     strength: MUST
     statement: >-
-      The server MUST support live context updates (agent loop, session, tools)
-      without rebinding the port.
+      The server MUST support live context updates (agent loop, session, tools) without rebinding
+      the port.
     scenarios:
       swap-session:
         - GIVEN: a running server with session A active
@@ -168,14 +157,46 @@ requirements:
         - THEN: subsequent API calls operate on session B without port change
   non-loopback-warning:
     strength: SHOULD
-    statement: >-
-      The server SHOULD log a security warning when binding to a non-loopback
-      address.
+    statement: The server SHOULD log a security warning when binding to a non-loopback address.
     scenarios:
       public-bind-warns:
         - GIVEN: a configured host of 0.0.0.0
         - WHEN: the server starts
         - THEN: a warning about non-loopback binding is logged
+  scheduler-status-endpoint:
+    strength: MUST
+    statement: >-
+      GET /api/scheduler/status MUST return { tasks: ScheduledTask[], enabledCount: number, running:
+      boolean, nextRun: string | null } with tasks including name, cron, enabled, lastRun, and
+      nextRun.
+    scenarios:
+      status-response:
+        - GIVEN: A running dashboard server with 3 scheduled tasks (2 enabled)
+        - WHEN: GET /api/scheduler/status is called with valid auth
+        - THEN: >-
+            Response contains 3 tasks, enabledCount=2, running=true, and nextRun as ISO string or
+            null
+  scheduler-history-endpoint:
+    strength: MUST
+    statement: >-
+      GET /api/scheduler/history MUST return { entries: HistoryEntry[] }. When taskId query param is
+      provided, filter to that task. Default limit 20, max 100. Without taskId, return all tasks
+      newest-first.
+    scenarios:
+      history-filtered:
+        - GIVEN: A HistoryStore with entries for tasks abc123 and def456
+        - WHEN: GET /api/scheduler/history?taskId=abc123&limit=10 is called with valid auth
+        - THEN: Response contains only entries for task abc123, at most 10, newest-first
+  scheduler-auth:
+    strength: MUST
+    statement: >-
+      Scheduler API endpoints MUST follow the existing dashboard token-auth pattern — GET requests
+      accept token via query parameter or X-Dspec-Token header.
+    scenarios:
+      auth-required:
+        - GIVEN: A running dashboard server with auth enabled
+        - WHEN: GET /api/scheduler/status is called without a token
+        - THEN: Response is 401 Unauthorized
 mapping:
   implementation:
     - src/server/index.ts

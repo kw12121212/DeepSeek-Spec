@@ -1,0 +1,24 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: dashboard-api
+  status: proposed
+summary:
+  what:
+    - Add REST API endpoints for scheduler status and history to the dashboard server
+  why:
+    - >-
+      M13 requires dashboard integration for remote monitoring of scheduled tasks. The scheduler
+      daemon and history store are complete — this change exposes them via read-only HTTP endpoints.
+scope:
+  in:
+    - src/server/routes/scheduler.ts
+  out:
+    - src/server/routes/scheduler.ts, tests/scheduler/dashboard-api.test.ts
+unchanged_behavior:
+  - All existing dashboard endpoints and SPA serving remain unchanged
+roadmap:
+  milestone: 0013-scheduled-tasks-integration
+  planned_change: dashboard-api

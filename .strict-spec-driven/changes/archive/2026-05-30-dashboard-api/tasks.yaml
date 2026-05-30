@@ -1,0 +1,61 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: dashboard-api
+sections:
+  Implementation:
+    create-scheduler-routes:
+      text: >-
+        Create src/server/routes/scheduler.ts with GET /api/scheduler/status, GET
+        /api/scheduler/history (with optional taskId filter), and wire into the existing Express
+        server.
+      status: complete
+    wire-context:
+      text: >-
+        Wire TaskStore and HistoryStore instances into the server context so the scheduler routes
+        can access them.
+      status: complete
+  Testing:
+    test-status-endpoint:
+      text: >-
+        Test GET /api/scheduler/status returns task list, enabledCount, running boolean, and
+        nextRun.
+      status: complete
+    test-history-by-task:
+      text: Test GET /api/scheduler/history?taskId=<id> filters entries for that task, respects limit.
+      status: complete
+    test-history-all:
+      text: Test GET /api/scheduler/history without taskId returns all entries newest-first.
+      status: complete
+    test-limit-cap:
+      text: Test limit parameter is respected and capped at 100.
+      status: complete
+    test-auth-required:
+      text: Test endpoints reject unauthenticated requests with 401.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run typecheck.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — read-only endpoints, no task modification,
+        snippets capped at 200 chars.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

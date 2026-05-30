@@ -1,0 +1,22 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: dashboard-api
+approach:
+  - >-
+    Create a new router module src/server/routes/scheduler.ts with three GET endpoints. Wire it into
+    the existing Express server alongside existing routes. Share HistoryStore and TaskStore
+    instances via the server context. Endpoints are read-only and follow the existing token-auth
+    pattern (GET allows query-param token). Response output snippets are capped at 200 chars per the
+    planned-change spec.
+decisions:
+  auth-strategy:
+    decision: >-
+      Reuse existing dashboard token auth — GET endpoints accept token via query param or header,
+      matching the read-allows-query pattern in the dashboard-server spec
+    rationale: >-
+      No new auth mechanisms needed; the dashboard already has token auth. Scheduler endpoints are
+      read-only so query-param token is safe.
+alternatives: []
+risks: []

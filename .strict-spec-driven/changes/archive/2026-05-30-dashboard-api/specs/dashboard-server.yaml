@@ -1,0 +1,48 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: dashboard-server
+mapping:
+  implementation:
+    - src/server/routes/scheduler.ts
+  tests:
+    - tests/scheduler/dashboard-api.test.ts
+operations:
+  ADDED:
+    scheduler-status-endpoint:
+      strength: MUST
+      statement: >-
+        GET /api/scheduler/status MUST return { tasks: ScheduledTask[], enabledCount: number,
+        running: boolean, nextRun: string | null } with tasks including name, cron, enabled,
+        lastRun, and nextRun.
+      scenarios:
+        status-response:
+          - GIVEN: A running dashboard server with 3 scheduled tasks (2 enabled)
+          - WHEN: GET /api/scheduler/status is called with valid auth
+          - THEN: >-
+              Response contains 3 tasks, enabledCount=2, running=true, and nextRun as ISO string or
+              null
+    scheduler-history-endpoint:
+      strength: MUST
+      statement: >-
+        GET /api/scheduler/history MUST return { entries: HistoryEntry[] }. When taskId query param
+        is provided, filter to that task. Default limit 20, max 100. Without taskId, return all
+        tasks newest-first.
+      scenarios:
+        history-filtered:
+          - GIVEN: A HistoryStore with entries for tasks abc123 and def456
+          - WHEN: GET /api/scheduler/history?taskId=abc123&limit=10 is called with valid auth
+          - THEN: Response contains only entries for task abc123, at most 10, newest-first
+    scheduler-auth:
+      strength: MUST
+      statement: >-
+        Scheduler API endpoints MUST follow the existing dashboard token-auth pattern — GET requests
+        accept token via query parameter or X-Dspec-Token header.
+      scenarios:
+        auth-required:
+          - GIVEN: A running dashboard server with auth enabled
+          - WHEN: GET /api/scheduler/status is called without a token
+          - THEN: Response is 401 Unauthorized
+  MODIFIED: {}
+  REMOVED: {}

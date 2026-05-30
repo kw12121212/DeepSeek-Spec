@@ -23,6 +23,7 @@ import { handlePermissions } from "./api/permissions.js";
 import { handlePlans } from "./api/plans.js";
 import { handleProjectTree } from "./api/project-tree.js";
 import { handleReviewDiffs } from "./api/review-diffs.js";
+import { handleScheduler } from "./api/scheduler.js";
 import { handleSemantic } from "./api/semantic.js";
 import { handleSessions } from "./api/sessions.js";
 import { handleSettings } from "./api/settings.js";
@@ -111,6 +112,8 @@ export async function handleApi(
         return await handleCheckpointDelete(method, rest, body, ctx);
       case "review-diffs":
         return await handleReviewDiffs(method, rest, body, ctx);
+      case "scheduler":
+        return await handleScheduler(method, rest, body, ctx, query);
       case "file":
         return await handleFileRead(method, rest, body, ctx);
       case "loop":
