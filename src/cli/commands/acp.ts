@@ -24,12 +24,12 @@ import { AcpServer } from "../../acp/server.js";
 import { codeSystemPrompt } from "../../code/prompt.js";
 import { buildCodeToolset } from "../../code/setup.js";
 import {
-  DEFAULT_MODEL,
   bridgeEndpointEnv,
   loadEditMode,
   loadModel,
   loadReasoningEffort,
   normalizeMcpConfig,
+  providerDefaultModel,
   readConfig,
 } from "../../config.js";
 import { Eventizer } from "../../core/eventize.js";
@@ -160,7 +160,7 @@ async function buildSession(opts: {
   mcpPrefix?: string;
   systemAppend?: string;
 }): Promise<Session> {
-  const model = opts.modelOverride || loadModel() || DEFAULT_MODEL;
+  const model = opts.modelOverride || loadModel() || providerDefaultModel();
   const toolset = await buildCodeToolset({ rootDir: opts.rootDir });
   // Bridge MCP tools BEFORE building the prefix so their specs make it into the cache key.
   const mcpClients = await loadMcpServers(
@@ -212,7 +212,7 @@ export async function acpCommand(opts: AcpOptions): Promise<void> {
 
   let transcriptStream: WriteStream | null = null;
   if (opts.transcript) {
-    const defaultModel = opts.model || loadModel() || DEFAULT_MODEL;
+    const defaultModel = opts.model || loadModel() || providerDefaultModel();
     transcriptStream = openTranscriptFile(opts.transcript, {
       version: 1,
       source: "dspec acp",

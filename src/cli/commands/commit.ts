@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline/promises";
-import { loadActiveProvider, loadApiKey, loadGlmApiKey } from "../../config.js";
+import { loadActiveProvider, loadApiKey, loadGlmApiKey, loadModel } from "../../config.js";
 import { loadDotenv } from "../../env.js";
 import type { ModelClient } from "../../ports/model-client.js";
 import { createClientForProvider } from "../../providers/registry.js";
@@ -18,7 +18,6 @@ export interface CommitOptions {
   yes?: boolean;
 }
 
-const DEFAULT_MODEL = "deepseek-v4-flash";
 const DIFF_BYTE_CAP = 80 * 1024;
 const LOG_COUNT = 10;
 
@@ -267,7 +266,7 @@ export async function commitCommand(opts: CommitOptions = {}): Promise<void> {
     );
   }
 
-  const model = opts.model ?? DEFAULT_MODEL;
+  const model = opts.model ?? loadModel();
   const client = createClientForProvider(model);
   const recentCommits = readRecentCommits();
 

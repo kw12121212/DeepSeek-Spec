@@ -1,10 +1,10 @@
 import {
-  DEFAULT_MODEL,
   type DeepSeekSpecConfig,
   type ReasoningEffort,
   isReasoningEffort,
   loadReasoningEffort,
   normalizeMcpConfig,
+  providerDefaultModel,
   readConfig,
 } from "../config.js";
 import { loadDotMcpJson } from "../mcp/dot-mcp-json.js";
@@ -30,7 +30,7 @@ export interface RawCliFlags {
 
 export function resolveDefaults(flags: RawCliFlags): ResolvedDefaults {
   const cfg: DeepSeekSpecConfig = flags.noConfig ? {} : readConfig();
-  const model = flags.model?.trim() || cfg.model?.trim() || DEFAULT_MODEL;
+  const model = flags.model?.trim() || cfg.model?.trim() || providerDefaultModel();
 
   const flagEffort = flags.effort?.toLowerCase();
   const reasoningEffort: ReasoningEffort = isReasoningEffort(flagEffort)

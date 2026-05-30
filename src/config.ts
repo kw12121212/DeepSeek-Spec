@@ -1246,15 +1246,21 @@ export function saveReasoningEffort(
   writeConfig(cfg, path);
 }
 
+export const GLM_DEFAULT_MODEL = "glm-5.1";
+
+export function providerDefaultModel(path: string = defaultConfigPath()): string {
+  return loadActiveProvider(path) === "glm" ? GLM_DEFAULT_MODEL : DEFAULT_MODEL;
+}
+
 export function loadModel(path: string = defaultConfigPath()): string {
   const cfg = readConfig(path);
   const raw = cfg.model;
   const trimmed = typeof raw === "string" ? raw.trim() : "";
-  if (!trimmed) return DEFAULT_MODEL;
+  if (!trimmed) return providerDefaultModel(path);
   // Custom-endpoint owners pick their own model namespace; trust them.
   const customEndpoint = cfg.baseUrl?.trim() || resolveBaseUrlEnv();
   if (customEndpoint) return trimmed;
-  return SUPPORTED_OFFICIAL_MODELS.includes(trimmed) ? trimmed : DEFAULT_MODEL;
+  return SUPPORTED_OFFICIAL_MODELS.includes(trimmed) ? trimmed : providerDefaultModel(path);
 }
 
 export function saveModel(model: string, path: string = defaultConfigPath()): void {

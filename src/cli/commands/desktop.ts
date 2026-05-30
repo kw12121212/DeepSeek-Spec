@@ -16,7 +16,6 @@ import { DeepSeekClient, pickPrimaryBalance } from "../../client.js";
 import { codeSystemPrompt } from "../../code/prompt.js";
 import { applyPlanMode, buildCodeToolset } from "../../code/setup.js";
 import {
-  DEFAULT_MODEL,
   type DesktopOpenTab,
   type EditMode,
   bridgeEndpointEnv,
@@ -40,6 +39,7 @@ import {
   loadSubagentModels,
   loadTavilyApiKey,
   loadWorkspaceDir,
+  providerDefaultModel,
   pushRecentWorkspace,
   readConfig,
   webSearchEngine as readWebSearchEngine,
@@ -1150,7 +1150,7 @@ export async function desktopCommand(opts: DesktopOptions): Promise<void> {
   function createTabSkeleton(initialDir?: string): Tab {
     const dir = resolve(initialDir ?? opts.dir ?? loadWorkspaceDir() ?? process.cwd());
     pushRecentWorkspace(dir);
-    const model = opts.model || loadModel() || DEFAULT_MODEL;
+    const model = opts.model || loadModel() || providerDefaultModel();
     const tab: Tab = {
       id: nextTabId(),
       rootDir: dir,
