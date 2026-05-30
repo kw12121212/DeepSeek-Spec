@@ -1,0 +1,51 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: tui-status
+sections:
+  Implementation:
+    create-scheduler-status-component:
+      text: >-
+        Create src/cli/ui/SchedulerStatus.tsx — Ink component that polls Scheduler.getStatus() +
+        TaskStore.getEnabled() every 30s, renders count and optional next-run time, renders null
+        when no enabled tasks.
+      status: complete
+    wire-top-bar:
+      text: Add SchedulerStatus to the top bar in chat.tsx and code.tsx.
+      status: complete
+    add-i18n-keys:
+      text: Add i18n keys for scheduled task status strings to en.yaml and zh.yaml.
+      status: complete
+  Testing:
+    test-tui-status:
+      text: >-
+        Create tests/scheduler/tui-status.test.tsx — test renders nothing when no tasks, renders
+        count when tasks exist, renders next run when within 1h, does not render next run when >1h
+        away.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run typecheck.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — SchedulerStatus renders in top bar, hidden
+        when no tasks, shows count + next-run when within 1h, all strings i18n'd.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

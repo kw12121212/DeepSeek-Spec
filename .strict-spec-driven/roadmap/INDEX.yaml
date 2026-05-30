@@ -54,4 +54,4 @@ milestones:
   0013-scheduled-tasks-integration:
     title: 'M13: Scheduled Tasks — Loop Integration and Status Display'
     path: roadmap/milestones/0013-scheduled-tasks-integration.yaml
-    status: proposed
+    status: complete

@@ -1245,6 +1245,8 @@ export const EN: TranslationSchema = {
     mcpLoading: "MCP",
     ctx: "ctx",
     shortcutsHint: "Ctrl+P shortcuts",
+    schedulerCount: "{count} scheduled",
+    schedulerNext: "next: {time}",
   },
   editMode: {
     plan: "PLAN MODE",

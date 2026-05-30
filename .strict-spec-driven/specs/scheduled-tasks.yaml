@@ -377,6 +377,39 @@ requirements:
         - GIVEN: Both user sessions and scheduled task sessions exist on disk
         - WHEN: /sessions is invoked
         - THEN: only user sessions are displayed, scheduled-sessions/ entries are excluded
+  tui-status-indicator:
+    strength: MUST
+    statement: >-
+      The TUI MUST display a SchedulerStatus component in the top bar when enabled scheduled tasks
+      exist, showing the count of enabled tasks. When the next scheduled run is within 1 hour, the
+      component MUST also show the next run time formatted as HH:MM. The component MUST render
+      nothing (hidden) when no enabled tasks exist.
+    scenarios:
+      tui-visible:
+        - GIVEN: Enabled scheduled tasks exist
+        - WHEN: The TUI top bar renders
+        - THEN: A status indicator shows the count of enabled tasks
+  tui-status-next-run:
+    strength: MUST
+    statement: >-
+      The SchedulerStatus component MUST show the next run time in HH:MM format when the next
+      scheduled execution is within 1 hour, and MUST NOT show the next run time when it is more than
+      1 hour away.
+    scenarios:
+      next-run-within-hour:
+        - GIVEN: An enabled task with next run time 30 minutes from now
+        - WHEN: The SchedulerStatus component renders
+        - THEN: 'The status text includes ''(next: HH:MM)'' where HH:MM is the next run time'
+  tui-status-i18n:
+    strength: MUST
+    statement: >-
+      All user-facing strings in the SchedulerStatus component MUST be internationalized via t()
+      from src/i18n/index.ts.
+    scenarios:
+      i18n-strings:
+        - GIVEN: The i18n system is initialized with any supported language
+        - WHEN: The SchedulerStatus component renders
+        - THEN: All display text is resolved via t() lookup
 mapping:
   implementation:
     - src/scheduler/cron-parser.ts

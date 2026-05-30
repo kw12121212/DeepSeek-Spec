@@ -11,6 +11,7 @@ import { useAgentState } from "../state/provider.js";
 import type { Mode, NetworkState, StatusBar } from "../state/state.js";
 import { GLYPH } from "../theme.js";
 import { FG, SURFACE, TONE, balanceColor, formatBalance, formatCost } from "../theme/tokens.js";
+import { SchedulerStatusPill, useSchedulerStatus } from "./SchedulerStatus.js";
 
 export interface StatusBarConfig {
   showBalance: boolean;
@@ -145,6 +146,7 @@ export function StatusRow({
             </Pill>
           </>
         )}
+        <SchedulerPill workspace={session.workspace} />
         {showWallet && (
           <>
             <Gap />
@@ -425,6 +427,19 @@ function networkDot(state: NetworkState): { glyph: string; color: Color } {
     case "reconnecting":
       return { glyph: "↻", color: TONE.brand };
   }
+}
+
+function SchedulerPill({ workspace }: { workspace: string }): React.ReactElement | null {
+  const { enabledCount, nextRunDate } = useSchedulerStatus(workspace);
+  if (enabledCount === 0) return null;
+  return (
+    <>
+      <Gap />
+      <Pill>
+        <SchedulerStatusPill enabledCount={enabledCount} nextRunDate={nextRunDate} />
+      </Pill>
+    </>
+  );
 }
 
 export type { StatusBar };

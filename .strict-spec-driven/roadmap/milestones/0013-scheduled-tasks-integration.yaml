@@ -40,7 +40,7 @@ risks:
   - Tool access in scheduled tasks may have unintended side effects — document security implications
   - Dashboard API must not expose sensitive task output — only return summaries
   - 'Graceful shutdown timing: in-flight tasks may take minutes — enforce a 30s shutdown timeout'
-status: proposed
+status: complete
 notes:
   - 'Dedicated session namespace: .dspec/scheduled-sessions/ (not mixed with user sessions)'
   - TUI status is passive (no live output streaming) — just a count and next-run time

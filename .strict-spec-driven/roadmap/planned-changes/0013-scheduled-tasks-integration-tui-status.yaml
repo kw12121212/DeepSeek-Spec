@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: tui-status
   milestone: 0013-scheduled-tasks-integration
-status: planned
+status: complete
 summary: |
   Add scheduler status indicators to the TUI top bar.
 details: |

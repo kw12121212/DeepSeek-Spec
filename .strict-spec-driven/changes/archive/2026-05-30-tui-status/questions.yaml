@@ -1,0 +1,18 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: tui-status
+open: []
+resolved:
+  - id: status-api-mismatch
+    question: >-
+      The planned change details specify Scheduler.getStatus() returning { enabledCount, nextRun,
+      running }, but the existing scheduler-status requirement defines { running, nextTick,
+      activeCount }. Should we extend getStatus() to include enabledCount and nextRun, or derive
+      these from the existing API + TaskStore.getEnabled()?
+    context: scheduled-tasks.yaml scheduler-status requirement vs planned change details
+    answer: >-
+      Derive enabledCount from TaskStore.getEnabled().length and nextRun from
+      Scheduler.getStatus().nextTick. Do not extend the Scheduler.getStatus() API surface.
+    status: resolved

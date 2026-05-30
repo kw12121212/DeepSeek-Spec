@@ -1312,6 +1312,8 @@ export const de: TranslationSchema = {
     mcpLoading: "MCP",
     ctx: "Kontext",
     shortcutsHint: "Strg+P Tastenkürzel",
+    schedulerCount: "{count} geplant",
+    schedulerNext: "nächste: {time}",
   },
   editMode: {
     ...EN.editMode,

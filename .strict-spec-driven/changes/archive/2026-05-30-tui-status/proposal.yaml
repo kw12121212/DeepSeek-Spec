@@ -1,0 +1,29 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: tui-status
+  status: proposed
+summary:
+  what:
+    - >-
+      Add a SchedulerStatus Ink component to the TUI top bar that shows scheduled task count and
+      next-run time when enabled tasks exist, and is hidden when no tasks are active.
+  why:
+    - >-
+      Users need visibility into the scheduled task system from the main TUI. Without status
+      indicators, there is no way to confirm scheduled tasks are active without running /schedule
+      list. This completes the M13 milestone's TUI integration requirement.
+scope:
+  in:
+    - src/cli/ui/
+  out:
+    - src/cli/ui/SchedulerStatus.tsx, tests/scheduler/tui-status.test.tsx
+unchanged_behavior:
+  - >-
+    src/scheduler/scheduler.ts (getStatus already exists), src/cli/ui/chat.tsx and code.tsx (top bar
+    layout only, no behavior change to existing indicators)
+roadmap:
+  milestone: 0013-scheduled-tasks-integration
+  planned_change: tui-status

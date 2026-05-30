@@ -1177,6 +1177,8 @@ export const zhCN: TranslationSchema = {
     mcpLoading: "MCP",
     ctx: "上下文",
     shortcutsHint: "Ctrl+P 快捷键",
+    schedulerCount: "{count} 个定时任务",
+    schedulerNext: "下次: {time}",
   },
   editMode: {
     plan: "计划",

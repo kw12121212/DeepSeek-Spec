@@ -1,0 +1,24 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: tui-status
+approach:
+  - >-
+    Create SchedulerStatus.tsx as an Ink component that polls Scheduler.getStatus() every 30
+    seconds. Render a compact status line: 'N scheduled' when tasks exist, 'N scheduled (next:
+    HH:MM)' when next run is within 1 hour. Render null (hidden) when no enabled tasks. Wire into
+    the existing top bar in chat.tsx and code.tsx. Use t() for all user-facing strings.
+decisions:
+  status-api-shape:
+    decision: >-
+      Reuse existing Scheduler.getStatus() which returns { running, nextTick, activeCount }. Derive
+      enabledCount from TaskStore.getEnabled().length and nextRun from
+      Scheduler.getStatus().nextTick to avoid API surface changes.
+    rationale: >-
+      The planned change details suggested { enabledCount, nextRun, running } but the existing
+      scheduler-status spec already defines { running, nextTick, activeCount }. Rather than changing
+      the Scheduler API, we derive the TUI fields from the existing API + TaskStore query, keeping
+      the change minimal.
+alternatives: []
+risks: []

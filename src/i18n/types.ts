@@ -435,6 +435,10 @@ export interface TranslationSchema {
     ctx: string;
     /** Hint shown next to the ⚑ icon — triggers the shortcut help modal. */
     shortcutsHint: string;
+    /** Scheduler pill: "{count} scheduled" */
+    schedulerCount: string;
+    /** Scheduler pill: "next: HH:MM" */
+    schedulerNext: string;
   };
   editMode: {
     plan: string;

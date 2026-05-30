@@ -1244,6 +1244,8 @@ export const JA: TranslationSchema = {
     mcpLoading: "MCP",
     ctx: "ctx",
     shortcutsHint: "Ctrl+P ショートカット",
+    schedulerCount: "{count}件のスケジュール",
+    schedulerNext: "次回: {time}",
   },
   editMode: {
     plan: "PLAN MODE",
