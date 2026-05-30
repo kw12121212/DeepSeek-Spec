@@ -1,0 +1,56 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: schedule-command
+  milestone: 0012-scheduled-tasks-management
+status: planned
+summary: |
+  Implement the /schedule slash command with add, list, remove, enable, and disable subcommands.
+details: >
+  src/cli/commands/schedule.ts:
+
+  - Register /schedule as a slash command in the CLI command registry
+
+  - Subcommands:
+    - /schedule add <name> --cron <expr> <prompt>
+      - Validates cron via parseCron(), shows description via describeCron() on success
+      - Generates 8-char ID, stores via TaskStore.add()
+      - Starts scheduler if not running
+    - /schedule list
+      - Renders table: name, cron, describeCron(cron), enabled, nextRun (via nextRun()), lastRun
+    - /schedule remove <name|id>
+      - Removes task via TaskStore.remove()
+    - /schedule enable <name|id>
+      - Sets enabled: true via TaskStore.update(), starts scheduler if needed
+    - /schedule disable <name|id>
+      - Sets enabled: false, stops scheduler if no enabled tasks remain
+  - /schedule with no subcommand shows help text
+
+  - All user-facing strings use t() from src/i18n/index.ts
+
+  - Cron validation error: "Invalid cron expression: <reason>. Expected 5 fields (min hour dom month
+  dow)."
+
+
+  Wire into CLI command registry alongside existing commands (chat.tsx, code.tsx, etc.)
+
+
+  tests/scheduler/schedule-command.test.ts:
+
+  - add creates a task, confirms with name + human-readable cron description
+
+  - list shows all tasks in table format
+
+  - remove deletes the task
+
+  - enable/disable toggles the flag
+
+  - Invalid cron shows clear error
+
+  - No subcommand shows help
+depends_on:
+  - scheduler-store
+  - cron-parser
+  - scheduler-daemon

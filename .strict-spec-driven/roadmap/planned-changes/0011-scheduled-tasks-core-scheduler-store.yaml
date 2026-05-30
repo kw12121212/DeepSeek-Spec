@@ -1,0 +1,33 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: scheduler-store
+  milestone: 0011-scheduled-tasks-core
+status: planned
+summary: |
+  Create the scheduled task data model and JSON persistence store.
+details: |
+  src/scheduler/store.ts:
+  - ScheduledTask interface:
+    { id: string, name: string, cron: string, prompt: string, enabled: boolean, createdAt: string, updatedAt: string }
+  - TaskStore class with CRUD operations:
+    - load(): ScheduledTask[] — reads .dspec/scheduled.json, returns [] if missing or malformed
+    - save(tasks: ScheduledTask[]): void — atomic write (write to .tmp, rename)
+    - add(task: { name, cron, prompt, enabled }): ScheduledTask — generates 8-char nanoid ID
+    - update(id: string, patch: Partial<ScheduledTask>): ScheduledTask | null
+    - remove(id: string): boolean
+    - getById(id: string): ScheduledTask | null
+    - getByName(name: string): ScheduledTask | null
+    - getEnabled(): ScheduledTask[] — convenience filter
+  - All timestamps ISO 8601 UTC
+  - File path: .dspec/scheduled.json (project-local)
+
+  tests/scheduler/store.test.ts:
+  - CRUD round-trip: add, load, update, remove
+  - Atomic write: crash simulation (.tmp exists, main missing -> returns [])
+  - Lookup by name and id
+  - Empty file returns []
+  - Malformed JSON returns []
+depends_on: []

@@ -43,3 +43,15 @@ milestones:
     title: 'M10: Real LLM Integration Tests with GLM-4.7'
     path: roadmap/milestones/0010-real-llm-test.yaml
     status: complete
+  0011-scheduled-tasks-core:
+    title: 'M11: Scheduled Tasks — Core Scheduler'
+    path: roadmap/milestones/0011-scheduled-tasks-core.yaml
+    status: proposed
+  0012-scheduled-tasks-management:
+    title: 'M12: Scheduled Tasks — Management Commands and History'
+    path: roadmap/milestones/0012-scheduled-tasks-management.yaml
+    status: proposed
+  0013-scheduled-tasks-integration:
+    title: 'M13: Scheduled Tasks — Loop Integration and Status Display'
+    path: roadmap/milestones/0013-scheduled-tasks-integration.yaml
+    status: proposed

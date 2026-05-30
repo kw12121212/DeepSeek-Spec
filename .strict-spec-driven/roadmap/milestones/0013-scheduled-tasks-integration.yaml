@@ -1,0 +1,48 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0013-scheduled-tasks-integration:
+    title: 'M13: Scheduled Tasks — Loop Integration and Status Display'
+goal: |
+  Wire scheduled task execution into CacheFirstLoop with proper tool access,
+  add TUI status indicators showing active scheduled tasks, and integrate
+  with the dashboard for remote monitoring. This milestone completes the
+  scheduled task feature as a production-ready capability.
+scope:
+  in:
+    - Wire TaskStore, TaskExecutor, HistoryStore, Scheduler into CacheFirstLoop init
+    - Hook scheduler.stop() into existing SIGINT/SIGTERM handlers in code.tsx and chat.tsx
+    - Add SchedulerStatus Ink component to TUI top bar
+    - 'Dashboard REST endpoints: GET /api/scheduler/status and GET /api/scheduler/history'
+    - Scheduled task sessions use .dspec/scheduled-sessions/ (isolated from user sessions)
+    - /sessions command filters out scheduled-sessions/ prefix
+    - 'Integration test: create a task with a short cron, verify it fires and records history'
+  out:
+    - Multi-project scheduler coordination (future)
+    - Remote task creation via API (future)
+    - Task output streaming to TUI (future — only status, not live output)
+    - Rate limiting on task execution (future)
+done_criteria:
+  - Scheduled tasks execute with full tool access (file, shell, MCP) via CacheFirstLoop
+  - Scheduler starts automatically on CLI boot when enabled tasks exist
+  - Scheduler stops gracefully on CLI exit (30s timeout, then force-kill)
+  - TUI shows scheduler status in the top bar when tasks are active
+  - Dashboard exposes scheduler status and history via REST API
+  - Scheduled task sessions are isolated from user sessions
+  - Integration test passes
+  - bun run verify passes with zero regressions
+planned_changes: {}
+dependencies:
+  - 0012-scheduled-tasks-management
+risks:
+  - Tool access in scheduled tasks may have unintended side effects — document security implications
+  - Dashboard API must not expose sensitive task output — only return summaries
+  - 'Graceful shutdown timing: in-flight tasks may take minutes — enforce a 30s shutdown timeout'
+status: proposed
+notes:
+  - 'Dedicated session namespace: .dspec/scheduled-sessions/ (not mixed with user sessions)'
+  - TUI status is passive (no live output streaming) — just a count and next-run time
+  - Dashboard endpoints require authentication if dashboard auth is enabled
+  - 'Shutdown timeout: 30s after SIGINT/SIGTERM, then force-kill remaining tasks'

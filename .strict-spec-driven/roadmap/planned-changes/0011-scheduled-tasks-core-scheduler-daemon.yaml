@@ -1,0 +1,43 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: scheduler-daemon
+  milestone: 0011-scheduled-tasks-core
+status: planned
+summary: |
+  Implement the scheduler daemon that ticks every 30 seconds and fires due tasks.
+details: |
+  src/scheduler/scheduler.ts:
+  - Scheduler class:
+    - constructor(store: TaskStore, executor: TaskExecutor, options?: { tickMs?: number })
+    - start(): void — begins the tick loop (default 30s, configurable via DSPEC_SCHEDULED_TICK_MS)
+    - stop(): Promise<void> — clears the tick timer, waits up to 30s for in-flight executions
+    - tick(): Promise<void> — checks all enabled tasks, fires due ones
+    - getStatus(): { running: boolean, nextTick: Date | null, activeCount: number }
+
+  Tick logic:
+  - Every tickMs (default 30000), load enabled tasks from store
+  - For each enabled task, check matchesCron(task.cron, now)
+  - If due AND not already fired this minute (lastFired Map<string, number> tracks epoch ms),
+    fire executor.execute(task) — non-blocking, don't await in tick
+  - After executor returns, caller (not executor) writes result to history store
+
+  Auto-start:
+  - Scheduler is instantiated on CLI boot (see M13 loop-wiring)
+  - start() is called only if store.getEnabled().length > 0
+  - stop() is called on CLI exit (hooks into existing SIGINT/SIGTERM in code.tsx/chat.tsx)
+
+  DSPEC_SCHEDULED_TICK_MS: environment variable to override tick interval (default 30000).
+  Minimum 10000 (10s), clamped at startup.
+
+  tests/scheduler/scheduler.test.ts:
+  - Tick fires a due task exactly once
+  - Tick does not fire a disabled task
+  - Tick does not fire the same task twice in the same minute
+  - stop() clears the timer and resolves after in-flight completes
+  - Auto-start: start() called only when enabled tasks exist
+depends_on:
+  - scheduler-store
+  - cron-parser

@@ -1,0 +1,39 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: dashboard-api
+  milestone: 0013-scheduled-tasks-integration
+status: planned
+summary: |
+  Add REST API endpoints for scheduler status and history to the dashboard server.
+details: |
+  src/server/routes/scheduler.ts:
+  - GET /api/scheduler/status
+    - Response: { tasks: ScheduledTask[], enabledCount: number, running: boolean, nextRun: string | null }
+    - Tasks include name, cron, enabled, lastRun, nextRun
+  - GET /api/scheduler/history?taskId=<id>&limit=20
+    - Response: { entries: HistoryEntry[] }
+    - Default limit 20, max 100
+  - GET /api/scheduler/history?limit=20
+    - Response: { entries: HistoryEntry[] } — all tasks, most recent first
+
+  Security:
+  - If dashboard auth is enabled (src/server/), these endpoints require authentication
+  - Output snippets included (capped at 200 chars), full output never exposed
+  - No task modification endpoints (read-only API — use CLI for management)
+
+  Integration:
+  - Wire routes into existing Express/Bun server in src/server/
+  - HistoryStore instance shared between CLI (daemon writes) and dashboard (reads)
+  - All response strings in English (dashboard is API, not user-facing i18n)
+
+  tests/scheduler/dashboard-api.test.ts:
+  - GET /api/scheduler/status returns task list and counts
+  - GET /api/scheduler/history with taskId filters correctly
+  - GET /api/scheduler/history without taskId returns all, most recent first
+  - Limit parameter respected, max capped at 100
+depends_on:
+  - scheduler-daemon
+  - execution-history

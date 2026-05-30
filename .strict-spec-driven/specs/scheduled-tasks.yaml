@@ -1,0 +1,58 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: scheduled-tasks
+  title: Scheduled Tasks
+requirements:
+  cron-parser-fields:
+    strength: MUST
+    statement: >-
+      The cron parser MUST support standard 5-field cron expressions (minute hour day-of-month month
+      day-of-week) with wildcards (*), ranges (1-5), steps (*/5, 1-10/2), and lists (1,3,5).
+    scenarios:
+      valid-expression:
+        - GIVEN: A valid 5-field cron expression such as '*/5 * * * *'
+        - WHEN: The expression is parsed by parseCron
+        - THEN: A CronFields object is returned with the correct set of allowed values for each field
+  cron-parser-matching:
+    strength: MUST
+    statement: >-
+      matchesCron MUST return true when a given Date's minute-boundary matches the cron expression,
+      and false otherwise.
+    scenarios:
+      match-check:
+        - GIVEN: A cron expression '0 9 * * 1-5' and a Date representing Monday at 09:00
+        - WHEN: matchesCron is called with the expression and date
+        - THEN: The function returns true
+  cron-parser-next-run:
+    strength: MUST
+    statement: >-
+      nextRun MUST return the next matching minute-boundary after a given Date, scanning forward up
+      to one full day (1440 minutes).
+    scenarios:
+      next-run:
+        - GIVEN: A cron expression '0 9 * * *' and a Date representing 08:30
+        - WHEN: nextRun is called with the expression and date
+        - THEN: A Date representing 09:00 on the same day is returned
+  cron-parser-describe:
+    strength: SHOULD
+    statement: >-
+      describeCron SHOULD produce human-readable descriptions for common patterns (e.g., '*/5 * * *
+      *' → 'every 5 minutes', '0 9 * * 1-5' → 'weekdays at 9:00'). Complex expressions that don't
+      match a known pattern fall back to the raw expression with field labels.
+    scenarios:
+      description:
+        - GIVEN: A cron expression '*/5 * * * *'
+        - WHEN: describeCron is called
+        - THEN: The string 'every 5 minutes' is returned
+  cron-parser-error-handling:
+    strength: MUST
+    statement: >-
+      Invalid cron expressions MUST throw an error with a message indicating the expected format
+      (e.g., 'Invalid cron: expected 5 fields').
+    scenarios:
+      invalid-expression:
+        - GIVEN: An invalid cron expression with fewer than 5 fields
+        - WHEN: parseCron is called
+        - THEN: An error is thrown with a descriptive message

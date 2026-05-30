@@ -53,6 +53,9 @@ specs:
   - id: native-build-script
     title: Native Build Script
     path: .strict-spec-driven/specs/native-build-script.yaml
+  - id: scheduled-tasks
+    title: Scheduled Tasks
+    path: .strict-spec-driven/specs/scheduled-tasks.yaml
   - id: semantic-index
     title: Semantic Vector Index
     path: .strict-spec-driven/specs/semantic-index.yaml

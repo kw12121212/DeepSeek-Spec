@@ -1,0 +1,54 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0011-scheduled-tasks-core:
+    title: 'M11: Scheduled Tasks — Core Scheduler'
+goal: |
+  Implement the foundational scheduled task system: a data model for task
+  definitions (cron expression + prompt), a persistent store in
+  .dspec/scheduled.json, a cron parser with human-readable descriptions,
+  a scheduler daemon that wakes on each cron tick, and a task executor
+  that runs prompts through a headless agent session. This milestone
+  delivers the minimal "set a cron, get automatic runs" loop without
+  management UI or history tracking.
+scope:
+  in:
+    - ScheduledTask interface and TaskStore with JSON persistence in .dspec/scheduled.json
+    - Cron expression parser (5-field) with match, nextRun, and describeCron
+    - 'Scheduler daemon: 30s tick loop (configurable via DSPEC_SCHEDULED_TICK_MS), fires due tasks'
+    - 'Task executor: headless agent session via CacheFirstLoop, 5-min timeout, session isolation'
+    - 'Executor reuses the main loop ModelClient and ToolHost (tool access: file, shell, MCP)'
+    - All user-facing strings internationalized via t()
+    - Unit tests for store CRUD, cron parsing, daemon tick, and executor invocation
+  out:
+    - CLI commands for managing tasks (covered in M12)
+    - Execution history and logging (covered in M12)
+    - TUI status indicators (covered in M13)
+    - Dashboard API integration (covered in M13)
+    - Concurrent task execution limits or queuing (future)
+done_criteria:
+  - TaskStore persists and loads ScheduledTask[] from .dspec/scheduled.json atomically
+  - Cron parser handles 5-field expressions with wildcard, range, step, and list syntax
+  - describeCron produces readable descriptions for common patterns
+  - Scheduler daemon ticks every 30s, fires each due task exactly once per minute
+  - Task executor runs a prompt through CacheFirstLoop with full tool access
+  - Executor sessions are isolated in .dspec/scheduled-sessions/
+  - bun run verify passes with zero regressions
+planned_changes: {}
+dependencies: []
+risks:
+  - Cron parsing edge cases (day-of-month vs day-of-week) — test thoroughly
+  - Headless session execution may have side effects — isolate session state completely
+  - Scheduler must not block the main CLI event loop — all work is async
+status: proposed
+notes:
+  - 'Cron expression format: minute hour day-of-month month day-of-week (standard 5-field)'
+  - .dspec/scheduled.json is project-local, not global — tasks are per-project
+  - Default tick interval 30s; override with DSPEC_SCHEDULED_TICK_MS (minimum 10s)
+  - 'Max turns per task: DSPEC_SCHEDULED_MAX_TURNS (default 10)'
+  - 'Timeout per task: DSPEC_SCHEDULED_TIMEOUT_MS (default 300000 = 5min)'
+  - >-
+    System prompt for scheduled tasks: reuse the default loop system prompt (includes tool
+    instructions)

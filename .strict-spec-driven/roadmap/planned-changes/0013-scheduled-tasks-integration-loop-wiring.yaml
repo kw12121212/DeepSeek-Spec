@@ -1,0 +1,41 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: loop-wiring
+  milestone: 0013-scheduled-tasks-integration
+status: planned
+summary: |
+  Wire the scheduled task system into CacheFirstLoop with full tool access and graceful shutdown.
+details: |
+  Integration with CacheFirstLoop (src/loop.ts):
+  - Add optional scheduler fields to CacheFirstLoopOptions:
+    scheduler?: { enabled: boolean }
+  - In CacheFirstLoop constructor or init:
+    - Instantiate TaskStore, TaskExecutor, HistoryStore, Scheduler
+    - TaskExecutor receives the same ModelClient and ToolHost as the main loop
+    - If scheduler.enabled and store.getEnabled().length > 0, call scheduler.start()
+  - Add CacheFirstLoop.shutdown() method:
+    - Calls scheduler.stop() which waits up to 30s for in-flight tasks
+    - After 30s, force-kill remaining via AbortController
+    - Logs shutdown status to .dspec/scheduled.log
+
+  Hook into existing shutdown in code.tsx and chat.tsx:
+  - Both files already handle SIGINT/SIGTERM with process.once()
+  - Add loop.shutdown() call before existing cleanup
+
+  Session isolation:
+  - Scheduled sessions stored in .dspec/scheduled-sessions/
+  - Auto-cleanup: keep only last 5 session files per task
+  - /sessions command filters out scheduled-sessions/ prefix
+
+  tests/scheduler/integration.test.ts:
+  - Task execution with mock ModelClient and ToolHost
+  - Session isolation: no files in user session directory
+  - Shutdown: in-flight task completes within 30s timeout
+  - Shutdown: force-kill after 30s timeout
+depends_on:
+  - scheduler-daemon
+  - task-executor
+  - execution-history

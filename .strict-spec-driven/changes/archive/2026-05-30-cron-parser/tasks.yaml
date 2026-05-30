@@ -1,0 +1,49 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: cron-parser
+sections:
+  Implementation:
+    create-cron-parser-module:
+      text: >-
+        Create src/scheduler/cron-parser.ts with parseCron, matchesCron, nextRun, and describeCron
+        functions.
+      status: complete
+    implement-field-parsing:
+      text: Implement per-field parsing for wildcards, ranges, steps, and lists with validation.
+      status: complete
+    implement-matching:
+      text: Implement matchesCron to check if a Date matches a cron expression at minute boundaries.
+      status: complete
+    implement-next-run:
+      text: Implement nextRun to compute the next matching minute-boundary after a given Date.
+      status: complete
+    implement-describe:
+      text: >-
+        Implement describeCron with pattern-based human-readable descriptions for common
+        expressions.
+      status: complete
+  Testing:
+    create-test-file:
+      text: Create tests/scheduler/cron-parser.test.ts with comprehensive test cases.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun test/run.ts
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

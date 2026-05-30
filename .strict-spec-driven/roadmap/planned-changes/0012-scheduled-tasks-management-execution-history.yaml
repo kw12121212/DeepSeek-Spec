@@ -1,0 +1,40 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: execution-history
+  milestone: 0012-scheduled-tasks-management
+status: planned
+summary: |
+  Implement the execution history store and the /schedule history command.
+details: |
+  src/scheduler/history.ts:
+  - HistoryEntry interface:
+    { taskId: string, taskName: string, startedAt: string, finishedAt: string,
+      status: 'success' | 'error', duration: number, outputSnippet: string }
+  - HistoryStore class:
+    - constructor(path?: string) — default: .dspec/scheduled-history.json
+    - append(entry: HistoryEntry): void — adds entry, prunes oldest if > 500 per task
+    - getByTaskId(taskId: string, limit?: number): HistoryEntry[] — default limit 20
+    - getAll(limit?: number): HistoryEntry[] — most recent first
+    - prune(): void — removes entries beyond 500-per-task cap
+
+  Integration with scheduler daemon:
+  - The daemon (not the executor) calls historyStore.append() after each execution
+  - This keeps executor free of persistence concerns and avoids circular dependency
+  - Output snippets capped at 200 characters
+
+  /schedule history <name|id> (in src/cli/commands/schedule.ts):
+  - Looks up task by name or id, calls historyStore.getByTaskId()
+  - Displays: timestamp, status (checkmark/cross), duration, snippet preview
+  - All user-facing strings use t() from src/i18n/index.ts
+
+  tests/scheduler/history.test.ts:
+  - Append and retrieve entries
+  - Pruning caps at 500 per task
+  - getByTaskId filters correctly
+  - Output snippets truncated to 200 chars
+  - getAll returns most recent first
+depends_on:
+  - scheduler-store

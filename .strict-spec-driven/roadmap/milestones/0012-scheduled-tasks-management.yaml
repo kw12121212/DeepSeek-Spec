@@ -1,0 +1,48 @@
+schema: strict-spec-driven/roadmap-milestone/v2
+schema_version: 2
+artifact_type: roadmap_milestone
+schema_file: ../schemas/roadmap-milestone.yaml
+milestone:
+  0012-scheduled-tasks-management:
+    title: 'M12: Scheduled Tasks — Management Commands and History'
+goal: |
+  Add CLI commands for creating, listing, editing, enabling/disabling, and
+  removing scheduled tasks. Implement execution history logging so users
+  can review past runs, their status, and output summaries. This milestone
+  makes the scheduler user-facing and debuggable.
+scope:
+  in:
+    - /schedule add <name> --cron <expr> <prompt> — create a scheduled task
+    - /schedule list — show all scheduled tasks with status and next-run time
+    - /schedule remove <name|id> — delete a scheduled task
+    - /schedule enable <name|id> and /schedule disable <name|id>
+    - /schedule history <name|id> — show recent execution log (last 20 runs)
+    - 'Execution history store: .dspec/scheduled-history.json (append-only, 500-entry cap per task)'
+    - Human-readable cron descriptions via describeCron() in /schedule list and /schedule add
+    - All user-facing strings internationalized via t() from src/i18n/
+    - Unit tests for all commands and history persistence
+  out:
+    - TUI live status display (covered in M13)
+    - Desktop/dashboard integration (covered in M13)
+    - Task output full-text storage (only store summary snippets)
+    - Task chaining or dependency logic (future)
+done_criteria:
+  - /schedule add creates a task in .dspec/scheduled.json with validated cron and shows description
+  - /schedule list displays all tasks with name, cron, human-readable schedule, enabled, next-run
+  - /schedule remove deletes a task
+  - /schedule enable and /schedule disable toggle task.enabled without deleting
+  - /schedule history shows timestamped execution log entries for a task
+  - Cron validation rejects invalid expressions with a clear error message
+  - bun run verify passes with zero regressions
+planned_changes: {}
+dependencies:
+  - 0011-scheduled-tasks-core
+risks:
+  - History file may grow large over time — cap at 500 entries per task, prune oldest
+  - Cron human-readable descriptions start with English only (i18n can extend later)
+status: proposed
+notes:
+  - /schedule with no subcommand shows help text
+  - History entries are append-only; pruning happens at write time
+  - Output snippets capped at 200 chars to keep history file small
+  - describeCron() is in cron-parser.ts from M11, not a separate file

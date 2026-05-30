@@ -1,0 +1,30 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: tui-status
+  milestone: 0013-scheduled-tasks-integration
+status: planned
+summary: |
+  Add scheduler status indicators to the TUI top bar.
+details: |
+  src/cli/ui/SchedulerStatus.tsx:
+  - Ink component rendering a compact status in the TUI top bar
+  - Shows: "N scheduled" when N enabled tasks exist
+  - Shows next run time if within the next hour: "2 scheduled (next: 14:30)"
+  - Hidden when no scheduled tasks exist (zero clutter for non-scheduler users)
+  - Status text uses t() from src/i18n/index.ts
+
+  Integration:
+  - Scheduler.getStatus() provides: { enabledCount, nextRun: Date | null, running: boolean }
+  - Top bar component subscribes to status updates via polling (every 30s, aligned with tick)
+  - Rendered in chat.tsx and code.tsx top bar alongside existing status indicators
+
+  tests/scheduler/tui-status.test.tsx:
+  - Renders nothing when no tasks
+  - Renders count when tasks exist
+  - Renders next run time when within 1 hour
+  - Does not render next run when > 1 hour away
+depends_on:
+  - scheduler-daemon

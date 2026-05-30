@@ -1,0 +1,78 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: cron-parser
+  milestone: 0011-scheduled-tasks-core
+status: complete
+summary: |
+  Implement a lightweight 5-field cron expression parser, matcher, and human-readable describer.
+details: >
+  src/scheduler/cron-parser.ts:
+
+  - parseCron(expr: string): CronFields — parses 5-field cron (min hour dom month dow)
+
+  - matchesCron(expr: string, date: Date): boolean — true if date's minute-boundary matches
+
+  - nextRun(expr: string, from: Date): Date — next matching minute-boundary after `from`
+
+  - describeCron(expr: string): string — human-readable description of the expression
+
+
+  Supported field values:
+
+  - Exact numbers: 0-59 (min), 0-23 (hour), 1-31 (dom), 1-12 (month), 0-6 (dow, 0=Sunday)
+
+  - Wildcards: * matches all
+
+  - Ranges: 1-5
+
+  - Steps: */5, 1-10/2
+
+  - Lists: 1,3,5
+
+
+  describeCron patterns:
+
+  - "*/N * * * *" -> "every N minutes"
+
+  - "0 */N * * *" -> "every N hours"
+
+  - "0 H * * *" -> "daily at HH:MM"
+
+  - "0 H * * 1-5" -> "weekdays at HH:MM"
+
+  - "0 H * * 0,6" -> "weekends at HH:MM"
+
+  - "0 0 1 * *" -> "first of every month at midnight"
+
+  - Complex expressions: fallback to raw expression with field labels
+
+
+  Edge cases to test:
+
+  - "0 0 * * *" = daily at midnight
+
+  - "*/5 * * * *" = every 5 minutes
+
+  - "0 9 * * 1-5" = weekdays at 9am
+
+  - "0 0 1 * *" = first of every month
+
+  - Invalid expressions throw with message: "Invalid cron: expected 5 fields (min hour dom month
+  dow)"
+
+
+  tests/scheduler/cron-parser.test.ts:
+
+  - Standard expressions parse correctly
+
+  - matchesCron true/false for known timestamps at minute boundaries
+
+  - nextRun returns correct next time
+
+  - describeCron produces readable strings for common patterns
+
+  - Invalid expressions throw with clear message
+depends_on: []

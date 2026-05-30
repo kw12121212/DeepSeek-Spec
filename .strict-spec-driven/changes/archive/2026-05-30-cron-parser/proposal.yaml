@@ -1,0 +1,33 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: cron-parser
+  status: proposed
+summary:
+  what:
+    - >-
+      Implement a lightweight 5-field cron expression parser that parses, matches, computes next run
+      times, and produces human-readable descriptions of cron expressions.
+  why:
+    - >-
+      The scheduled tasks system (M11–M13) needs a cron parser to determine when tasks should fire.
+      This is the foundational building block for the entire scheduler subsystem.
+scope:
+  in:
+    - >-
+      New module src/scheduler/cron-parser.ts with parseCron, matchesCron, nextRun, and describeCron
+      functions. New test file tests/scheduler/cron-parser.test.ts covering standard expressions,
+      matching, next-run computation, descriptions, and error handling.
+  out:
+    - >-
+      CLI commands for managing scheduled tasks (M12), execution history (M12), TUI status
+      indicators (M13), dashboard API integration (M13), scheduler daemon (separate planned change).
+unchanged_behavior:
+  - >-
+    All existing modules remain unchanged. This is a pure addition with no modifications to existing
+    code.
+roadmap:
+  milestone: 0011-scheduled-tasks-core
+  planned_change: cron-parser
