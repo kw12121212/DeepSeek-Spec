@@ -1,0 +1,76 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: scheduled-tasks
+mapping:
+  implementation:
+    - src/scheduler/executor.ts
+  tests:
+    - tests/scheduler/executor.test.ts
+operations:
+  ADDED:
+    executor-headless-run:
+      strength: MUST
+      statement: >-
+        TaskExecutor MUST run a scheduled task prompt through CacheFirstLoop with a default system
+        prompt and the task prompt as user message, up to DSPEC_SCHEDULED_MAX_TURNS turns (default
+        10).
+      scenarios:
+        headless-execution:
+          - GIVEN: >-
+              A ScheduledTask with prompt 'check build status' and a configured ModelClient and
+              ToolHost
+          - WHEN: TaskExecutor.execute() is called
+          - THEN: >-
+              CacheFirstLoop.run() is invoked with the system prompt and user message, limited to
+              maxTurns
+    executor-result-type:
+      strength: MUST
+      statement: >-
+        TaskExecutor MUST return a TaskExecutionResult with taskId, startedAt, finishedAt, status
+        ('success'|'error'), outputSnippet, and duration fields.
+      scenarios:
+        success-result:
+          - GIVEN: A task that completes successfully
+          - WHEN: execute() returns
+          - THEN: The result has status 'success', non-empty outputSnippet, and positive duration
+    executor-session-isolation:
+      strength: MUST
+      statement: >-
+        TaskExecutor MUST write session files to .dspec/scheduled-sessions/<taskId>/ separately from
+        user sessions. Sessions in this directory MUST NOT appear in /sessions list. Auto-cleanup
+        MUST keep only the last 5 session files per task after each execution.
+      scenarios:
+        isolation-cleanup:
+          - GIVEN: A task execution that writes a session file
+          - WHEN: the execution completes
+          - THEN: >-
+              the session file is in .dspec/scheduled-sessions/<taskId>/ and older files beyond the
+              5 most recent are deleted
+    executor-timeout:
+      strength: MUST
+      statement: >-
+        TaskExecutor MUST enforce a configurable timeout (DSPEC_SCHEDULED_TIMEOUT_MS, default
+        300000ms) via AbortController. When the timeout fires, the execution MUST be aborted and
+        return a TaskExecutionResult with status 'error' and the timeout message as outputSnippet.
+      scenarios:
+        timeout-abort:
+          - GIVEN: A task execution that exceeds the timeout
+          - WHEN: the AbortController fires
+          - THEN: the loop is aborted and the result has status 'error' with a timeout message
+    executor-error-handling:
+      strength: MUST
+      statement: >-
+        When CacheFirstLoop.run() throws, TaskExecutor MUST catch the error and return a
+        TaskExecutionResult with status 'error' and the error message as outputSnippet instead of
+        propagating the exception.
+      scenarios:
+        error-catch:
+          - GIVEN: A task execution where the agent loop throws an error
+          - WHEN: execute() catches the exception
+          - THEN: >-
+              the result has status 'error' with the error message as snippet, no exception
+              propagates
+  MODIFIED: {}
+  REMOVED: {}

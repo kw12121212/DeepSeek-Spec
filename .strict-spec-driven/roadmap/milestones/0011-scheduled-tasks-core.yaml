@@ -42,7 +42,7 @@ risks:
   - Cron parsing edge cases (day-of-month vs day-of-week) — test thoroughly
   - Headless session execution may have side effects — isolate session state completely
   - Scheduler must not block the main CLI event loop — all work is async
-status: proposed
+status: complete
 notes:
   - 'Cron expression format: minute hour day-of-month month day-of-week (standard 5-field)'
   - .dspec/scheduled.json is project-local, not global — tasks are per-project

@@ -30,6 +30,7 @@ sessions/
 # bits (semantic index, sessions, opt-out markers) never should.
 .dspec/semantic/
 .dspec/sessions/
+.dspec/scheduled-sessions/
 .dspec/semantic-skip
 .dspec/truncated-results/
 # Scratch entry regenerated each time scripts/bundle-codemirror.mjs runs.

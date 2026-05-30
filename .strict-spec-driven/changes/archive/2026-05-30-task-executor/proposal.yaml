@@ -1,0 +1,30 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: task-executor
+  status: proposed
+summary:
+  what:
+    - >-
+      Implement the TaskExecutor class that runs a scheduled task prompt through a headless agent
+      session using CacheFirstLoop, with timeout support, session isolation in
+      .dspec/scheduled-sessions/, and error handling.
+  why:
+    - >-
+      The task executor is the core execution engine for scheduled tasks. It connects the scheduler
+      daemon to the agent loop, enabling automatic prompt execution with full tool access, isolation
+      from user sessions, and configurable timeouts.
+scope:
+  in:
+    - src/scheduler/executor.ts
+  out:
+    - >-
+      TaskExecutor class with execute() method, TaskExecutionResult type, session isolation,
+      AbortController-based timeout, auto-cleanup of old session files.
+unchanged_behavior:
+  - Cron parser, task store, scheduler daemon, CLI commands, TUI, dashboard
+roadmap:
+  milestone: 0011-scheduled-tasks-core
+  planned_change: task-executor

@@ -46,7 +46,7 @@ milestones:
   0011-scheduled-tasks-core:
     title: 'M11: Scheduled Tasks — Core Scheduler'
     path: roadmap/milestones/0011-scheduled-tasks-core.yaml
-    status: proposed
+    status: complete
   0012-scheduled-tasks-management:
     title: 'M12: Scheduled Tasks — Management Commands and History'
     path: roadmap/milestones/0012-scheduled-tasks-management.yaml

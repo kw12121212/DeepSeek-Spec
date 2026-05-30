@@ -1,0 +1,60 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: task-executor
+sections:
+  Implementation:
+    define-types:
+      text: Define TaskExecutionResult interface and TaskExecutorOptions in src/scheduler/executor.ts.
+      status: complete
+    implement-executor:
+      text: >-
+        Implement TaskExecutor class with execute() method — build messages, call
+        CacheFirstLoop.run(), collect output, return TaskExecutionResult.
+      status: complete
+    session-isolation:
+      text: >-
+        Implement session file creation in .dspec/scheduled-sessions/<taskId>/ with auto-cleanup
+        keeping last 5 per task.
+      status: complete
+    timeout-abort:
+      text: >-
+        Add AbortController-based timeout (DSPEC_SCHEDULED_TIMEOUT_MS, default 300000) with error
+        result on abort.
+      status: complete
+    i18n-strings:
+      text: Extract user-facing strings to i18n via t() from src/i18n/index.ts.
+      status: complete
+  Testing:
+    test-success:
+      text: Test successful execution returns status 'success' with non-empty snippet.
+      status: complete
+    test-error:
+      text: Test failed execution returns status 'error' with error message as snippet.
+      status: complete
+    test-isolation:
+      text: Test session isolation — no files written to user session directory.
+      status: complete
+    test-timeout:
+      text: Test timeout — execution exceeding limit is aborted and returns error status.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run full test suite.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

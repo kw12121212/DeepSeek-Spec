@@ -1921,4 +1921,7 @@ export const EN: TranslationSchema = {
     reviewSaveError: "Could not save config: {message}",
     exitHint: "/exit or /quit to cancel",
   },
+  scheduler: {
+    executionTimedOut: "Execution timed out",
+  },
 };

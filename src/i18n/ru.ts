@@ -551,4 +551,7 @@ export const ru: TranslationSchema = {
     reviewSaveError: "Не удалось сохранить конфигурацию: {message}",
     exitHint: "/exit или /quit для отмены",
   },
+  scheduler: {
+    executionTimedOut: "Время выполнения истекло",
+  },
 };

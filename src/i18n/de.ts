@@ -2011,4 +2011,7 @@ export const de: TranslationSchema = {
   wizard: {
     ...EN.wizard,
   },
+  scheduler: {
+    executionTimedOut: "Ausführung hat das Zeitlimit überschritten",
+  },
 };

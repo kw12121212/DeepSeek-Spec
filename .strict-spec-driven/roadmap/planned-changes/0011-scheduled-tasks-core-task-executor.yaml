@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: task-executor
   milestone: 0011-scheduled-tasks-core
-status: planned
+status: complete
 summary: |
   Implement the task executor that runs a scheduled task prompt through a headless agent session.
 details: |

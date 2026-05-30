@@ -1931,4 +1931,7 @@ export const JA: TranslationSchema = {
     reviewSaveError: "設定を保存できませんでした：{message}",
     exitHint: "/exit または /quit でキャンセル",
   },
+  scheduler: {
+    executionTimedOut: "実行がタイムアウトしました",
+  },
 };

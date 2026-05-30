@@ -1815,4 +1815,7 @@ export const zhCN: TranslationSchema = {
     reviewSaveError: "无法保存配置：{message}",
     exitHint: "/exit 或 /quit 取消",
   },
+  scheduler: {
+    executionTimedOut: "执行超时",
+  },
 };

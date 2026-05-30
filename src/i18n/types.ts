@@ -1017,4 +1017,7 @@ export interface TranslationSchema {
     reviewSaveError: string;
     exitHint: string;
   };
+  scheduler: {
+    executionTimedOut: string;
+  };
 }
