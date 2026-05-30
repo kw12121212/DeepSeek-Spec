@@ -1,0 +1,93 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: code-query
+  title: Code Query Analysis
+requirements:
+  grammar-management:
+    strength: MUST
+    statement: >-
+      The code query system MUST manage tree-sitter grammar singletons for
+      supported languages, loading WASM grammars on demand.
+    scenarios:
+      load-grammar:
+        - GIVEN: a TypeScript source file
+        - WHEN: a code query requires the TypeScript grammar
+        - THEN: the grammar is loaded and cached for subsequent queries
+  symbol-extraction:
+    strength: MUST
+    statement: >-
+      The symbol extractor MUST extract functions, classes, methods, variables,
+      and imports from source files using tree-sitter AST parsing.
+    scenarios:
+      extract-functions:
+        - GIVEN: a TypeScript file with 3 exported functions
+        - WHEN: symbols() is called
+        - THEN: 3 function symbols with names, locations, and signatures are returned
+  identifier-search:
+    strength: MUST
+    statement: >-
+      findInCode MUST search for identifiers across the project using
+      tree-sitter-aware matching, returning file paths, line numbers, and
+      surrounding context.
+    scenarios:
+      find-references:
+        - GIVEN: a project referencing "processToolCall" in 4 files
+        - WHEN: findInCode("processToolCall") is called
+        - THEN: hits from all 4 files are returned with line numbers
+  tool-registration:
+    strength: MUST
+    statement: >-
+      Code query tools MUST be registered as dispatchable agent tools for
+      symbol search and identifier lookup.
+    scenarios:
+      tools-available:
+        - GIVEN: the tool registry is initialized
+        - WHEN: code query tools are registered
+        - THEN: symbol search and find-in-code tools are available
+  outline-generation:
+    strength: MUST
+    statement: >-
+      The outline tool MUST produce a structured outline of symbols in a file
+      with nesting levels and kind labels.
+    scenarios:
+      file-outline:
+        - GIVEN: a TypeScript file with a class containing 3 methods
+        - WHEN: outline() is called
+        - THEN: the class and its 3 methods are listed with proper indentation
+  glob-pattern:
+    strength: MUST
+    statement: >-
+      File search MUST support glob patterns with gitignore-aware exclusion,
+      returning matching file paths relative to the project root.
+    scenarios:
+      glob-typescript:
+        - GIVEN: a project with 10 .ts files and 5 .test.ts files
+        - WHEN: glob("src/**/*.ts") is called
+        - THEN: matching files are returned, excluding gitignored paths
+  regex-search:
+    strength: MUST
+    statement: >-
+      Content search MUST support regex patterns across files with match context
+      and line numbers, respecting file size limits.
+    scenarios:
+      regex-match:
+        - GIVEN: files containing "import.*from.*react"
+        - WHEN: grep with the pattern is executed
+        - THEN: matching lines with surrounding context are returned
+mapping:
+  implementation:
+    - src/code-query/parser.ts
+    - src/code-query/symbols.ts
+    - src/code-query/find-in-code.ts
+    - src/code-query/grammar-map.ts
+    - src/tools/fs/search.ts
+    - src/tools/fs/glob.ts
+    - src/tools/fs/outline.ts
+    - src/tools/fs/regex-runner.ts
+  tests:
+    - tests/code-query-parser.test.ts
+    - tests/code-query-symbols.test.ts
+    - tests/code-query-find-in-code.test.ts
+    - tests/code-query-tools.test.ts

@@ -1,0 +1,126 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: memory-system
+  title: Memory System
+requirements:
+  project-memory:
+    strength: MUST
+    statement: >-
+      Project memory MUST read and write DSPEC.md (or AGENTS.md) from the
+      project root with an 8000 character cap, committed to version control.
+    scenarios:
+      read-project:
+        - GIVEN: a project with DSPEC.md containing instructions
+        - WHEN: readProjectMemory() is called
+        - THEN: the file content is returned as a string
+      write-project:
+        - GIVEN: a project with content under 8000 chars
+        - WHEN: writeProjectMemory() is called
+        - THEN: DSPEC.md is written with the new content
+      oversize-rejected:
+        - GIVEN: content exceeding 8000 characters
+        - WHEN: writeProjectMemory() is called
+        - THEN: an error is returned indicating the size limit
+  user-memory:
+    strength: MUST
+    statement: >-
+      User memory MUST persist typed memories (user, feedback, project,
+      reference) as markdown files under ~/.dspec/memory/{global,<project-hash>}/
+      with frontmatter metadata.
+    scenarios:
+      write-user-memory:
+        - GIVEN: a user memory entry with type feedback and project scope
+        - WHEN: the memory store write method is called
+        - THEN: a markdown file is created under the project-scoped directory with frontmatter
+      list-memories:
+        - GIVEN: 3 user memory entries in the global scope
+        - WHEN: the memory store list method is called with global scope
+        - THEN: 3 entries are returned with metadata
+      query-memories:
+        - GIVEN: memory entries of different types
+        - WHEN: query is called with type filter "feedback"
+        - THEN: only feedback-type entries are returned
+  session-storage:
+    strength: MUST
+    statement: >-
+      Session storage MUST persist conversations as JSONL append-only logs
+      under ~/.dspec/sessions/ with sidecar metadata files.
+    scenarios:
+      append-message:
+        - GIVEN: an active session file
+        - WHEN: appendSessionMessage() is called with a user message
+        - THEN: a JSONL line is appended to the session file
+      load-session:
+        - GIVEN: a session file with 10 messages
+        - WHEN: loadSessionMessages() is called
+        - THEN: 10 parsed message objects are returned
+      list-sessions:
+        - GIVEN: 5 sessions in the sessions directory
+        - WHEN: listSessions() is called
+        - THEN: 5 session metadata objects are returned sorted by recency
+      delete-session:
+        - GIVEN: a session file that exists
+        - WHEN: deleteSession() is called
+        - THEN: the session file and its sidecar are removed
+  runtime-structures:
+    strength: MUST
+    statement: >-
+      Runtime memory MUST provide ImmutablePrefix (read-only), AppendOnlyLog
+      (append-only), and VolatileScratch (read-write, session-scoped) data
+      structures for the cache-first loop.
+    scenarios:
+      immutable-prefix:
+        - GIVEN: an ImmutablePrefix initialized with messages
+        - WHEN: a write is attempted
+        - THEN: the write is rejected or ignored
+      append-only-log:
+        - GIVEN: an AppendOnlyLog
+        - WHEN: entries are appended and the log is read
+        - THEN: all entries are returned in order
+  subdir-memory:
+    strength: MUST
+    statement: >-
+      Subdir memory MUST walk ancestor directories to find module-scoped
+      DSPEC.md files, collecting all applicable project memory from parent
+      directories.
+    scenarios:
+      walk-ancestors:
+        - GIVEN: a project with DSPEC.md in root and src/ subdirectory
+        - WHEN: findDirMemory() is called from src/loop/
+        - THEN: both DSPEC.md files are collected
+  port-interface:
+    strength: MUST
+    statement: >-
+      The MemoryStore port MUST define async query(), list(), write(), and
+      remove() methods that concrete implementations fulfill.
+    scenarios:
+      port-methods:
+        - GIVEN: a MemoryStore implementation
+        - WHEN: each port method is called
+        - THEN: the method returns the expected result type
+  prune-stale:
+    strength: MUST
+    statement: >-
+      pruneStaleSessions MUST remove session files older than the configured
+      retention period.
+    scenarios:
+      old-session-removed:
+        - GIVEN: sessions older than the retention period
+        - WHEN: pruneStaleSessions() is called
+        - THEN: those sessions are deleted
+mapping:
+  implementation:
+    - src/memory/project.ts
+    - src/memory/user.ts
+    - src/memory/session.ts
+    - src/memory/runtime.ts
+    - src/memory/subdir.ts
+    - src/ports/memory-store.ts
+  tests:
+    - tests/memory.test.ts
+    - tests/project-memory.test.ts
+    - tests/user-memory.test.ts
+    - tests/subdir-memory.test.ts
+    - tests/session.test.ts

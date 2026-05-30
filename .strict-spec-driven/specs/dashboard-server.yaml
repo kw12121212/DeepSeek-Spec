@@ -1,0 +1,194 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: dashboard-server
+  title: Dashboard HTTP Server
+requirements:
+  startup-binding:
+    strength: MUST
+    statement: >-
+      The dashboard server MUST bind to 127.0.0.1 on an ephemeral port (or
+      configured port) and generate a 32-byte hex auth token on startup.
+    scenarios:
+      ephemeral-port:
+        - GIVEN: no port is configured
+        - WHEN: the server starts
+        - THEN: it binds to 127.0.0.1 on an OS-assigned port and returns a token
+  token-auth:
+    strength: MUST
+    statement: >-
+      All API requests MUST be authenticated via token — read requests accept
+      token via query parameter or X-Dspec-Token header; mutation requests
+      (POST/DELETE/PUT) require header-only token for CSRF protection.
+    scenarios:
+      missing-token-rejected:
+        - GIVEN: a running server with a generated token
+        - WHEN: an API request is made without a token
+        - THEN: the request is rejected with 401
+      mutation-requires-header:
+        - GIVEN: a running server
+        - WHEN: a POST request sends the token only via query parameter
+        - THEN: the request is rejected with 401
+      read-allows-query:
+        - GIVEN: a running server
+        - WHEN: a GET request sends the token via query parameter
+        - THEN: the request is accepted
+  constant-time-compare:
+    strength: MUST
+    statement: >-
+      Token comparison MUST use constant-time comparison to prevent timing
+      attacks.
+    scenarios:
+      timing-safe:
+        - GIVEN: a valid token and an invalid token of the same length
+        - WHEN: both are compared against the server token
+        - THEN: comparison time does not leak which character differs
+  spa-serving:
+    strength: MUST
+    statement: >-
+      The server MUST serve the SPA from / and /index.html with token-gated
+      access, and serve static assets from /assets/ without token gating.
+    scenarios:
+      root-serves-spa:
+        - GIVEN: a running server with built assets
+        - WHEN: GET / is requested with a valid token
+        - THEN: the SPA HTML is returned
+  sse-events:
+    strength: MUST
+    statement: >-
+      The /api/events SSE endpoint MUST stream live events including
+      assistant_delta, tool_start, modal_up/down, busy_change, and status
+      updates to connected clients.
+    scenarios:
+      delta-stream:
+        - GIVEN: a connected SSE client
+        - WHEN: an assistant_delta event is emitted by the agent loop
+        - THEN: the event is delivered to the client as an SSE data frame
+  modal-system:
+    strength: MUST
+    statement: >-
+      The modal API MUST support shell confirmations, path confirmations, choice
+      dialogs, edit reviews, checkpoints, and picker interactions. Modal state
+      MUST be resolved via the /api/modal endpoint.
+    scenarios:
+      shell-confirm:
+        - GIVEN: a shell command requiring user confirmation
+        - WHEN: the modal is created
+        - THEN: a modal_up event is streamed and /api/modal accepts the resolution
+  session-api:
+    strength: MUST
+    statement: >-
+      The /api/sessions endpoint MUST list sessions, switch active sessions,
+      and delete sessions. The /api/overview endpoint MUST return bundled state
+      for the active session.
+    scenarios:
+      list-sessions:
+        - GIVEN: 3 existing sessions
+        - WHEN: GET /api/sessions is called
+        - THEN: an array of 3 session summaries is returned
+  submit-api:
+    strength: MUST
+    statement: >-
+      The /api/submit endpoint MUST accept user prompts and inject them into
+      the active agent session.
+    scenarios:
+      submit-prompt:
+        - GIVEN: an active agent session
+        - WHEN: POST /api/submit is called with a text prompt
+        - THEN: the prompt is processed by the agent loop
+  abort-api:
+    strength: MUST
+    statement: >-
+      The /api/abort endpoint MUST abort the current agent turn.
+    scenarios:
+      abort-turn:
+        - GIVEN: an agent loop mid-turn
+        - WHEN: POST /api/abort is called
+        - THEN: the current turn is cancelled via AbortSignal
+  checkpoint-api:
+    strength: MUST
+    statement: >-
+      The /api/checkpoints endpoints MUST create, list, show diffs for, and
+      restore checkpoints.
+    scenarios:
+      create-and-restore:
+        - GIVEN: a running session with file changes
+        - WHEN: checkpoint-create is called then checkpoint-restore is called
+        - THEN: files are reverted to the checkpoint state
+  settings-api:
+    strength: MUST
+    statement: >-
+      The /api/settings endpoint MUST read and update configuration including
+      API key, model, budget, and skill preferences.
+    scenarios:
+      update-model:
+        - GIVEN: an active session with model "deepseek-v4-flash"
+        - WHEN: PUT /api/settings is called with model "deepseek-v4-pro"
+        - THEN: the model is updated for subsequent turns
+  files-api:
+    strength: MUST
+    statement: >-
+      The /api/files, /api/browse, and /api/file-read endpoints MUST provide
+      file listing, directory browsing, and file content reading.
+    scenarios:
+      read-file:
+        - GIVEN: a file in the project directory
+        - WHEN: GET /api/file-read is called with the file path
+        - THEN: the file content is returned
+  mcp-api:
+    strength: MUST
+    statement: >-
+      The /api/mcp endpoint MUST list MCP server status and allow
+      enabling/disabling servers.
+    scenarios:
+      list-mcp:
+        - GIVEN: 2 configured MCP servers
+        - WHEN: GET /api/mcp is called
+        - THEN: server status (connected/disconnected) is returned for each
+  usage-api:
+    strength: MUST
+    statement: >-
+      The /api/usage endpoint MUST return cumulative token usage and cost
+      metrics.
+    scenarios:
+      usage-metrics:
+        - GIVEN: a session with 3 completed turns
+        - WHEN: GET /api/usage is called
+        - THEN: cumulative tokens and cost are returned
+  context-update:
+    strength: MUST
+    statement: >-
+      The server MUST support live context updates (agent loop, session, tools)
+      without rebinding the port.
+    scenarios:
+      swap-session:
+        - GIVEN: a running server with session A active
+        - WHEN: the context is updated to session B
+        - THEN: subsequent API calls operate on session B without port change
+  non-loopback-warning:
+    strength: SHOULD
+    statement: >-
+      The server SHOULD log a security warning when binding to a non-loopback
+      address.
+    scenarios:
+      public-bind-warns:
+        - GIVEN: a configured host of 0.0.0.0
+        - WHEN: the server starts
+        - THEN: a warning about non-loopback binding is logged
+mapping:
+  implementation:
+    - src/server/index.ts
+    - src/server/router.ts
+    - src/server/context.ts
+    - src/server/router.ts
+  tests:
+    - tests/server-dashboard.test.ts
+    - tests/dashboard-smoke.test.ts
+    - tests/dashboard-host-and-token.test.ts
+    - tests/dashboard-port-pin.test.ts
+    - tests/dashboard-token-persistence.test.ts
+    - tests/dashboard-session-url.test.ts
+    - tests/dashboard-sessions-ops.test.ts
+    - tests/dashboard-server-bridge-refresh.test.ts
+    - tests/server-index-config.test.ts

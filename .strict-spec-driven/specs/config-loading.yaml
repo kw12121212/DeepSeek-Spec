@@ -1,0 +1,111 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: config-loading
+  title: Configuration Loading
+requirements:
+  load-config:
+    strength: MUST
+    statement: >-
+      readConfig MUST read and parse config.json from ~/.dspec/ (global) and
+      .dspec/ (project-local), merging project settings over global defaults.
+    scenarios:
+      global-defaults:
+        - GIVEN: a global config.json with model "deepseek-v4-pro"
+        - WHEN: readConfig() is called in a project with no local config
+        - THEN: the global config is returned with model "deepseek-v4-pro"
+      project-override:
+        - GIVEN: global config with model "deepseek-v4-pro" and project config with model "deepseek-v4-flash"
+        - WHEN: readConfig() is called in the project
+        - THEN: model is "deepseek-v4-flash" (project overrides global)
+  missing-config-defaults:
+    strength: MUST
+    statement: >-
+      When config.json does not exist, readConfig MUST return sensible
+      defaults without error.
+    scenarios:
+      no-config:
+        - GIVEN: no config.json in global or project directory
+        - WHEN: readConfig() is called
+        - THEN: default values are returned (e.g., default model, editMode yolo)
+  api-key-resolution:
+    strength: MUST
+    statement: >-
+      API key MUST resolve from DSPEC_API_KEY env var first, then config.json
+      apiKey field, then throw if neither is present.
+    scenarios:
+      env-key-preferred:
+        - GIVEN: DSPEC_API_KEY is set and config.json has apiKey
+        - WHEN: the API key is resolved
+        - THEN: the DSPEC_API_KEY value is used
+      missing-key-throws:
+        - GIVEN: no DSPEC_API_KEY and no config apiKey
+        - WHEN: the API key is resolved
+        - THEN: an error is thrown indicating the key is required
+  edit-mode:
+    strength: MUST
+    statement: >-
+      editMode MUST accept "yolo", "auto", "review", "plan" values, defaulting
+      to "yolo" when not set.
+    scenarios:
+      default-yolo:
+        - GIVEN: no editMode in config
+        - WHEN: loadEditMode() is called
+        - THEN: "'yolo' is returned"
+  model-selection:
+    strength: MUST
+    statement: >-
+      The active model MUST resolve from DSPEC_MODEL env var, then config.json
+      model field, then the provider default.
+    scenarios:
+      env-model:
+        - GIVEN: DSPEC_MODEL is "deepseek-v4-flash"
+        - WHEN: the model is resolved
+        - THEN: "'deepseek-v4-flash' is used"
+  mcp-server-config:
+    strength: MUST
+    statement: >-
+      MCP server configurations MUST be loadable from both config.json and
+      .mcp.json files, supporting stdio and SSE transports.
+    scenarios:
+      load-mcp-config:
+        - GIVEN: a config.json with 2 MCP server entries
+        - WHEN: MCP config is loaded
+        - THEN: 2 server configurations with transport details are returned
+  permission-config:
+    strength: MUST
+    statement: >-
+      Permission mode MUST be configurable per-project, with allowed commands
+      and denied patterns persisting across sessions.
+    scenarios:
+      project-permissions:
+        - GIVEN: a project config with allowedCommands ["git", "bun"]
+        - WHEN: the permission config is loaded
+        - THEN: git and bun commands are pre-approved
+  budget-config:
+    strength: MUST
+    statement: >-
+      Budget settings (maxTurnCost, maxSessionCost) MUST be configurable in
+      the config file with USD values.
+    scenarios:
+      budget-limit:
+        - GIVEN: a config with maxSessionCost 5.0
+        - WHEN: the budget is loaded
+        - THEN: the session cost limit is $5.00
+  sanitize-string-arrays:
+    strength: MUST
+    statement: >-
+      String array config fields MUST be sanitized to remove duplicates and
+      empty entries.
+    scenarios:
+      dedup:
+        - GIVEN: a config with allowedCommands ["git", "git", "", "npm"]
+        - WHEN: the config is loaded
+        - THEN: allowedCommands is ["git", "npm"]
+mapping:
+  implementation:
+    - src/config.ts
+  tests:
+    - tests/config.test.ts
+    - tests/config-sanitize-string-arrays.test.ts

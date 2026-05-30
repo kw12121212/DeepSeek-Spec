@@ -1,0 +1,111 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: acp-protocol
+  title: Agent Client Protocol
+requirements:
+  json-rpc-transport:
+    strength: MUST
+    statement: >-
+      ACP MUST use JSON-RPC 2.0 over NDJSON (newline-delimited JSON) on
+      stdin/stdout for transport between server and client.
+    scenarios:
+      message-framing:
+        - GIVEN: an ACP server connected to a client via stdin/stdout
+        - WHEN: a JSON-RPC message is sent
+        - THEN: it is framed as a single NDJSON line
+  session-lifecycle:
+    strength: MUST
+    statement: >-
+      ACP MUST support creating sessions, sending prompts with content blocks
+      (text, images, audio, resources), and cancelling sessions.
+    scenarios:
+      create-session:
+        - GIVEN: an initialized ACP server
+        - WHEN: a createSession request is sent
+        - THEN: a session ID is returned
+      send-prompt:
+        - GIVEN: an active session
+        - WHEN: a prompt with text content is sent
+        - THEN: the agent begins processing and streams updates
+  streaming-updates:
+    strength: MUST
+    statement: >-
+      ACP MUST stream incremental updates as agent message chunks, reasoning
+      chunks, tool call state changes, and plan entries.
+    scenarios:
+      content-delta:
+        - GIVEN: an active session with a prompt being processed
+        - WHEN: the agent produces content
+        - THEN: content delta updates are streamed to the client
+      tool-lifecycle:
+        - GIVEN: an agent invoking a tool
+        - WHEN: the tool progresses from pending to in_progress to completed
+        - THEN: state transition updates are streamed
+  permission-flow:
+    strength: MUST
+    statement: >-
+      ACP MUST support interactive permission requests for tool execution with
+      allow_once, allow_always, and reject options.
+    scenarios:
+      permission-request:
+        - GIVEN: a tool requiring permission
+        - WHEN: the tool is invoked
+        - THEN: a permission request is sent to the client with the available options
+      permission-response:
+        - GIVEN: a pending permission request
+        - WHEN: the client responds with allow_once
+        - THEN: the tool executes once and future invocations require new permission
+  error-handling:
+    strength: MUST
+    statement: >-
+      ACP error messages MUST include structured metadata with name, code,
+      phase, and retryable flag.
+    scenarios:
+      structured-error:
+        - GIVEN: a session that encounters an API error
+        - WHEN: the error is reported
+        - THEN: the error update includes name, code, phase, and retryable fields
+  event-bridging:
+    strength: MUST
+    statement: >-
+      ACP MUST map internal kernel events (model.delta, tool.*) to ACP
+      session/update notifications.
+    scenarios:
+      bridge-delta:
+        - GIVEN: a model.delta event from the kernel
+        - WHEN: the event is bridged
+        - THEN: an ACP content delta update is produced
+  client-capabilities:
+    strength: MUST
+    statement: >-
+      ACP MUST exchange client capabilities (fs, terminal) and agent
+      capabilities (loadSession, promptCapabilities, mcpCapabilities) during
+      initialization.
+    scenarios:
+      capability-exchange:
+        - GIVEN: a client with fs and terminal capabilities
+        - WHEN: initialization completes
+        - THEN: the server knows the client supports fs and terminal operations
+  gate-evaluation:
+    strength: MUST
+    statement: >-
+      ACP gates MUST evaluate tool calls against permission policies and
+      session constraints before dispatch.
+    scenarios:
+      gate-blocks:
+        - GIVEN: a tool call that violates session constraints
+        - WHEN: the gate evaluates the call
+        - THEN: the call is blocked and an error is returned
+mapping:
+  implementation:
+    - src/acp/dispatch.ts
+    - src/acp/gates.ts
+    - src/acp/protocol.ts
+    - src/acp/server.ts
+  tests:
+    - tests/acp.test.ts
+    - tests/acp-mcp.test.ts
+    - tests/acp-transcript.test.ts
+    - tests/acp-yolo.test.ts

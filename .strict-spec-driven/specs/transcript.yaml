@@ -1,0 +1,87 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: transcript
+  title: Transcript Logging
+requirements:
+  jsonl-logging:
+    strength: MUST
+    statement: >-
+      Transcript logging MUST persist session events as JSON line-separated
+      files with comprehensive metadata including timestamps, turn numbers,
+      role types, token usage, costs, and model IDs.
+    scenarios:
+      log-turn:
+        - GIVEN: a completed agent turn with usage data
+        - WHEN: the turn is logged
+        - THEN: a JSONL line is appended with all metadata fields
+  streaming-capture:
+    strength: MUST
+    statement: >-
+      Transcript logging MUST use streaming writes for real-time capture,
+      ensuring data is persisted even if the process crashes mid-turn.
+    scenarios:
+      crash-partial:
+        - GIVEN: a turn that crashes after the user message is logged
+        - WHEN: the session is recovered
+        - THEN: the user message is available in the transcript
+  tolerant-parsing:
+    strength: MUST
+    statement: >-
+      Transcript parsing MUST skip malformed JSON lines without error,
+      returning all valid records.
+    scenarios:
+      malformed-line:
+        - GIVEN: a transcript with 9 valid lines and 1 malformed line
+        - WHEN: parsing is performed
+        - THEN: 9 valid records are returned
+  diff-comparison:
+    strength: MUST
+    statement: >-
+      Transcript diffing MUST compare two transcripts by turn number, pairing
+      assistant_final records to detect divergences, and classify differences
+      as matches, divergences, or exclusive-to-one-side.
+    scenarios:
+      divergent-transcripts:
+        - GIVEN: two transcripts of the same session with different tool results
+        - WHEN: diff is computed
+        - THEN: divergent turns are identified with similarity scores
+  similarity-scoring:
+    strength: MUST
+    statement: >-
+      Transcript diffing MUST compute similarity via Levenshtein distance or
+      token overlap for large texts, with first-divergence highlighting.
+    scenarios:
+      first-divergence:
+        - GIVEN: two transcripts that diverge at turn 5
+        - WHEN: the diff report is generated
+        - THEN: turn 5 is highlighted as the first divergence
+  prefix-stability:
+    strength: MUST
+    statement: >-
+      Transcript diffing MUST include prefix stability analysis showing
+      prefix hash churn across turns.
+    scenarios:
+      churn-analysis:
+        - GIVEN: a transcript with prefix hash changes at turns 3 and 7
+        - WHEN: prefix analysis runs
+        - THEN: churn events at turns 3 and 7 are reported
+  replay-economics:
+    strength: MUST
+    statement: >-
+      Transcript replay MUST reconstruct session economics offline without API
+      keys, aggregating per-turn stats, models used, cache hit ratios, and
+      cumulative cost.
+    scenarios:
+      replay-stats:
+        - GIVEN: a transcript from a 10-turn session
+        - WHEN: replay is performed
+        - THEN: total cost, cache hit ratio, and per-model breakdown are computed
+mapping:
+  implementation:
+    - src/transcript/log.ts
+    - src/transcript/diff.ts
+    - src/transcript/replay.ts
+  tests:
+    - tests/transcript.test.ts

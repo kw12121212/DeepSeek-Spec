@@ -1,0 +1,84 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: i18n
+  title: Internationalization
+requirements:
+  language-detection:
+    strength: MUST
+    statement: >-
+      The i18n system MUST auto-detect the system locale from environment
+      variables (LC_ALL, LC_MESSAGES, LANG) or browser Intl API, mapping to
+      supported language codes.
+    scenarios:
+      env-detection:
+        - GIVEN: LC_ALL is set to "zh_CN.UTF-8"
+        - WHEN: language detection runs
+        - THEN: "'zh-CN' is selected"
+      fallback-english:
+        - GIVEN: no locale environment variables are set
+        - WHEN: language detection runs
+        - THEN: "English is used as fallback"
+  supported-languages:
+    strength: MUST
+    statement: >-
+      The i18n system MUST support EN, zh-CN, de, ru, and ja languages with
+      comprehensive TranslationSchema coverage.
+    scenarios:
+      all-languages:
+        - GIVEN: the i18n module
+        - WHEN: each supported language code is loaded
+        - THEN: a valid TranslationSchema is available with no empty required keys
+  string-lookup:
+    strength: MUST
+    statement: >-
+      String lookup MUST support hierarchical dot-notation keys (e.g.,
+      "common.error") with {key} template parameter replacement.
+    scenarios:
+      dot-notation:
+        - GIVEN: 'key "status.running" with params {model: "v4"}'
+        - WHEN: t() is called
+        - THEN: 'the translated string with "v4" substituted is returned'
+  english-fallback:
+    strength: MUST
+    statement: >-
+      When a key is missing in the active language, the English translation
+      MUST be used as fallback.
+    scenarios:
+      missing-key-fallback:
+        - GIVEN: a key present in EN but missing in de
+        - WHEN: the key is looked up with locale de
+        - THEN: the English translation is returned
+  runtime-switching:
+    strength: MUST
+    statement: >-
+      Language MUST be switchable at runtime with listener notifications, so
+      UI components re-render in the new language.
+    scenarios:
+      switch-language:
+        - GIVEN: the current language is EN and a listener is registered
+        - WHEN: setLanguage("zh-CN") is called
+        - THEN: the listener is notified and subsequent t() calls return Chinese
+  config-persistence:
+    strength: MUST
+    statement: >-
+      The selected language MUST be persisted in the user config so it
+      survives across sessions.
+    scenarios:
+      persist-selection:
+        - GIVEN: the user selects "ja" via /language
+        - WHEN: the next session starts
+        - THEN: Japanese is the active language without re-detection
+mapping:
+  implementation:
+    - src/i18n/index.ts
+    - src/i18n/types.ts
+    - src/i18n/EN.ts
+    - src/i18n/zh-CN.ts
+    - src/i18n/de.ts
+    - src/i18n/ru.ts
+    - src/i18n/JA.ts
+  tests:
+    - tests/i18n-detect.test.ts
+    - tests/i18n-notify.test.ts

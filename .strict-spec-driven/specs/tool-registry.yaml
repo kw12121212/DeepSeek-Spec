@@ -1,0 +1,204 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: tool-registry
+  title: Tool Registry and Dispatch
+requirements:
+  register-and-list:
+    strength: MUST
+    statement: >-
+      ToolRegistry MUST register tools with schemas and dispatch handlers, and
+      list() MUST return all registered tools.
+    scenarios:
+      register-then-list:
+        - GIVEN: a ToolRegistry with 5 registered tools
+        - WHEN: list() is called
+        - THEN: an array of 5 tool definitions is returned
+  schema-validation:
+    strength: MUST
+    statement: >-
+      Tool dispatch MUST validate input against the tool's JSON schema and
+      reject invalid calls before invoking the handler.
+    scenarios:
+      invalid-input:
+        - GIVEN: a tool requiring a string parameter
+        - WHEN: dispatch is called with a number value for that parameter
+        - THEN: a validation error is returned without calling the handler
+  dispatch-execution:
+    strength: MUST
+    statement: >-
+      dispatch MUST execute the registered handler for the matching tool name
+      and return the handler result.
+    scenarios:
+      happy-path:
+        - GIVEN: a registered tool with a handler that returns "done"
+        - WHEN: dispatch is called with the tool name and valid args
+        - THEN: "'done' is returned"
+  unknown-tool-rejection:
+    strength: MUST
+    statement: dispatch MUST throw when called with an unregistered tool name.
+    scenarios:
+      unknown-name:
+        - GIVEN: a ToolRegistry with no tool named "nonexistent"
+        - WHEN: dispatch("nonexistent", {}) is called
+        - THEN: an error is thrown indicating the tool is not found
+  rate-limiting:
+    strength: MUST
+    statement: >-
+      Rate limiting MUST enforce sliding-window limits on tool dispatch, with
+      aggregate and per-tool buckets, returning a structured error when limits
+      are exceeded.
+    scenarios:
+      limit-exceeded:
+        - GIVEN: a per-tool limit of 5 calls per minute and 5 calls have been made
+        - WHEN: a 6th call is attempted within the window
+        - THEN: a rate-limit error is returned without calling the handler
+  result-truncation:
+    strength: MUST
+    statement: >-
+      Tool results exceeding maxResultChars MUST be truncated with a marker and
+      the full result saved to .dspec/truncated-results/ for later retrieval.
+    scenarios:
+      long-result:
+        - GIVEN: a tool handler returning 50000 chars and maxResultChars is 8000
+        - WHEN: the result is processed
+        - THEN: the returned text is truncated to 8000 chars with a marker and a file is saved
+  truncated-result-cleanup:
+    strength: MUST
+    statement: >-
+      Truncated result files older than 30 days MUST be cleaned up automatically.
+    scenarios:
+      old-file-pruned:
+        - GIVEN: a truncated-results directory with a file 31 days old
+        - WHEN: saveTruncatedResult is called
+        - THEN: the old file is deleted
+  read-before-edit-gate:
+    strength: MUST
+    statement: >-
+      Edit and write operations MUST be rejected if the target file has not been
+      read in the current session (tracked by ReadTracker).
+    scenarios:
+      unread-file-rejected:
+        - GIVEN: a file /foo/bar.ts that has not been read this session
+        - WHEN: an edit tool targets /foo/bar.ts
+        - THEN: the edit is rejected with a must-read-first error
+  read-tracking:
+    strength: MUST
+    statement: >-
+      ReadTracker MUST record file paths read via the read tool and report
+      whether a path has been read.
+    scenarios:
+      track-and-query:
+        - GIVEN: a file is read via the read tool
+        - WHEN: hasRead(path) is called for that file
+        - THEN: true is returned
+  plan-mode-gating:
+    strength: MUST
+    statement: >-
+      When plan mode is active, mutation tools MUST be blocked until the plan is
+      approved.
+    scenarios:
+      plan-blocks-edit:
+        - GIVEN: plan mode is active and no plan has been approved
+        - WHEN: an edit tool is dispatched
+        - THEN: the tool is blocked with a plan-mode error
+  interceptor-hooks:
+    strength: MUST
+    statement: >-
+      Tool dispatch MUST call interceptor hooks before and after handler
+      execution, allowing hooks to modify or block the call.
+    scenarios:
+      hook-blocks:
+        - GIVEN: a pre-dispatch hook that returns a block signal
+        - WHEN: dispatch is called
+        - THEN: the handler is not executed and the block result is returned
+  scaffold-tool:
+    strength: MUST
+    statement: >-
+      The scaffold tool MUST create a new skill file with frontmatter
+      configuration in the project skills directory.
+    scenarios:
+      create-skill:
+        - GIVEN: a skill name and description
+        - WHEN: scaffold is called
+        - THEN: a skill file is created with valid frontmatter including name, description, and tools
+  skill-tool-run:
+    strength: MUST
+    statement: >-
+      The skill tool MUST execute user-defined skill playbooks, supporting both
+      inline and subagent execution modes.
+    scenarios:
+      run-inline:
+        - GIVEN: a skill with inline mode and a valid playbook
+        - WHEN: the skill tool is dispatched
+        - THEN: the playbook is executed and results returned
+  todo-tracking:
+    strength: MUST
+    statement: >-
+      The todo tool MUST track in-session tasks with status (pending,
+      in_progress, completed), enforcing that exactly one task can be
+      in_progress at a time.
+    scenarios:
+      single-in-progress:
+        - GIVEN: a task is in_progress and another task is pending
+        - WHEN: the second task is set to in_progress
+        - THEN: the first task is automatically set to pending
+  choice-tool:
+    strength: MUST
+    statement: >-
+      The choice tool MUST present 2-6 options to the user and return the
+      selected option, supporting optional custom free-form responses.
+    scenarios:
+      user-selects:
+        - GIVEN: a choice with 3 options
+        - WHEN: the user selects option 2
+        - THEN: option 2 is returned
+  memory-tool-save:
+    strength: MUST
+    statement: >-
+      The memory tool MUST save typed memories (user/feedback/project/reference)
+      with scope (global/project) and return confirmation.
+    scenarios:
+      save-feedback:
+        - GIVEN: a feedback memory with project scope
+        - WHEN: save is called
+        - THEN: the memory is persisted and confirmation returned
+  jobs-tool:
+    strength: MUST
+    statement: >-
+      The jobs tool MUST spawn background processes, track output with
+      incremental streaming, detect ready signals, and support graceful
+      termination with process tree cleanup.
+    scenarios:
+      spawn-and-read:
+        - GIVEN: a background command "npm run dev"
+        - WHEN: the job is spawned and output is read
+        - THEN: a job ID is returned and output is available incrementally
+      graceful-terminate:
+        - GIVEN: a running background job with child processes
+        - WHEN: stop is called
+        - THEN: SIGTERM is sent to the process tree and the job is removed
+mapping:
+  implementation:
+    - src/tools.ts
+    - src/tools/rate-limit.ts
+    - src/tools/read-tracker.ts
+    - src/tools/truncated-result-saver.ts
+    - src/tools/scaffold.ts
+    - src/tools/skills.ts
+    - src/tools/todo.ts
+    - src/tools/choice.ts
+    - src/tools/memory.ts
+    - src/tools/jobs.ts
+  tests:
+    - tests/tools.test.ts
+    - tests/tools-rate-limit.test.ts
+    - tests/read-before-edit-gate.test.ts
+    - tests/truncated-result-saver.test.ts
+    - tests/tools-scaffold.test.ts
+    - tests/tools-skills.test.ts
+    - tests/todo.test.ts
+    - tests/choice.test.ts
+    - tests/tools-memory.test.ts
+    - tests/jobs.test.ts

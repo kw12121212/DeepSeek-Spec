@@ -5,27 +5,66 @@ specs:
   - id: agent-loop
     title: Core Agent Loop
     path: .strict-spec-driven/specs/agent-loop.yaml
+  - id: acp-protocol
+    title: Agent Client Protocol
+    path: .strict-spec-driven/specs/acp-protocol.yaml
   - id: code-edit-blocks
     title: Code Edit Blocks
     path: .strict-spec-driven/specs/code-edit-blocks.yaml
+  - id: code-query
+    title: Code Query Analysis
+    path: .strict-spec-driven/specs/code-query.yaml
+  - id: config-loading
+    title: Configuration Loading
+    path: .strict-spec-driven/specs/config-loading.yaml
+  - id: context-manager
+    title: Context Manager
+    path: .strict-spec-driven/specs/context-manager.yaml
+  - id: dashboard-server
+    title: Dashboard HTTP Server
+    path: .strict-spec-driven/specs/dashboard-server.yaml
+  - id: desktop-support
+    title: Desktop Support
+    path: .strict-spec-driven/specs/desktop-support.yaml
   - id: embedded-assets
     title: Embedded Asset Registry
     path: .strict-spec-driven/specs/embedded-assets.yaml
   - id: event-kernel
     title: Event Log Kernel
     path: .strict-spec-driven/specs/event-kernel.yaml
+  - id: hooks-system
+    title: Hooks System
+    path: .strict-spec-driven/specs/hooks-system.yaml
+  - id: i18n
+    title: Internationalization
+    path: .strict-spec-driven/specs/i18n.yaml
+  - id: main-loop
+    title: Main Agent Loop Orchestrator
+    path: .strict-spec-driven/specs/main-loop.yaml
   - id: mcp-integration
     title: MCP Client Integration
     path: .strict-spec-driven/specs/mcp-integration.yaml
+  - id: memory-system
+    title: Memory System
+    path: .strict-spec-driven/specs/memory-system.yaml
   - id: multi-provider-config
     title: Multi-Provider Configuration
     path: .strict-spec-driven/specs/multi-provider-config.yaml
   - id: native-build-script
     title: Native Build Script
     path: .strict-spec-driven/specs/native-build-script.yaml
+  - id: semantic-index
+    title: Semantic Vector Index
+    path: .strict-spec-driven/specs/semantic-index.yaml
+  - id: session-management
+    title: Session Import and Title Generation
+    path: .strict-spec-driven/specs/session-management.yaml
   - id: shell-tool
     title: Shell Tool
     path: .strict-spec-driven/specs/shell-tool.yaml
+  - id: skills-system
+    title: Skills System
+    path: .strict-spec-driven/specs/skills-system.yaml
   - id: strict-brainstorm
     title: Strict Brainstorm Tool
     path: .strict-spec-driven/specs/strict-brainstorm.yaml
@@ -44,6 +83,15 @@ specs:
   - id: telemetry
     title: Telemetry and Cost Tracking
     path: .strict-spec-driven/specs/telemetry.yaml
+  - id: tokenizer
+    title: DeepSeek Tokenizer
+    path: .strict-spec-driven/specs/tokenizer.yaml
   - id: tool-call-repair
     title: Tool Call Repair Pipeline
     path: .strict-spec-driven/specs/tool-call-repair.yaml
+  - id: tool-registry
+    title: Tool Registry and Dispatch
+    path: .strict-spec-driven/specs/tool-registry.yaml
+  - id: transcript
+    title: Transcript Logging
+    path: .strict-spec-driven/specs/transcript.yaml

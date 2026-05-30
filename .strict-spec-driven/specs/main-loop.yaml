@@ -1,0 +1,126 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: main-loop
+  title: Main Agent Loop Orchestrator
+requirements:
+  iteration-control:
+    strength: MUST
+    statement: >-
+      The main loop MUST iterate until the model produces no tool calls (agent
+      turn ends), the abort signal fires, or maxTurns is reached.
+    scenarios:
+      natural-end:
+        - GIVEN: a model response with no tool calls
+        - WHEN: the loop processes the response
+        - THEN: the loop exits with the final response
+      max-turns:
+        - GIVEN: maxTurns is 5 and the model produces tool calls for 6 turns
+        - WHEN: the 6th turn is reached
+        - THEN: the loop exits with a max-turns message
+      abort:
+        - GIVEN: an AbortSignal that fires during a turn
+        - WHEN: the signal is triggered
+        - THEN: the loop exits cleanly without hanging
+  system-prompt-construction:
+    strength: MUST
+    statement: >-
+      The main loop MUST construct the system prompt from project memory,
+      skills, tool definitions, and configured instructions before each API
+      call.
+    scenarios:
+      prompt-assembly:
+        - GIVEN: a project with DSPEC.md and 3 loaded skills
+        - WHEN: the loop builds the system prompt
+        - THEN: the prompt includes project memory, skill descriptions, and tool schemas
+  message-history:
+    strength: MUST
+    statement: >-
+      The main loop MUST maintain a conversation history, appending user
+      messages, model responses, and tool results in correct alternating
+      order.
+    scenarios:
+      history-order:
+        - GIVEN: a conversation with user->assistant->tool_result turns
+        - WHEN: the next API call is made
+        - THEN: the message array has correct user/assistant/tool ordering
+  error-recovery:
+    strength: MUST
+    statement: >-
+      The main loop MUST handle API errors with retry logic for transient
+      failures (429, 500, 502, 503, 504) and surface non-retryable errors to
+      the user.
+    scenarios:
+      transient-retry:
+        - GIVEN: the API returns a 429 response
+        - WHEN: the error is caught
+        - THEN: the request is retried with exponential backoff
+      fatal-error:
+        - GIVEN: the API returns a 401 response
+        - WHEN: the error is caught
+        - THEN: the error is surfaced to the user without retry
+  context-compaction:
+    strength: MUST
+    statement: >-
+      The main loop MUST trigger context compaction when the context manager
+      reports the context is near the token limit.
+    scenarios:
+      compact-before-overflow:
+        - GIVEN: the context is at 90% of the token limit
+        - WHEN: a new turn is about to start
+        - THEN: context compaction is triggered before the API call
+  session-persist:
+    strength: MUST
+    statement: >-
+      The main loop MUST persist session state (messages, events, usage) to
+      disk after each turn for crash recovery and session resumption.
+    scenarios:
+      per-turn-persist:
+        - GIVEN: a turn completes with tool results
+        - WHEN: the turn finishes
+        - THEN: the session file is updated with the new turn data
+  tool-result-handling:
+    strength: MUST
+    statement: >-
+      The main loop MUST handle tool results including errors, truncated
+      results, and storm-breaker repeat detection before returning them to
+      the model.
+    scenarios:
+      storm-detected:
+        - GIVEN: 3 identical tool calls in recent turns
+        - WHEN: a 4th identical call is detected
+        - THEN: the call is suppressed and a storm warning is injected
+  dashboard-events:
+    strength: MUST
+    statement: >-
+      The main loop MUST emit events to the dashboard (via the event sink)
+      for each lifecycle stage: user message, model start, delta, final,
+      tool dispatch, and turn end.
+    scenarios:
+      event-sequence:
+        - GIVEN: a single-turn conversation
+        - WHEN: the turn executes
+        - THEN: events are emitted for model.turn.started, model.delta, model.final in order
+  hook-integration:
+    strength: MUST
+    statement: >-
+      The main loop MUST fire hook events (PreToolUse, PostToolUse) around
+      tool dispatch and UserPromptSubmit before processing user messages.
+    scenarios:
+      pre-tool-hook:
+        - GIVEN: a PreToolUse hook is configured
+        - WHEN: a tool call is dispatched
+        - THEN: the hook is fired before the tool handler executes
+mapping:
+  implementation:
+    - src/loop.ts
+  tests:
+    - tests/loop.test.ts
+    - tests/loop-error.test.ts
+    - tests/loop-hooks.test.ts
+    - tests/loop-inflight.test.ts
+    - tests/loop-r1-reasoning.test.ts
+    - tests/loop-slash.test.ts
+    - tests/loop-to-dashboard.test.ts
+    - tests/loop-user-persist.test.ts

@@ -1,0 +1,75 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: session-management
+  title: Session Import and Title Generation
+requirements:
+  import-claude-code:
+    strength: MUST
+    statement: >-
+      Session import MUST parse Claude Code JSONL session files and convert
+      them to DeepSeek-Spec session format with metadata preservation.
+    scenarios:
+      import-claude:
+        - GIVEN: a Claude Code JSONL file with user/assistant turns
+        - WHEN: import is called
+        - THEN: a DeepSeek-Spec session file is created with equivalent messages
+  import-codex:
+    strength: MUST
+    statement: >-
+      Session import MUST parse Codex session files and convert them to
+      DeepSeek-Spec session format.
+    scenarios:
+      import-codex-session:
+        - GIVEN: a Codex-format session file
+        - WHEN: import is called
+        - THEN: a DeepSeek-Spec session file is created
+  import-metadata:
+    strength: MUST
+    statement: >-
+      Imported sessions MUST preserve timestamps, model information, and token
+      usage metadata from the source format.
+    scenarios:
+      metadata-preserved:
+        - GIVEN: a source session with timestamps and model IDs
+        - WHEN: import completes
+        - THEN: the DeepSeek-Spec session contains the original timestamps and model IDs
+  title-generation:
+    strength: MUST
+    statement: >-
+      generateSessionTitle MUST produce a concise session title by examining
+      the first user message and optional assistant response using an AI call.
+    scenarios:
+      title-from-message:
+        - GIVEN: a session with first user message "Fix the authentication bug in login.ts"
+        - WHEN: generateSessionTitle is called
+        - THEN: a concise title like "Fix auth bug in login.ts" is returned
+  title-fallback:
+    strength: MUST
+    statement: >-
+      When AI title generation fails or the message is too short, a default
+      session title MUST be used.
+    scenarios:
+      fallback-title:
+        - GIVEN: a session with an empty first message
+        - WHEN: generateSessionTitle is called
+        - THEN: a default title is returned without error
+  session-persistence:
+    strength: MUST
+    statement: >-
+      Session state MUST persist to disk after each turn, enabling session
+      resumption after restart.
+    scenarios:
+      persist-and-resume:
+        - GIVEN: a session with 3 turns
+        - WHEN: the session is saved and reloaded
+        - THEN: all 3 turns are available in the reloaded session
+mapping:
+  implementation:
+    - src/session-import.ts
+    - src/session-title.ts
+  tests:
+    - tests/session-import.test.ts
+    - tests/session-title.test.ts
+    - tests/session.test.ts

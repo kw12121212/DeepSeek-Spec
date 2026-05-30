@@ -1,0 +1,87 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: hooks-system
+  title: Hooks System
+requirements:
+  hook-types:
+    strength: MUST
+    statement: >-
+      The hooks system MUST support PreToolUse, PostToolUse, UserPromptSubmit,
+      and Stop hook events.
+    scenarios:
+      all-types-supported:
+        - GIVEN: hook configurations for all 4 event types
+        - WHEN: hooks are loaded
+        - THEN: all 4 event types are registered and executable
+  hook-execution:
+    strength: MUST
+    statement: >-
+      Hooks MUST execute as shell commands with the hook event data provided as
+      JSON on stdin, and the hook result MUST be parsed from stdout.
+    scenarios:
+      execute-hook:
+        - GIVEN: a PreToolUse hook configured with a shell command
+        - WHEN: the hook is triggered for a tool call
+        - THEN: the shell command receives the tool event as JSON on stdin
+  hook-blocking:
+    strength: MUST
+    statement: >-
+      A hook MUST be able to block the triggering action by exiting with code 2.
+      Exit code 0 allows the action. Any other exit code is an error.
+    scenarios:
+      block-action:
+        - GIVEN: a PreToolUse hook that exits with code 2
+        - WHEN: a tool call triggers the hook
+        - THEN: the tool call is blocked and a block message is returned
+      allow-action:
+        - GIVEN: a PreToolUse hook that exits with code 0
+        - WHEN: a tool call triggers the hook
+        - THEN: the tool call proceeds normally
+  hook-feedback:
+    strength: MUST
+    statement: >-
+      When a hook blocks an action (exit 2), the hook's stdout MUST be
+      presented to the user as the reason for the block.
+    scenarios:
+      block-reason:
+        - GIVEN: a hook that exits 2 with stdout "blocked for safety"
+        - WHEN: the block is processed
+        - THEN: "'blocked for safety' is surfaced to the user"
+  project-and-global-hooks:
+    strength: MUST
+    statement: >-
+      Hooks MUST be loadable from both project-level (.dspec/settings.json)
+      and global (~/.dspec/settings.json) configuration. Project hooks MUST
+      run after global hooks.
+    scenarios:
+      both-run:
+        - GIVEN: a global hook and a project hook for PreToolUse
+        - WHEN: a tool call is made
+        - THEN: both hooks execute, global first
+  hook-environment:
+    strength: MUST
+    statement: >-
+      Hook commands MUST execute with the project root as CWD and with
+      relevant environment variables set.
+    scenarios:
+      cwd-set:
+        - GIVEN: a project at /home/user/project
+        - WHEN: a hook command executes
+        - THEN: the command's CWD is /home/user/project
+  hook-timeout:
+    strength: SHOULD
+    statement: >-
+      Hooks SHOULD enforce a timeout to prevent indefinite blocking of the
+      agent loop.
+    scenarios:
+      timeout-fires:
+        - GIVEN: a hook command that runs for 30 seconds and a 10-second timeout
+        - WHEN: the hook is executed
+        - THEN: the hook is killed after 10 seconds
+mapping:
+  implementation:
+    - src/hooks.ts
+  tests:
+    - tests/hooks.test.ts

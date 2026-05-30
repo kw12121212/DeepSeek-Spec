@@ -1,0 +1,99 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: context-manager
+  title: Context Manager
+requirements:
+  token-tracking:
+    strength: MUST
+    statement: >-
+      The context manager MUST track token usage across turns and report the
+      current context size in tokens.
+    scenarios:
+      track-tokens:
+        - GIVEN: a conversation with 3 turns totaling 5000 tokens
+        - WHEN: the context size is queried
+        - THEN: 5000 (or the cumulative count) is returned
+  fold-when-near-limit:
+    strength: MUST
+    statement: >-
+      When the context approaches the model's context window limit, the context
+      manager MUST fold older messages by summarizing them into a compact
+      representation, preserving the most recent turns intact.
+    scenarios:
+      fold-triggered:
+        - GIVEN: a conversation approaching 90% of the context window
+        - WHEN: a new turn is added
+        - THEN: older messages are folded and the context shrinks below the threshold
+  fold-preserves-recent:
+    strength: MUST
+    statement: >-
+      Context folding MUST preserve the most recent N turns intact and only
+      summarize older turns.
+    scenarios:
+      recent-intact:
+        - GIVEN: 20 turns in the conversation and folding is triggered
+        - WHEN: folding completes
+        - THEN: the last N turns remain unchanged and older turns are summarized
+  cache-aligned-fold:
+    strength: MUST
+    statement: >-
+      Context folding MUST be aligned with the prefix cache boundary, folding
+      at message boundaries that preserve the immutable prefix.
+    scenarios:
+      prefix-preserved:
+        - GIVEN: an established prefix cache covering the first 5 messages
+        - WHEN: folding occurs
+        - THEN: the folded summary replaces messages after the prefix boundary
+  fold-timeout:
+    strength: MUST
+    statement: >-
+      Context folding MUST enforce a timeout to prevent the folding operation
+      from blocking the agent loop indefinitely.
+    scenarios:
+      fold-completes-within-timeout:
+        - GIVEN: a folding operation that takes longer than the timeout
+        - WHEN: the timeout fires
+        - THEN: a best-effort fold result is returned or an error is surfaced
+  budget-allocation:
+    strength: MUST
+    statement: >-
+      The context manager MUST allocate token budget across system prompt, tool
+      definitions, conversation history, and response space, ensuring the total
+      stays within the model's context window.
+    scenarios:
+      budget-respected:
+        - GIVEN: a model with 64000 token context window
+        - WHEN: the context is assembled for an API call
+        - THEN: total tokens (system + tools + history + response budget) do not exceed 64000
+  skill-pin:
+    strength: MUST
+    statement: >-
+      The context manager MUST pin skill-related content so it is not folded
+      away during context compaction.
+    scenarios:
+      skill-not-folded:
+        - GIVEN: a skill definition in the context and a fold event
+        - WHEN: folding occurs
+        - THEN: the skill definition remains in the context
+  thinking-mode-adjustment:
+    strength: MUST
+    statement: >-
+      The context manager MUST adjust token budgets when the active model uses
+      thinking mode, accounting for reasoning tokens in the budget.
+    scenarios:
+      thinking-budget:
+        - GIVEN: a thinking-mode model with reasoning token overhead
+        - WHEN: the context budget is calculated
+        - THEN: the response budget is reduced to account for reasoning tokens
+mapping:
+  implementation:
+    - src/context-manager.ts
+  tests:
+    - tests/compact-tokens.test.ts
+    - tests/context-manager-cache-aligned-fold.test.ts
+    - tests/context-manager-fold-timeout.test.ts
+    - tests/context-manager-log-tokens.test.ts
+    - tests/context-manager-skill-pin.test.ts
+    - tests/context-manager-thinking-mode.test.ts

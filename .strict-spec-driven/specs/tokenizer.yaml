@@ -1,0 +1,71 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: tokenizer
+  title: DeepSeek Tokenizer
+requirements:
+  bpe-encode:
+    strength: MUST
+    statement: >-
+      The tokenizer MUST encode text to token IDs using DeepSeek V4 BPE merge
+      rules, producing the same tokenization as the DeepSeek reference
+      implementation.
+    scenarios:
+      encode-text:
+        - GIVEN: the string "Hello, world!"
+        - WHEN: encode() is called
+        - THEN: an array of integer token IDs is returned matching DeepSeek V4 tokenization
+  decode-tokens:
+    strength: MUST
+    statement: >-
+      The tokenizer MUST decode token IDs back to the original text.
+    scenarios:
+      round-trip:
+        - GIVEN: a string "test input"
+        - WHEN: encode() then decode() is called
+        - THEN: the original string is recovered
+  count-tokens:
+    strength: MUST
+    statement: >-
+      countTokens() MUST return the exact token count for a string.
+    scenarios:
+      accurate-count:
+        - GIVEN: a string that tokenizes to 7 tokens
+        - WHEN: countTokens() is called
+        - THEN: 7 is returned
+  count-message-tokens:
+    strength: MUST
+    statement: >-
+      countMessageTokens() MUST count tokens for a full chat message including
+      role markers, content, and tool call overhead.
+    scenarios:
+      message-overhead:
+        - GIVEN: a user message "hi"
+        - WHEN: countMessageTokens() is called
+        - THEN: the count includes the content tokens plus role formatting overhead
+  chat-template:
+    strength: MUST
+    statement: >-
+      formatChatTemplate() MUST apply the DeepSeek chat template to a message
+      array, producing the exact formatted string expected by the API.
+    scenarios:
+      template-output:
+        - GIVEN: a conversation with system, user, and assistant messages
+        - WHEN: formatChatTemplate() is called
+        - THEN: the output matches the DeepSeek chat template format with correct delimiters
+  tool-spec-tokens:
+    strength: MUST
+    statement: >-
+      countToolSpecTokens() MUST count the token overhead for tool definitions
+      in the prompt.
+    scenarios:
+      tool-overhead:
+        - GIVEN: 3 tool definitions with schemas
+        - WHEN: countToolSpecTokens() is called
+        - THEN: the count includes tokens for tool names, descriptions, and schema JSON
+mapping:
+  implementation:
+    - src/tokenizer.ts
+  tests:
+    - tests/tokenizer.test.ts

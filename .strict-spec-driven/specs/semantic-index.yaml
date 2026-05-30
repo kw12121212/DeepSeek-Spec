@@ -1,0 +1,119 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: semantic-index
+  title: Semantic Vector Index
+requirements:
+  bootstrap-and-register:
+    strength: MUST
+    statement: >-
+      The semantic index MUST auto-register the semantic_search tool when the
+      index exists and config matches the current project state.
+    scenarios:
+      auto-register:
+        - GIVEN: an existing index directory matching the project config
+        - WHEN: the agent session starts
+        - THEN: the semantic_search tool is available
+  chunking:
+    strength: MUST
+    statement: >-
+      The chunker MUST split source files into 60-line overlapping windows with
+      12-line overlap, respecting gitignore patterns and excluding binary files.
+      Chunks MUST not exceed 4000 characters.
+    scenarios:
+      chunk-file:
+        - GIVEN: a 200-line source file
+        - WHEN: chunking is performed
+        - THEN: overlapping 60-line windows are produced with 12-line overlaps
+  embedding:
+    strength: MUST
+    statement: >-
+      The embedder MUST batch embedding requests to Ollama or OpenAI-compatible
+      APIs and normalize resulting vectors to unit length.
+    scenarios:
+      batch-embed:
+        - GIVEN: 10 chunks and a running Ollama instance with nomic-embed-text
+        - WHEN: embedding is performed
+        - THEN: 10 normalized unit vectors are returned
+  store-operations:
+    strength: MUST
+    statement: >-
+      The store MUST use append-only JSONL writes with a metadata file, track
+      incremental updates by file mtime, and use linear cosine scan for queries
+      when chunks are 10000 or fewer.
+    scenarios:
+      incremental-update:
+        - GIVEN: an index with 100 chunks and a modified file
+        - WHEN: rebuild is triggered
+        - THEN: only modified file chunks are re-embedded and the store is updated
+  query:
+    strength: MUST
+    statement: >-
+      semantic_search MUST return top-K ranked hits with file:line ranges,
+      score previews, and a configurable minimum score threshold.
+    scenarios:
+      search-hit:
+        - GIVEN: an index with embedded chunks for a TypeScript project
+        - WHEN: semantic_search is called with query "token counting"
+        - THEN: ranked hits with file paths, line ranges, and similarity scores are returned
+  ollama-launcher:
+    strength: MUST
+    statement: >-
+      The launcher MUST auto-start the Ollama daemon, pull missing models, and
+      verify compatibility before indexing begins.
+    scenarios:
+      auto-start:
+        - GIVEN: Ollama is not running and is installed
+        - WHEN: indexing is triggered
+        - THEN: the Ollama daemon is started and the required model is available
+  preflight:
+    strength: MUST
+    statement: >-
+      Preflight checks MUST verify Ollama availability, model compatibility,
+      and disk space before indexing begins, surfacing actionable errors for
+      each failure mode.
+    scenarios:
+      ollama-missing:
+        - GIVEN: Ollama is not installed
+        - WHEN: preflight is run
+        - THEN: an error is returned with installation instructions
+  i18n-messages:
+    strength: MUST
+    statement: >-
+      Status messages and error descriptions from the semantic index MUST be
+      available in all supported i18n languages.
+    scenarios:
+      localized-error:
+        - GIVEN: locale is zh-CN
+        - WHEN: a preflight error is generated
+        - THEN: the error message is in Chinese
+  index-config:
+    strength: MUST
+    statement: >-
+      Index configuration MUST specify the embedding model, dimensions,
+      chunk size, and exclusion patterns, with sensible defaults.
+    scenarios:
+      default-config:
+        - GIVEN: no index configuration is provided
+        - WHEN: the index is created
+        - THEN: defaults (nomic-embed-text, 768 dimensions, 60-line chunks) are used
+mapping:
+  implementation:
+    - src/index/config.ts
+    - src/index/semantic/builder.ts
+    - src/index/semantic/chunker.ts
+    - src/index/semantic/embedding.ts
+    - src/index/semantic/store.ts
+    - src/index/semantic/tool.ts
+    - src/index/semantic/preflight.ts
+    - src/index/semantic/ollama-launcher.ts
+    - src/index/semantic/i18n.ts
+  tests:
+    - tests/semantic-bootstrap.test.ts
+    - tests/semantic-chunker.test.ts
+    - tests/semantic-store.test.ts
+    - tests/semantic-embed-tolerant.test.ts
+    - tests/semantic-launcher.test.ts
+    - tests/semantic-i18n.test.ts
+    - tests/index-config.test.ts

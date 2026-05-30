@@ -1,0 +1,44 @@
+schema: strict-spec-driven/spec/v1
+schema_version: 1
+artifact_type: main_spec
+spec:
+  id: desktop-support
+  title: Desktop Support
+requirements:
+  login-shell-path:
+    strength: MUST
+    statement: >-
+      loginShellPath MUST probe the user's login shell ($SHELL -ilc) to
+      capture the full PATH including version manager entries (nvm, asdf, fnm,
+      volta, mise), then augment process.env.PATH at startup.
+    scenarios:
+      augment-path:
+        - GIVEN: a login shell with nvm-installed Node at ~/.nvm/versions/node/v22/bin
+        - WHEN: loginShellPath() is called
+        - THEN: process.env.PATH includes the nvm bin directory
+      no-shell:
+        - GIVEN: $SHELL is not set
+        - WHEN: loginShellPath() is called
+        - THEN: process.env.PATH is unchanged and no error is thrown
+  memory-browser:
+    strength: MUST
+    statement: >-
+      The memory browser MUST collect and read workspace memory entries from
+      three sources: project files, global files, and structured MemoryStore
+      records.
+    scenarios:
+      list-entries:
+        - GIVEN: a project with DSPEC.md and 2 global memory files
+        - WHEN: listMemoryEntries() is called
+        - THEN: 3 entries are returned with kind, scope, name, path, and description metadata
+      read-entry:
+        - GIVEN: a memory entry with path and kind
+        - WHEN: readMemoryEntry() is called
+        - THEN: the full entry content including body and creation timestamp is returned
+mapping:
+  implementation:
+    - src/desktop/login-shell-path.ts
+    - src/desktop/memory-browser.ts
+  tests:
+    - tests/desktop-login-shell-path.test.ts
+    - tests/desktop-memory-browser.test.ts
