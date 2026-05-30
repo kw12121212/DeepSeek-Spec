@@ -1,8 +1,6 @@
-import { DeepSeekClient } from "../client.js";
 import {
   type EditMode,
   loadEditMode,
-  loadEndpoint,
   loadFilesystemOutlineThresholdBytes,
   loadJavaSourceEnabled,
   loadProjectShellAllowed,
@@ -13,6 +11,8 @@ import {
   searchEnabled,
 } from "../config.js";
 import { bootstrapSemanticSearchInCodeMode } from "../index/semantic/tool.js";
+import type { ModelClient } from "../ports/model-client.js";
+import { createClientForProvider } from "../providers/registry.js";
 import { registerStrictTools } from "../strict/strict-tools.js";
 import { ToolRegistry } from "../tools.js";
 import { registerChoiceTool } from "../tools/choice.js";
@@ -102,7 +102,7 @@ export async function buildCodeToolset(opts: CodeToolsetOpts): Promise<CodeTools
   // which would kill `dspec code` before the setup wizard can prompt for
   // one. Defer to first subagent dispatch — by then the user has either keyed
   // in or we error per-call instead of at boot.
-  let subagentClient: DeepSeekClient | null = null;
+  let subagentClient: ModelClient | null = null;
   registerSkillTools(tools, {
     projectRoot: opts.rootDir,
     customSkillPaths: loadResolvedSkillPaths(opts.rootDir),
@@ -110,8 +110,7 @@ export async function buildCodeToolset(opts: CodeToolsetOpts): Promise<CodeTools
     onSkillInstalled: opts.onSkillInstalled,
     subagentRunner: async (skill, task, signal) => {
       if (!subagentClient) {
-        const ep = loadEndpoint();
-        subagentClient = new DeepSeekClient({ apiKey: ep.apiKey, baseUrl: ep.baseUrl });
+        subagentClient = createClientForProvider();
       }
       const result = await spawnSubagent({
         client: subagentClient,

@@ -132,12 +132,12 @@ describe("ProviderRegistry: loadActiveProvider", () => {
 
   it("defaults to deepseek when env is unset", () => {
     process.env.DSPEC_PROVIDER = undefined;
-    expect(loadActiveProvider()).toBe("deepseek");
+    expect(loadActiveProvider("/nonexistent/dspec-test-config.json")).toBe("deepseek");
   });
 
   it("ignores invalid env values and falls back to deepseek", () => {
     process.env.DSPEC_PROVIDER = "claude";
-    expect(loadActiveProvider()).toBe("deepseek");
+    expect(loadActiveProvider("/nonexistent/dspec-test-config.json")).toBe("deepseek");
   });
 });
 

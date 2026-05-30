@@ -26,9 +26,7 @@ import { buildCodeToolset } from "../../code/setup.js";
 import {
   DEFAULT_MODEL,
   bridgeEndpointEnv,
-  loadApiKey,
   loadEditMode,
-  loadEndpoint,
   loadModel,
   loadReasoningEffort,
   normalizeMcpConfig,
@@ -39,13 +37,14 @@ import { pauseGate } from "../../core/pause-gate.js";
 import { autoResolveVerdict } from "../../core/pause-policy.js";
 import { loadDotenv } from "../../env.js";
 import { t } from "../../i18n/index.js";
-import { CacheFirstLoop, DeepSeekClient, ImmutablePrefix } from "../../index.js";
+import { CacheFirstLoop, ImmutablePrefix } from "../../index.js";
 import { errorMeta } from "../../loop/errors.js";
 import { McpClient } from "../../mcp/client.js";
 import { preflightStdioSpec } from "../../mcp/preflight.js";
 import { bridgeMcpTools } from "../../mcp/registry.js";
 import { buildTransportFromSpec } from "../../mcp/transport-from-spec.js";
 import { timestampSuffix } from "../../memory/session.js";
+import { createClientForProvider } from "../../providers/registry.js";
 import { openTranscriptFile, recordFromLoopEvent, writeRecord } from "../../transcript/log.js";
 import { VERSION } from "../../version.js";
 import { formatMcpLifecycleEvent } from "../ui/mcp-lifecycle.js";
@@ -175,8 +174,7 @@ async function buildSession(opts: {
     modelId: model,
     systemAppend: opts.systemAppend,
   });
-  const ep = loadEndpoint();
-  const client = new DeepSeekClient({ apiKey: ep.apiKey, baseUrl: ep.baseUrl });
+  const client = createClientForProvider(model);
   const prefix = new ImmutablePrefix({ system, toolSpecs: toolset.tools.specs() });
   const loop = new CacheFirstLoop({
     client,

@@ -9,6 +9,7 @@ import {
   loadApiKey,
   loadEndpoint,
   loadToolRateLimit,
+  modelToProvider,
   normalizeMcpConfig,
   readConfig,
   saveApiKey,
@@ -149,7 +150,8 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     ["deepseek-v4-flash", "deepseek-v4-pro"],
   );
   registry.register("glm", () => new GLMClient(), ["glm-4.7", "glm-5.1", "glm-5-turbo"]);
-  const client = registry.resolve("deepseek");
+  const provider = modelToProvider(opts.model);
+  const client = registry.resolve(provider);
   const prefix = new ImmutablePrefix({
     system: opts.system,
     toolSpecs: tools?.specs(),

@@ -1,5 +1,5 @@
 import { OpenAICompatClient } from "./adapters/model-openai-compat.js";
-import { loadRateLimit, resolveBaseUrlEnv } from "./config.js";
+import { loadApiKey, loadRateLimit, resolveBaseUrlEnv } from "./config.js";
 import type { RetryOptions } from "./retry.js";
 import type { ChatMessage, ChatRequestOptions, ToolCall, ToolSpec } from "./types.js";
 
@@ -92,10 +92,10 @@ export class DeepSeekClient extends OpenAICompatClient {
   override readonly capabilities = { supportsThinking: true, supportsReasoningContent: true };
 
   constructor(opts: DeepSeekClientOptions = {}) {
-    const apiKey = opts.apiKey ?? process.env.DEEPSEEK_API_KEY;
+    const apiKey = opts.apiKey ?? process.env.DEEPSEEK_API_KEY ?? loadApiKey();
     if (!apiKey) {
       throw new Error(
-        "DEEPSEEK_API_KEY is not set. Put it in .env or pass apiKey to DeepSeekClient.",
+        "API key not found. Set it in ~/.dspec/config.json, .env, or pass apiKey to DeepSeekClient.",
       );
     }
     const rpm = opts.rateLimit?.rpm ?? loadRateLimit()?.rpm;

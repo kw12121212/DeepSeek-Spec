@@ -6,10 +6,10 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline/promises";
-import { DeepSeekClient } from "../../client.js";
-import { loadEndpoint } from "../../config.js";
+import { loadActiveProvider, loadApiKey, loadGlmApiKey } from "../../config.js";
 import { loadDotenv } from "../../env.js";
 import type { ModelClient } from "../../ports/model-client.js";
+import { createClientForProvider } from "../../providers/registry.js";
 
 export interface CommitOptions {
   /** Override the default model (deepseek-v4-flash). */
@@ -240,10 +240,11 @@ export async function commitCommand(opts: CommitOptions = {}): Promise<void> {
   loadDotenv();
   dieIfNotGitRepo();
 
-  const ep = loadEndpoint();
-  if (!ep.apiKey) {
+  const provider = loadActiveProvider();
+  const hasKey = provider === "glm" ? !!loadGlmApiKey() : !!loadApiKey();
+  if (!hasKey) {
     process.stderr.write(
-      "dspec commit: DEEPSEEK_API_KEY not set. Run `dspec setup` to save one, or export it.\n",
+      `dspec commit: API key not set for provider '${provider}'. Run \`dspec setup\` to save one.\n`,
     );
     process.exit(1);
   }
@@ -266,8 +267,8 @@ export async function commitCommand(opts: CommitOptions = {}): Promise<void> {
     );
   }
 
-  const client = new DeepSeekClient({ apiKey: ep.apiKey, baseUrl: ep.baseUrl });
   const model = opts.model ?? DEFAULT_MODEL;
+  const client = createClientForProvider(model);
   const recentCommits = readRecentCommits();
 
   let message = "";

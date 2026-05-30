@@ -87,6 +87,7 @@ import {
   sessionPath,
   timestampSuffix,
 } from "../../memory/session.js";
+import { createClientForProvider } from "../../providers/registry.js";
 import {
   type ExternalSessionSource,
   discoverExternalSessionApps,
@@ -954,8 +955,7 @@ function buildRuntimeFor(tab: Tab): RuntimeState {
   if (!tab.toolset) throw new Error("buildRuntimeFor called before initTabToolset finished");
   const toolset = tab.toolset;
   applyPlanMode(toolset.tools, loadEditMode());
-  const ep = loadEndpoint();
-  const client = new DeepSeekClient({ apiKey: ep.apiKey, baseUrl: ep.baseUrl });
+  const client = createClientForProvider(tab.currentModel);
   const prefix = new ImmutablePrefix({ system: tab.system, toolSpecs: toolset.tools.specs() });
   const reasoningEffort = loadReasoningEffort();
   const loop = new CacheFirstLoop({

@@ -36,7 +36,6 @@ import {
   defaultConfigPath,
   editModeHintShown,
   isReasoningEffort,
-  loadEndpoint,
   loadEngineeringLifecycleMode,
   loadHistoryScrollMode,
   loadMouseWheelRows,
@@ -71,6 +70,7 @@ import {
   renameSession,
   sanitizeName,
 } from "../../memory/session.js";
+import { createClientForProvider } from "../../providers/registry.js";
 import type {
   ActiveModal,
   ChoiceResolution,
@@ -964,8 +964,7 @@ function AppInner({
   // biome-ignore lint/correctness/useExhaustiveDependencies: currentRootDir —see comment above
   const loop = useMemo(() => {
     if (loopRef.current) return loopRef.current;
-    const ep = loadEndpoint();
-    const client = new DeepSeekClient({ apiKey: ep.apiKey, baseUrl: ep.baseUrl });
+    const client = createClientForProvider(model);
     // Register run_skill HERE (not in code.tsx / chat.tsx) because
     // subagent-runAs skills need the client + parent registry to
     // spawn child loops. Wiring lives in App.tsx so the same code
