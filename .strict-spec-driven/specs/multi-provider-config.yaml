@@ -314,6 +314,29 @@ requirements:
         - GIVEN: a GLM API key and network timeout
         - WHEN: validateGlmApiKey() is called and the request times out
         - THEN: 'returns {ok: false, reason: ''failed'', message: ''...''}'
+  mimo-adapter-class:
+    strength: MUST
+    statement: >-
+      MimoClient MUST extend OpenAICompatClient and override authHeaders() to emit { 'api-key': key
+      } instead of Authorization Bearer. Default base URL MUST be
+      https://token-plan-cn.xiaomimimo.com/v1.
+    scenarios:
+      mimo-auth-header:
+        - GIVEN: a MimoClient instance with a valid tp-xxxxx API key
+        - WHEN: authHeaders() is called
+        - THEN: >-
+            the returned headers contain 'api-key' header with the key value, not Authorization
+            Bearer
+  mimo-provider-id:
+    strength: MUST
+    statement: >-
+      ProviderId type MUST include 'mimo' alongside 'deepseek' and 'glm'. MimoProviderConfig MUST
+      mirror GlmProviderConfig with optional apiKey and baseUrl fields.
+    scenarios:
+      mimo-in-provider-id:
+        - GIVEN: ProviderId type definition
+        - WHEN: a new provider is added
+        - THEN: ProviderId accepts 'mimo' as a valid value
 mapping:
   implementation:
     - src/config.ts

@@ -493,6 +493,7 @@ export const de: TranslationSchema = {
     providerPrompt: "Wählen Sie Ihren KI-Anbieter.",
     providerDeepSeek: "DeepSeek",
     providerGlm: "GLM (Zhipu AI)",
+    providerMimo: "MiMo (Xiaomi Token Plan)",
     modelPrompt: "Wählen Sie ein Modell.",
     apiKeyPrompt: "Fügen Sie Ihren DeepSeek API-Schlüssel ein, um zu beginnen.",
     apiKeyGetOne: "Holen Sie einen unter: https://platform.deepseek.com/api_keys",
@@ -514,6 +515,10 @@ export const de: TranslationSchema = {
     glmApiKeyGetOne: "Holen Sie einen unter: https://open.bigmodel.cn/usercenter/apikeys",
     glmApiKeyRejected:
       "GLM hat diesen API-Schlüssel abgelehnt. Fügen Sie einen gültigen Schlüssel ein oder drücken Sie Esc zum Abbrechen.",
+    mimoApiKeyPrompt: "Fügen Sie Ihren Xiaomi MiMo Token Plan API-Schlüssel ein, um zu beginnen.",
+    mimoApiKeyGetOne: "Holen Sie einen unter: https://platform.xiaomimimo.com/price/tokenplan",
+    mimoApiKeyRejected:
+      "MiMo hat diesen API-Schlüssel abgelehnt. Fügen Sie einen gültigen Schlüssel ein oder drücken Sie Esc zum Abbrechen.",
   },
   themePicker: {
     ...EN.themePicker,

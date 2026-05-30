@@ -25,7 +25,7 @@ export type EditMode = "review" | "auto" | "yolo" | "plan";
 
 export const DEFAULT_MODEL = "deepseek-v4-flash";
 
-export type ProviderId = "deepseek" | "glm";
+export type ProviderId = "deepseek" | "glm" | "mimo";
 
 /** Models the official api.deepseek.com endpoint currently accepts. v3-era
  *  `deepseek-chat`/`deepseek-reasoner` are gone — sending them produces a 400.
@@ -36,6 +36,7 @@ export const SUPPORTED_OFFICIAL_MODELS: readonly string[] = [
   "glm-4.7",
   "glm-5.1",
   "glm-5-turbo",
+  "mimo-v2.5-pro",
 ];
 
 export type ReasoningEffort = "low" | "medium" | "high" | "max";
@@ -147,13 +148,20 @@ export interface GlmProviderConfig {
   baseUrl?: string;
 }
 
+export interface MimoProviderConfig {
+  apiKey?: string;
+  baseUrl?: string;
+}
+
 export interface DeepSeekSpecConfig {
   apiKey?: string;
   baseUrl?: string;
-  /** Active provider: "deepseek" or "glm". Default "deepseek". */
+  /** Active provider: "deepseek" or "glm" or "mimo". Default "deepseek". */
   provider?: ProviderId;
   /** GLM (Zhipu AI) provider settings. */
   glm?: GlmProviderConfig;
+  /** MiMo (Xiaomi Token Plan) provider settings. */
+  mimo?: MimoProviderConfig;
   lang?: LanguageCode;
   /** Persisted DeepSeek model id — `/model <id>` and the dashboard model picker write through this. */
   model?: string;
@@ -703,9 +711,9 @@ export function bridgeEndpointEnv(path: string = defaultConfigPath()): void {
 /** Active provider: DSPEC_PROVIDER env → config.json provider → "deepseek". */
 export function loadActiveProvider(path: string = defaultConfigPath()): ProviderId {
   const env = process.env.DSPEC_PROVIDER?.trim();
-  if (env === "deepseek" || env === "glm") return env;
+  if (env === "deepseek" || env === "glm" || env === "mimo") return env;
   const cfg = readConfig(path).provider;
-  if (cfg === "deepseek" || cfg === "glm") return cfg;
+  if (cfg === "deepseek" || cfg === "glm" || cfg === "mimo") return cfg;
   return "deepseek";
 }
 
@@ -717,6 +725,7 @@ export function modelToProvider(
 ): ProviderId {
   if (modelId.startsWith("deepseek-")) return "deepseek";
   if (modelId.startsWith("glm-")) return "glm";
+  if (modelId.startsWith("mimo-")) return "mimo";
   return activeProvider ?? loadActiveProvider(path);
 }
 
@@ -734,6 +743,24 @@ export function loadGlmBaseUrl(path: string = defaultConfigPath()): string | und
   const env = process.env.ZHIPU_BASE_URL?.trim();
   if (env) return env;
   const cfg = readConfig(path).glm?.baseUrl;
+  if (cfg && typeof cfg === "string" && cfg.trim()) return cfg.trim();
+  return undefined;
+}
+
+/** MiMo API key: MIMO_API_KEY env → config.json mimo.apiKey → undefined. */
+export function loadMimoApiKey(path: string = defaultConfigPath()): string | undefined {
+  const env = process.env.MIMO_API_KEY?.trim();
+  if (env) return env;
+  const cfg = readConfig(path).mimo?.apiKey;
+  if (cfg && typeof cfg === "string" && cfg.trim()) return cfg.trim();
+  return undefined;
+}
+
+/** MiMo base URL: MIMO_BASE_URL env → config.json mimo.baseUrl → undefined. */
+export function loadMimoBaseUrl(path: string = defaultConfigPath()): string | undefined {
+  const env = process.env.MIMO_BASE_URL?.trim();
+  if (env) return env;
+  const cfg = readConfig(path).mimo?.baseUrl;
   if (cfg && typeof cfg === "string" && cfg.trim()) return cfg.trim();
   return undefined;
 }
@@ -1247,9 +1274,13 @@ export function saveReasoningEffort(
 }
 
 export const GLM_DEFAULT_MODEL = "glm-5.1";
+export const MIMO_DEFAULT_MODEL = "mimo-v2.5-pro";
 
 export function providerDefaultModel(path: string = defaultConfigPath()): string {
-  return loadActiveProvider(path) === "glm" ? GLM_DEFAULT_MODEL : DEFAULT_MODEL;
+  const provider = loadActiveProvider(path);
+  if (provider === "glm") return GLM_DEFAULT_MODEL;
+  if (provider === "mimo") return MIMO_DEFAULT_MODEL;
+  return DEFAULT_MODEL;
 }
 
 export function loadModel(path: string = defaultConfigPath()): string {

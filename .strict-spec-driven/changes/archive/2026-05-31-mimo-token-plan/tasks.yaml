@@ -1,0 +1,56 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: mimo-token-plan
+sections:
+  Implementation:
+    add-mimo-provider-config:
+      text: >-
+        Add "mimo" to ProviderId union, MimoProviderConfig interface, mimo field to
+        DeepSeekSpecConfig, MIMO model to SUPPORTED_OFFICIAL_MODELS,
+        loadActiveProvider/modelToProvider/loadMimoApiKey/loadMimoBaseUrl helpers,
+        MIMO_DEFAULT_MODEL, and providerDefaultModel support in config.ts.
+      status: complete
+    create-mimo-client-adapter:
+      text: >-
+        Create src/adapters/model-mimo.ts extending OpenAICompatClient. Override authHeaders() to
+        emit { "api-key": this.apiKey } instead of Bearer. Default base URL:
+        https://token-plan-cn.xiaomimimo.com/v1.
+      status: complete
+    register-mimo-provider:
+      text: >-
+        Register mimo provider in registry.ts createClientForProvider and in cli/commands/run.ts
+        with mimo model list.
+      status: complete
+    add-mimo-setup-wizard:
+      text: >-
+        Add mimo to setup wizard in cli/commands/setup.tsx: provider step, key step (tp-xxxxx
+        format), model step. Add validateMimoApiKey to cli/validate-api-key.ts.
+      status: complete
+    add-mimo-commit-key-check:
+      text: Update cli/commands/commit.ts to check MIMO API key when provider is mimo.
+      status: complete
+    add-mimo-i18n:
+      text: Add MIMO i18n type keys to i18n/types.ts and translations to zh-CN, en, and ru locale files.
+      status: complete
+  Testing:
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run type checking.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-typecheck
+  unit_test_task: run-tests

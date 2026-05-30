@@ -457,6 +457,7 @@ export const JA: TranslationSchema = {
     providerPrompt: "AI プロバイダーを選択してください。",
     providerDeepSeek: "DeepSeek",
     providerGlm: "GLM (Zhipu AI)",
+    providerMimo: "MiMo (Xiaomi Token Plan)",
     modelPrompt: "モデルを選択してください。",
     apiKeyPrompt: "DeepSeek API キーを貼り付けて開始してください。",
     apiKeyGetOne: "取得：https://platform.deepseek.com/api_keys",
@@ -477,6 +478,10 @@ export const JA: TranslationSchema = {
     glmApiKeyGetOne: "取得：https://open.bigmodel.cn/usercenter/apikeys",
     glmApiKeyRejected:
       "GLM がこの API キーを拒否しました。有効なキーを貼り付けるか、Esc でキャンセルしてください。",
+    mimoApiKeyPrompt: "Xiaomi MiMo Token Plan API キーを貼り付けて開始してください。",
+    mimoApiKeyGetOne: "取得：https://platform.xiaomimimo.com/price/tokenplan",
+    mimoApiKeyRejected:
+      "MiMo がこの API キーを拒否しました。有効なキーを貼り付けるか、Esc でキャンセルしてください。",
   },
   themePicker: {
     header: "テーマ",
@@ -1918,6 +1923,7 @@ export const JA: TranslationSchema = {
     providerPrompt: "AI プロバイダーを選択してください。",
     providerDeepSeek: "DeepSeek",
     providerGlm: "GLM (Zhipu AI)",
+    providerMimo: "MiMo (Xiaomi Token Plan)",
     modelPrompt: "モデルを選択してください。",
     apiKeyPrompt: "DeepSeek API キーを貼り付けて開始してください。",
     apiKeyGetOne: "取得：https://platform.deepseek.com/api_keys",
@@ -1934,6 +1940,10 @@ export const JA: TranslationSchema = {
     glmApiKeyGetOne: "取得：https://open.bigmodel.cn/usercenter/apikeys",
     glmApiKeyRejected:
       "GLM がこの API キーを拒否しました。有効なキーを貼り付けるか、Esc でキャンセルしてください。",
+    mimoApiKeyPrompt: "Xiaomi MiMo Token Plan API キーを貼り付けて開始してください。",
+    mimoApiKeyGetOne: "取得：https://platform.xiaomimimo.com/price/tokenplan",
+    mimoApiKeyRejected:
+      "MiMo がこの API キーを拒否しました。有効なキーを貼り付けるか、Esc でキャンセルしてください。",
     reviewSaveError: "設定を保存できませんでした：{message}",
     exitHint: "/exit または /quit でキャンセル",
   },

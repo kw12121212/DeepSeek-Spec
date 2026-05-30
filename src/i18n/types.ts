@@ -334,6 +334,7 @@ export interface TranslationSchema {
     providerPrompt: string;
     providerDeepSeek: string;
     providerGlm: string;
+    providerMimo: string;
     modelPrompt: string;
     apiKeyPrompt: string;
     apiKeyGetOne: string;
@@ -351,6 +352,9 @@ export interface TranslationSchema {
     glmApiKeyPrompt: string;
     glmApiKeyGetOne: string;
     glmApiKeyRejected: string;
+    mimoApiKeyPrompt: string;
+    mimoApiKeyGetOne: string;
+    mimoApiKeyRejected: string;
   };
   themePicker: {
     header: string;
@@ -1005,6 +1009,7 @@ export interface TranslationSchema {
     providerPrompt: string;
     providerDeepSeek: string;
     providerGlm: string;
+    providerMimo: string;
     modelPrompt: string;
     apiKeyPrompt: string;
     apiKeyGetOne: string;
@@ -1018,6 +1023,9 @@ export interface TranslationSchema {
     glmApiKeyPrompt: string;
     glmApiKeyGetOne: string;
     glmApiKeyRejected: string;
+    mimoApiKeyPrompt: string;
+    mimoApiKeyGetOne: string;
+    mimoApiKeyRejected: string;
     reviewSaveError: string;
     exitHint: string;
   };

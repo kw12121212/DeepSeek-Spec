@@ -1,4 +1,4 @@
-import { loadBaseUrl, loadGlmBaseUrl } from "../config.js";
+import { loadBaseUrl, loadGlmBaseUrl, loadMimoBaseUrl } from "../config.js";
 
 export type ApiKeyValidationResult =
   | { ok: true }
@@ -56,6 +56,36 @@ export async function validateGlmApiKey(
     const resp = await fetchImpl(`${baseUrl}/models`, {
       method: "GET",
       headers: { Authorization: `Bearer ${apiKey}` },
+      signal: ctrl.signal,
+    });
+    if (resp.ok) return { ok: true };
+    if (resp.status === 401 || resp.status === 403) return { ok: false, reason: "rejected" };
+    return { ok: false, reason: "failed", message: `HTTP ${resp.status}` };
+  } catch (e) {
+    return { ok: false, reason: "failed", message: (e as Error).message };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export async function validateMimoApiKey(
+  apiKey: string,
+  opts: {
+    baseUrl?: string;
+    timeoutMs?: number;
+    fetch?: typeof fetch;
+  } = {},
+): Promise<ApiKeyValidationResult> {
+  const fetchImpl = opts.fetch ?? globalThis.fetch.bind(globalThis);
+  let baseUrl = opts.baseUrl ?? loadMimoBaseUrl() ?? "https://token-plan-cn.xiaomimimo.com/v1";
+  while (baseUrl.endsWith("/")) baseUrl = baseUrl.slice(0, -1);
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), opts.timeoutMs ?? 10_000);
+  try {
+    const resp = await fetchImpl(`${baseUrl}/models`, {
+      method: "GET",
+      headers: { "api-key": apiKey },
       signal: ctrl.signal,
     });
     if (resp.ok) return { ok: true };

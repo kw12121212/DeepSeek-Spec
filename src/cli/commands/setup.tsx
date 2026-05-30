@@ -11,6 +11,7 @@ import {
   isPlausibleKey,
   loadApiKey,
   loadGlmApiKey,
+  loadMimoApiKey,
   readConfig,
   redactKey,
   writeConfig,
@@ -22,6 +23,7 @@ import {
   type ApiKeyValidationResult,
   validateDeepSeekApiKey,
   validateGlmApiKey,
+  validateMimoApiKey,
 } from "../validate-api-key.js";
 
 export interface SetupOptions {
@@ -32,11 +34,13 @@ type Step = "provider" | "key" | "model" | "saved";
 
 const DEEPSEEK_MODELS = SUPPORTED_OFFICIAL_MODELS.filter((m) => m.startsWith("deepseek-"));
 const GLM_MODELS = SUPPORTED_OFFICIAL_MODELS.filter((m) => m.startsWith("glm-"));
+const MIMO_MODELS = SUPPORTED_OFFICIAL_MODELS.filter((m) => m.startsWith("mimo-"));
 
 export async function setupCommand(_opts: SetupOptions = {}): Promise<void> {
   loadDotenv();
   const existingDsKey = loadApiKey();
   const existingGlmKey = loadGlmApiKey();
+  const existingMimoKey = loadMimoApiKey();
   const cfg = readConfig();
   const activeProvider = cfg.provider ?? "deepseek";
   const existingModel = cfg.model;
@@ -46,6 +50,7 @@ export async function setupCommand(_opts: SetupOptions = {}): Promise<void> {
       initialProvider={activeProvider}
       existingDsKey={existingDsKey}
       existingGlmKey={existingGlmKey}
+      existingMimoKey={existingMimoKey}
       existingModel={existingModel}
       onComplete={() => undefined}
       onCancel={() => unmount()}
@@ -59,6 +64,7 @@ function SetupWizard({
   initialProvider,
   existingDsKey,
   existingGlmKey,
+  existingMimoKey,
   existingModel,
   onComplete,
   onCancel,
@@ -66,6 +72,7 @@ function SetupWizard({
   initialProvider: ProviderId;
   existingDsKey?: string;
   existingGlmKey?: string;
+  existingMimoKey?: string;
   existingModel?: string;
   onComplete: () => void;
   onCancel: () => void;
@@ -80,7 +87,8 @@ function SetupWizard({
   };
 
   const handleKeySaved = (_key: string) => {
-    const models = provider === "deepseek" ? DEEPSEEK_MODELS : GLM_MODELS;
+    const models =
+      provider === "deepseek" ? DEEPSEEK_MODELS : provider === "glm" ? GLM_MODELS : MIMO_MODELS;
     if (models.length > 0) {
       setStep("model");
     } else {
@@ -130,14 +138,21 @@ function SetupWizard({
     return (
       <KeyStep
         provider={provider}
-        existingKey={provider === "deepseek" ? existingDsKey : existingGlmKey}
+        existingKey={
+          provider === "deepseek"
+            ? existingDsKey
+            : provider === "glm"
+              ? existingGlmKey
+              : existingMimoKey
+        }
         onSaved={handleKeySaved}
       />
     );
   }
 
   if (step === "model") {
-    const models = provider === "deepseek" ? DEEPSEEK_MODELS : GLM_MODELS;
+    const models =
+      provider === "deepseek" ? DEEPSEEK_MODELS : provider === "glm" ? GLM_MODELS : MIMO_MODELS;
     return <ModelStep models={models} initial={existingModel} onSubmit={handleModel} />;
   }
 
@@ -156,6 +171,7 @@ function ProviderStep({
   const items: SelectItem<ProviderId>[] = [
     { value: "deepseek", label: t("setup.providerDeepSeek"), hint: "platform.deepseek.com" },
     { value: "glm", label: t("setup.providerGlm"), hint: "open.bigmodel.cn" },
+    { value: "mimo", label: t("setup.providerMimo"), hint: "platform.xiaomimimo.com" },
   ];
   return (
     <Box flexDirection="column" borderStyle="round" borderColor="ansi:cyan" paddingX={1}>
@@ -191,11 +207,30 @@ function KeyStep({
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const prompt = provider === "deepseek" ? t("setup.apiKeyPrompt") : t("setup.glmApiKeyPrompt");
-  const getOne = provider === "deepseek" ? t("setup.apiKeyGetOne") : t("setup.glmApiKeyGetOne");
-  const validate = provider === "deepseek" ? validateDeepSeekApiKey : validateGlmApiKey;
+  const prompt =
+    provider === "deepseek"
+      ? t("setup.apiKeyPrompt")
+      : provider === "glm"
+        ? t("setup.glmApiKeyPrompt")
+        : t("setup.mimoApiKeyPrompt");
+  const getOne =
+    provider === "deepseek"
+      ? t("setup.apiKeyGetOne")
+      : provider === "glm"
+        ? t("setup.glmApiKeyGetOne")
+        : t("setup.mimoApiKeyGetOne");
+  const validate =
+    provider === "deepseek"
+      ? validateDeepSeekApiKey
+      : provider === "glm"
+        ? validateGlmApiKey
+        : validateMimoApiKey;
   const rejectedMsg =
-    provider === "deepseek" ? t("setup.apiKeyRejected") : t("setup.glmApiKeyRejected");
+    provider === "deepseek"
+      ? t("setup.apiKeyRejected")
+      : provider === "glm"
+        ? t("setup.glmApiKeyRejected")
+        : t("setup.mimoApiKeyRejected");
 
   const handleSubmit = (raw: string) => {
     const trimmed = raw.trim() || existingKey?.trim() || "";
@@ -224,8 +259,10 @@ function KeyStep({
       };
       if (provider === "deepseek") {
         cfg.apiKey = trimmed;
-      } else {
+      } else if (provider === "glm") {
         cfg.glm = { ...cfg.glm, apiKey: trimmed };
+      } else {
+        cfg.mimo = { ...cfg.mimo, apiKey: trimmed };
       }
       writeConfig(cfg);
       onSaved(trimmed);

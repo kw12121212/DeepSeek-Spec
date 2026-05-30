@@ -15,6 +15,7 @@ import {
   type ApiKeyValidationResult,
   validateDeepSeekApiKey,
   validateGlmApiKey,
+  validateMimoApiKey,
 } from "../validate-api-key.js";
 import { MaskedInput } from "./MaskedInput.js";
 import { type SelectItem, SingleSelect } from "./Select.js";
@@ -22,6 +23,7 @@ import { COLOR, GLYPH, GRADIENT } from "./theme.js";
 
 const DEEPSEEK_MODELS = SUPPORTED_OFFICIAL_MODELS.filter((m) => m.startsWith("deepseek-"));
 const GLM_MODELS = SUPPORTED_OFFICIAL_MODELS.filter((m) => m.startsWith("glm-"));
+const MIMO_MODELS = SUPPORTED_OFFICIAL_MODELS.filter((m) => m.startsWith("mimo-"));
 
 type Step = "provider" | "key" | "model";
 
@@ -39,7 +41,8 @@ export function Setup({ onReady }: SetupProps) {
   };
 
   const handleKeySaved = (key: string) => {
-    const models = provider === "deepseek" ? DEEPSEEK_MODELS : GLM_MODELS;
+    const models =
+      provider === "deepseek" ? DEEPSEEK_MODELS : provider === "glm" ? GLM_MODELS : MIMO_MODELS;
     if (models.length > 0) {
       setStep("model");
     } else {
@@ -49,7 +52,12 @@ export function Setup({ onReady }: SetupProps) {
 
   const handleModel = (_m: string) => {
     const cfg = readConfig();
-    const savedKey = provider === "deepseek" ? cfg.apiKey : cfg.glm?.apiKey;
+    const savedKey =
+      provider === "deepseek"
+        ? cfg.apiKey
+        : provider === "glm"
+          ? cfg.glm?.apiKey
+          : cfg.mimo?.apiKey;
     onReady(provider, savedKey ?? "");
   };
 
@@ -62,7 +70,8 @@ export function Setup({ onReady }: SetupProps) {
   }
 
   if (step === "model") {
-    const models = provider === "deepseek" ? DEEPSEEK_MODELS : GLM_MODELS;
+    const models =
+      provider === "deepseek" ? DEEPSEEK_MODELS : provider === "glm" ? GLM_MODELS : MIMO_MODELS;
     return <ModelPicker models={models} onSubmit={handleModel} />;
   }
 
@@ -73,6 +82,7 @@ function ProviderPicker({ onSubmit }: { onSubmit: (p: ProviderId) => void }) {
   const items: SelectItem<ProviderId>[] = [
     { value: "deepseek", label: t("wizard.providerDeepSeek"), hint: "platform.deepseek.com" },
     { value: "glm", label: t("wizard.providerGlm"), hint: "open.bigmodel.cn" },
+    { value: "mimo", label: t("wizard.providerMimo"), hint: "platform.xiaomimimo.com" },
   ];
   return (
     <Box flexDirection="column" paddingX={1} marginY={1}>
@@ -110,11 +120,30 @@ function KeyInput({
   const [checking, setChecking] = useState(false);
   const { exit } = useApp();
 
-  const prompt = provider === "deepseek" ? t("wizard.apiKeyPrompt") : t("wizard.glmApiKeyPrompt");
-  const getOne = provider === "deepseek" ? t("wizard.apiKeyGetOne") : t("wizard.glmApiKeyGetOne");
-  const validate = provider === "deepseek" ? validateDeepSeekApiKey : validateGlmApiKey;
+  const prompt =
+    provider === "deepseek"
+      ? t("wizard.apiKeyPrompt")
+      : provider === "glm"
+        ? t("wizard.glmApiKeyPrompt")
+        : t("wizard.mimoApiKeyPrompt");
+  const getOne =
+    provider === "deepseek"
+      ? t("wizard.apiKeyGetOne")
+      : provider === "glm"
+        ? t("wizard.glmApiKeyGetOne")
+        : t("wizard.mimoApiKeyGetOne");
+  const validate =
+    provider === "deepseek"
+      ? validateDeepSeekApiKey
+      : provider === "glm"
+        ? validateGlmApiKey
+        : validateMimoApiKey;
   const rejectedMsg =
-    provider === "deepseek" ? t("wizard.apiKeyRejected") : t("wizard.glmApiKeyRejected");
+    provider === "deepseek"
+      ? t("wizard.apiKeyRejected")
+      : provider === "glm"
+        ? t("wizard.glmApiKeyRejected")
+        : t("wizard.mimoApiKeyRejected");
 
   const handleSubmit = (raw: string) => {
     const trimmed = raw.trim();
@@ -143,8 +172,10 @@ function KeyInput({
       const cfg: DeepSeekSpecConfig = { ...readConfig(), provider };
       if (provider === "deepseek") {
         cfg.apiKey = trimmed;
-      } else {
+      } else if (provider === "glm") {
         cfg.glm = { ...cfg.glm, apiKey: trimmed };
+      } else {
+        cfg.mimo = { ...cfg.mimo, apiKey: trimmed };
       }
       writeConfig(cfg);
       onSaved(trimmed);

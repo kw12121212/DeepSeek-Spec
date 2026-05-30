@@ -6,7 +6,13 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline/promises";
-import { loadActiveProvider, loadApiKey, loadGlmApiKey, loadModel } from "../../config.js";
+import {
+  loadActiveProvider,
+  loadApiKey,
+  loadGlmApiKey,
+  loadMimoApiKey,
+  loadModel,
+} from "../../config.js";
 import { loadDotenv } from "../../env.js";
 import type { ModelClient } from "../../ports/model-client.js";
 import { createClientForProvider } from "../../providers/registry.js";
@@ -240,7 +246,12 @@ export async function commitCommand(opts: CommitOptions = {}): Promise<void> {
   dieIfNotGitRepo();
 
   const provider = loadActiveProvider();
-  const hasKey = provider === "glm" ? !!loadGlmApiKey() : !!loadApiKey();
+  const hasKey =
+    provider === "glm"
+      ? !!loadGlmApiKey()
+      : provider === "mimo"
+        ? !!loadMimoApiKey()
+        : !!loadApiKey();
   if (!hasKey) {
     process.stderr.write(
       `dspec commit: API key not set for provider '${provider}'. Run \`dspec setup\` to save one.\n`,

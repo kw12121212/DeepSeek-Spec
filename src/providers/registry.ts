@@ -1,4 +1,5 @@
 import { GLMClient } from "../adapters/model-glm.js";
+import { MimoClient } from "../adapters/model-mimo.js";
 import { DeepSeekClient } from "../client.js";
 import { loadActiveProvider, loadEndpoint, modelToProvider } from "../config.js";
 import type { ModelClient } from "../ports/model-client.js";
@@ -50,6 +51,7 @@ export class ProviderRegistry {
 export function createClientForProvider(modelId?: string): ModelClient {
   const provider = modelId ? modelToProvider(modelId) : loadActiveProvider();
   if (provider === "glm") return new GLMClient();
+  if (provider === "mimo") return new MimoClient();
   const ep = loadEndpoint();
   return new DeepSeekClient({ apiKey: ep.apiKey, baseUrl: ep.baseUrl });
 }

@@ -1,0 +1,38 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - src/config.ts
+    - src/adapters/model-mimo.ts
+  tests:
+    - tests/config.test.ts
+operations:
+  ADDED:
+    mimo-adapter-class:
+      strength: MUST
+      statement: >-
+        MimoClient MUST extend OpenAICompatClient and override authHeaders() to emit { 'api-key':
+        key } instead of Authorization Bearer. Default base URL MUST be
+        https://token-plan-cn.xiaomimimo.com/v1.
+      scenarios:
+        mimo-auth-header:
+          - GIVEN: a MimoClient instance with a valid tp-xxxxx API key
+          - WHEN: authHeaders() is called
+          - THEN: >-
+              the returned headers contain 'api-key' header with the key value, not Authorization
+              Bearer
+  MODIFIED:
+    mimo-provider-id:
+      strength: MUST
+      statement: >-
+        ProviderId type MUST include 'mimo' alongside 'deepseek' and 'glm'. MimoProviderConfig MUST
+        mirror GlmProviderConfig with optional apiKey and baseUrl fields.
+      scenarios:
+        mimo-in-provider-id:
+          - GIVEN: ProviderId type definition
+          - WHEN: a new provider is added
+          - THEN: ProviderId accepts 'mimo' as a valid value
+  REMOVED: {}

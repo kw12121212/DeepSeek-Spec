@@ -391,6 +391,7 @@ export const ru: TranslationSchema = {
     providerPrompt: "Выберите вашего AI-провайдера.",
     providerDeepSeek: "DeepSeek",
     providerGlm: "GLM (Zhipu AI)",
+    providerMimo: "MiMo (Xiaomi Token Plan)",
     modelPrompt: "Выберите модель.",
     apiKeyPrompt: "Вставьте ваш DeepSeek API-ключ для начала работы.",
     apiKeyGetOne: "Получите здесь: https://platform.deepseek.com/api_keys",
@@ -411,6 +412,10 @@ export const ru: TranslationSchema = {
     glmApiKeyGetOne: "Получите здесь: https://open.bigmodel.cn/usercenter/apikeys",
     glmApiKeyRejected:
       "GLM отклонил этот API-ключ. Вставьте действительный ключ или нажмите Esc для отмены.",
+    mimoApiKeyPrompt: "Вставьте ваш Xiaomi MiMo Token Plan API-ключ для начала работы.",
+    mimoApiKeyGetOne: "Получите здесь: https://platform.xiaomimimo.com/price/tokenplan",
+    mimoApiKeyRejected:
+      "MiMo отклонил этот API-ключ. Вставьте действительный ключ или нажмите Esc для отмены.",
   },
   themePicker: {
     ...EN.themePicker,
@@ -536,6 +541,7 @@ export const ru: TranslationSchema = {
     providerPrompt: "Выберите вашего AI-провайдера.",
     providerDeepSeek: "DeepSeek",
     providerGlm: "GLM (Zhipu AI)",
+    providerMimo: "MiMo (Xiaomi Token Plan)",
     modelPrompt: "Выберите модель.",
     apiKeyPrompt: "Вставьте ваш DeepSeek API-ключ для начала работы.",
     apiKeyGetOne: "Получите здесь: https://platform.deepseek.com/api_keys",
@@ -552,6 +558,10 @@ export const ru: TranslationSchema = {
     glmApiKeyGetOne: "Получите здесь: https://open.bigmodel.cn/usercenter/apikeys",
     glmApiKeyRejected:
       "GLM отклонил этот API-ключ. Вставьте действительный ключ или нажмите Esc для отмены.",
+    mimoApiKeyPrompt: "Вставьте ваш Xiaomi MiMo Token Plan API-ключ для начала работы.",
+    mimoApiKeyGetOne: "Получите здесь: https://platform.xiaomimimo.com/price/tokenplan",
+    mimoApiKeyRejected:
+      "MiMo отклонил этот API-ключ. Вставьте действительный ключ или нажмите Esc для отмены.",
     reviewSaveError: "Не удалось сохранить конфигурацию: {message}",
     exitHint: "/exit или /quit для отмены",
   },

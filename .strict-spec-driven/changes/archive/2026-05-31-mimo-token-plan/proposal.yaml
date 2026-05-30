@@ -1,0 +1,33 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: mimo-token-plan
+  status: proposed
+summary:
+  what:
+    - >-
+      Add Xiaomi MiMo Token Plan as a supported provider (mimo). MiMo uses OpenAI-compatible chat
+      completions at token-plan-cn.xiaomimimo.com/v1, authenticates with api-key header (not
+      Bearer), and has model mimo-v2.5-pro.
+  why:
+    - >-
+      Users with Xiaomi MiMo Token Plan subscriptions need first-class provider support, including
+      setup wizard, API key validation, and automatic model routing.
+scope:
+  in:
+    - >-
+      config.ts ProviderId type, SUPPORTED_OFFICIAL_MODELS, provider routing, model-openai-compat.ts
+      authHeaders, providers/registry.ts, cli/commands/run.ts, cli/commands/setup.tsx,
+      cli/commands/commit.ts, cli/validate-api-key.ts, i18n type definitions and locale files
+      (zh-CN, en, ru)
+  out:
+    - >-
+      New adapter model-mimo.ts (extends OpenAICompatClient with api-key auth header),
+      MimoProviderConfig interface in config.ts, loadMimoApiKey/loadMimoBaseUrl helpers, MIMO entry
+      in setup wizard, validateMimoApiKey function, i18n strings for all locales
+unchanged_behavior:
+  - >-
+    DeepSeek provider behavior, GLM provider behavior, OpenAI-compat client base class, existing
+    config file format (additive only), TUI layout, tool definitions, loop logic, repair pipeline
