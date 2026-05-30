@@ -383,7 +383,11 @@ export const ru: TranslationSchema = {
     },
   },
   setup: {
-    title: "Настройка — API-ключ",
+    title: "Настройка — Провайдер",
+    providerPrompt: "Выберите вашего AI-провайдера.",
+    providerDeepSeek: "DeepSeek",
+    providerGlm: "GLM (Zhipu AI)",
+    modelPrompt: "Выберите модель.",
     apiKeyPrompt: "Вставьте ваш DeepSeek API-ключ для начала работы.",
     apiKeyGetOne: "Получите здесь: https://platform.deepseek.com/api_keys",
     apiKeySavedLocally: "Сохранён локально в {path}",
@@ -396,9 +400,13 @@ export const ru: TranslationSchema = {
       "Не удалось проверить API-ключ ({message}). Проверьте сеть или попробуйте снова.",
     apiKeyPreview: "предпросмотр: {redacted}",
     savedTitle: "▸ Сохранено.",
-    savedFooter: "[Enter] для выхода",
+    savedFooter: "[Enter] для выхода · выполните dspec setup снова для смены провайдера",
     footer: "[Enter] подтвердить · [Esc] отмена",
     hint: "API-ключ не найден. Установите переменную окружения DEEPSEEK_API_KEY или выполните /setup.",
+    glmApiKeyPrompt: "Вставьте ваш Zhipu AI API-ключ для начала работы.",
+    glmApiKeyGetOne: "Получите здесь: https://open.bigmodel.cn/usercenter/apikeys",
+    glmApiKeyRejected:
+      "GLM отклонил этот API-ключ. Вставьте действительный ключ или нажмите Esc для отмены.",
   },
   themePicker: {
     ...EN.themePicker,
@@ -518,5 +526,29 @@ export const ru: TranslationSchema = {
       switchedBraveNote:
         " Укажите параметр BRAVE_SEARCH_API_KEY (или BRAVE_API_KEY) или `braveApiKey` в файле конфигурации; 2000 бесплатных запросов в месяц доступны по адресу https://brave.com/search/api/.",
     },
+  },
+  wizard: {
+    welcomeTitle: "Добро пожаловать в DeepSeek-Spec",
+    providerPrompt: "Выберите вашего AI-провайдера.",
+    providerDeepSeek: "DeepSeek",
+    providerGlm: "GLM (Zhipu AI)",
+    modelPrompt: "Выберите модель.",
+    apiKeyPrompt: "Вставьте ваш DeepSeek API-ключ для начала работы.",
+    apiKeyGetOne: "Получите здесь: https://platform.deepseek.com/api_keys",
+    apiKeyPlaceholder: "sk-...",
+    apiKeySavedLocally: "Сохранён локально в {path}",
+    apiKeyPreview: "предпросмотр: {redacted}",
+    apiKeyInvalid: "Ключ слишком короткий — вставьте полный токен (16+ символов, без пробелов).",
+    apiKeyChecking: "Проверка API-ключа…",
+    apiKeyRejected:
+      "DeepSeek отклонил этот API-ключ. Вставьте действительный ключ или нажмите Esc для отмены.",
+    apiKeyCheckFailed:
+      "Не удалось проверить API-ключ ({message}). Проверьте сеть или попробуйте снова.",
+    glmApiKeyPrompt: "Вставьте ваш Zhipu AI API-ключ для начала работы.",
+    glmApiKeyGetOne: "Получите здесь: https://open.bigmodel.cn/usercenter/apikeys",
+    glmApiKeyRejected:
+      "GLM отклонил этот API-ключ. Вставьте действительный ключ или нажмите Esc для отмены.",
+    reviewSaveError: "Не удалось сохранить конфигурацию: {message}",
+    exitHint: "/exit или /quit для отмены",
   },
 };

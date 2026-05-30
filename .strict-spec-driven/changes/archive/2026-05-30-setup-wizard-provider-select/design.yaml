@@ -1,0 +1,35 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: setup-wizard-provider-select
+approach:
+  - >-
+    Rewrite SetupPrompt and Setup components as state machines with 3 steps: (1) provider
+    SingleSelect, (2) API key TextInput with provider-specific validation, (3) model SingleSelect.
+    Add validateGlmApiKey() alongside existing validateDeepSeekApiKey(). Wire step completion to
+    write provider, API key (in provider-specific field), model, and setupCompleted to config.json.
+    Reuse existing SingleSelect and MaskedInput TUI components.
+decisions:
+  provider-step-first:
+    decision: >-
+      Provider selection comes before key input because the validation endpoint and placeholder text
+      depend on which provider is chosen.
+    rationale: >-
+      Eliminates conditional branching in the key step — the provider is already known when we
+      validate.
+  model-step-after-key:
+    decision: Model picker shown after key validation so we can skip it if validation fails.
+    rationale: Avoids showing model options the user cannot use.
+  active-provider-only:
+    decision: Wizard configures only the active provider. Re-run to switch.
+    rationale: >-
+      Keeps the wizard simple and focused; dual-provider setup is an advanced use case for
+      config.json.
+  glm-default-endpoint:
+    decision: GLM uses open.bigmodel.cn defaults, no base URL input in wizard.
+    rationale: >-
+      Advanced users can set ZHIPU_BASE_URL env or edit config.json; the wizard targets first-run
+      simplicity.
+alternatives: []
+risks: []

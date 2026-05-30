@@ -6,5 +6,5 @@ import { existsSync } from "node:fs";
 
 if (!existsSync("dashboard/package.json")) process.exit(0);
 
-execSync("npm --prefix dashboard ci --ignore-scripts", { stdio: "inherit" });
-execSync("npm --prefix desktop ci --ignore-scripts", { stdio: "inherit" });
+execSync("bun install --cwd dashboard", { stdio: "inherit" });
+execSync("bun install --cwd desktop", { stdio: "inherit" });

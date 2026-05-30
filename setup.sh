@@ -66,7 +66,7 @@ bun install --frozen-lockfile 2>/dev/null || bun install
 ok "dependencies installed"
 
 step "installing workspace deps"
-for ws in dashboard desktop packages/core-utils packages/dsnix packages/ink; do
+for ws in dashboard desktop packages/core-utils packages/ink; do
   if [ -f "$ws/package.json" ]; then
     bun install --cwd "$ws" 2>/dev/null || true
   fi
@@ -91,7 +91,7 @@ ok "vendor assets"
 # ── 5. Compile single binary with embedded assets ────────────────────────────
 
 step "compiling native binary (embedded assets)"
-BINARY_NAME=deepseek-spec node scripts/build-native.mjs --target "$TARGET" --embed
+BINARY_NAME=dspec node scripts/build-native.mjs --target "$TARGET" --embed
 ok "native binary"
 
 # ── 6. Install ────────────────────────────────────────────────────────────────
@@ -103,10 +103,10 @@ mkdir -p "$BIN_DIR"
 
 EXT=""
 [ "$TARGET" = "bun-windows-x64" ] && EXT=".exe"
-cp "dist/native/$TARGET/deepseek-spec$EXT" "$BIN_DIR/deepseek-spec$EXT"
-chmod +x "$BIN_DIR/deepseek-spec$EXT"
+cp "dist/native/$TARGET/dspec$EXT" "$BIN_DIR/dspec$EXT"
+chmod +x "$BIN_DIR/dspec$EXT"
 
-ok "installed $BIN_DIR/deepseek-spec$EXT ($(du -h "$BIN_DIR/deepseek-spec$EXT" | cut -f1))"
+ok "installed $BIN_DIR/dspec$EXT ($(du -h "$BIN_DIR/dspec$EXT" | cut -f1))"
 
 # Ensure bin dir is in PATH
 case ":$PATH:" in
@@ -123,4 +123,4 @@ case ":$PATH:" in
     ;;
 esac
 
-printf "\n${GREEN}Done!${NC} Run ${CYAN}deepseek-spec${NC} to start.\n"
+printf "\n${GREEN}Done!${NC} Run ${CYAN}dspec${NC} to start.\n"

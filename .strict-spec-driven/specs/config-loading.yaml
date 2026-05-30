@@ -8,22 +8,22 @@ requirements:
   load-config:
     strength: MUST
     statement: >-
-      readConfig MUST read and parse config.json from ~/.dspec/ (global) and
-      .dspec/ (project-local), merging project settings over global defaults.
+      readConfig MUST read and parse config.json from ~/.dspec/ (global) and .dspec/
+      (project-local), merging project settings over global defaults.
     scenarios:
       global-defaults:
         - GIVEN: a global config.json with model "deepseek-v4-pro"
         - WHEN: readConfig() is called in a project with no local config
         - THEN: the global config is returned with model "deepseek-v4-pro"
       project-override:
-        - GIVEN: global config with model "deepseek-v4-pro" and project config with model "deepseek-v4-flash"
+        - GIVEN: >-
+            global config with model "deepseek-v4-pro" and project config with model
+            "deepseek-v4-flash"
         - WHEN: readConfig() is called in the project
         - THEN: model is "deepseek-v4-flash" (project overrides global)
   missing-config-defaults:
     strength: MUST
-    statement: >-
-      When config.json does not exist, readConfig MUST return sensible
-      defaults without error.
+    statement: When config.json does not exist, readConfig MUST return sensible defaults without error.
     scenarios:
       no-config:
         - GIVEN: no config.json in global or project directory
@@ -32,8 +32,8 @@ requirements:
   api-key-resolution:
     strength: MUST
     statement: >-
-      API key MUST resolve from DSPEC_API_KEY env var first, then config.json
-      apiKey field, then throw if neither is present.
+      API key MUST resolve from DSPEC_API_KEY env var first, then config.json apiKey field, then
+      throw if neither is present.
     scenarios:
       env-key-preferred:
         - GIVEN: DSPEC_API_KEY is set and config.json has apiKey
@@ -46,28 +46,28 @@ requirements:
   edit-mode:
     strength: MUST
     statement: >-
-      editMode MUST accept "yolo", "auto", "review", "plan" values, defaulting
-      to "yolo" when not set.
+      editMode MUST accept "yolo", "auto", "review", "plan" values, defaulting to "yolo" when not
+      set.
     scenarios:
       default-yolo:
         - GIVEN: no editMode in config
         - WHEN: loadEditMode() is called
-        - THEN: "'yolo' is returned"
+        - THEN: '''yolo'' is returned'
   model-selection:
     strength: MUST
     statement: >-
-      The active model MUST resolve from DSPEC_MODEL env var, then config.json
-      model field, then the provider default.
+      The active model MUST resolve from DSPEC_MODEL env var, then config.json model field, then the
+      provider default.
     scenarios:
       env-model:
         - GIVEN: DSPEC_MODEL is "deepseek-v4-flash"
         - WHEN: the model is resolved
-        - THEN: "'deepseek-v4-flash' is used"
+        - THEN: '''deepseek-v4-flash'' is used'
   mcp-server-config:
     strength: MUST
     statement: >-
-      MCP server configurations MUST be loadable from both config.json and
-      .mcp.json files, supporting stdio and SSE transports.
+      MCP server configurations MUST be loadable from both config.json and .mcp.json files,
+      supporting stdio and SSE transports.
     scenarios:
       load-mcp-config:
         - GIVEN: a config.json with 2 MCP server entries
@@ -76,8 +76,8 @@ requirements:
   permission-config:
     strength: MUST
     statement: >-
-      Permission mode MUST be configurable per-project, with allowed commands
-      and denied patterns persisting across sessions.
+      Permission mode MUST be configurable per-project, with allowed commands and denied patterns
+      persisting across sessions.
     scenarios:
       project-permissions:
         - GIVEN: a project config with allowedCommands ["git", "bun"]
@@ -86,8 +86,8 @@ requirements:
   budget-config:
     strength: MUST
     statement: >-
-      Budget settings (maxTurnCost, maxSessionCost) MUST be configurable in
-      the config file with USD values.
+      Budget settings (maxTurnCost, maxSessionCost) MUST be configurable in the config file with USD
+      values.
     scenarios:
       budget-limit:
         - GIVEN: a config with maxSessionCost 5.0
@@ -95,14 +95,50 @@ requirements:
         - THEN: the session cost limit is $5.00
   sanitize-string-arrays:
     strength: MUST
-    statement: >-
-      String array config fields MUST be sanitized to remove duplicates and
-      empty entries.
+    statement: String array config fields MUST be sanitized to remove duplicates and empty entries.
     scenarios:
       dedup:
         - GIVEN: a config with allowedCommands ["git", "git", "", "npm"]
         - WHEN: the config is loaded
         - THEN: allowedCommands is ["git", "npm"]
+  setup-provider-selection:
+    strength: MUST
+    statement: >-
+      The setup wizard MUST present a provider selection step before API key input, offering
+      'deepseek' and 'glm' as choices.
+    scenarios:
+      provider-select-step:
+        - GIVEN: the setup wizard starts with no existing config
+        - WHEN: the wizard renders
+        - THEN: a SingleSelect with 'deepseek' and 'glm' options is shown, defaulting to 'deepseek'
+  setup-model-picker:
+    strength: MUST
+    statement: >-
+      After API key validation succeeds, the setup wizard MUST present a model selection step
+      listing the chosen provider's supported models.
+    scenarios:
+      model-picker-deepseek:
+        - GIVEN: provider is 'deepseek' and API key validated
+        - WHEN: the model step renders
+        - THEN: a SingleSelect shows deepseek-v4-flash (default) and deepseek-v4-pro
+      model-picker-glm:
+        - GIVEN: provider is 'glm' and API key validated
+        - WHEN: the model step renders
+        - THEN: a SingleSelect shows glm-5.1 (default), glm-4.7, and glm-5-turbo
+  setup-writes-provider:
+    strength: MUST
+    statement: >-
+      On completion, the setup wizard MUST write provider, API key (in provider-specific field),
+      model, and setupCompleted to config.json
+    scenarios:
+      deepseek-key-save:
+        - GIVEN: user selected deepseek and entered a valid key
+        - WHEN: setup completes
+        - THEN: config.json has provider='deepseek', apiKey set, model set, setupCompleted=true
+      glm-key-save:
+        - GIVEN: user selected glm and entered a valid key
+        - WHEN: setup completes
+        - THEN: config.json has provider='glm', glm.apiKey set, model set, setupCompleted=true
 mapping:
   implementation:
     - src/config.ts

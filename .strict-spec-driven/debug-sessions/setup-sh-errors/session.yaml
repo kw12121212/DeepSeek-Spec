@@ -1,0 +1,69 @@
+schema: strict-spec-driven/debug-session/v1
+schema_version: 1
+artifact_type: debug_session
+schema_file: ../../../templates/strict-spec-driven/schemas/debug-session.yaml
+debug_session:
+  id: "setup-sh-errors"
+  status: proposed
+issue:
+  summary: Describe the failure under investigation.
+  observed_behavior: Describe what actually happens.
+  expected_behavior: Describe what should happen instead.
+scope:
+  layers:
+    - frontend
+  out_of_scope: []
+targets:
+  primary-target:
+    layer: frontend
+    kind: browser_page
+    label: Primary debug target.
+    url: "http://127.0.0.1:3000"
+    notes: []
+reproduction:
+  preconditions: []
+  steps:
+    - id: reproduce
+      target: primary-target
+      action: Reproduce the failure.
+      expected: The failure is visible or captured in evidence.
+  expected_failure: Describe the expected failing observation.
+evidence:
+  directory: evidence/
+  entries: []
+hypotheses: []
+findings: []
+human_checkpoints: []
+manual_actions: []
+cdp_health:
+  required: false
+  checks: []
+dev_session:
+  declaration: .strict-spec-driven/dev-session.yaml
+  services: []
+  lifecycle:
+    plan:
+      command: strict-spec-driven dev-session-plan
+      status: not_run
+      evidence: []
+    start:
+      command: strict-spec-driven dev-session-start
+      status: not_run
+      evidence: []
+    status:
+      command: strict-spec-driven dev-session-status
+      status: not_run
+      evidence: []
+    logs: []
+    stop:
+      command: strict-spec-driven dev-session-stop
+      status: not_run
+      evidence: []
+    cleanup_status: not_started
+  unavailable_conditions: []
+replay:
+  commands: []
+verification:
+  status: not_started
+  steps: []
+  evidence: []

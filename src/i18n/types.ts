@@ -331,6 +331,10 @@ export interface TranslationSchema {
   };
   setup: {
     title: string;
+    providerPrompt: string;
+    providerDeepSeek: string;
+    providerGlm: string;
+    modelPrompt: string;
     apiKeyPrompt: string;
     apiKeyGetOne: string;
     apiKeySavedLocally: string;
@@ -344,6 +348,9 @@ export interface TranslationSchema {
     savedFooter: string;
     footer: string;
     hint: string;
+    glmApiKeyPrompt: string;
+    glmApiKeyGetOne: string;
+    glmApiKeyRejected: string;
   };
   themePicker: {
     header: string;
@@ -988,5 +995,26 @@ export interface TranslationSchema {
     noInstallMeta: string;
     buildSpecFailed: string;
     alreadyInstalled: string;
+  };
+  wizard: {
+    welcomeTitle: string;
+    providerPrompt: string;
+    providerDeepSeek: string;
+    providerGlm: string;
+    modelPrompt: string;
+    apiKeyPrompt: string;
+    apiKeyGetOne: string;
+    apiKeyPlaceholder: string;
+    apiKeySavedLocally: string;
+    apiKeyPreview: string;
+    apiKeyInvalid: string;
+    apiKeyChecking: string;
+    apiKeyRejected: string;
+    apiKeyCheckFailed: string;
+    glmApiKeyPrompt: string;
+    glmApiKeyGetOne: string;
+    glmApiKeyRejected: string;
+    reviewSaveError: string;
+    exitHint: string;
   };
 }

@@ -296,6 +296,24 @@ requirements:
         - THEN: >-
             response.toolCalls is a non-empty array, toolCalls[0].function.name is 'get_weather',
             and parsed arguments contain a 'city' field with 'Beijing' or '北京'
+  glm-key-validation:
+    strength: MUST
+    statement: >-
+      validateGlmApiKey() MUST validate a GLM API key by sending GET /models to
+      open.bigmodel.cn/api/paas/v4 with Bearer auth, returning ok/rejected/failed
+    scenarios:
+      glm-key-ok:
+        - GIVEN: a valid GLM API key
+        - WHEN: validateGlmApiKey() is called
+        - THEN: 'returns {ok: true}'
+      glm-key-rejected:
+        - GIVEN: an invalid GLM API key
+        - WHEN: validateGlmApiKey() is called and the endpoint returns 401
+        - THEN: 'returns {ok: false, reason: ''rejected''}'
+      glm-key-timeout:
+        - GIVEN: a GLM API key and network timeout
+        - WHEN: validateGlmApiKey() is called and the request times out
+        - THEN: 'returns {ok: false, reason: ''failed'', message: ''...''}'
 mapping:
   implementation:
     - src/config.ts

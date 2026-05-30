@@ -1,0 +1,51 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: setup-wizard-provider-select
+sections:
+  Implementation:
+    add-glm-key-validation:
+      text: >-
+        Add validateGlmApiKey() to src/cli/validate-api-key.ts — mirrors validateDeepSeekApiKey()
+        but targets open.bigmodel.cn/api/paas/v4/models with Bearer auth.
+      status: complete
+    rewrite-setup-command:
+      text: >-
+        Rewrite src/cli/commands/setup.tsx as a 3-step state machine: provider SingleSelect → key
+        input with provider-aware validation → model SingleSelect. Write provider,
+        apiKey/glm.apiKey, model, setupCompleted to config.
+      status: complete
+    rewrite-setup-tui:
+      text: >-
+        Rewrite src/cli/ui/Setup.tsx with same 3-step flow using MaskedInput and SingleSelect. Wire
+        onReady(provider, key) callback.
+      status: complete
+    add-i18n-keys:
+      text: >-
+        Add setup.providerPrompt, setup.providerDeepSeek, setup.providerGlm, setup.modelPrompt,
+        setup.glmApiKeyPrompt, setup.glmApiKeyGetOne, setup.glmApiKeyRejected and wizard equivalents
+        to EN.ts, zh-CN.ts, and types.ts.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — no provider resolution logic changed, no
+        desktop/dashboard changes, no new providers.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

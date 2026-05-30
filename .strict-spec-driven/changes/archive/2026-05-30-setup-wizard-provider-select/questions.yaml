@@ -1,0 +1,23 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: setup-wizard-provider-select
+open: []
+resolved:
+  - id: provider-label-i18n
+    question: Should the GLM provider be labeled 'GLM (Zhipu AI)' or just 'GLM' in the provider picker?
+    context: >-
+      The wizard shows a SingleSelect with provider options. Clarity vs brevity tradeoff for the
+      label shown to users.
+    answer: "Use 'GLM (Zhipu AI)' for clarity — first-time users may not know GLM = Zhipu."
+    status: resolved
+  - id: setup-reuse-hint
+    question: >-
+      Should the saved-footer hint say 'Run dspec setup again to switch provider' or just '[Enter]
+      to exit'?
+    context: >-
+      Current setup.tsx shows a simple '[Enter] to exit' after saving. We could add a hint about
+      re-running to change provider.
+    answer: "Show '[Enter] to exit · run dspec setup again to switch provider' in saved footer."
+    status: resolved

@@ -2,12 +2,12 @@ schema: strict-spec-driven/spec-index/v1
 schema_version: 1
 artifact_type: spec_index
 specs:
-  - id: agent-loop
-    title: Core Agent Loop
-    path: .strict-spec-driven/specs/agent-loop.yaml
   - id: acp-protocol
     title: Agent Client Protocol
     path: .strict-spec-driven/specs/acp-protocol.yaml
+  - id: agent-loop
+    title: Core Agent Loop
+    path: .strict-spec-driven/specs/agent-loop.yaml
   - id: code-edit-blocks
     title: Code Edit Blocks
     path: .strict-spec-driven/specs/code-edit-blocks.yaml

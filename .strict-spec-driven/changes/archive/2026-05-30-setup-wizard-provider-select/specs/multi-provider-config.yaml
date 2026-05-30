@@ -1,0 +1,32 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - src/cli/validate-api-key.ts
+  tests:
+    - tests/validate-api-key.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    glm-key-validation:
+      strength: MUST
+      statement: >-
+        validateGlmApiKey() MUST validate a GLM API key by sending GET /models to
+        open.bigmodel.cn/api/paas/v4 with Bearer auth, returning ok/rejected/failed
+      scenarios:
+        glm-key-ok:
+          - GIVEN: a valid GLM API key
+          - WHEN: validateGlmApiKey() is called
+          - THEN: 'returns {ok: true}'
+        glm-key-rejected:
+          - GIVEN: an invalid GLM API key
+          - WHEN: validateGlmApiKey() is called and the endpoint returns 401
+          - THEN: 'returns {ok: false, reason: ''rejected''}'
+        glm-key-timeout:
+          - GIVEN: a GLM API key and network timeout
+          - WHEN: validateGlmApiKey() is called and the request times out
+          - THEN: 'returns {ok: false, reason: ''failed'', message: ''...''}'
+  REMOVED: {}

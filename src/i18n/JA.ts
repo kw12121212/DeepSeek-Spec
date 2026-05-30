@@ -449,7 +449,11 @@ export const JA: TranslationSchema = {
     },
   },
   setup: {
-    title: "セットアップ — API キー",
+    title: "セットアップ — プロバイダー",
+    providerPrompt: "AI プロバイダーを選択してください。",
+    providerDeepSeek: "DeepSeek",
+    providerGlm: "GLM (Zhipu AI)",
+    modelPrompt: "モデルを選択してください。",
     apiKeyPrompt: "DeepSeek API キーを貼り付けて開始してください。",
     apiKeyGetOne: "取得：https://platform.deepseek.com/api_keys",
     apiKeySavedLocally: "{path} に保存されました",
@@ -462,9 +466,13 @@ export const JA: TranslationSchema = {
       "API キーを今すぐ確認できませんでした（{message}）。ネットワークを確認するか、再試行してください。",
     apiKeyPreview: "プレビュー：{redacted}",
     savedTitle: "▸ 保存しました。",
-    savedFooter: "[Enter] で終了",
+    savedFooter: "[Enter] で終了 · dspec setup を再実行してプロバイダーを切り替え",
     footer: "[Enter] 確認 · [Esc] キャンセル",
     hint: "API キーが見つかりません。DEEPSEEK_API_KEY 環境変数を設定するか、/setup を実行してください。",
+    glmApiKeyPrompt: "Zhipu AI API キーを貼り付けて開始してください。",
+    glmApiKeyGetOne: "取得：https://open.bigmodel.cn/usercenter/apikeys",
+    glmApiKeyRejected:
+      "GLM がこの API キーを拒否しました。有効なキーを貼り付けるか、Esc でキャンセルしてください。",
   },
   themePicker: {
     header: "テーマ",
@@ -1898,5 +1906,29 @@ export const JA: TranslationSchema = {
       '"{name}" のインストールメタデータを導出できませんでした \u2014 `npx -y @smithery/cli install {name}` を直接試してください。',
     buildSpecFailed: "{name} のインストール仕様を構築できません: {message}",
     alreadyInstalled: "インストール済み: {spec}",
+  },
+  wizard: {
+    welcomeTitle: "DeepSeek-Spec へようこそ",
+    providerPrompt: "AI プロバイダーを選択してください。",
+    providerDeepSeek: "DeepSeek",
+    providerGlm: "GLM (Zhipu AI)",
+    modelPrompt: "モデルを選択してください。",
+    apiKeyPrompt: "DeepSeek API キーを貼り付けて開始してください。",
+    apiKeyGetOne: "取得：https://platform.deepseek.com/api_keys",
+    apiKeyPlaceholder: "sk-...",
+    apiKeySavedLocally: "{path} に保存されました",
+    apiKeyPreview: "プレビュー：{redacted}",
+    apiKeyInvalid: "キーが短すぎます。完全なトークンを貼り付けてください（16文字以上、空白不可）。",
+    apiKeyChecking: "API キーを確認中…",
+    apiKeyRejected:
+      "DeepSeek がこの API キーを拒否しました。有効なキーを貼り付けるか、Esc でキャンセルしてください。",
+    apiKeyCheckFailed:
+      "API キーを今すぐ確認できませんでした（{message}）。ネットワークを確認するか、再試行してください。",
+    glmApiKeyPrompt: "Zhipu AI API キーを貼り付けて開始してください。",
+    glmApiKeyGetOne: "取得：https://open.bigmodel.cn/usercenter/apikeys",
+    glmApiKeyRejected:
+      "GLM がこの API キーを拒否しました。有効なキーを貼り付けるか、Esc でキャンセルしてください。",
+    reviewSaveError: "設定を保存できませんでした：{message}",
+    exitHint: "/exit または /quit でキャンセル",
   },
 };

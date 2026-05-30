@@ -462,7 +462,11 @@ export const de: TranslationSchema = {
     },
   },
   setup: {
-    title: "Einrichtung — API-Schlüssel",
+    title: "Einrichtung — Anbieter",
+    providerPrompt: "Wählen Sie Ihren KI-Anbieter.",
+    providerDeepSeek: "DeepSeek",
+    providerGlm: "GLM (Zhipu AI)",
+    modelPrompt: "Wählen Sie ein Modell.",
     apiKeyPrompt: "Fügen Sie Ihren DeepSeek API-Schlüssel ein, um zu beginnen.",
     apiKeyGetOne: "Holen Sie einen unter: https://platform.deepseek.com/api_keys",
     apiKeySavedLocally: "Lokal gespeichert in {path}",
@@ -476,9 +480,13 @@ export const de: TranslationSchema = {
       "API-Schlüssel konnte nicht verifiziert werden ({message}). Netzwerk prüfen oder erneut versuchen.",
     apiKeyPreview: "Vorschau: {redacted}",
     savedTitle: "▸ Gespeichert.",
-    savedFooter: "[Enter] zum Beenden",
+    savedFooter: "[Enter] zum Beenden · dspec setup erneut ausführen, um den Anbieter zu wechseln",
     footer: "[Enter] bestätigen · [Esc] abbrechen",
     hint: "Kein API-Schlüssel gefunden. DEEPSEEK_API_KEY-Umgebungsvariable setzen oder /setup ausführen.",
+    glmApiKeyPrompt: "Fügen Sie Ihren Zhipu AI API-Schlüssel ein, um zu beginnen.",
+    glmApiKeyGetOne: "Holen Sie einen unter: https://open.bigmodel.cn/usercenter/apikeys",
+    glmApiKeyRejected:
+      "GLM hat diesen API-Schlüssel abgelehnt. Fügen Sie einen gültigen Schlüssel ein oder drücken Sie Esc zum Abbrechen.",
   },
   themePicker: {
     ...EN.themePicker,
@@ -1999,5 +2007,8 @@ export const de: TranslationSchema = {
       'Konnte Installationsmetadaten für "{name}" nicht ableiten — versuche `npx -y @smithery/cli install {name}` direkt.',
     buildSpecFailed: "Kann Installationsspec für {name} nicht erstellen: {message}",
     alreadyInstalled: "Bereits installiert: {spec}",
+  },
+  wizard: {
+    ...EN.wizard,
   },
 };

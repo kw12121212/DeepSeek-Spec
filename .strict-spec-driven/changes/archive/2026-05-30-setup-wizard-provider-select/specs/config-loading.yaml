@@ -1,0 +1,52 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: config-loading
+mapping:
+  implementation:
+    - src/cli/commands/setup.tsx,src/cli/ui/Setup.tsx
+  tests:
+    - tests/setup-wizard.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    setup-provider-selection:
+      strength: MUST
+      statement: >-
+        The setup wizard MUST present a provider selection step before API key input, offering
+        'deepseek' and 'glm' as choices.
+      scenarios:
+        provider-select-step:
+          - GIVEN: the setup wizard starts with no existing config
+          - WHEN: the wizard renders
+          - THEN: a SingleSelect with 'deepseek' and 'glm' options is shown, defaulting to 'deepseek'
+    setup-model-picker:
+      strength: MUST
+      statement: >-
+        After API key validation succeeds, the setup wizard MUST present a model selection step
+        listing the chosen provider's supported models.
+      scenarios:
+        model-picker-deepseek:
+          - GIVEN: provider is 'deepseek' and API key validated
+          - WHEN: the model step renders
+          - THEN: a SingleSelect shows deepseek-v4-flash (default) and deepseek-v4-pro
+        model-picker-glm:
+          - GIVEN: provider is 'glm' and API key validated
+          - WHEN: the model step renders
+          - THEN: a SingleSelect shows glm-5.1 (default), glm-4.7, and glm-5-turbo
+    setup-writes-provider:
+      strength: MUST
+      statement: >-
+        On completion, the setup wizard MUST write provider, API key (in provider-specific field),
+        model, and setupCompleted to config.json
+      scenarios:
+        deepseek-key-save:
+          - GIVEN: user selected deepseek and entered a valid key
+          - WHEN: setup completes
+          - THEN: config.json has provider='deepseek', apiKey set, model set, setupCompleted=true
+        glm-key-save:
+          - GIVEN: user selected glm and entered a valid key
+          - WHEN: setup completes
+          - THEN: config.json has provider='glm', glm.apiKey set, model set, setupCompleted=true
+  REMOVED: {}

@@ -1,0 +1,29 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: setup-wizard-provider-select
+  status: proposed
+summary:
+  what:
+    - >-
+      Replace the single-step DeepSeek-only setup wizard with a multi-step flow: provider selection
+      (DeepSeek or GLM) → provider-specific API key input with validation → model picker → done.
+  why:
+    - >-
+      The current wizard only handles DeepSeek API keys. Users choosing GLM must manually edit
+      config.json or set env vars, which is a poor first-run experience.
+scope:
+  in:
+    - >-
+      src/cli/commands/setup.tsx, src/cli/ui/Setup.tsx, src/cli/validate-api-key.ts, src/i18n/EN.ts,
+      src/i18n/zh-CN.ts, src/i18n/types.ts
+  out:
+    - >-
+      Multi-step setup wizard with provider selection, provider-aware key validation, and model
+      picker. Both CLI (dspec setup) and in-app (no-key gate) paths updated.
+unchanged_behavior:
+  - >-
+    Provider resolution logic (loadActiveProvider, modelToProvider), GLM adapter, provider registry,
+    desktop/dashboard code, config.json schema

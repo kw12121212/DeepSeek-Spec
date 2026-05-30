@@ -165,7 +165,7 @@ function Root({
     return (
       <KeystrokeProvider>
         <Setup
-          onReady={(k) => {
+          onReady={(_provider, k) => {
             bridgeEndpointEnv();
             setKey(k);
           }}
