@@ -8,8 +8,8 @@ requirements:
   load-builtin-skills:
     strength: MUST
     statement: >-
-      The skills system MUST load built-in skills from the bundled skill
-      definitions and register them in the tool registry.
+      The skills system MUST load built-in skills from the bundled skill definitions and register
+      them in the tool registry.
     scenarios:
       builtins-available:
         - GIVEN: the skills system initializes
@@ -18,18 +18,18 @@ requirements:
   load-user-skills:
     strength: MUST
     statement: >-
-      The skills system MUST load user-authored skill playbooks from project
-      and global skill directories, parsing frontmatter metadata.
+      The skills system MUST load user skills from .agents/skills as the primary directory and
+      .claude/skills as fallback; .dspec/skills is no longer scanned.
     scenarios:
-      project-skill:
-        - GIVEN: a .dspec/skills/ directory with a skill.yaml file
+      agents-primary:
+        - GIVEN: an .agents/skills directory with a skill.yaml file
         - WHEN: skills are loaded
         - THEN: the skill is parsed and available for execution
   frontmatter-parsing:
     strength: MUST
     statement: >-
-      Skill frontmatter MUST include name, description, allowedTools, and mode
-      (inline or subagent). Missing required fields MUST produce a clear error.
+      Skill frontmatter MUST include name, description, allowedTools, and mode (inline or subagent).
+      Missing required fields MUST produce a clear error.
     scenarios:
       valid-frontmatter:
         - GIVEN: a skill file with name, description, tools, and mode
@@ -42,8 +42,8 @@ requirements:
   inline-execution:
     strength: MUST
     statement: >-
-      Skills in inline mode MUST execute the playbook in the current agent
-      context with access to the specified allowedTools.
+      Skills in inline mode MUST execute the playbook in the current agent context with access to
+      the specified allowedTools.
     scenarios:
       inline-run:
         - GIVEN: an inline skill with allowedTools [read_file, grep]
@@ -52,8 +52,8 @@ requirements:
   subagent-execution:
     strength: MUST
     statement: >-
-      Skills in subagent mode MUST spawn a child agent to execute the playbook
-      with the specified system prompt and tools.
+      Skills in subagent mode MUST spawn a child agent to execute the playbook with the specified
+      system prompt and tools.
     scenarios:
       subagent-run:
         - GIVEN: a subagent skill with a custom system prompt
@@ -62,8 +62,8 @@ requirements:
   skill-index-generation:
     strength: MUST
     statement: >-
-      The skills system MUST generate a skills index describing available skills
-      for inclusion in the model context.
+      The skills system MUST generate a skills index describing available skills for inclusion in
+      the model context.
     scenarios:
       index-contents:
         - GIVEN: 5 loaded skills
@@ -72,13 +72,13 @@ requirements:
   install-skill:
     strength: MUST
     statement: >-
-      The install mechanism MUST accept a skill definition and write it to the
-      project or global skill directory with valid frontmatter.
+      The install mechanism MUST write new skills to .agents/skills (project or global scope)
+      instead of .dspec/skills.
     scenarios:
-      install-to-project:
+      install-agents-dir:
         - GIVEN: a skill definition with name and playbook
         - WHEN: install is called with project scope
-        - THEN: a skill file is created in .dspec/skills/ with frontmatter
+        - THEN: a skill file is created in .agents/skills/ with frontmatter
 mapping:
   implementation:
     - src/skills.ts

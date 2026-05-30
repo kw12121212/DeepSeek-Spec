@@ -1126,8 +1126,8 @@ export const zhCN: TranslationSchema = {
     },
     skill: {
       listEmpty: "未找到技能。DeepSeek-Spec 从以下位置读取技能：",
-      listProjectScope: "  · <project>/.dspec/skills/<name>/SKILL.md  （或 <name>.md） — 项目范围",
-      listGlobalScope: "  · ~/.dspec/skills/<name>/SKILL.md  （或 <name>.md） — 全局范围",
+      listProjectScope: "  · <project>/.agents/skills/<name>/SKILL.md  （或 <name>.md） — 项目范围",
+      listGlobalScope: "  · ~/.agents/skills/<name>/SKILL.md  （或 <name>.md） — 全局范围",
       listProjectOnly: "  （项目范围仅在 `dspec code` 中活跃）",
       listFrontmatter: "每个文件的 frontmatter 至少需要 `name` 和 `description`。",
       listInvoke: "使用 `/skill <name> [args]` 调用技能，或让模型调用 `run_skill`。",

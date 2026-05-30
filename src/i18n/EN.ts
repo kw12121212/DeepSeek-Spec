@@ -1192,8 +1192,8 @@ export const EN: TranslationSchema = {
     skill: {
       listEmpty: "no skills found. DeepSeek-Spec reads skills from:",
       listProjectScope:
-        "  · <project>/.dspec/skills/<name>/SKILL.md  (or <name>.md)  — project scope",
-      listGlobalScope: "  · ~/.dspec/skills/<name>/SKILL.md  (or <name>.md)  — global scope",
+        "  · <project>/.agents/skills/<name>/SKILL.md  (or <name>.md)  — project scope",
+      listGlobalScope: "  · ~/.agents/skills/<name>/SKILL.md  (or <name>.md)  — global scope",
       listProjectOnly: "  (project scope is only active in `dspec code`)",
       listFrontmatter: "Each file's frontmatter needs at least `name` and `description`.",
       listInvoke:

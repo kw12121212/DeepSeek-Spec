@@ -44,9 +44,9 @@ const HARD_MAX_FILE_BYTES = 32 * 1024 * 1024;
 const OUTLINE_HEAD_LINES = 80;
 
 // Skipped unless `include_deps:true`. Derived from the semantic indexer's exclude
-// list, minus `.dspec` — the indexer shouldn't embed session logs / cache, but
-// user skills live at `<root>/.dspec/skills/` (and `~/.dspec/skills/`) and
-// must stay reachable to read_file / search_files / search_content (#1357).
+// list, minus `.dspec` — user skills now live under `.agents/skills/` which is not
+// in the indexer's exclude list, so read_file / search_files / search_content reach
+// them by default (#1357).
 const SKIP_DIR_NAMES: ReadonlySet<string> = new Set(
   DEFAULT_INDEX_EXCLUDES.dirs.filter((d) => d !== ".dspec"),
 );

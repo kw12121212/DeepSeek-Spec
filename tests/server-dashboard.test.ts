@@ -294,7 +294,7 @@ describe("dashboard server: endpoints", () => {
   it("GET /api/skills lists and edits flat-format project skills (#586)", async () => {
     const proj = mkdtempSync(join(tmpdir(), "dspec-dash-skills-"));
     try {
-      const skillsDir = join(proj, ".dspec", "skills");
+      const skillsDir = join(proj, ".agents", "skills");
       const folderDir = join(skillsDir, "folder-skill");
       const flatPath = join(skillsDir, "flat-skill.md");
       await mkdir(folderDir, { recursive: true });
@@ -392,7 +392,7 @@ describe("dashboard server: endpoints", () => {
         getCurrentCwd: () => proj,
         audit: (e) => audited.push({ action: e.action }),
       });
-      const target = join(proj, ".dspec", "skills", "silent-fail", "SKILL.md");
+      const target = join(proj, ".agents", "skills", "silent-fail", "SKILL.md");
 
       const noFrontmatter = await call(`${base}api/skills/project/silent-fail`, {
         method: "POST",

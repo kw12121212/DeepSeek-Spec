@@ -226,8 +226,8 @@ export function registerSkillTools(
   });
 
   const installScopeDesc = hasProjectScope
-    ? "'project' (default) writes to <repo>/.dspec/skills/, scoped to this workspace only; 'global' writes to ~/.dspec/skills/, available in every project."
-    : "'global' (only option here — no project workspace) writes to ~/.dspec/skills/.";
+    ? "'project' (default) writes to <repo>/.agents/skills/, scoped to this workspace only; 'global' writes to ~/.agents/skills/, available in every project."
+    : "'global' (only option here — no project workspace) writes to ~/.agents/skills/.";
 
   registry.register({
     name: "install_skill",

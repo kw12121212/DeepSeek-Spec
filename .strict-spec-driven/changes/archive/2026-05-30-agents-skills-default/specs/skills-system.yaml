@@ -1,0 +1,34 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: skills-system
+mapping:
+  implementation:
+    - src/skills.ts
+  tests:
+    - tests/skills.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    load-user-skills:
+      strength: MUST
+      statement: >-
+        The skills system MUST load user skills from .agents/skills as the primary directory and
+        .claude/skills as fallback; .dspec/skills is no longer scanned.
+      scenarios:
+        agents-primary:
+          - GIVEN: an .agents/skills directory with a skill.yaml file
+          - WHEN: skills are loaded
+          - THEN: the skill is parsed and available for execution
+    install-skill:
+      strength: MUST
+      statement: >-
+        The install mechanism MUST write new skills to .agents/skills (project or global scope)
+        instead of .dspec/skills.
+      scenarios:
+        install-agents-dir:
+          - GIVEN: a skill definition with name and playbook
+          - WHEN: install is called with project scope
+          - THEN: a skill file is created in .agents/skills/ with frontmatter
+  REMOVED: {}

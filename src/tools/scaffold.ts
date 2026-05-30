@@ -48,7 +48,7 @@ export function registerScaffoldTools(
           type: "string",
           enum: ["project", "global"],
           description:
-            "`project` (default) = workspace .dspec/skills/; `global` = ~/.dspec/skills/.",
+            "`project` (default) = workspace .agents/skills/; `global` = ~/.agents/skills/.",
         },
         allowed_tools: {
           type: "array",

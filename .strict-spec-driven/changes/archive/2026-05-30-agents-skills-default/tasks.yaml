@@ -1,0 +1,47 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: agents-skills-default
+sections:
+  Implementation:
+    reorder-roots:
+      text: >-
+        In SkillStore.roots(), remove all .dspec/skills entries. Make .agents/skills the first root
+        for both project and global scopes. Keep .claude/skills as fallback.
+      status: complete
+    update-create-target:
+      text: >-
+        Update SkillStore.create() and createWithContent() to scaffold new skills into
+        .agents/skills instead of .dspec/skills.
+      status: complete
+    update-server-api:
+      text: >-
+        Update server/api/skills.ts: change globalSkillsDir() and projectSkillsDir() to return
+        .agents/skills paths. Update the GET list endpoint to scan .agents/skills.
+      status: complete
+    update-tests:
+      text: >-
+        Update all tests referencing .dspec/skills to use .agents/skills. Verify .claude/skills
+        compatibility still works.
+      status: complete
+  Testing:
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

@@ -387,11 +387,11 @@ describe("filesystem tools (built-in, sandbox-enforced)", () => {
       expect(out).toContain("node_modules/lib/marker.ts");
     });
 
-    it("walks .dspec/ by default so user skills stay reachable (#1357)", async () => {
-      await fs.mkdir(join(root, ".dspec", "skills"), { recursive: true });
-      await fs.writeFile(join(root, ".dspec", "skills", "my-skill.md"), "# my-skill\n");
+    it("walks .agents/ by default so user skills stay reachable (#1357)", async () => {
+      await fs.mkdir(join(root, ".agents", "skills"), { recursive: true });
+      await fs.writeFile(join(root, ".agents", "skills", "my-skill.md"), "# my-skill\n");
       const out = await tools.dispatch("search_files", JSON.stringify({ pattern: "my-skill" }));
-      expect(out).toContain(".dspec/skills/my-skill.md");
+      expect(out).toContain(".agents/skills/my-skill.md");
     });
 
     it("honors AbortSignal during recursive search", async () => {

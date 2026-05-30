@@ -1188,9 +1188,9 @@ export const JA: TranslationSchema = {
     skill: {
       listEmpty: "スキルが見つかりません。DeepSeek-Spec は以下からスキルを読み取ります:",
       listProjectScope:
-        "  · <project>/.dspec/skills/<name>/SKILL.md  （または <name>.md） — プロジェクトスコープ",
+        "  · <project>/.agents/skills/<name>/SKILL.md  （または <name>.md） — プロジェクトスコープ",
       listGlobalScope:
-        "  · ~/.dspec/skills/<name>/SKILL.md  （または <name>.md） — グローバルスコープ",
+        "  · ~/.agents/skills/<name>/SKILL.md  （または <name>.md） — グローバルスコープ",
       listProjectOnly: "  （プロジェクトスコープは `dspec code` 内でのみアクティブ）",
       listFrontmatter:
         "各ファイルのフロントマターには少なくとも `name` と `description` が必要です。",

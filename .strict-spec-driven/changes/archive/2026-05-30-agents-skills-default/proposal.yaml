@@ -1,0 +1,30 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: agents-skills-default
+  status: proposed
+summary:
+  what:
+    - >-
+      Replace .dspec/skills with .agents/skills as the default skills directory; remove
+      .dspec/skills from all loading paths
+  why:
+    - >-
+      User wants .agents/skills as the sole default; .dspec/skills is deprecated and removed
+      entirely
+scope:
+  in:
+    - >-
+      SkillStore.roots() loading paths, server API default dir helpers, create() scaffold targets,
+      test fixtures
+  out:
+    - >-
+      .agents/skills is the primary default; .dspec/skills is no longer scanned; .claude/skills
+      remains as compatibility fallback; create() writes to .agents/skills
+unchanged_behavior:
+  - >-
+    Builtin skills, frontmatter parsing, inline/subagent execution modes, skills index generation,
+    allowed-tools parsing, subagent model overrides, flat/folder layout support, .claude/skills
+    compatibility
