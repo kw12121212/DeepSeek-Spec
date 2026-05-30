@@ -1,0 +1,30 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: scheduler-store
+  status: proposed
+summary:
+  what:
+    - >-
+      Create the ScheduledTask interface and TaskStore class with JSON persistence in
+      .dspec/scheduled.json, providing CRUD operations with atomic writes and robust error handling.
+  why:
+    - >-
+      The scheduled task system needs a persistent data store as its foundation. All subsequent
+      scheduler components (cron parser, daemon, executor) depend on being able to read and write
+      task definitions.
+scope:
+  in:
+    - >-
+      TaskStore with load/save/add/update/remove/getById/getByName/getEnabled operations;
+      ScheduledTask interface; atomic write via temp file + rename; nanoid 8-char IDs; ISO 8601 UTC
+      timestamps; project-local .dspec/scheduled.json
+  out:
+    - CLI commands, execution history, TUI indicators, dashboard API, concurrent execution limits
+unchanged_behavior:
+  - Existing agent loop, tools, MCP, TUI, and all other modules remain unchanged
+roadmap:
+  milestone: 0011-scheduled-tasks-core
+  planned_change: scheduler-store

@@ -1,0 +1,47 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: scheduled-tasks
+mapping:
+  implementation:
+    - src/scheduler/store.ts
+  tests:
+    - tests/scheduler/store.test.ts
+operations:
+  ADDED:
+    store-persistence:
+      strength: MUST
+      statement: >-
+        TaskStore MUST persist ScheduledTask objects to .dspec/scheduled.json and load them back,
+        returning an empty array when the file is missing or contains malformed JSON.
+      scenarios:
+        round-trip:
+          - GIVEN: A TaskStore instance and a ScheduledTask added via add()
+          - WHEN: The store is saved and a new TaskStore instance loads from the same file
+          - THEN: The loaded array contains the added task with all fields intact
+    store-atomic-write:
+      strength: MUST
+      statement: >-
+        TaskStore MUST perform atomic writes by writing to a temporary file and renaming it,
+        ensuring the store file is never left in a partially written state.
+      scenarios:
+        crash-simulation:
+          - GIVEN: >-
+              A TaskStore with tasks and a simulated crash during write (temp file exists, main file
+              missing)
+          - WHEN: A new TaskStore instance loads from the file
+          - THEN: An empty array is returned without error
+    store-crud:
+      strength: MUST
+      statement: >-
+        TaskStore MUST support add, update, remove, getById, getByName, and getEnabled operations.
+        add generates an 8-character nanoid. update merges partial fields and updates the updatedAt
+        timestamp. remove returns true if the task existed.
+      scenarios:
+        update-task:
+          - GIVEN: A TaskStore with an existing task
+          - WHEN: update is called with the task ID and a partial patch
+          - THEN: The task is updated with the merged fields and a new updatedAt timestamp
+  MODIFIED: {}
+  REMOVED: {}

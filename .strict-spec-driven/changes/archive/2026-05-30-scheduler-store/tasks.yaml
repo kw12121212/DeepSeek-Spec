@@ -1,0 +1,39 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: scheduler-store
+sections:
+  Implementation:
+    define-interface:
+      text: Define ScheduledTask interface in src/scheduler/store.ts.
+      status: complete
+    implement-store:
+      text: Implement TaskStore class with CRUD, atomic writes, and error handling.
+      status: complete
+    add-i18n:
+      text: Add i18n keys for store error messages via t().
+      status: complete
+  Testing:
+    write-unit-tests:
+      text: Write tests/scheduler/store.test.ts covering CRUD, atomic write, lookups, errors.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

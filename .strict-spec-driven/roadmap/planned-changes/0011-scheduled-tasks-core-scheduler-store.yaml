@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: scheduler-store
   milestone: 0011-scheduled-tasks-core
-status: planned
+status: complete
 summary: |
   Create the scheduled task data model and JSON persistence store.
 details: |
