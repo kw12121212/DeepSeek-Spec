@@ -417,6 +417,10 @@ export const de: TranslationSchema = {
       description: "Terminal-Theme anzeigen oder speichern. Ohne Argument öffnet die Auswahl.",
     },
     exit: { ...EN.slash.exit, description: "TUI beenden" },
+    schedule: {
+      ...EN.slash.schedule,
+      description: "Ausführungsverlauf für eine geplante Aufgabe anzeigen",
+    },
     "strict-init": { description: ".strict-spec-driven/ im aktuellen Projekt initialisieren" },
     "strict-propose": {
       description: "Neuen Strict-Change-Vorschlag erstellen",
@@ -2013,5 +2017,11 @@ export const de: TranslationSchema = {
   },
   scheduler: {
     executionTimedOut: "Ausführung hat das Zeitlimit überschritten",
+    historyUsage: "Verwendung: /schedule history <Name|id>",
+    historyNotFound: "Kein Task mit Name oder id gefunden: {id}",
+    historyNoTask: "Kein Ausführungsverlauf für Task: {name}",
+    historyEntry: "{status} {startedAt}  {duration}s  {snippet}",
+    historyStatusSuccess: "✓",
+    historyStatusError: "✗",
   },
 };

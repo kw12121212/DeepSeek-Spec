@@ -345,6 +345,10 @@ export const zhCN: TranslationSchema = {
       argsHint: "<5s..6h> <prompt>  ·  stop  ·  （无参数 = 状态）",
     },
     exit: { description: "退出 TUI" },
+    schedule: {
+      description: "查看计划任务的执行历史",
+      argsHint: "history <名称|id>",
+    },
     init: {
       description:
         "扫描项目并合成基线 DSPEC.md（模型写入；使用 /apply 审查）。`force` 覆盖已有文件。",
@@ -1817,5 +1821,11 @@ export const zhCN: TranslationSchema = {
   },
   scheduler: {
     executionTimedOut: "执行超时",
+    historyUsage: "用法：/schedule history <名称|id>",
+    historyNotFound: "未找到名称或 id 为 {id} 的任务",
+    historyNoTask: "任务 {name} 暂无执行历史",
+    historyEntry: "{status} {startedAt}  {duration}秒  {snippet}",
+    historyStatusSuccess: "✓",
+    historyStatusError: "✗",
   },
 };

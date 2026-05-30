@@ -61,8 +61,8 @@ export class TaskExecutor implements TaskExecutorPort {
     this.timeoutMs = opts.timeoutMs ?? getTimeoutMs();
   }
 
-  async execute(task: ScheduledTask): Promise<void> {
-    await this.runWithResult(task);
+  async execute(task: ScheduledTask): Promise<TaskExecutionResult> {
+    return this.runWithResult(task);
   }
 
   async runWithResult(task: ScheduledTask): Promise<TaskExecutionResult> {

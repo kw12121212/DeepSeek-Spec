@@ -431,6 +431,12 @@ export const SLASH_COMMANDS: readonly SlashCommandSpec[] = [
     summary: "show current vs latest version + the shell command to upgrade",
   },
   { cmd: "exit", group: "advanced", summary: "quit the TUI", aliases: ["quit", "q"] },
+  {
+    cmd: "schedule",
+    group: "advanced",
+    argsHint: "history <name|id>",
+    summary: "show execution history for a scheduled task",
+  },
 ];
 
 export function suggestSlashCommands(

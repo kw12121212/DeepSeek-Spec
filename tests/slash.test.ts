@@ -588,7 +588,7 @@ describe("handleSlash", () => {
   it("suggestSlashCommands filters by prefix", () => {
     expect(suggestSlashCommands("h").map((s) => s.cmd)).toEqual(["help", "hooks"]);
     // Case-insensitive. Fuzzy adds "theme" (h-e in t-h-e-m-e).
-    expect(suggestSlashCommands("HE").map((s) => s.cmd)).toEqual(["help", "theme"]);
+    expect(suggestSlashCommands("HE").map((s) => s.cmd)).toEqual(["help", "theme", "schedule"]);
     // Empty prefix returns the full non-advanced release list, including code commands.
     expect(suggestSlashCommands("", true)).toHaveLength(53);
     expect(suggestSlashCommands("", true).map((s) => s.cmd)).toContain("logs");

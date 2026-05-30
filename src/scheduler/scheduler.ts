@@ -1,9 +1,11 @@
 import { matchesCron } from "./cron-parser.js";
+import type { TaskExecutionResult } from "./executor.js";
+import type { HistoryEntry, HistoryStore } from "./history.js";
 import type { ScheduledTask } from "./store.js";
 import type { TaskStore } from "./store.js";
 
 export interface TaskExecutorPort {
-  execute(task: ScheduledTask): Promise<void>;
+  execute(task: ScheduledTask): Promise<TaskExecutionResult>;
 }
 
 const DEFAULT_TICK_MS = 30_000;
@@ -25,15 +27,21 @@ function minuteKey(ts: number): number {
 export class Scheduler {
   private readonly store: TaskStore;
   private readonly executor: TaskExecutorPort;
+  private readonly historyStore?: HistoryStore;
   private readonly tickMs: number;
   private timer: ReturnType<typeof setInterval> | null = null;
   private readonly lastFired = new Map<string, number>();
   private readonly inFlight = new Set<Promise<void>>();
   private nextTickAt: Date | null = null;
 
-  constructor(store: TaskStore, executor: TaskExecutorPort, options?: { tickMs?: number }) {
+  constructor(
+    store: TaskStore,
+    executor: TaskExecutorPort,
+    options?: { tickMs?: number; historyStore?: HistoryStore },
+  ) {
     this.store = store;
     this.executor = executor;
+    this.historyStore = options?.historyStore;
     this.tickMs = options?.tickMs ?? getTickMs();
   }
 
@@ -69,7 +77,19 @@ export class Scheduler {
       if (lastMs !== undefined && minuteKey(lastMs) === currentMinute) continue;
       this.lastFired.set(task.id, nowMs);
       const p = this.executor.execute(task).then(
-        () => {
+        (result) => {
+          if (this.historyStore) {
+            const entry: HistoryEntry = {
+              taskId: result.taskId,
+              taskName: task.name,
+              startedAt: result.startedAt,
+              finishedAt: result.finishedAt,
+              status: result.status,
+              duration: result.duration,
+              outputSnippet: result.outputSnippet,
+            };
+            this.historyStore.append(entry);
+          }
           this.inFlight.delete(p);
         },
         () => {

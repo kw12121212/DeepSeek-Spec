@@ -1019,5 +1019,11 @@ export interface TranslationSchema {
   };
   scheduler: {
     executionTimedOut: string;
+    historyUsage: string;
+    historyNotFound: string;
+    historyNoTask: string;
+    historyEntry: string;
+    historyStatusSuccess: string;
+    historyStatusError: string;
   };
 }

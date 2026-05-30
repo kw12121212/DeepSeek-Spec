@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: execution-history
   milestone: 0012-scheduled-tasks-management
-status: planned
+status: complete
 summary: |
   Implement the execution history store and the /schedule history command.
 details: |

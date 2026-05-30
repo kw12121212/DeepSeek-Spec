@@ -1,0 +1,24 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: execution-history
+  status: proposed
+summary:
+  what:
+    - Execution history store (HistoryEntry, HistoryStore) and the /schedule history command
+  why:
+    - >-
+      M11 core scheduler is complete; users need to review past task executions, their status, and
+      output summaries to debug and monitor scheduled tasks
+scope:
+  in:
+    - .strict-spec-driven/specs/scheduled-tasks.yaml
+  out:
+    - .strict-spec-driven/specs/scheduled-tasks.yaml
+unchanged_behavior:
+  - All existing cron-parser, store, scheduler, and executor requirements remain unchanged
+roadmap:
+  milestone: 0012-scheduled-tasks-management
+  planned_change: execution-history

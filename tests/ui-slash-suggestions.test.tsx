@@ -97,9 +97,9 @@ describe("SlashSuggestions", () => {
     expect(names).toContain("language");
     expect(names).toContain("btw");
     expect(names).toContain("about");
-    expect(countAdvancedCommands(true)).toBe(10);
+    expect(countAdvancedCommands(true)).toBe(11);
     expect(frame).toContain("53 commands");
-    expect(frame).toContain("+ 10 advanced");
+    expect(frame).toContain("+ 11 advanced");
   });
 
   it("surfaces /language for typed language prefixes", () => {

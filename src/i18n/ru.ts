@@ -310,6 +310,10 @@ export const ru: TranslationSchema = {
         "авто-переотправлять <промпт> каждые <интервал> пока ты не напишешь / Esc / /loop stop",
     },
     exit: { ...EN.slash.exit, description: "выйти из TUI" },
+    schedule: {
+      ...EN.slash.schedule,
+      description: "показать историю выполнения запланированной задачи",
+    },
     init: {
       ...EN.slash.init,
       description:
@@ -553,5 +557,11 @@ export const ru: TranslationSchema = {
   },
   scheduler: {
     executionTimedOut: "Время выполнения истекло",
+    historyUsage: "Использование: /schedule history <имя|id>",
+    historyNotFound: "Задача не найдена: {id}",
+    historyNoTask: "Нет истории выполнения для задачи: {name}",
+    historyEntry: "{status} {startedAt}  {duration}с  {snippet}",
+    historyStatusSuccess: "✓",
+    historyStatusError: "✗",
   },
 };

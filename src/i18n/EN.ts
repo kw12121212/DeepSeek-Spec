@@ -360,6 +360,10 @@ export const EN: TranslationSchema = {
       argsHint: "<5s..6h> <prompt>  ·  stop  ·  (no args = status)",
     },
     exit: { description: "quit the TUI" },
+    schedule: {
+      description: "show execution history for a scheduled task",
+      argsHint: "history <name|id>",
+    },
     init: {
       description:
         "scan the project and synthesize a baseline DSPEC.md (model writes; review with /apply). `force` overwrites an existing file.",
@@ -1923,5 +1927,11 @@ export const EN: TranslationSchema = {
   },
   scheduler: {
     executionTimedOut: "Execution timed out",
+    historyUsage: "Usage: /schedule history <name|id>",
+    historyNotFound: "No task found with name or id: {id}",
+    historyNoTask: "No execution history for task: {name}",
+    historyEntry: "{status} {startedAt}  {duration}s  {snippet}",
+    historyStatusSuccess: "✓",
+    historyStatusError: "✗",
   },
 };

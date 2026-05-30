@@ -201,6 +201,85 @@ requirements:
         - GIVEN: A task execution where the agent loop throws an error
         - WHEN: execute() catches the exception
         - THEN: the result has status 'error' with the error message as snippet, no exception propagates
+  history-entry-interface:
+    strength: MUST
+    statement: >-
+      HistoryEntry MUST contain taskId, taskName, startedAt, finishedAt, status ('success'|'error'),
+      duration (ms), and outputSnippet (string, max 200 chars).
+    scenarios:
+      entry-round-trip:
+        - GIVEN: A HistoryEntry with all fields populated
+        - WHEN: the entry is appended and retrieved from HistoryStore
+        - THEN: all fields match the original values exactly
+  history-store-persistence:
+    strength: MUST
+    statement: >-
+      HistoryStore MUST persist entries to .dspec/scheduled-history.json and load them back,
+      returning an empty array when the file is missing or contains malformed JSON.
+    scenarios:
+      store-round-trip:
+        - GIVEN: A HistoryStore with appended entries saved to disk
+        - WHEN: a new HistoryStore instance loads from the same file
+        - THEN: the loaded entries match the appended entries
+  history-store-prune:
+    strength: MUST
+    statement: >-
+      HistoryStore MUST prune entries per task beyond 500, keeping the most recent. Pruning occurs
+      at append time.
+    scenarios:
+      prune-cap:
+        - GIVEN: A HistoryStore with 500 entries for a task
+        - WHEN: a new entry is appended for that task
+        - THEN: the oldest entry is removed so the count remains 500
+  history-store-query-by-task:
+    strength: MUST
+    statement: >-
+      HistoryStore.getByTaskId MUST return entries for a specific task in reverse chronological
+      order, limited to the given limit (default 20).
+    scenarios:
+      query-by-task:
+        - GIVEN: A HistoryStore with 30 entries for task 'abc123'
+        - WHEN: getByTaskId('abc123', 20) is called
+        - THEN: the 20 most recent entries are returned in newest-first order
+  history-store-get-all:
+    strength: MUST
+    statement: >-
+      HistoryStore.getAll MUST return all entries across all tasks in reverse chronological order,
+      limited to the given limit (default 50).
+    scenarios:
+      get-all:
+        - GIVEN: A HistoryStore with entries for multiple tasks
+        - WHEN: getAll() is called
+        - THEN: entries are returned newest-first across all tasks
+  history-snippet-truncation:
+    strength: MUST
+    statement: HistoryStore.append MUST truncate outputSnippet to 200 characters before persisting.
+    scenarios:
+      snippet-cap:
+        - GIVEN: An entry with outputSnippet longer than 200 characters
+        - WHEN: append() is called
+        - THEN: the stored snippet is exactly 200 characters
+  schedule-history-command:
+    strength: MUST
+    statement: >-
+      /schedule history <name|id> MUST display the last 20 execution log entries for the identified
+      task, showing timestamp, status icon (checkmark for success, cross for error), duration in
+      seconds, and output snippet preview. All strings MUST be internationalized via t().
+    scenarios:
+      history-display:
+        - GIVEN: A task 'daily-build' with 5 execution history entries
+        - WHEN: /schedule history daily-build is invoked
+        - THEN: 5 entries are displayed with timestamp, status icon, duration, and snippet for each
+  daemon-history-recording:
+    strength: MUST
+    statement: >-
+      After each task execution completes, the scheduler daemon MUST call historyStore.append() with
+      the execution result. The executor remains free of persistence concerns.
+    scenarios:
+      daemon-records-history:
+        - GIVEN: A scheduled task that completes execution
+        - WHEN: the executor returns a TaskExecutionResult
+        - THEN: historyStore.append() is called with a HistoryEntry derived from the result
 mapping:
   implementation:
     - src/scheduler/cron-parser.ts

@@ -382,6 +382,10 @@ export const JA: TranslationSchema = {
       argsHint: "<5s..6h> <prompt>  ·  stop  ·  (引数なし = 状態表示)",
     },
     exit: { description: "TUIを終了" },
+    schedule: {
+      description: "スケジュールされたタスクの実行履歴を表示",
+      argsHint: "history <名前|id>",
+    },
     init: {
       description:
         "プロジェクトをスキャンしてベースラインの DSPEC.md を生成（モデルが作成; /apply でレビュー）。`force` で既存ファイルを上書き。",
@@ -1933,5 +1937,11 @@ export const JA: TranslationSchema = {
   },
   scheduler: {
     executionTimedOut: "実行がタイムアウトしました",
+    historyUsage: "使い方：/schedule history <名前|id>",
+    historyNotFound: "名前または id {id} のタスクが見つかりません",
+    historyNoTask: "タスク {name} の実行履歴はありません",
+    historyEntry: "{status} {startedAt}  {duration}秒  {snippet}",
+    historyStatusSuccess: "✓",
+    historyStatusError: "✗",
   },
 };
