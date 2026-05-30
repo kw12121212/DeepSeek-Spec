@@ -1,0 +1,25 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: tool-calls
+  status: proposed
+summary:
+  what:
+    - Real integration test for tool call generation against the live GLM-4.7 API
+  why:
+    - >-
+      M10 requires validating the full tool-call parsing stack against live GLM responses.
+      chat-and-stream, config-and-vitest, and error-handling are complete; tool-calls is the last
+      remaining planned change in this milestone.
+scope:
+  in:
+    - tests/real-llm/
+  out:
+    - tests/real-llm/tool-calls.test.ts
+unchanged_behavior:
+  - src/, all existing tests, helpers/
+roadmap:
+  milestone: 0010-real-llm-test
+  planned_change: tool-calls

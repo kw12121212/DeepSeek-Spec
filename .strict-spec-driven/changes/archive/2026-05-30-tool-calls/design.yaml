@@ -1,0 +1,21 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: tool-calls
+approach:
+  - >-
+    Create a single test file (tests/real-llm/tool-calls.test.ts) following the existing real-LLM
+    test pattern: import helpers from helpers/config.ts, send a chat request with a tools array
+    containing a get_weather function definition, and assert the response contains a well-formed
+    tool call with the expected function name and parsed arguments.
+decisions:
+  tool-call-assertions:
+    decision: >-
+      Assert toolCalls array is non-empty, first call has function.name === 'get_weather', parsed
+      arguments contain a 'city' field, and city value includes 'Beijing' or '北京' (case-insensitive)
+    rationale: >-
+      Matches the planned-change details and validates end-to-end tool-call parsing without
+      over-specifying API response content
+alternatives: []
+risks: []

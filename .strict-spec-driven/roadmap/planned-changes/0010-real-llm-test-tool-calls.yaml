@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: tool-calls
   milestone: 0010-real-llm-test
-status: planned
+status: complete
 summary: |
   Real integration test for tool call generation against the live GLM-4.7 API.
 details: |

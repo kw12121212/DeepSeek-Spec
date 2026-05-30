@@ -277,6 +277,25 @@ requirements:
             GLMClient is created with apiKey 'invalid.key123' and the real baseUrl, then a chat
             request is sent
         - THEN: the rejection message contains '401' or '403'
+  real-tool-call-test:
+    strength: MUST
+    statement: >-
+      Real-LLM tool call tests must auto-skip when config is absent and assert that a chat request
+      with tools produces a non-empty toolCalls array with the correct function name and parsed
+      arguments against the live GLM-4.7 API
+    scenarios:
+      tool-call-skip-no-config:
+        - GIVEN: tests/real-llm.config.json does not exist
+        - WHEN: bun run test:real is executed
+        - THEN: all tool call tests are skipped
+      tool-call-invoked:
+        - GIVEN: >-
+            a valid real-llm config and GLMClient, a messages array asking about Beijing weather
+            with a get_weather tool definition
+        - WHEN: client.chat is called with the tool
+        - THEN: >-
+            response.toolCalls is a non-empty array, toolCalls[0].function.name is 'get_weather',
+            and parsed arguments contain a 'city' field with 'Beijing' or '北京'
 mapping:
   implementation:
     - src/config.ts

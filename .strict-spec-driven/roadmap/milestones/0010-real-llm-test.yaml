@@ -42,7 +42,7 @@ risks:
   - GLM API rate limits or transient failures may cause flaky tests — use 30s timeouts
   - Real API responses are non-deterministic — assertions verify structure not content
   - GLM may not reliably trigger tool calls for simple prompts — may need prompt tuning
-status: proposed
+status: complete
 notes:
   - Config file approach lets each developer manage their own key without env var pollution
   - 'Tests are opt-in: only developers with a ZHIPU_API_KEY run them'

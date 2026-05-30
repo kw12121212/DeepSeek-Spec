@@ -1,0 +1,27 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: tool-calls
+sections:
+  Implementation:
+    create-tool-calls-test:
+      text: >-
+        Create tests/real-llm/tool-calls.test.ts with a single test case that sends a chat request
+        with a get_weather tool definition and asserts the response contains a well-formed tool call
+        (function name, parsed arguments with city field containing Beijing/北京).
+      status: complete
+  Testing:
+    run-verify:
+      text: >-
+        Run bun run verify to confirm zero regressions (real-LLM tests are excluded from default
+        test run).
+      status: complete
+      command: bun run verify
+  Verification:
+    verify-scope:
+      text: Verify only tests/real-llm/tool-calls.test.ts was created and no src/ files were modified.
+      status: complete
+testing_gates:
+  validation_task: run-verify
+  unit_test_task: run-verify
