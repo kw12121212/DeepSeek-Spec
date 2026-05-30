@@ -1,0 +1,21 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: schedule-command
+approach:
+  - >-
+    Create src/cli/commands/schedule.ts as the /schedule slash command handler with subcommand
+    dispatch. Each subcommand (add, list, remove, enable, disable) calls the existing scheduler
+    modules (TaskStore, parseCron, describeCron, nextRun, Scheduler). Wire into the CLI command
+    registry. All user-facing strings via t() from i18n.
+decisions:
+  subcommand-dispatch:
+    decision: >-
+      Use a single /schedule command with subcommand dispatch rather than separate /schedule-add,
+      /schedule-list commands
+    rationale: >-
+      Consistent with existing CLI patterns (e.g., /strict-*), reduces command namespace clutter,
+      and groups related operations logically.
+alternatives: []
+risks: []

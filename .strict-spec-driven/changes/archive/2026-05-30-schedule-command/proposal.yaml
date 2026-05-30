@@ -1,0 +1,28 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: schedule-command
+  status: proposed
+summary:
+  what:
+    - >-
+      Implement the /schedule slash command with add, list, remove, enable, and disable subcommands
+      for managing scheduled tasks.
+  why:
+    - >-
+      M11 core scheduler is complete. Users need a CLI interface to create, list, toggle, and remove
+      scheduled tasks. This is the first eligible planned change in M12.
+scope:
+  in:
+    - src/cli/commands/schedule.ts, src/scheduler/
+  out:
+    - tests/scheduler/schedule-command.test.ts
+unchanged_behavior:
+  - >-
+    src/scheduler/cron-parser.ts, src/scheduler/store.ts, src/scheduler/scheduler.ts,
+    src/scheduler/task-executor.ts
+roadmap:
+  milestone: 0012-scheduled-tasks-management
+  planned_change: schedule-command

@@ -1,0 +1,54 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: schedule-command
+sections:
+  Implementation:
+    register-command:
+      text: Register /schedule as a slash command in the CLI command registry.
+      status: complete
+    add-subcommand:
+      text: >-
+        Implement /schedule add <name> --cron <expr> <prompt> with cron validation and
+        human-readable description.
+      status: complete
+    list-subcommand:
+      text: >-
+        Implement /schedule list with table output (name, cron, description, enabled, nextRun,
+        lastRun).
+      status: complete
+    remove-subcommand:
+      text: Implement /schedule remove <name|id> via TaskStore.remove().
+      status: complete
+    enable-disable-subcommands:
+      text: >-
+        Implement /schedule enable and /schedule disable toggling task.enabled via
+        TaskStore.update().
+      status: complete
+    help-fallback:
+      text: Show help text when /schedule is invoked with no subcommand.
+      status: complete
+    i18n-strings:
+      text: Add all user-facing strings to i18n translation files via t().
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests for schedule command.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

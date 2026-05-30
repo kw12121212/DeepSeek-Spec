@@ -50,7 +50,7 @@ milestones:
   0012-scheduled-tasks-management:
     title: 'M12: Scheduled Tasks — Management Commands and History'
     path: roadmap/milestones/0012-scheduled-tasks-management.yaml
-    status: proposed
+    status: complete
   0013-scheduled-tasks-integration:
     title: 'M13: Scheduled Tasks — Loop Integration and Status Display'
     path: roadmap/milestones/0013-scheduled-tasks-integration.yaml

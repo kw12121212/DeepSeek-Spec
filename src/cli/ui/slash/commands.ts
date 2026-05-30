@@ -434,8 +434,8 @@ export const SLASH_COMMANDS: readonly SlashCommandSpec[] = [
   {
     cmd: "schedule",
     group: "advanced",
-    argsHint: "history <name|id>",
-    summary: "show execution history for a scheduled task",
+    argsHint: "add|list|remove|enable|disable|history",
+    summary: "manage scheduled tasks (add, list, remove, enable, disable, history)",
   },
 ];
 

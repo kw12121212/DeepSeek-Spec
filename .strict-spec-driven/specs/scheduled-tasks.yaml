@@ -280,6 +280,83 @@ requirements:
         - GIVEN: A scheduled task that completes execution
         - WHEN: the executor returns a TaskExecutionResult
         - THEN: historyStore.append() is called with a HistoryEntry derived from the result
+  schedule-add-command:
+    strength: MUST
+    statement: >-
+      /schedule add <name> --cron <expr> <prompt> MUST validate the cron expression via parseCron(),
+      store the task via TaskStore.add(), display the human-readable description via describeCron(),
+      and start the scheduler if not running.
+    scenarios:
+      add-success:
+        - GIVEN: A valid name, cron expression '0 9 * * 1-5', and prompt text
+        - WHEN: /schedule add daily-build --cron '0 9 * * 1-5' check build status is invoked
+        - THEN: >-
+            A task is created with an 8-char ID, stored in .dspec/scheduled.json, and the user sees
+            a confirmation with the human-readable cron description
+  schedule-list-command:
+    strength: MUST
+    statement: >-
+      /schedule list MUST display all tasks in a table with name, cron expression, human-readable
+      description, enabled status, next run time, and last run time.
+    scenarios:
+      list-display:
+        - GIVEN: Two scheduled tasks exist in the store
+        - WHEN: /schedule list is invoked
+        - THEN: A table is displayed showing both tasks with all columns populated
+  schedule-remove-command:
+    strength: MUST
+    statement: >-
+      /schedule remove <name|id> MUST remove the task via TaskStore.remove() and confirm deletion.
+      Looking up by name or ID.
+    scenarios:
+      remove-by-id:
+        - GIVEN: A task with ID 'abc12345' exists
+        - WHEN: /schedule remove abc12345 is invoked
+        - THEN: The task is removed from the store and a confirmation message is shown
+  schedule-enable-disable-command:
+    strength: MUST
+    statement: >-
+      /schedule enable <name|id> MUST set enabled=true via TaskStore.update() and start the
+      scheduler if needed. /schedule disable <name|id> MUST set enabled=false and stop the scheduler
+      if no enabled tasks remain.
+    scenarios:
+      enable-task:
+        - GIVEN: A disabled task with name 'daily-build'
+        - WHEN: /schedule enable daily-build is invoked
+        - THEN: The task is enabled, the scheduler starts if not running, and a confirmation is shown
+  schedule-help-fallback:
+    strength: MUST
+    statement: >-
+      /schedule with no subcommand MUST display help text listing all available subcommands and
+      their usage.
+    scenarios:
+      no-subcommand:
+        - GIVEN: No subcommand argument is provided
+        - WHEN: /schedule is invoked
+        - THEN: >-
+            Help text is displayed showing add, list, remove, enable, disable, and history
+            subcommands
+  schedule-cron-error:
+    strength: MUST
+    statement: >-
+      When an invalid cron expression is provided to /schedule add, a clear error message MUST be
+      displayed in the format: 'Invalid cron expression: <reason>. Expected 5 fields (min hour dom
+      month dow).'
+    scenarios:
+      invalid-cron:
+        - GIVEN: An invalid cron expression 'bad cron' is provided
+        - WHEN: /schedule add test --cron 'bad cron' prompt is invoked
+        - THEN: An error message is displayed explaining the invalid cron and the expected format
+  schedule-i18n:
+    strength: MUST
+    statement: >-
+      All user-facing strings in the /schedule command MUST be internationalized via t() from
+      src/i18n/index.ts.
+    scenarios:
+      i18n-coverage:
+        - GIVEN: The i18n system is initialized with any supported language
+        - WHEN: /schedule subcommands are invoked
+        - THEN: All output strings are resolved via t() lookup
 mapping:
   implementation:
     - src/scheduler/cron-parser.ts

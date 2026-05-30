@@ -40,7 +40,7 @@ dependencies:
 risks:
   - History file may grow large over time — cap at 500 entries per task, prune oldest
   - Cron human-readable descriptions start with English only (i18n can extend later)
-status: proposed
+status: complete
 notes:
   - /schedule with no subcommand shows help text
   - History entries are append-only; pruning happens at write time

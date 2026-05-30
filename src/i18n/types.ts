@@ -1025,5 +1025,22 @@ export interface TranslationSchema {
     historyEntry: string;
     historyStatusSuccess: string;
     historyStatusError: string;
+    addUsage: string;
+    addCreated: string;
+    addCronInvalid: string;
+    addCronDescription: string;
+    listEmpty: string;
+    listHeader: string;
+    listRow: string;
+    listEnabled: string;
+    listDisabled: string;
+    removeUsage: string;
+    removeNotFound: string;
+    removeSuccess: string;
+    toggleUsage: string;
+    toggleNotFound: string;
+    enableSuccess: string;
+    disableSuccess: string;
+    helpText: string;
   };
 }
