@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: scheduler-daemon
   milestone: 0011-scheduled-tasks-core
-status: planned
+status: complete
 summary: |
   Implement the scheduler daemon that ticks every 30 seconds and fires due tasks.
 details: |

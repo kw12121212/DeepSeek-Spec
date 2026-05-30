@@ -1,0 +1,19 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: scheduler-daemon
+open: []
+resolved:
+  - id: tick-precision
+    question: >-
+      Should the tick precision be exactly 30s wall-clock or should it drift-adjust to align with
+      minute boundaries?
+    context: >-
+      The planned change says 30s tick. Cron expressions are minute-boundary based. A simple 30s
+      interval will sometimes check the same minute twice. The lastFired dedup handles this, but an
+      alternative is to align ticks to minute boundaries.
+    answer: >-
+      Use simple setInterval at tickMs interval. The lastFired dedup already prevents same-minute
+      double-firing, so drift-adjustment is unnecessary complexity.
+    status: resolved

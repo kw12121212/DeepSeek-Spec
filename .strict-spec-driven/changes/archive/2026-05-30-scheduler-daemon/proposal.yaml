@@ -1,0 +1,27 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: scheduler-daemon
+  status: proposed
+summary:
+  what:
+    - >-
+      Implement the Scheduler class in src/scheduler/scheduler.ts that ticks every 30 seconds,
+      checks enabled tasks via matchesCron, fires due tasks through the TaskExecutor, and prevents
+      double-firing within the same minute.
+  why:
+    - >-
+      The scheduler daemon is the core engine connecting the cron parser and task store to actually
+      execute scheduled tasks. Dependencies scheduler-store and cron-parser are complete.
+scope:
+  in:
+    - src/scheduler/scheduler.ts, tests/scheduler/scheduler.test.ts
+  out:
+    - .strict-spec-driven/specs/scheduled-tasks.yaml
+unchanged_behavior:
+  - src/loop.ts, src/tools/, src/mcp/
+roadmap:
+  milestone: 0011-scheduled-tasks-core
+  planned_change: scheduler-daemon

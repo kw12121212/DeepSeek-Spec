@@ -1,0 +1,66 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: scheduled-tasks
+mapping:
+  implementation:
+    - src/scheduler/scheduler.ts
+  tests:
+    - tests/scheduler/scheduler.test.ts
+operations:
+  ADDED:
+    scheduler-daemon-tick:
+      strength: MUST
+      statement: >-
+        The Scheduler MUST tick at a configurable interval (default 30s, DSPEC_SCHEDULED_TICK_MS,
+        minimum 10s) and on each tick fire all enabled tasks whose cron expression matches the
+        current minute and that have not already been fired in that minute.
+      scenarios:
+        tick-fires-due:
+          - GIVEN: An enabled task with cron '*/5 * * * *' and the current time at a 5-minute boundary
+          - WHEN: The scheduler ticks
+          - THEN: The task executor is invoked for that task exactly once
+    scheduler-dedup:
+      strength: MUST
+      statement: >-
+        The Scheduler MUST NOT fire the same task twice within the same calendar minute. A lastFired
+        map keyed by task ID tracks the epoch-ms of the last execution and suppresses re-firing if
+        the current minute boundary matches.
+      scenarios:
+        dedup-same-minute:
+          - GIVEN: A task was fired at 09:00:15 and the scheduler ticks again at 09:00:45
+          - WHEN: The tick checks if the task is due
+          - THEN: The task is skipped because it was already fired in this minute
+    scheduler-stop:
+      strength: MUST
+      statement: >-
+        Scheduler.stop() MUST clear the tick timer and resolve after all in-flight executions
+        complete or after a 30-second timeout, whichever comes first.
+      scenarios:
+        stop-waits-inflight:
+          - GIVEN: A task execution is in progress
+          - WHEN: stop() is called
+          - THEN: stop() waits for the execution to finish (up to 30s) before resolving
+    scheduler-status:
+      strength: SHOULD
+      statement: >-
+        Scheduler.getStatus() SHOULD return { running: boolean, nextTick: Date | null, activeCount:
+        number } reflecting the current daemon state.
+      scenarios:
+        status-report:
+          - GIVEN: The scheduler is running with 2 active executions
+          - WHEN: getStatus() is called
+          - THEN: 'It returns { running: true, nextTick: <next tick Date>, activeCount: 2 }'
+    scheduler-nonblocking-fire:
+      strength: MUST
+      statement: >-
+        The scheduler tick MUST fire task executions without awaiting them, so a slow task does not
+        block subsequent tick processing.
+      scenarios:
+        nonblocking:
+          - GIVEN: Two tasks are due on the same tick
+          - WHEN: The tick fires them
+          - THEN: Both executions start without waiting for the other to complete
+  MODIFIED: {}
+  REMOVED: {}

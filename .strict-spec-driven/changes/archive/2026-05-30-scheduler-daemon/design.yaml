@@ -1,0 +1,29 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: scheduler-daemon
+approach:
+  - >-
+    Create a Scheduler class that owns a setInterval tick loop. Each tick loads enabled tasks from
+    TaskStore, checks each against matchesCron with the current time, tracks lastFired per task to
+    prevent same-minute double-fires, and fires executor.execute(task) non-blocking. The class
+    provides start/stop/getStatus methods. stop clears the timer and awaits in-flight executions
+    with a 30s timeout.
+decisions:
+  tick-mechanism:
+    decision: >-
+      Use setInterval with configurable tickMs (default 30000, min 10000 via DSPEC_SCHEDULED_TICK_MS
+      env). Each tick is synchronous check + async fire.
+    rationale: >-
+      setInterval is the simplest correct mechanism for a periodic check. The tick interval is
+      decoupled from cron granularity so 30s ticks can serve any cron minute-boundary correctly.
+  fire-tracking:
+    decision: >-
+      Track lastFired as a Map<string, number> keyed by task ID with epoch-ms values. A task is due
+      if matchesCron is true AND lastFired[id] is outside the current minute boundary.
+    rationale: >-
+      Prevents double-firing when tickMs is less than 60s. Epoch-ms comparison against minute
+      boundaries is simple and correct.
+alternatives: []
+risks: []

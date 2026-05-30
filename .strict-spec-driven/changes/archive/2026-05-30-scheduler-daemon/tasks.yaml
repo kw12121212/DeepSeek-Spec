@@ -1,0 +1,39 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: scheduler-daemon
+sections:
+  Implementation:
+    implement-scheduler-class:
+      text: Create src/scheduler/scheduler.ts with Scheduler class (constructor, start, stop, tick, getStatus).
+      status: complete
+    implement-tick-logic:
+      text: Implement tick logic — load enabled tasks, check matchesCron, track lastFired, fire executor non-blocking.
+      status: complete
+    implement-env-config:
+      text: Read DSPEC_SCHEDULED_TICK_MS with 10000 minimum clamp.
+      status: complete
+  Testing:
+    write-tests:
+      text: Create tests/scheduler/scheduler.test.ts covering tick fires due task once, skips disabled, dedupes same-minute, stop clears timer, auto-start guard.
+      status: complete
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests
