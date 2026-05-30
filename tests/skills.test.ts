@@ -708,12 +708,37 @@ describe("Built-in skills", () => {
     expect(test?.body).toMatch(/SEARCH\/REPLACE/);
   });
 
-  it("user-authored skills override a builtin with the same name", () => {
+  it("builtins win over user-authored skills with the same name", () => {
     writeSkillDir(home, "global", "explore", { description: "my own" }, "custom body", home);
     const store = new SkillStore({ homeDir: home });
     const explore = store.read("explore");
-    expect(explore?.scope).toBe("global");
-    expect(explore?.body).toBe("custom body");
+    expect(explore?.scope).toBe("builtin");
+    expect(explore?.body).not.toBe("custom body");
+  });
+
+  it("user-authored skills load when no builtin collision exists", () => {
+    writeSkillDir(home, "global", "my-custom", { description: "custom" }, "custom body", home);
+    const store = new SkillStore({ homeDir: home });
+    const custom = store.read("my-custom");
+    expect(custom?.scope).toBe("global");
+    expect(custom?.body).toBe("custom body");
+  });
+
+  it("builtin bodies use absolute vendor paths", () => {
+    const store = new SkillStore({ homeDir: home });
+    const init = store.read("strict-init");
+    expect(init?.scope).toBe("builtin");
+    expect(init?.body).toMatch(/node \/.+vendor\/strict-spec-driven\.js/);
+    // No bare "node vendor/" (relative) references remain.
+    expect(init?.body).not.toMatch(/node vendor\/strict-spec-driven\.js/);
+  });
+
+  it("list also reflects builtin priority", () => {
+    writeSkillDir(home, "global", "explore", { description: "my own" }, "custom body", home);
+    const store = new SkillStore({ homeDir: home });
+    const list = store.list();
+    const explore = list.find((s) => s.name === "explore");
+    expect(explore?.scope).toBe("builtin");
   });
 
   it("disableBuiltins hides them entirely", () => {

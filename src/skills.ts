@@ -12,6 +12,7 @@ import {
 import { accessSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { parseFrontmatter } from "./frontmatter.js";
 import { t } from "./i18n/index.js";
 import { NEGATIVE_CLAIM_RULE, TUI_FORMATTING_RULES } from "./prompt-fragments.js";
@@ -148,6 +149,13 @@ export class SkillStore {
   /** Higher-priority root wins on collision (project > custom > global > builtin); sorted for stable prefix hash. */
   list(): Skill[] {
     const byName = new Map<string, Skill>();
+    // Builtins first — the bundled engine is version-matched and authoritative.
+    if (!this.disableBuiltins) {
+      for (const skill of BUILTIN_SKILLS) {
+        byName.set(skill.name, skill);
+      }
+    }
+    // File-backed skills only fill gaps where no builtin exists.
     for (const { dir, scope, status } of this.roots()) {
       if (status !== "ok") continue;
       let entries: import("node:fs").Dirent[];
@@ -159,12 +167,6 @@ export class SkillStore {
       for (const entry of entries) {
         const skill = this.readEntry(dir, scope, entry);
         if (!skill) continue;
-        if (!byName.has(skill.name)) byName.set(skill.name, skill);
-      }
-    }
-    // Builtins last so user/project files override on name collision.
-    if (!this.disableBuiltins) {
-      for (const skill of BUILTIN_SKILLS) {
         if (!byName.has(skill.name)) byName.set(skill.name, skill);
       }
     }
@@ -219,9 +221,14 @@ export class SkillStore {
     return { path: flat };
   }
 
-  /** Resolve one skill by name. Returns `null` if not found or malformed. */
+  /** Resolve one skill by name. Builtins win; file-backed skills fill gaps. */
   read(name: string): Skill | null {
     if (!isValidSkillName(name)) return null;
+    if (!this.disableBuiltins) {
+      for (const skill of BUILTIN_SKILLS) {
+        if (skill.name === name) return skill;
+      }
+    }
     for (const { dir, scope, status } of this.roots()) {
       if (status !== "ok") continue;
       const dirCandidate = join(dir, name, SKILL_FILE);
@@ -231,11 +238,6 @@ export class SkillStore {
       const flatCandidate = join(dir, `${name}.md`);
       if (existsSync(flatCandidate) && statSync(flatCandidate).isFile()) {
         return this.parse(flatCandidate, name, scope);
-      }
-    }
-    if (!this.disableBuiltins) {
-      for (const skill of BUILTIN_SKILLS) {
-        if (skill.name === name) return skill;
       }
     }
     return null;
@@ -276,7 +278,7 @@ export class SkillStore {
     return {
       name,
       description,
-      body: body.trim(),
+      body: resolveSkillDir(body.trim(), path),
       scope,
       path,
       allowedTools: parseAllowedTools(data["allowed-tools"]),
@@ -284,6 +286,13 @@ export class SkillStore {
       model: data.model?.startsWith("deepseek-") ? data.model : undefined,
     };
   }
+}
+
+function resolveSkillDir(body: string, skillPath: string): string {
+  if (skillPath === "(builtin)") return body;
+  const dir = dirname(skillPath);
+  if (!dir || !body.includes("{{SKILL_DIR}}")) return body;
+  return body.replaceAll("{{SKILL_DIR}}", dir);
 }
 
 function dedupePaths(paths: readonly string[]): string[] {
@@ -728,7 +737,7 @@ Stop conditions:
 - If the change scope is open-ended or cross-repository, suggest \`/strict-brainstorm\` instead.
 - If the project regression command cannot run, stop and provide actionable setup guidance.`;
 
-const BUILTIN_SKILLS: readonly Skill[] = Object.freeze([
+const _RAW_BUILTIN_SKILLS: readonly Skill[] = Object.freeze([
   Object.freeze<Skill>({
     name: "explore",
     description:
@@ -892,3 +901,29 @@ const BUILTIN_SKILLS: readonly Skill[] = Object.freeze([
     runAs: "inline",
   }),
 ]);
+
+const _thisDir = dirname(fileURLToPath(import.meta.url));
+const _vendorScript = _resolveVendorScript(_thisDir);
+
+function _resolveVendorScript(startDir: string): string {
+  let dir = startDir;
+  for (let i = 0; i < 4; i++) {
+    const candidate = join(dir, "vendor", "strict-spec-driven.js");
+    if (existsSync(candidate)) return candidate;
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  // Fallback: relative, will fail at runtime with a clear error.
+  return "vendor/strict-spec-driven.js";
+}
+
+const BUILTIN_SKILLS: readonly Skill[] = Object.freeze(
+  (_RAW_BUILTIN_SKILLS as Skill[]).map((skill) => {
+    if (!skill.body.includes("vendor/strict-spec-driven.js")) return Object.freeze(skill);
+    return Object.freeze({
+      ...skill,
+      body: skill.body.replaceAll("vendor/strict-spec-driven.js", _vendorScript),
+    });
+  }),
+);

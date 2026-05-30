@@ -1,0 +1,46 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: builtin-priority-abs-paths
+sections:
+  Implementation:
+    reverse-skill-priority:
+      text: >-
+        Reverse SkillStore.list so builtins are registered first; file-backed skills only fill gaps
+        where no builtin exists. Remove existing user-skill entries on collision.
+      status: complete
+    resolve-vendor-abs-path:
+      text: >-
+        At module load time, resolve the vendor/strict-spec-driven.js path relative to the package
+        root (using import.meta.url / fileURLToPath) and replace all vendor/strict-spec-driven.js
+        references in BUILTIN_SKILLS bodies with the absolute path.
+      status: complete
+    add-tests:
+      text: >-
+        Add tests: (1) builtin wins over user skill with same name, (2) user skill loads when no
+        builtin collision, (3) builtin body contains absolute vendor path, (4) resolveVendorPath
+        helper unit test.
+      status: complete
+  Testing:
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run type checker.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify builtin strict-roadmap-plan wins over user-installed version. Verify builtin body has
+        absolute vendor path. Verify user-only skills still load.
+      status: complete
+testing_gates:
+  validation_task: run-lint
+  unit_test_task: run-tests

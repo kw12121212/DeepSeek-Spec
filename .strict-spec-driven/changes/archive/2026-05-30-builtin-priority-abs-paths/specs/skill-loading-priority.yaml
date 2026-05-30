@@ -1,0 +1,43 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: skills-system
+mapping:
+  implementation:
+    - src/skills.ts
+  tests:
+    - tests/skills.test.ts
+operations:
+  ADDED:
+    builtin-priority:
+      strength: MUST
+      statement: >-
+        SkillStore.list MUST register builtin skills first so they win over file-backed skills
+        with the same name. File-backed skills only fill gaps where no builtin exists.
+      scenarios:
+        builtin-wins-over-user:
+          - GIVEN: "a user-installed skill named strict-roadmap-plan at ~/.agents/skills/strict-roadmap-plan/"
+          - WHEN: "SkillStore.list is called"
+          - THEN: "the returned skill has scope builtin, not global"
+        user-fills-gap:
+          - GIVEN: "a user-installed skill named my-custom-skill at ~/.agents/skills/my-custom-skill/"
+          - AND: "no builtin skill named my-custom-skill exists"
+          - WHEN: "SkillStore.list is called"
+          - THEN: "the returned skill has scope global"
+    builtin-vendor-abs-path:
+      strength: MUST
+      statement: >-
+        Builtin skill bodies that reference vendor/strict-spec-driven.js MUST have it resolved
+        to an absolute path at module load time so the scripts work regardless of CWD.
+      scenarios:
+        abs-path-in-body:
+          - GIVEN: "a builtin skill whose body contains node vendor/strict-spec-driven.js"
+          - WHEN: "the skill is loaded"
+          - THEN: "the body contains an absolute path ending in vendor/strict-spec-driven.js"
+        works-from-any-cwd:
+          - GIVEN: "the CWD is the user home directory, not a project root"
+          - WHEN: "the model executes the node command from the builtin skill body"
+          - THEN: "the script is found and runs successfully"
+  MODIFIED: {}
+  REMOVED: {}

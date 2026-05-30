@@ -207,6 +207,24 @@ export const de: TranslationSchema = {
       description:
         "Session-USD-Grenze — warnt bei 80 %, verweigert nächsten Turn bei 100 %. Standardmäßig aus. /budget allein zeigt Status.",
     },
+    explore: {
+      ...EN.slash.explore,
+      description: "Fokussierte Nur-Lese-Codebase-Untersuchung in einem isolierten Subagenten",
+    },
+    research: {
+      ...EN.slash.research,
+      description: "Websuche + Code-Lektüre in einem isolierten Subagenten kombinieren",
+    },
+    review: {
+      ...EN.slash.review,
+      description:
+        "Ausstehende Änderungen (aktueller Branch-Diff) in einem isolierten Subagenten reviewen",
+    },
+    "security-review": {
+      ...EN.slash["security-review"],
+      description:
+        "Sicherheitsfokussiertes Review des aktuellen Branch-Diffs in einem isolierten Subagenten",
+    },
     mcp: { ...EN.slash.mcp, description: "MCP-Server + Tools dieser Sitzung auflisten" },
     resource: {
       ...EN.slash.resource,
@@ -332,6 +350,11 @@ export const de: TranslationSchema = {
       argsHint: "<5s..6h> <Eingabeaufforderung>  ·  Stopp  ·  (keine Argumente = Status)",
       description:
         "Prompt automatisch alle <intervall> erneut senden, bis du etwas eingibst / Esc / /loop stop",
+    },
+    test: {
+      ...EN.slash.test,
+      description:
+        "Projekttest-Suite ausführen, Fehler diagnostizieren, Fixes vorschlagen, bis alles grün ist",
     },
     init: {
       ...EN.slash.init,

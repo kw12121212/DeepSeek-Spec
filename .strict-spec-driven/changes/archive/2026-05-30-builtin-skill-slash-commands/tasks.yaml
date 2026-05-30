@@ -1,0 +1,49 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: builtin-skill-slash-commands
+sections:
+  Implementation:
+    add-skill-dir-substitution:
+      text: >-
+        Add resolveSkillDir helper and call it in SkillStore.parse to replace {{SKILL_DIR}} with
+        dirname of skill.path. Skip for builtin skills where path is the literal string (builtin).
+      status: complete
+    add-builtin-slash-commands:
+      text: >-
+        Add SlashCommandSpec entries for explore, research, review, security-review, test to
+        SLASH_COMMANDS in commands.ts.
+      status: complete
+    create-generic-skill-handler:
+      text: >-
+        Refactor makeStrictHandler into a shared makeSkillHandler. Wire it for all builtin skill
+        names including strict-* and the new non-strict ones.
+      status: complete
+    update-strict-handler:
+      text: >-
+        Remove the now-redundant makeStrictHandler from handlers/strict.ts and redirect to the
+        shared handler.
+      status: complete
+  Testing:
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run type checker.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify /explore, /research, /review, /security-review, /test appear as top-level slash
+        commands. Verify {{SKILL_DIR}} in a user skill resolves to the correct directory.
+      status: complete
+testing_gates:
+  validation_task: run-lint
+  unit_test_task: run-tests

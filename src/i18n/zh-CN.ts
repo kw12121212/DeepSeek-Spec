@@ -272,6 +272,20 @@ export const zhCN: TranslationSchema = {
       description: "会话美元上限 — 80% 时警告，100% 时拒绝下一轮。默认关闭。单独 /budget 显示状态",
       argsHint: "[usd|off]",
     },
+    explore: {
+      description: "在隔离子代理中运行聚焦的只读代码库调查",
+      argsHint: "<question>",
+    },
+    research: {
+      description: "在隔离子代理中结合网络搜索 + 代码阅读",
+      argsHint: "<question>",
+    },
+    review: {
+      description: "在隔离子代理中审查待提交的更改（当前分支 diff）",
+    },
+    "security-review": {
+      description: "在隔离子代理中对当前分支 diff 进行安全审查",
+    },
     mcp: { description: "列出附加到此会话的 MCP 服务器 + 工具" },
     resource: {
       description: "浏览 + 读取 MCP 资源（无参数 → 列出 URI；<uri> → 获取内容）",
@@ -348,6 +362,9 @@ export const zhCN: TranslationSchema = {
     schedule: {
       description: "查看计划任务的执行历史",
       argsHint: "history <名称|id>",
+    },
+    test: {
+      description: "运行项目测试套件，诊断失败，提出修复建议，重新运行直到通过",
     },
     init: {
       description:

@@ -1,0 +1,29 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: builtin-skill-slash-commands
+  status: proposed
+summary:
+  what:
+    - All builtin skills (explore, research, review, security-review, test, strict-*) become top-level slash commands (e.g. /explore, /test), not just the strict-* subset.
+    - Skill bodies containing {{SKILL_DIR}} placeholders have them replaced with the skill's parent directory at load time, so user-authored skills from ~/.agents/skills/ or .agents/skills/ that reference {{SKILL_DIR}}/scripts/... resolve correctly.
+  why:
+    - Non-strict builtin skills (explore, research, review, security-review, test) currently require /skill <name> or run_skill invocation — a top-level slash command is faster and more discoverable.
+    - User-installed skills at ~/.agents/skills/ that contain {{SKILL_DIR}} fail at runtime because dspec never substitutes the placeholder, producing "Cannot find module" errors when the model tries to run node {{SKILL_DIR}}/scripts/... commands.
+scope:
+  in:
+    - Generate slash command specs and handlers for all builtin skills not already registered as top-level commands.
+    - Add {{SKILL_DIR}} → dirname(skill.path) substitution in SkillStore.parse() for non-builtin skills.
+    - Add {{SKILL_DIR}} substitution in the strict slash handler (handlers/strict.ts) so user-overridden strict skills also resolve correctly.
+    - Register new slash commands in SLASH_COMMANDS (commands.ts) and dispatch handler map (dispatch.ts).
+  out:
+    - Changing the builtin skill bodies themselves.
+    - Modifying the subagent runner or subagent dispatch paths.
+    - Changing the /skill subcommand surface (list, show, new, paths).
+unchanged_behavior:
+  - Existing strict-* slash commands continue to work identically.
+  - /skill <name> invocation continues to work as a fallback.
+  - Builtin skills whose names collide with existing slash commands (e.g. /init) remain handled by their dedicated handler.
+  - run_skill tool behavior is unchanged beyond receiving a substituted body.

@@ -1,0 +1,20 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: builtin-priority-abs-paths
+approach:
+  - "Register BUILTIN_SKILLS first in list(), then iterate file-backed roots and only insert names not already claimed by a builtin."
+  - "Add a resolveVendorPath helper that computes the absolute path to vendor/strict-spec-driven.js using fileURLToPath(import.meta.url) + dirname + join. Replace vendor/strict-spec-driven.js in BUILTIN_SKILLS bodies at module init time."
+decisions:
+  priority-order:
+    decision: "Builtins first, user skills fill gaps."
+    rationale: "The bundled engine is version-matched. User-installed copies may be stale or incompatible. Builtins must be the canonical source."
+  vendor-resolution:
+    decision: "Resolve vendor/ path at module load time using import.meta.url."
+    rationale: "Works in both dev (tsx) and compiled (tsup bundle) contexts. No runtime CWD dependency."
+alternatives:
+  - option: "Keep user skills winning, but also resolve their {{SKILL_DIR}} paths."
+    reason: "Rejected because user skill scripts may be stale. The bundled engine must be authoritative."
+risks:
+  - "Users who intentionally customized a builtin skill by installing a same-named user skill will lose their customizations. Mitigation: they can rename their skill or use /skill <name> directly."

@@ -79,6 +79,96 @@ requirements:
         - GIVEN: a skill definition with name and playbook
         - WHEN: install is called with project scope
         - THEN: a skill file is created in .agents/skills/ with frontmatter
+  builtin-skill-slash-commands:
+    strength: MUST
+    statement: >-
+      All builtin skills MUST be registered as top-level slash commands in SLASH_COMMANDS and
+      dispatchable via handleSlash.
+    scenarios:
+      explore-command:
+        - GIVEN: a user typing /explore in the TUI
+        - WHEN: the slash dispatcher receives the command
+        - THEN: >-
+            it resolves to the explore builtin skill and returns the skill body as a resubmit
+            payload
+      research-command:
+        - GIVEN: a user typing /research in the TUI
+        - WHEN: the slash dispatcher receives the command
+        - THEN: >-
+            it resolves to the research builtin skill and returns the skill body as a resubmit
+            payload
+      review-command:
+        - GIVEN: a user typing /review in the TUI
+        - WHEN: the slash dispatcher receives the command
+        - THEN: it resolves to the review builtin skill and returns the skill body as a resubmit payload
+      security-review-command:
+        - GIVEN: a user typing /security-review in the TUI
+        - WHEN: the slash dispatcher receives the command
+        - THEN: >-
+            it resolves to the security-review builtin skill and returns the skill body as a
+            resubmit payload
+      test-command:
+        - GIVEN: a user typing /test in the TUI
+        - WHEN: the slash dispatcher receives the command
+        - THEN: it resolves to the test builtin skill and returns the skill body as a resubmit payload
+  generic-skill-handler:
+    strength: MUST
+    statement: >-
+      The slash handler for builtin skills MUST use a shared makeSkillHandler factory that reads the
+      skill from SkillStore and returns a resubmit payload.
+    scenarios:
+      shared-handler:
+        - GIVEN: any builtin skill name
+        - WHEN: the handler is invoked via slash dispatch
+        - THEN: it reads the skill from SkillStore and returns { info, resubmit } with the skill body
+  skill-dir-placeholder-resolution:
+    strength: MUST
+    statement: >-
+      SkillStore.parse MUST replace all {{SKILL_DIR}} placeholders in the skill body with the parent
+      directory of the skill file path (dirname of skill.path).
+    scenarios:
+      file-backed-skill:
+        - GIVEN: >-
+            a file-backed skill whose path is /home/user/.agents/skills/foo/SKILL.md and whose body
+            contains {{SKILL_DIR}}/scripts/run.js
+        - THEN: the returned Skill.body contains /home/user/.agents/skills/foo/scripts/run.js
+      builtin-skill-skip:
+        - GIVEN: a builtin skill whose path is the literal string (builtin)
+        - THEN: the returned Skill.body is unchanged and no substitution is attempted
+      multiple-occurrences:
+        - GIVEN: a skill body containing {{SKILL_DIR}}/a.js and {{SKILL_DIR}}/b.js
+        - THEN: both occurrences are replaced with the skill directory path
+  builtin-priority:
+    strength: MUST
+    statement: >-
+      SkillStore.list MUST register builtin skills first so they win over file-backed skills with
+      the same name. File-backed skills only fill gaps where no builtin exists.
+    scenarios:
+      builtin-wins-over-user:
+        - GIVEN: >-
+            a user-installed skill named strict-roadmap-plan at
+            ~/.agents/skills/strict-roadmap-plan/
+        - WHEN: SkillStore.list is called
+        - THEN: the returned skill has scope builtin, not global
+      user-fills-gap:
+        - GIVEN: a user-installed skill named my-custom-skill at ~/.agents/skills/my-custom-skill/
+        - AND: no builtin skill named my-custom-skill exists
+        - WHEN: SkillStore.list is called
+        - THEN: the returned skill has scope global
+  builtin-vendor-abs-path:
+    strength: MUST
+    statement: >-
+      Builtin skill bodies that reference vendor/strict-spec-driven.js MUST have it resolved to an
+      absolute path at module load time so the scripts work regardless of CWD.
+    scenarios:
+      abs-path-in-body:
+        - GIVEN: a builtin skill whose body contains node vendor/strict-spec-driven.js
+        - WHEN: the skill is loaded
+        - THEN: the body contains an absolute path ending in vendor/strict-spec-driven.js
+      works-from-any-cwd:
+        - GIVEN: the CWD is the user home directory, not a project root
+        - WHEN: the model executes the node command from the builtin skill body
+        - THEN: the script is found and runs successfully
 mapping:
   implementation:
     - src/skills.ts

@@ -1,0 +1,48 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: skills-system
+mapping:
+  implementation:
+    - src/cli/ui/slash/commands.ts
+    - src/cli/ui/slash/handlers/strict.ts
+    - src/cli/ui/slash/dispatch.ts
+  tests:
+    - tests/slash-commands.test.ts
+operations:
+  ADDED:
+    builtin-skill-slash-commands:
+      strength: MUST
+      statement: "All builtin skills MUST be registered as top-level slash commands in SLASH_COMMANDS and dispatchable via handleSlash."
+      scenarios:
+        explore-command:
+          - GIVEN: "a user typing /explore in the TUI"
+          - WHEN: "the slash dispatcher receives the command"
+          - THEN: "it resolves to the explore builtin skill and returns the skill body as a resubmit payload"
+        research-command:
+          - GIVEN: "a user typing /research in the TUI"
+          - WHEN: "the slash dispatcher receives the command"
+          - THEN: "it resolves to the research builtin skill and returns the skill body as a resubmit payload"
+        review-command:
+          - GIVEN: "a user typing /review in the TUI"
+          - WHEN: "the slash dispatcher receives the command"
+          - THEN: "it resolves to the review builtin skill and returns the skill body as a resubmit payload"
+        security-review-command:
+          - GIVEN: "a user typing /security-review in the TUI"
+          - WHEN: "the slash dispatcher receives the command"
+          - THEN: "it resolves to the security-review builtin skill and returns the skill body as a resubmit payload"
+        test-command:
+          - GIVEN: "a user typing /test in the TUI"
+          - WHEN: "the slash dispatcher receives the command"
+          - THEN: "it resolves to the test builtin skill and returns the skill body as a resubmit payload"
+    generic-skill-handler:
+      strength: MUST
+      statement: "The slash handler for builtin skills MUST use a shared makeSkillHandler factory that reads the skill from SkillStore and returns a resubmit payload."
+      scenarios:
+        shared-handler:
+          - GIVEN: "any builtin skill name"
+          - WHEN: "the handler is invoked via slash dispatch"
+          - THEN: "it reads the skill from SkillStore and returns { info, resubmit } with the skill body"
+  MODIFIED: {}
+  REMOVED: {}

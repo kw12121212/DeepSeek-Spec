@@ -150,6 +150,28 @@ export const SLASH_COMMANDS: readonly SlashCommandSpec[] = [
     aliases: ["retitle"],
   },
 
+  {
+    cmd: "explore",
+    group: "extend",
+    argsHint: "<question>",
+    summary: "run a focused read-only codebase investigation in an isolated subagent",
+  },
+  {
+    cmd: "research",
+    group: "extend",
+    argsHint: "<question>",
+    summary: "combine web search + code reading in an isolated subagent",
+  },
+  {
+    cmd: "review",
+    group: "extend",
+    summary: "review the pending changes (current branch diff) in an isolated subagent",
+  },
+  {
+    cmd: "security-review",
+    group: "extend",
+    summary: "security-focused review of current branch diff in an isolated subagent",
+  },
   { cmd: "mcp", group: "extend", summary: "list MCP servers + tools attached to this session" },
   {
     cmd: "resource",
@@ -249,6 +271,12 @@ export const SLASH_COMMANDS: readonly SlashCommandSpec[] = [
     summary: "run the full strict lifecycle end to end for a change",
   },
 
+  {
+    cmd: "test",
+    group: "code",
+    summary: "run the project test suite, diagnose failures, propose fixes, re-run until green",
+    contextual: "code",
+  },
   {
     cmd: "init",
     group: "code",

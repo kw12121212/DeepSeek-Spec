@@ -533,7 +533,7 @@ describe("built-in subagent tools (explore / research / review / security_review
     expect(runnerCalls).toBe(0);
   });
 
-  it("bounces to run_skill when a user override flips the skill to runAs: inline", async () => {
+  it("builtins win — user override cannot flip builtin subagent to inline", async () => {
     writeSkillWithFrontmatter(
       home,
       "review",
@@ -546,11 +546,11 @@ describe("built-in subagent tools (explore / research / review / security_review
       homeDir: home,
       subagentRunner: async () => {
         runnerCalls++;
-        return "x";
+        return "subagent result";
       },
     });
     const out = await reg.dispatch("review", { task: "the diff" });
-    expect(JSON.parse(out).error).toMatch(/overridden as inline.*run_skill/);
-    expect(runnerCalls).toBe(0);
+    expect(out).toBe("subagent result");
+    expect(runnerCalls).toBe(1);
   });
 });

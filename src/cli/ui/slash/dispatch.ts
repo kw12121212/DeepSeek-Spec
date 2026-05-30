@@ -16,7 +16,7 @@ import { handlers as permissionsHandlers } from "./handlers/permissions.js";
 import { handlers as plansHandlers } from "./handlers/plans.js";
 import { handlers as scheduleHandlers } from "./handlers/schedule.js";
 import { handlers as sessionsHandlers } from "./handlers/sessions.js";
-import { handlers as skillHandlers } from "./handlers/skill.js";
+import { makeSkillHandler, handlers as skillHandlers } from "./handlers/skill.js";
 import { handlers as strictHandlers } from "./handlers/strict.js";
 import { handlers as themeHandlers } from "./handlers/theme.js";
 import { handlers as webSearchEngineHandlers } from "./handlers/web-search-engine.js";
@@ -25,6 +25,13 @@ import type { SlashContext, SlashResult } from "./types.js";
 
 /** Synchronous return — async work fires-and-forgets via `ctx.postInfo` to keep input non-blocking. */
 export type SlashHandler = (args: string[], loop: CacheFirstLoop, ctx: SlashContext) => SlashResult;
+
+const builtinSkillHandlers: Record<string, SlashHandler> = Object.fromEntries(
+  ["explore", "research", "review", "security-review", "test"].map((name) => [
+    name,
+    makeSkillHandler(name),
+  ]),
+);
 
 const HANDLERS: Record<string, SlashHandler> = {
   ...adminHandlers,
@@ -44,6 +51,7 @@ const HANDLERS: Record<string, SlashHandler> = {
   ...sessionsHandlers,
   ...themeHandlers,
   ...skillHandlers,
+  ...builtinSkillHandlers,
   ...strictHandlers,
   ...webSearchEngineHandlers,
 };

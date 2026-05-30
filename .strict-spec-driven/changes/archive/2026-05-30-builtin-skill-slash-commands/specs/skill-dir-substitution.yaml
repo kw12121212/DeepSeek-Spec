@@ -1,0 +1,27 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: skills-system
+mapping:
+  implementation:
+    - src/skills.ts
+  tests:
+    - tests/skills.test.ts
+operations:
+  ADDED:
+    skill-dir-placeholder-resolution:
+      strength: MUST
+      statement: "SkillStore.parse MUST replace all {{SKILL_DIR}} placeholders in the skill body with the parent directory of the skill file path (dirname of skill.path)."
+      scenarios:
+        file-backed-skill:
+          - GIVEN: "a file-backed skill whose path is /home/user/.agents/skills/foo/SKILL.md and whose body contains {{SKILL_DIR}}/scripts/run.js"
+          - THEN: "the returned Skill.body contains /home/user/.agents/skills/foo/scripts/run.js"
+        builtin-skill-skip:
+          - GIVEN: "a builtin skill whose path is the literal string (builtin)"
+          - THEN: "the returned Skill.body is unchanged and no substitution is attempted"
+        multiple-occurrences:
+          - GIVEN: "a skill body containing {{SKILL_DIR}}/a.js and {{SKILL_DIR}}/b.js"
+          - THEN: "both occurrences are replaced with the skill directory path"
+  MODIFIED: {}
+  REMOVED: {}

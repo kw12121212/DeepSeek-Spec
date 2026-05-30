@@ -1,0 +1,26 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: builtin-priority-abs-paths
+  status: proposed
+summary:
+  what:
+    - "Builtin skills take priority over user-installed skills with the same name — user skills only fill gaps where no builtin exists."
+    - "Builtin skill bodies that reference vendor/strict-spec-driven.js have it resolved to an absolute path at module load time, so they work regardless of CWD."
+  why:
+    - "The bundled vendor/strict-spec-driven.js is version-matched to the running dspec binary — user-installed copies may be stale or incompatible."
+    - "Relative vendor/ paths break when dspec runs outside a project directory."
+scope:
+  in:
+    - "Reverse skill-loading priority in SkillStore.list so builtins win over file-backed skills on name collision."
+    - "Resolve vendor/strict-spec-driven.js to an absolute path in builtin skill bodies at module load time."
+    - "Add tests covering priority ordering and absolute-path resolution."
+  out:
+    - "Changing user-facing /skill list output or the skill index format."
+    - "Removing or renaming the user-installed skill directories."
+unchanged_behavior:
+  - "User-installed skills that do NOT collide with a builtin name continue to load normally."
+  - "The /skill invocation path is unchanged."
+  - "The run_skill tool behavior is unchanged."

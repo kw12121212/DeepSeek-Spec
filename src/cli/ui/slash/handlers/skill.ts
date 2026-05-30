@@ -150,3 +150,24 @@ export const handlers: Record<string, SlashHandler> = {
   skill,
   skills: skill,
 };
+
+export function makeSkillHandler(skillName: string): SlashHandler {
+  return (args, _loop, ctx) => {
+    const store = new SkillStore({ projectRoot: ctx.codeRoot });
+    const found = store.read(skillName);
+    if (!found) {
+      return { info: t("handlers.skill.runNotFound", { name: skillName }) };
+    }
+    const extra = args.join(" ").trim();
+    const header = `# Skill: ${found.name}${found.description ? `\n> ${found.description}` : ""}`;
+    const argsLine = extra ? `\n\nArguments: ${extra}` : "";
+    const payload = `${header}\n\n${found.body}${argsLine}`;
+    return {
+      info: t("handlers.skill.runInfo", {
+        name: found.name,
+        args: extra ? ` — ${extra}` : "",
+      }),
+      resubmit: payload,
+    };
+  };
+}

@@ -284,6 +284,20 @@ export const EN: TranslationSchema = {
         "session USD cap — warns at 80%, refuses next turn at 100%. Off by default. /budget alone shows status",
       argsHint: "[usd|off]",
     },
+    explore: {
+      description: "run a focused read-only codebase investigation in an isolated subagent",
+      argsHint: "<question>",
+    },
+    research: {
+      description: "combine web search + code reading in an isolated subagent",
+      argsHint: "<question>",
+    },
+    review: {
+      description: "review the pending changes (current branch diff) in an isolated subagent",
+    },
+    "security-review": {
+      description: "security-focused review of current branch diff in an isolated subagent",
+    },
     mcp: { description: "list MCP servers + tools attached to this session" },
     resource: {
       description: "browse + read MCP resources (no arg → list URIs; <uri> → fetch contents)",
@@ -363,6 +377,10 @@ export const EN: TranslationSchema = {
     schedule: {
       description: "show execution history for a scheduled task",
       argsHint: "history <name|id>",
+    },
+    test: {
+      description:
+        "run the project test suite, diagnose failures, propose fixes, re-run until green",
     },
     init: {
       description:

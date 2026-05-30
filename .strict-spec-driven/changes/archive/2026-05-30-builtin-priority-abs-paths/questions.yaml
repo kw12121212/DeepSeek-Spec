@@ -1,0 +1,15 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: builtin-priority-abs-paths
+# open questions block the change — keep empty until real questions arise.
+# Sample entry shape: { id: kebab-id, question: "...", context: "...", status: open }
+open: []
+resolved:
+  # Replace or remove the sample entry below. Move questions here once answered.
+  - id: sample-resolved
+    question: Is [assumption] valid?
+    context: Confirmation needed before proceeding.
+    answer: Yes, confirmed by [source].
+    status: resolved

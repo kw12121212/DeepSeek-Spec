@@ -1,0 +1,17 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: builtin-skill-slash-commands
+open: []
+resolved:
+  - id: builtin-path-substitution
+    question: What should {{SKILL_DIR}} resolve to for builtin skills (path === "(builtin)")?
+    context: Builtin bodies use "node vendor/strict-spec-driven.js" directly, so {{SKILL_DIR}} would produce nonsense.
+    answer: Skip substitution for builtins — only substitute for file-backed skills where path is a real filesystem path.
+    status: resolved
+  - id: slash-command-collision
+    question: Some builtin names (e.g. "review", "test") could collide with existing or future commands.
+    context: /review is not currently a top-level command; /test is not either.
+    answer: No collision exists today. If a future command needs the same name, the dedicated handler wins over the skill handler in dispatch.ts (handler map key order).
+    status: resolved
