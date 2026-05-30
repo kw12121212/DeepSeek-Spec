@@ -1,0 +1,65 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: loop-wiring
+sections:
+  Implementation:
+    add-scheduler-options:
+      text: Add optional scheduler config to CacheFirstLoopOptions in src/loop.ts
+      status: complete
+    wire-scheduler-init:
+      text: >-
+        Instantiate TaskStore, TaskExecutor, HistoryStore, Scheduler in CacheFirstLoop init, passing
+        shared ModelClient and ToolHost
+      status: complete
+    add-shutdown-method:
+      text: >-
+        Add CacheFirstLoop.shutdown() that calls scheduler.stop() with 30s timeout and logs to
+        .dspec/scheduled.log
+      status: complete
+    hook-shutdown-code-tsx:
+      text: >-
+        Hook loop.shutdown() into exit handler in src/cli/commands/code.tsx alongside
+        jobs.shutdown()
+      status: complete
+    hook-shutdown-chat-tsx:
+      text: >-
+        Hook loop.shutdown() into SIGINT/SIGTERM handlers in src/cli/commands/chat.tsx before
+        process.exit
+      status: complete
+    session-isolation:
+      text: >-
+        Ensure TaskExecutor writes to .dspec/scheduled-sessions/<taskId>/ and /sessions filters out
+        scheduled-sessions/ prefix
+      status: complete
+  Testing:
+    integration-test:
+      text: >-
+        Write tests/scheduler/integration.test.ts covering: task execution with mock client/host,
+        session isolation, shutdown within timeout, force-kill after timeout
+      status: complete
+      command: bun run test
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-typecheck:
+      text: Run type checking.
+      status: complete
+      command: bun run typecheck
+    run-tests:
+      text: Run full test suite.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope — no TUI or dashboard changes included.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

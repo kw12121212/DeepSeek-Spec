@@ -1,0 +1,32 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: loop-wiring
+open: []
+resolved:
+  - id: shutdown-timing
+    question: >-
+      Should the 30s shutdown timeout be configurable via DSPEC_SCHEDULED_SHUTDOWN_MS env var, or
+      hard-coded?
+    context: >-
+      The planned-change details mention 30s timeout with force-kill. The scheduler daemon spec
+      already has scheduler.stop() with 30s timeout. Need to clarify if this should be configurable.
+    answer: >-
+      Hard-code at 30s. scheduler.stop() already mandates 30s timeout internally — duplicating that
+      knob at the loop wrapper level adds no value. If tuning is needed later, it should be at the
+      scheduler level.
+    status: resolved
+  - id: auto-start-behavior
+    question: >-
+      Should the scheduler auto-start only when .dspec/scheduled.json exists with enabled tasks, or
+      also when the scheduler option is explicitly set in config?
+    context: >-
+      The planned change says 'if scheduler.enabled and store.getEnabled().length > 0'. Need to
+      clarify whether scheduler.enabled comes from CacheFirstLoopOptions or from the existence of
+      the scheduled.json file.
+    answer: >-
+      No explicit scheduler.enabled in CacheFirstLoopOptions. Auto-start whenever
+      TaskStore.getEnabled().length > 0. Keeps options minimal — scheduler toggled via /schedule
+      enable|disable commands instead.
+    status: resolved

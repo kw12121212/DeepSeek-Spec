@@ -1,0 +1,33 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: loop-wiring
+  status: proposed
+summary:
+  what:
+    - >-
+      Wire TaskStore, TaskExecutor, HistoryStore, and Scheduler into CacheFirstLoop initialization
+      and shutdown lifecycle
+  why:
+    - >-
+      The scheduler modules (cron parser, store, executor, history, scheduler daemon) are
+      implemented but not yet integrated into the main agent loop. This change connects them so
+      scheduled tasks execute with full tool access on CLI boot and stop gracefully on exit.
+scope:
+  in:
+    - >-
+      src/loop.ts (CacheFirstLoop init/shutdown), src/cli/ui/code.tsx (SIGINT/SIGTERM hooks),
+      src/cli/ui/chat.tsx (SIGINT/SIGTERM hooks)
+  out:
+    - >-
+      Scheduled task sessions isolated in .dspec/scheduled-sessions/, scheduler starts on boot when
+      enabled tasks exist, graceful shutdown with 30s timeout
+unchanged_behavior:
+  - >-
+    Scheduler internals (cron-parser, store, executor, history, scheduler daemon), tool definitions,
+    TUI components (TUI status bar changes are out of scope for this change)
+roadmap:
+  milestone: 0013-scheduled-tasks-integration
+  planned_change: loop-wiring

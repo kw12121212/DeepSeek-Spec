@@ -1014,6 +1014,7 @@ function AppInner({
       hookCwd: currentRootDir,
       reasoningEffort: initialReasoningEffort ?? loadReasoningEffort(),
       rebuildSystem,
+      schedulerRoot: currentRootDir,
     });
     loopRef.current = l;
     return l;
@@ -1646,7 +1647,7 @@ function AppInner({
   }, [session, loop, codeMode, syncPendingCount, log, pendingEdits, startupInfoHints]);
 
   // Esc handles "abort the current turn" separately; Ctrl+C is the universal "I'm done" key.
-  const quitProcess = useQuit(transcriptRef);
+  const quitProcess = useQuit(transcriptRef, () => loop.shutdown());
 
   // Ctrl+D = standard TUI exit (matches the boot-banner hint). Always-on
   // — no modal / picker should swallow it.

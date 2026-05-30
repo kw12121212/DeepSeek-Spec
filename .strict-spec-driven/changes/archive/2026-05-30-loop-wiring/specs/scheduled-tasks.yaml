@@ -1,0 +1,34 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: scheduled-tasks
+mapping:
+  implementation:
+    - src/loop.ts
+  tests:
+    - tests/scheduler/integration.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    loop-scheduler-wiring:
+      strength: MUST
+      statement: >-
+        CacheFirstLoop MUST pass the same ModelClient and ToolHost used by the main loop to
+        TaskExecutor, ensuring scheduled tasks have full tool access (file, shell, MCP).
+      scenarios:
+        shared-tool-access:
+          - GIVEN: CacheFirstLoop is initialized with a ModelClient and ToolHost
+          - WHEN: TaskExecutor is instantiated for scheduled tasks
+          - THEN: the executor uses the same ModelClient and ToolHost as the main agent loop
+    session-directory-filter:
+      strength: MUST
+      statement: >-
+        The /sessions command MUST filter out sessions under .dspec/scheduled-sessions/ so scheduled
+        task sessions are not shown in user session listings.
+      scenarios:
+        filter-scheduled-sessions:
+          - GIVEN: Both user sessions and scheduled task sessions exist on disk
+          - WHEN: /sessions is invoked
+          - THEN: only user sessions are displayed, scheduled-sessions/ entries are excluded
+  REMOVED: {}

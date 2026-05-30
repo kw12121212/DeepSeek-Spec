@@ -357,6 +357,26 @@ requirements:
         - GIVEN: The i18n system is initialized with any supported language
         - WHEN: /schedule subcommands are invoked
         - THEN: All output strings are resolved via t() lookup
+  loop-scheduler-wiring:
+    strength: MUST
+    statement: >-
+      CacheFirstLoop MUST pass the same ModelClient and ToolHost used by the main loop to
+      TaskExecutor, ensuring scheduled tasks have full tool access (file, shell, MCP).
+    scenarios:
+      shared-tool-access:
+        - GIVEN: CacheFirstLoop is initialized with a ModelClient and ToolHost
+        - WHEN: TaskExecutor is instantiated for scheduled tasks
+        - THEN: the executor uses the same ModelClient and ToolHost as the main agent loop
+  session-directory-filter:
+    strength: MUST
+    statement: >-
+      The /sessions command MUST filter out sessions under .dspec/scheduled-sessions/ so scheduled
+      task sessions are not shown in user session listings.
+    scenarios:
+      filter-scheduled-sessions:
+        - GIVEN: Both user sessions and scheduled task sessions exist on disk
+        - WHEN: /sessions is invoked
+        - THEN: only user sessions are displayed, scheduled-sessions/ entries are excluded
 mapping:
   implementation:
     - src/scheduler/cron-parser.ts

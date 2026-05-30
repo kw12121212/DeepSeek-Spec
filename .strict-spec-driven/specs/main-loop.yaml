@@ -8,8 +8,8 @@ requirements:
   iteration-control:
     strength: MUST
     statement: >-
-      The main loop MUST iterate until the model produces no tool calls (agent
-      turn ends), the abort signal fires, or maxTurns is reached.
+      The main loop MUST iterate until the model produces no tool calls (agent turn ends), the abort
+      signal fires, or maxTurns is reached.
     scenarios:
       natural-end:
         - GIVEN: a model response with no tool calls
@@ -26,9 +26,8 @@ requirements:
   system-prompt-construction:
     strength: MUST
     statement: >-
-      The main loop MUST construct the system prompt from project memory,
-      skills, tool definitions, and configured instructions before each API
-      call.
+      The main loop MUST construct the system prompt from project memory, skills, tool definitions,
+      and configured instructions before each API call.
     scenarios:
       prompt-assembly:
         - GIVEN: a project with DSPEC.md and 3 loaded skills
@@ -37,9 +36,8 @@ requirements:
   message-history:
     strength: MUST
     statement: >-
-      The main loop MUST maintain a conversation history, appending user
-      messages, model responses, and tool results in correct alternating
-      order.
+      The main loop MUST maintain a conversation history, appending user messages, model responses,
+      and tool results in correct alternating order.
     scenarios:
       history-order:
         - GIVEN: a conversation with user->assistant->tool_result turns
@@ -48,9 +46,8 @@ requirements:
   error-recovery:
     strength: MUST
     statement: >-
-      The main loop MUST handle API errors with retry logic for transient
-      failures (429, 500, 502, 503, 504) and surface non-retryable errors to
-      the user.
+      The main loop MUST handle API errors with retry logic for transient failures (429, 500, 502,
+      503, 504) and surface non-retryable errors to the user.
     scenarios:
       transient-retry:
         - GIVEN: the API returns a 429 response
@@ -63,8 +60,8 @@ requirements:
   context-compaction:
     strength: MUST
     statement: >-
-      The main loop MUST trigger context compaction when the context manager
-      reports the context is near the token limit.
+      The main loop MUST trigger context compaction when the context manager reports the context is
+      near the token limit.
     scenarios:
       compact-before-overflow:
         - GIVEN: the context is at 90% of the token limit
@@ -73,8 +70,8 @@ requirements:
   session-persist:
     strength: MUST
     statement: >-
-      The main loop MUST persist session state (messages, events, usage) to
-      disk after each turn for crash recovery and session resumption.
+      The main loop MUST persist session state (messages, events, usage) to disk after each turn for
+      crash recovery and session resumption.
     scenarios:
       per-turn-persist:
         - GIVEN: a turn completes with tool results
@@ -83,9 +80,8 @@ requirements:
   tool-result-handling:
     strength: MUST
     statement: >-
-      The main loop MUST handle tool results including errors, truncated
-      results, and storm-breaker repeat detection before returning them to
-      the model.
+      The main loop MUST handle tool results including errors, truncated results, and storm-breaker
+      repeat detection before returning them to the model.
     scenarios:
       storm-detected:
         - GIVEN: 3 identical tool calls in recent turns
@@ -94,9 +90,8 @@ requirements:
   dashboard-events:
     strength: MUST
     statement: >-
-      The main loop MUST emit events to the dashboard (via the event sink)
-      for each lifecycle stage: user message, model start, delta, final,
-      tool dispatch, and turn end.
+      The main loop MUST emit events to the dashboard (via the event sink) for each lifecycle stage:
+      user message, model start, delta, final, tool dispatch, and turn end.
     scenarios:
       event-sequence:
         - GIVEN: a single-turn conversation
@@ -105,13 +100,49 @@ requirements:
   hook-integration:
     strength: MUST
     statement: >-
-      The main loop MUST fire hook events (PreToolUse, PostToolUse) around
-      tool dispatch and UserPromptSubmit before processing user messages.
+      The main loop MUST fire hook events (PreToolUse, PostToolUse) around tool dispatch and
+      UserPromptSubmit before processing user messages.
     scenarios:
       pre-tool-hook:
         - GIVEN: a PreToolUse hook is configured
         - WHEN: a tool call is dispatched
         - THEN: the hook is fired before the tool handler executes
+  scheduler-init:
+    strength: MUST
+    statement: >-
+      CacheFirstLoop MUST instantiate and start the scheduler during initialization when scheduler
+      config is provided and enabled tasks exist in the store.
+    scenarios:
+      auto-start:
+        - GIVEN: CacheFirstLoopOptions includes scheduler config and TaskStore has enabled tasks
+        - WHEN: CacheFirstLoop initializes
+        - THEN: Scheduler.start() is called and tasks begin executing on their cron schedule
+  graceful-shutdown:
+    strength: MUST
+    statement: >-
+      CacheFirstLoop.shutdown() MUST call scheduler.stop() which waits up to 30 seconds for
+      in-flight tasks to complete, then force-kills remaining via AbortController.
+    scenarios:
+      shutdown-clean:
+        - GIVEN: A scheduled task is in-flight when shutdown() is called
+        - WHEN: shutdown() is invoked
+        - THEN: scheduler.stop() is called, in-flight tasks complete within 30s, and the method resolves
+      shutdown-force-kill:
+        - GIVEN: A scheduled task exceeds 30s during shutdown
+        - WHEN: shutdown() is invoked
+        - THEN: the task is force-killed via AbortController after 30s and shutdown resolves
+  signal-hook-shutdown:
+    strength: MUST
+    statement: >-
+      SIGINT and SIGTERM handlers in code.tsx and chat.tsx MUST call loop.shutdown() before existing
+      cleanup logic.
+    scenarios:
+      sigint-triggers-shutdown:
+        - GIVEN: CacheFirstLoop is running with an active scheduler
+        - WHEN: SIGINT is received
+        - THEN: >-
+            loop.shutdown() is called before process exit, allowing in-flight tasks to complete or
+            timeout
 mapping:
   implementation:
     - src/loop.ts

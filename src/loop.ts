@@ -10,6 +10,10 @@ import {
   truncateForModelByTokens,
 } from "./mcp/registry.js";
 import type { ModelClient } from "./ports/model-client.js";
+import { TaskExecutor } from "./scheduler/executor.js";
+import { HistoryStore } from "./scheduler/history.js";
+import { Scheduler } from "./scheduler/scheduler.js";
+import { TaskStore } from "./scheduler/store.js";
 
 import { ContextManager, TURN_START_FOLD_THRESHOLD } from "./context-manager.js";
 import { InflightSet } from "./core/inflight.js";
@@ -102,6 +106,8 @@ export interface CacheFirstLoopOptions {
   confirmationGate?: PauseGate;
   /** Re-runs the prompt builder (applyMemoryStack / codeSystemPrompt) on /new so DSPEC.md edits take effect without a restart. Accepting a cache miss is the price. */
   rebuildSystem?: () => string;
+  /** Project root for scheduler subsystem. When provided, the scheduler auto-starts if enabled tasks exist. */
+  schedulerRoot?: string;
 }
 
 export interface ReconfigurableOptions {
@@ -154,6 +160,8 @@ export class CacheFirstLoop {
   readonly resumedMessageCount: number;
 
   private readonly _rebuildSystem: (() => string) | null;
+
+  private readonly _scheduler: Scheduler | null = null;
 
   private _turn = 0;
   private _streamPreference: boolean;
@@ -288,6 +296,21 @@ export class CacheFirstLoop {
       getFewShots: () => this.prefix.fewShots,
       onLogRewrite: () => this.readTracker.reset(),
     });
+
+    if (opts.schedulerRoot) {
+      const store = new TaskStore(opts.schedulerRoot);
+      const historyStore = new HistoryStore(opts.schedulerRoot);
+      const executor = new TaskExecutor({
+        client: this.client,
+        tools: this.tools,
+        projectRoot: opts.schedulerRoot,
+        buildSystemPrompt: () => this.prefix.system,
+      });
+      this._scheduler = new Scheduler(store, executor, { historyStore });
+      if (store.getEnabled().length > 0) {
+        this._scheduler.start();
+      }
+    }
   }
 
   /** Replace older turns with one summary message; keep tail within keepRecentTokens budget. */
@@ -403,6 +426,10 @@ export class CacheFirstLoop {
       this.stream = opts.stream;
     }
     if (opts.reasoningEffort !== undefined) this.reasoningEffort = opts.reasoningEffort;
+  }
+
+  async shutdown(): Promise<void> {
+    if (this._scheduler) await this._scheduler.stop();
   }
 
   /** `null` disables the cap; any change re-arms the 80% warning. */

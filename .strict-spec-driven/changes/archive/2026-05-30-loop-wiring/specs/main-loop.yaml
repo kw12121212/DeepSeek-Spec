@@ -1,0 +1,53 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: main-loop
+mapping:
+  implementation:
+    - src/loop.ts
+    - src/cli/ui/code.tsx
+  tests:
+    - tests/scheduler/integration.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    scheduler-init:
+      strength: MUST
+      statement: >-
+        CacheFirstLoop MUST instantiate and start the scheduler during initialization when scheduler
+        config is provided and enabled tasks exist in the store.
+      scenarios:
+        auto-start:
+          - GIVEN: CacheFirstLoopOptions includes scheduler config and TaskStore has enabled tasks
+          - WHEN: CacheFirstLoop initializes
+          - THEN: Scheduler.start() is called and tasks begin executing on their cron schedule
+    graceful-shutdown:
+      strength: MUST
+      statement: >-
+        CacheFirstLoop.shutdown() MUST call scheduler.stop() which waits up to 30 seconds for
+        in-flight tasks to complete, then force-kills remaining via AbortController.
+      scenarios:
+        shutdown-clean:
+          - GIVEN: A scheduled task is in-flight when shutdown() is called
+          - WHEN: shutdown() is invoked
+          - THEN: >-
+              scheduler.stop() is called, in-flight tasks complete within 30s, and the method
+              resolves
+        shutdown-force-kill:
+          - GIVEN: A scheduled task exceeds 30s during shutdown
+          - WHEN: shutdown() is invoked
+          - THEN: the task is force-killed via AbortController after 30s and shutdown resolves
+    signal-hook-shutdown:
+      strength: MUST
+      statement: >-
+        SIGINT and SIGTERM handlers in code.tsx and chat.tsx MUST call loop.shutdown() before
+        existing cleanup logic.
+      scenarios:
+        sigint-triggers-shutdown:
+          - GIVEN: CacheFirstLoop is running with an active scheduler
+          - WHEN: SIGINT is received
+          - THEN: >-
+              loop.shutdown() is called before process exit, allowing in-flight tasks to complete or
+              timeout
+  REMOVED: {}

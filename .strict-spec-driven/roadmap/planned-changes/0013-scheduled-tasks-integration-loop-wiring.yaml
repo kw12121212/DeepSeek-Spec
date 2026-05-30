@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: loop-wiring
   milestone: 0013-scheduled-tasks-integration
-status: planned
+status: complete
 summary: |
   Wire the scheduled task system into CacheFirstLoop with full tool access and graceful shutdown.
 details: |
