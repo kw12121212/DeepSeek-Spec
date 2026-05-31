@@ -1,0 +1,75 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: dashboard-server
+mapping:
+  implementation:
+    - tests/e2e/dashboard/helper.ts
+    - tests/e2e/dashboard/sse-events.test.ts
+    - tests/e2e/dashboard/auth-enforcement.test.ts
+    - tests/e2e/dashboard/session-switch.test.ts
+    - tests/e2e/dashboard/scheduler-status.test.ts
+  tests:
+    - tests/e2e/dashboard/spa-load.test.ts
+    - tests/e2e/dashboard/sse-events.test.ts
+    - tests/e2e/dashboard/auth-enforcement.test.ts
+    - tests/e2e/dashboard/session-switch.test.ts
+    - tests/e2e/dashboard/scheduler-status.test.ts
+operations:
+  ADDED:
+    e2e-spa-load:
+      strength: MUST
+      statement: >-
+        The dashboard SPA MUST load and render the main layout when accessed via browser with a
+        valid token.
+      scenarios:
+        e2e-spa-renders:
+          - GIVEN: A running dashboard server with built assets
+          - WHEN: A Playwright browser navigates to the dashboard URL with a valid token
+          - THEN: The SPA HTML renders with the main layout container visible
+    e2e-sse-streaming:
+      strength: MUST
+      statement: >-
+        The /api/events SSE endpoint MUST stream live events including model.turn.started and
+        model.delta when a prompt is submitted.
+      scenarios:
+        e2e-sse-live:
+          - GIVEN: A running dashboard server with a connected SSE client and active agent session
+          - WHEN: A prompt is submitted via /api/submit and the SSE connection is active
+          - THEN: model.turn.started and model.delta events arrive within 30 seconds
+    e2e-auth-enforcement:
+      strength: MUST
+      statement: >-
+        Dashboard API endpoints MUST enforce token auth: reject requests without token (401), accept
+        GET with query param token, accept requests with X-Dspec-Token header, and reject POST with
+        query-param-only token (CSRF).
+      scenarios:
+        e2e-auth-matrix:
+          - GIVEN: A running dashboard server with a generated token
+          - WHEN: Requests are made with various token placement strategies
+          - THEN: Auth enforcement matches the token-auth and mutation-requires-header requirements
+    e2e-session-api:
+      strength: MUST
+      statement: >-
+        GET /api/sessions MUST return a session array and GET /api/overview MUST return current
+        session info.
+      scenarios:
+        e2e-session-list:
+          - GIVEN: A running dashboard server with sessions
+          - WHEN: GET /api/sessions and GET /api/overview are called with valid auth
+          - THEN: A session array and current session info are returned
+    e2e-scheduler-status:
+      strength: MUST
+      statement: >-
+        GET /api/scheduler/status MUST return { tasks, enabledCount, running, nextRun } and the SPA
+        must render the scheduler status section.
+      scenarios:
+        e2e-scheduler-render:
+          - GIVEN: A running dashboard server
+          - WHEN: GET /api/scheduler/status is called with valid auth and the SPA is viewed
+          - THEN: >-
+              Response contains tasks array, enabledCount, running flag, and nextRun; SPA renders
+              scheduler status
+  MODIFIED: {}
+  REMOVED: {}

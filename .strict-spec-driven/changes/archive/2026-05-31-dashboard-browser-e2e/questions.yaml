@@ -1,0 +1,18 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: dashboard-browser-e2e
+open: []
+resolved:
+  - id: playwright-version
+    question: >-
+      Which Playwright browsers should be tested against — chromium only or chromium + firefox +
+      webkit?
+    context: >-
+      The planned change specifies Playwright. Milestone notes say 'use npx playwright install
+      chromium only'. Defaulting to chromium-only keeps CI fast and avoids 200MB+ per extra browser.
+    answer: >-
+      Chromium only — dashboard SPA has no browser-specific APIs, matches milestone guidance to keep
+      CI fast.
+    status: resolved

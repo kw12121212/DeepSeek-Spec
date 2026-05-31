@@ -1,0 +1,25 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: dashboard-browser-e2e
+approach:
+  - >-
+    Create tests/e2e/dashboard/ directory with a helper module that spawns the binary via node-pty,
+    parses the dashboard URL+token from PTY output, and provides startDashboard/stopDashboard
+    functions. Use agent-browser CLI for browser-level verification (SPA load, scheduler status page
+    rendering). Use fetch/EventSource for API-level tests (auth, SSE events, session switching,
+    scheduler status API). agent-browser is invoked via child_process.execSync for snapshot and
+    screenshot commands. No @playwright/test devDependency needed.
+decisions:
+  browser-tool:
+    decision: >-
+      Use agent-browser CLI (already installed) instead of @playwright/test for browser automation.
+      agent-browser is invoked via execSync from vitest tests. API-level tests use fetch directly
+      without a browser.
+    rationale: >-
+      agent-browser is already available as a system CLI tool, avoiding an extra devDependency. Most
+      dashboard E2E tests are API-level (fetch) and don't need a browser at all — only SPA load
+      verification and scheduler status page rendering need browser automation.
+alternatives: []
+risks: []

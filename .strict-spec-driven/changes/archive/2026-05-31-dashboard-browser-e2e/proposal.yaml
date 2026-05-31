@@ -1,0 +1,30 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: dashboard-browser-e2e
+  status: proposed
+summary:
+  what:
+    - >-
+      Dashboard browser E2E tests using Playwright to verify the SPA loads, SSE events stream live,
+      session switching works, scheduler status page renders, and token auth enforces access
+      control.
+  why:
+    - >-
+      Black-box E2E validation of the dashboard server against the built binary, ensuring the SPA,
+      SSE streaming, session API, scheduler status API, and token auth all work end-to-end. Part of
+      M14 binary E2E testing milestone.
+scope:
+  in:
+    - tests/e2e/dashboard/
+  out:
+    - >-
+      New test files: helper.ts, spa-load.test.ts, sse-events.test.ts, session-switch.test.ts,
+      scheduler-status.test.ts, auth-enforcement.test.ts. No changes to src/ code.
+unchanged_behavior:
+  - src/ code is not modified — these are black-box tests only.
+roadmap:
+  milestone: 0014-binary-e2e-testing
+  planned_change: dashboard-browser-e2e

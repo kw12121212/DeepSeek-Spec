@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: dashboard-browser-e2e
   milestone: 0014-binary-e2e-testing
-status: planned
+status: complete
 summary: |
   Dashboard browser E2E tests using Playwright to verify the SPA loads, SSE
   events stream live, session switching works, scheduler status page renders,

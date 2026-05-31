@@ -1,0 +1,59 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: dashboard-browser-e2e
+sections:
+  Implementation:
+    create-helper:
+      text: >-
+        Create tests/e2e/dashboard/helper.ts with startDashboard(), stopDashboard(), PTY URL+token
+        parsing, fixture worktree setup, agent-browser helpers, and auto-skip logic.
+      status: complete
+    create-spa-load-test:
+      text: >-
+        Create tests/e2e/dashboard/spa-load.test.ts — agent-browser opens dashboard URL with token,
+        snapshot asserts SPA HTML renders main layout.
+      status: complete
+    create-sse-events-test:
+      text: >-
+        Create tests/e2e/dashboard/sse-events.test.ts — fetch-based test that connects to SSE
+        endpoint, submits a prompt, and asserts events stream live.
+      status: complete
+    create-session-switch-test:
+      text: >-
+        Create tests/e2e/dashboard/session-switch.test.ts — fetch-based test for GET /api/sessions
+        and /api/overview endpoints.
+      status: complete
+    create-scheduler-status-test:
+      text: >-
+        Create tests/e2e/dashboard/scheduler-status.test.ts — fetch-based test for GET
+        /api/scheduler/status response structure plus agent-browser snapshot for SPA rendering.
+      status: complete
+    create-auth-enforcement-test:
+      text: >-
+        Create tests/e2e/dashboard/auth-enforcement.test.ts — fetch-based test for token missing
+        (401), query param (200 for GET), header (200), CSRF on POST (401 without header).
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests to confirm no regressions.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — no src/ code modified, only test files
+        created.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests
