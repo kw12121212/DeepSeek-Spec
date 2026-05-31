@@ -139,6 +139,16 @@ requirements:
         - GIVEN: user selected glm and entered a valid key
         - WHEN: setup completes
         - THEN: config.json has provider='glm', glm.apiKey set, model set, setupCompleted=true
+  e2e-vitest-exclusion:
+    strength: MUST
+    statement: >-
+      The default vitest run (bun run test) MUST exclude tests/e2e/** so that E2E tests requiring
+      real LLM credentials or a built binary never run in CI or default test runs.
+    scenarios:
+      e2e-excluded-by-default:
+        - GIVEN: bun run test is executed
+        - WHEN: vitest collects test files
+        - THEN: no files under tests/e2e/ are included in the test run
 mapping:
   implementation:
     - src/config.ts

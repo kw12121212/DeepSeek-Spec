@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import {
   type ReasoningEffort,
   bridgeEndpointEnv,
-  loadApiKey,
+  loadKeyForActiveProvider,
   loadHistoryScrollMode,
   loadToolRateLimit,
   readConfig,
@@ -247,7 +247,7 @@ function Root({
 export async function chatCommand(opts: ChatOptions): Promise<void> {
   markPhase("chat_command_enter");
   loadDotenv();
-  const initialKey = loadApiKey();
+  const initialKey = loadKeyForActiveProvider();
   markPhase("config_loaded");
 
   const requestedSpecs = opts.mcp ?? [];

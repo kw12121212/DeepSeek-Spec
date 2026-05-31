@@ -1,0 +1,65 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: cli-smoke
+  milestone: 0014-binary-e2e-testing
+status: planned
+summary: |
+  CLI smoke tests that run the built binary with various subcommands and flags,
+  asserting exit codes, stdout, and stderr. Uses child_process.spawn (no PTY
+  needed for non-interactive commands). No real LLM required for most tests.
+details: |
+  Create tests/e2e/cli/ directory with:
+
+  1. helper.ts:
+     - spawnBinary(args): spawn the binary via child_process.spawn, capture
+       stdout/stderr, return { exitCode, stdout, stderr }.
+     - getBinaryPath(): read from e2e.config.json binaryPath field, fallback
+       to "node dist/cli/index.js" (always available after bun run build).
+     - All tests auto-skip when binary is missing (hasE2eConfig() check).
+
+  2. help.test.ts:
+     - Run: dspec --help
+     - Assert exit code 0
+     - Assert stdout contains "DeepSeek-Spec" and lists subcommands
+       (code, chat, run, setup, doctor, sessions, etc.)
+
+  3. version.test.ts:
+     - Run: dspec version
+     - Assert exit code 0
+     - Assert stdout matches semver pattern /\d+\.\d+\.\d+/
+
+  4. doctor.test.ts:
+     - Run: dspec doctor --json
+     - Assert exit code 0 or 1 (may fail on missing API key)
+     - Assert stdout is valid JSON with health check fields
+
+  5. run-command.test.ts:
+     - Run: dspec run "What is 2+2?" (cwd = fixture worktree)
+     - Requires real LLM config — auto-skip if absent
+     - Uses createFixtureWorktree() for isolated cwd
+     - Assert exit code 0
+     - Assert stdout contains a reasonable response within 60s timeout
+
+  6. error-paths.test.ts:
+     - Run: dspec nonexistent-command
+     - Assert non-zero exit code
+     - Assert stderr contains "unknown command" or similar error
+
+  Commands tested: --help, version, doctor --json, run, invalid subcommand.
+  Only run-command.test.ts needs a real LLM. All others work offline.
+
+  Files to create:
+  - tests/e2e/cli/helper.ts
+  - tests/e2e/cli/help.test.ts
+  - tests/e2e/cli/version.test.ts
+  - tests/e2e/cli/doctor.test.ts
+  - tests/e2e/cli/run-command.test.ts
+  - tests/e2e/cli/error-paths.test.ts
+
+  Dependencies to add:
+  - (none — child_process is built-in)
+depends_on:
+  - shared-config

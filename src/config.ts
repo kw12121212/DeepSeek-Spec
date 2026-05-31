@@ -792,6 +792,15 @@ export function loadOpenaiCustomBaseUrl(path: string = defaultConfigPath()): str
   return undefined;
 }
 
+/** Load the API key for whichever provider is currently active. */
+export function loadKeyForActiveProvider(path: string = defaultConfigPath()): string | undefined {
+  const provider = loadActiveProvider(path);
+  if (provider === "glm") return loadGlmApiKey(path);
+  if (provider === "mimo") return loadMimoApiKey(path);
+  if (provider === "openai") return loadOpenaiCustomApiKey(path);
+  return loadApiKey(path);
+}
+
 /** OpenAI-custom supported models from config.json openai.models → empty array. */
 export function loadOpenaiCustomModels(path: string = defaultConfigPath()): string[] {
   const cfg = readConfig(path).openai?.models;

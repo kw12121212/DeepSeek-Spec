@@ -1,0 +1,33 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: shared-config
+  status: proposed
+summary:
+  what:
+    - >-
+      Create shared E2E test infrastructure: config file template, git fixture project, config
+      reader helper, binary path resolver, ANSI stripper helper, vitest exclusion, package.json
+      scripts, and devDependencies.
+  why:
+    - >-
+      Shared infrastructure is the prerequisite dependency for three downstream E2E test suites
+      (cli-smoke, terminal-e2e, dashboard-browser-e2e). Without it, none of the binary E2E tests can
+      be written.
+scope:
+  in:
+    - >-
+      No src/ code (black-box test infrastructure only). Scope: tests/e2e/ directory structure,
+      fixture project, helpers, vitest config, package.json, .gitignore.
+  out:
+    - >-
+      tests/e2e/ directory with e2e.config.json.example, helpers/, fixtures/sample-project/, updated
+      vitest.config.ts exclude, test:e2e script in package.json, node-pty and @playwright/test
+      devDependencies.
+unchanged_behavior:
+  - All src/ code. Existing test suites. Existing specs.
+roadmap:
+  milestone: 0014-binary-e2e-testing
+  planned_change: shared-config

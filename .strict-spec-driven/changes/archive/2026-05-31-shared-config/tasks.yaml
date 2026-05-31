@@ -1,0 +1,64 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: shared-config
+sections:
+  Implementation:
+    create-fixture-project:
+      text: >-
+        Create tests/e2e/fixtures/sample-project/ with package.json, src/index.ts, src/utils.ts,
+        README.md, tsconfig.json, .gitignore. Initialize as git repo with one commit.
+      status: complete
+    create-config-example:
+      text: >-
+        Create tests/e2e/e2e.config.json.example with documented fields (binaryPath, provider,
+        apiKey, baseUrl, model, timeout).
+      status: complete
+    create-config-helper:
+      text: >-
+        Create tests/e2e/helpers/config.ts with readE2eConfig(), hasE2eConfig(), getBinaryCommand().
+        Reuse patterns from tests/real-llm/helpers/config.ts.
+      status: complete
+    create-fixture-helper:
+      text: >-
+        Create tests/e2e/helpers/fixture.ts with createFixtureWorktree() that copies fixture to temp
+        dir and returns { dir, cleanup() }.
+      status: complete
+    create-ansi-stripper:
+      text: Create tests/e2e/helpers/ansi-stripper.ts with stripAnsi() for PTY output parsing.
+      status: complete
+    update-gitignore:
+      text: Add tests/e2e/e2e.config.json to .gitignore.
+      status: complete
+    update-vitest-config:
+      text: 'Add exclude: ["tests/e2e/**"] to vitest.config.ts so default bun run test stays clean.'
+      status: complete
+    update-package-json:
+      text: Add test:e2e script and devDependencies (node-pty, @playwright/test) to package.json.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+    verify-e2e-exclusion:
+      text: Verify bun run test does not pick up tests/e2e/ files.
+      status: complete
+  Verification:
+    verify-scope:
+      text: >-
+        Verify implementation matches proposal scope — no src/ modifications, all helpers
+        functional, fixture committed.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

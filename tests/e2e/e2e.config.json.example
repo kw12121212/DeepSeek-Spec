@@ -1,0 +1,8 @@
+{
+  "binaryPath": "node dist/cli/index.js",
+  "provider": "deepseek",
+  "apiKey": "your-api-key-here",
+  "baseUrl": "https://api.deepseek.com",
+  "model": "deepseek-chat",
+  "timeout": 60000
+}

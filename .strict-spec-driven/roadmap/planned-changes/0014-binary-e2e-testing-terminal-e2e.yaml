@@ -1,0 +1,71 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: terminal-e2e
+  milestone: 0014-binary-e2e-testing
+status: planned
+summary: |
+  Terminal E2E tests that spawn the built binary in a node-pty pseudo-terminal
+  to test interactive chat mode with a real LLM. Validates that prompts get
+  responses and tools execute correctly through the Ink TUI.
+details: |
+  Create tests/e2e/terminal/ directory with:
+
+  1. helper.ts:
+     - spawnPty(args, opts): spawn the binary in a node-pty pseudo-terminal
+       (24x80 cols/rows), return { pty, output, waitUntil(pattern, timeout), kill() }.
+     - opts.cwd: working directory for the spawned process (fixture worktree).
+     - stripAnsi(): strip all ANSI escape sequences from pty output before
+       pattern matching.
+     - waitUntil(pattern, timeoutMs): wait for a regex pattern to appear in
+       stripped output, reject on timeout (default 60s for LLM latency).
+     - Reads e2e.config.json for binaryPath and LLM credentials.
+     - Auto-skips all tests when config or binary is missing.
+
+  2. chat-response.test.ts:
+     - Spawn: dspec chat (interactive mode via pty, cwd = fixture worktree)
+     - Wait for TUI to render (look for prompt indicator or ">" prompt)
+     - Type: "What is 2+2? Please answer with just the number."
+     - Wait for "4" to appear in output (within 60s)
+     - Type: /exit
+     - Assert clean exit
+     - Uses createFixtureWorktree() for isolated cwd
+
+  3. tool-execution.test.ts:
+     - Spawn: dspec code (code mode has filesystem tools, cwd = fixture worktree)
+     - Wait for TUI to render
+     - Type: "Read the file package.json and tell me the project name"
+     - Wait for "sample-project" to appear in output (within 60s)
+     - Type: /exit
+     - Assert clean exit
+     - Uses createFixtureWorktree() for isolated cwd
+
+  4. exit-handling.test.ts:
+     - Spawn: dspec chat via pty
+     - Wait for TUI to render
+     - Send: /exit
+     - Assert process exits within 10 seconds (pty.onExit)
+
+  Why node-pty instead of child_process:
+  - Ink TUI requires a real TTY to render — child_process provides no PTY
+  - Terminal features (colors, cursor movement, line editing) only work with PTY
+  - Tests verify the full interactive experience, not just stdout
+
+  Config fields from e2e.config.json:
+  - binaryPath (default: "node dist/cli/index.js")
+  - provider, apiKey, baseUrl, model
+  - timeout (default: 60000)
+  - Working directory: fixture worktree (from helpers/fixture.ts)
+
+  Files to create:
+  - tests/e2e/terminal/helper.ts
+  - tests/e2e/terminal/chat-response.test.ts
+  - tests/e2e/terminal/tool-execution.test.ts
+  - tests/e2e/terminal/exit-handling.test.ts
+
+  Dependencies to add:
+  - node-pty (devDependency)
+depends_on:
+  - shared-config

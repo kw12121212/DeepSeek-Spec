@@ -1,0 +1,109 @@
+schema: strict-spec-driven/debug-session/v1
+schema_version: 1
+artifact_type: debug_session
+schema_file: ../../../templates/strict-spec-driven/schemas/debug-session.yaml
+debug_session:
+  id: "setup-wizard-repetition"
+  status: resolved
+issue:
+  summary: "Setup wizard shows on every launch even after completion when active provider is non-DeepSeek (e.g. GLM)"
+  observed_behavior: "User completes setup wizard selecting GLM provider, key saved to cfg.glm.apiKey. On next launch, chatCommand calls loadApiKey() which only reads cfg.apiKey (DeepSeek key), finds nothing, and shows Setup again."
+  expected_behavior: "After completing setup once, the app should skip the setup wizard on subsequent launches regardless of which provider was selected."
+scope:
+  layers:
+    - frontend
+  out_of_scope:
+    - electron
+    - cdp_access
+    - web_api
+targets:
+  primary-target:
+    layer: frontend
+    kind: browser_page
+    label: "chatCommand startup key gate"
+    url: "http://localhost"
+    notes:
+      - "src/cli/commands/chat.tsx:250 calls loadApiKey() which is DeepSeek-only"
+      - "src/cli/commands/chat.tsx:164 checks !key to show Setup"
+reproduction:
+  preconditions:
+    - "Active provider is set to 'glm' (or 'mimo' or 'openai')"
+    - "API key saved under cfg.glm.apiKey (not cfg.apiKey)"
+    - "cfg.setupCompleted is true"
+  steps:
+    - id: step1
+      target: primary-target
+      action: "Run dspec (production build) with provider=glm and glm.apiKey set but no cfg.apiKey"
+      expected: "App skips setup wizard and enters chat directly"
+  expected_failure: "loadApiKey() returns undefined, !key is true, Setup component renders"
+evidence:
+  directory: evidence/
+  entries:
+    - id: ev-config
+      path: config-snapshot.json
+      layer: frontend
+      type: text_log
+      description: "Current ~/.dspec/config.json showing provider=glm, glm.apiKey set, no top-level apiKey"
+      redacted: false
+hypotheses:
+  - id: h1
+    status: verified
+    statement: "chatCommand uses loadApiKey() which only checks DeepSeek key (cfg.apiKey), ignoring provider-specific keys like cfg.glm.apiKey"
+    layer: frontend
+    evidence:
+      - ev-config
+findings:
+  - id: f1
+    layer: frontend
+    target: primary-target
+    status: confirmed
+    summary: "Root cause: chatCommand (chat.tsx:250) calls loadApiKey() which returns cfg.apiKey. When provider is GLM, key is in cfg.glm.apiKey, so loadApiKey() returns undefined. Root component sees !key and renders Setup."
+    evidence:
+      - ev-config
+human_checkpoints: []
+manual_actions: []
+cdp_health:
+  required: false
+  checks: []
+dev_session:
+  declaration: .strict-spec-driven/dev-session.yaml
+  services: []
+  lifecycle:
+    plan:
+      command: strict-spec-driven dev-session-plan
+      status: not_run
+      evidence: []
+    start:
+      command: strict-spec-driven dev-session-start
+      status: not_run
+      evidence: []
+    status:
+      command: strict-spec-driven dev-session-status
+      status: not_run
+      evidence: []
+    logs: []
+    stop:
+      command: strict-spec-driven dev-session-stop
+      status: not_run
+      evidence: []
+    cleanup_status: not_started
+  unavailable_conditions: []
+replay:
+  commands:
+    - id: replay-1
+      command: dspec
+      working_directory: "."
+      layer: frontend
+      expected_result: "App skips setup wizard and enters chat directly"
+verification:
+  status: passed
+  steps:
+    - id: verify-typecheck
+      action: "bun run typecheck"
+      expected: "No type errors"
+      status: passed
+    - id: verify-tests
+      action: "bun run test"
+      expected: "All tests pass"
+      status: passed
+  evidence: []

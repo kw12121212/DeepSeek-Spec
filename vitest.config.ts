@@ -46,6 +46,7 @@ export default defineConfig({
     // One retry absorbs Windows scheduler hiccups in jobs.test.ts / loop.test.ts /
     // bundle-smoke (real spawns + tokenizer cold load). A real failure still re-fails.
     retry: 1,
+    exclude: ["tests/e2e/**"],
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "json-summary"],

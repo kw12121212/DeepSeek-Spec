@@ -1,0 +1,91 @@
+schema: strict-spec-driven/planned-change/v1
+schema_version: 1
+artifact_type: planned_change
+schema_file: ../schemas/planned-change.yaml
+planned_change:
+  id: shared-config
+  milestone: 0014-binary-e2e-testing
+status: complete
+summary: |
+  Shared E2E test infrastructure: config file template, git fixture project,
+  config reader helper, binary path resolver, vitest exclusion, package.json
+  scripts, and devDependencies (node-pty, @playwright/test).
+details: |
+  Create tests/e2e/ shared infrastructure:
+
+  1. tests/e2e/e2e.config.json.example:
+     {
+       "binaryPath": "node dist/cli/index.js",
+       "provider": "deepseek",
+       "apiKey": "your-api-key-here",
+       "baseUrl": "https://api.deepseek.com",
+       "model": "deepseek-chat",
+       "timeout": 60000
+     }
+     Fields:
+     - binaryPath: command to run the binary (default: "node dist/cli/index.js")
+     - provider: "deepseek" | "glm" — which provider to use
+     - apiKey: real API key for LLM calls
+     - baseUrl: optional, provider base URL override
+     - model: model ID to use
+     - timeout: default timeout in ms (default: 60000)
+     No projectDir field — the fixture project is always used.
+
+  2. tests/e2e/fixtures/sample-project/ — a controlled git fixture project:
+     - package.json: { name: "sample-project", version: "1.0.0",
+       description: "E2E test fixture", scripts: { test: "echo ok" } }
+     - src/index.ts: simple TypeScript file with a hello function
+     - src/utils.ts: utility functions (add, multiply)
+     - README.md: "Sample Project — E2E test fixture for DeepSeek-Spec"
+     - tsconfig.json: basic TypeScript config
+     - .gitignore: node_modules
+     - Initialized as a git repo with one commit (committed state)
+     - This fixture is checked into the repo under tests/e2e/fixtures/
+
+  3. tests/e2e/helpers/config.ts:
+     - readE2eConfig(): read and validate e2e.config.json
+     - hasE2eConfig(): boolean — true when config exists with valid apiKey
+     - getBinaryCommand(): string[] — returns split binaryPath as command
+       array for spawn (e.g., ["node", "dist/cli/index.js"])
+     - Reuses patterns from tests/real-llm/helpers/config.ts
+
+  4. tests/e2e/helpers/fixture.ts:
+     - createFixtureWorktree(): creates a temp directory, copies the fixture
+       project into it, returns { dir, cleanup() }. The temp dir is a git
+       worktree so file changes are isolated and never affect the committed
+       fixture in the repo.
+     - cleanup(): rm -rf the temp directory
+     - Each test that needs a writable project calls createFixtureWorktree()
+       in beforeAll and cleanup() in afterAll. This ensures full isolation.
+
+  5. tests/e2e/helpers/ansi-stripper.ts:
+     - stripAnsi(input: string): string — strips all ANSI escape sequences
+     - Used by terminal E2E and dashboard helper to parse PTY output
+
+  6. .gitignore: add "tests/e2e/e2e.config.json"
+
+  7. vitest.config.ts: add exclude: ["tests/e2e/**"]
+
+  8. package.json scripts:
+     - "test:e2e": "vitest run tests/e2e/"
+
+  9. DevDependencies:
+     - node-pty (for terminal E2E + dashboard helper)
+     - @playwright/test (for dashboard browser E2E)
+
+  Files to create:
+  - tests/e2e/e2e.config.json.example
+  - tests/e2e/helpers/config.ts
+  - tests/e2e/helpers/fixture.ts
+  - tests/e2e/helpers/ansi-stripper.ts
+  - tests/e2e/fixtures/sample-project/package.json
+  - tests/e2e/fixtures/sample-project/tsconfig.json
+  - tests/e2e/fixtures/sample-project/src/index.ts
+  - tests/e2e/fixtures/sample-project/src/utils.ts
+  - tests/e2e/fixtures/sample-project/README.md
+
+  Files to modify:
+  - .gitignore
+  - vitest.config.ts
+  - package.json
+depends_on: []

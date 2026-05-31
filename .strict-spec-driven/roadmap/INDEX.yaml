@@ -55,3 +55,7 @@ milestones:
     title: 'M13: Scheduled Tasks — Loop Integration and Status Display'
     path: roadmap/milestones/0013-scheduled-tasks-integration.yaml
     status: complete
+  0014-binary-e2e-testing:
+    title: 'M14: Binary E2E Testing — Real Terminal, Real LLM, Real Dashboard'
+    path: roadmap/milestones/0014-binary-e2e-testing.yaml
+    status: proposed

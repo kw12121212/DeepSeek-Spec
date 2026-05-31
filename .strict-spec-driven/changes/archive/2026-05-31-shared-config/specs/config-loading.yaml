@@ -1,0 +1,22 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: config-loading
+mapping:
+  implementation: []
+  tests: []
+operations:
+  ADDED: {}
+  MODIFIED:
+    e2e-vitest-exclusion:
+      strength: MUST
+      statement: >-
+        The default vitest run (bun run test) MUST exclude tests/e2e/** so that E2E tests requiring
+        real LLM credentials or a built binary never run in CI or default test runs.
+      scenarios:
+        e2e-excluded-by-default:
+          - GIVEN: bun run test is executed
+          - WHEN: vitest collects test files
+          - THEN: no files under tests/e2e/ are included in the test run
+  REMOVED: {}

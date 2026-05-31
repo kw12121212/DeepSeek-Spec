@@ -55,3 +55,6 @@ desktop/src-tauri/binaries/
 
 # Real LLM test credentials — never committed.
 tests/real-llm.config.json
+
+# E2E test credentials — never committed.
+tests/e2e/e2e.config.json

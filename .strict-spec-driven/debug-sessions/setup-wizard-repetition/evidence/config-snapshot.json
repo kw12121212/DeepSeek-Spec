@@ -1,0 +1,20 @@
+{
+  "model": "glm-4.7",
+  "reasoningEffort": "max",
+  "lang": "EN",
+  "theme": "auto",
+  "mcpDisabled": [
+    "notion"
+  ],
+  "setupCompleted": true,
+  "editMode": "yolo",
+  "provider": "glm",
+  "glm": {
+    "apiKey": "6eca9630a97745d69a20122084e84eca.PrsL48nfCyuMP5Ao"
+  },
+  "editModeHintShown": true,
+  "mouseClipboardHintShown": true,
+  "dashboard": {
+    "port": 45981
+  }
+}
