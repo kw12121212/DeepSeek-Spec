@@ -1,0 +1,25 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: multi-provider-config
+mapping:
+  implementation:
+    - src/adapters/model-openai-custom.ts
+  tests:
+    - tests/openai-custom-provider.test.ts
+operations:
+  ADDED: {}
+  MODIFIED:
+    openai-provider-id:
+      strength: MUST
+      statement: >-
+        ProviderId type MUST include openai. OpenAICustomProviderConfig MUST provide optional
+        apiKey, baseUrl, and models fields. The openai provider MUST resolve apiKey from
+        OPENAI_API_KEY env then config, and baseUrl from OPENAI_BASE_URL env then config.
+      scenarios:
+        openai-env-key:
+          - GIVEN: OPENAI_API_KEY env var is set and config.json has openai.baseUrl
+          - WHEN: OpenAICustomClient is constructed
+          - THEN: the env var apiKey and config baseUrl are used
+  REMOVED: {}

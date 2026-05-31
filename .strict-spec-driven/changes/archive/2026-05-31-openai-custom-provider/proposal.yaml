@@ -1,0 +1,30 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: openai-custom-provider
+  status: proposed
+summary:
+  what:
+    - >-
+      Add a generic 'openai' provider that wraps OpenAICompatClient with user-configurable apiKey,
+      baseUrl, and supportedModels via config.json, enabling any OpenAI-compatible API endpoint
+      (Groq, Together, Mistral, local vLLM, etc.) without dedicated adapter classes.
+  why:
+    - >-
+      Currently only deepseek, glm, and mimo are supported. Users who want to use other
+      OpenAI-compatible providers have no way to configure them without writing a new adapter class.
+scope:
+  in:
+    - >-
+      ProviderId type, config.ts types and loaders, ProviderRegistry registration in run.ts,
+      modelToProvider mapping, SUPPORTED_OFFICIAL_MODELS list
+  out:
+    - >-
+      New OpenAICustomClient class in src/adapters/model-openai-custom.ts, openai config section in
+      DeepSeekSpecConfig, provider registration, CLI docs
+unchanged_behavior:
+  - >-
+    DeepSeekClient, GLMClient, MimoClient behavior unchanged; existing provider resolution and env
+    var loading unchanged for deepseek/glm/mimo

@@ -337,6 +337,17 @@ requirements:
         - GIVEN: ProviderId type definition
         - WHEN: a new provider is added
         - THEN: ProviderId accepts 'mimo' as a valid value
+  openai-provider-id:
+    strength: MUST
+    statement: >-
+      ProviderId type MUST include openai. OpenAICustomProviderConfig MUST provide optional apiKey,
+      baseUrl, and models fields. The openai provider MUST resolve apiKey from OPENAI_API_KEY env
+      then config, and baseUrl from OPENAI_BASE_URL env then config.
+    scenarios:
+      openai-env-key:
+        - GIVEN: OPENAI_API_KEY env var is set and config.json has openai.baseUrl
+        - WHEN: OpenAICustomClient is constructed
+        - THEN: the env var apiKey and config baseUrl are used
 mapping:
   implementation:
     - src/config.ts

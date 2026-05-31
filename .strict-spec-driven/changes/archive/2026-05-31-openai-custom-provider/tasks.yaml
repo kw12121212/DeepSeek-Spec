@@ -1,0 +1,46 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: openai-custom-provider
+sections:
+  Implementation:
+    add-openai-provider-id:
+      text: >-
+        Add 'openai' to ProviderId union type, add OpenAICustomProviderConfig interface (apiKey,
+        baseUrl, models fields) to DeepSeekSpecConfig, add openai config section loader, add
+        OPENAI_API_KEY / OPENAI_BASE_URL env var loaders, update modelToProvider to map 'openai-*'
+        prefix, add 'openai' to SUPPORTED_OFFICIAL_MODELS as empty array placeholder.
+      status: complete
+    create-openai-custom-client:
+      text: >-
+        Create src/adapters/model-openai-custom.ts with OpenAICustomClient extending
+        OpenAICompatClient. Constructor reads apiKey from OPENAI_API_KEY env then config, baseUrl
+        from OPENAI_BASE_URL env then config, then throws if no apiKey or baseUrl configured.
+      status: complete
+    register-openai-provider:
+      text: >-
+        Register 'openai' provider in ProviderRegistry (run.ts) with factory returning
+        OpenAICustomClient, and models from config. Update createClientForProvider to handle
+        'openai' case.
+      status: complete
+  Testing:
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

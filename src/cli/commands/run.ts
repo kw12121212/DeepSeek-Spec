@@ -3,12 +3,14 @@ import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline/promises";
 import { GLMClient } from "../../adapters/model-glm.js";
 import { MimoClient } from "../../adapters/model-mimo.js";
+import { OpenAICustomClient } from "../../adapters/model-openai-custom.js";
 import {
   bridgeEndpointEnv,
   defaultConfigPath,
   isPlausibleKey,
   loadApiKey,
   loadEndpoint,
+  loadOpenaiCustomModels,
   loadToolRateLimit,
   modelToProvider,
   normalizeMcpConfig,
@@ -152,6 +154,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   );
   registry.register("glm", () => new GLMClient(), ["glm-4.7", "glm-5.1", "glm-5-turbo"]);
   registry.register("mimo", () => new MimoClient(), ["mimo-v2.5-pro"]);
+  registry.register("openai", () => new OpenAICustomClient(), loadOpenaiCustomModels());
   const provider = modelToProvider(opts.model);
   const client = registry.resolve(provider);
   const prefix = new ImmutablePrefix({

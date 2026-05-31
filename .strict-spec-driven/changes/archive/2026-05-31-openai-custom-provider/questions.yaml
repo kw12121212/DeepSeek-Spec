@@ -1,0 +1,17 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: openai-custom-provider
+open: []
+resolved:
+  - id: auth-style
+    question: >-
+      Should the custom openai provider default to Bearer auth (like standard OpenAI) or allow
+      configuring custom auth headers?
+    context: MimoClient uses api-key header instead of Bearer. Some providers use different auth schemes.
+    answer: >-
+      Default to Bearer auth via OpenAICompatClient base class. Users with non-Bearer providers can
+      extend OpenAICompatClient themselves or we can add a customHeaders config field later if
+      needed.
+    status: resolved
