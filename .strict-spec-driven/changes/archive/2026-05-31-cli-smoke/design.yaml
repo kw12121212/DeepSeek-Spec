@@ -1,0 +1,28 @@
+schema: strict-spec-driven/change-design/v1
+schema_version: 1
+artifact_type: change_design
+schema_file: templates/strict-spec-driven/schemas/change-design.yaml
+change: cli-smoke
+approach:
+  - >-
+    Create a shared helper (tests/e2e/cli/helper.ts) that resolves the binary path from
+    e2e.config.json and provides spawnBinary() to execute subcommands via child_process.spawn. Each
+    test file covers one CLI subcommand, asserting exit code and output content. Real LLM config is
+    mandatory — run-command.test.ts errors if LLM credentials are missing. Offline tests (help,
+    version, error-paths) only require the binary to exist.
+decisions:
+  binary-resolution:
+    decision: >-
+      Use node dist/cli/index.js as fallback binary path (always available after bun run build),
+      with e2e.config.json binaryPath override.
+    rationale: >-
+      The shared-config planned change already established the e2e.config.json pattern and vitest
+      exclusion. Reusing that infrastructure keeps CLI smoke tests consistent with the other E2E
+      suites.
+  llm-requirement:
+    decision: >-
+      Real LLM config is mandatory for run-command.test.ts — test fails with a clear error if
+      credentials are missing, rather than auto-skipping.
+    rationale: E2E tests must validate real behavior. Skipping defeats the purpose of end-to-end validation.
+alternatives: []
+risks: []

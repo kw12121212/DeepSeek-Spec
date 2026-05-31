@@ -1,0 +1,22 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: config-loading
+mapping:
+  implementation:
+    - tests/e2e/cli/doctor.test.ts
+  tests:
+    - tests/e2e/cli/doctor.test.ts
+operations:
+  ADDED:
+    cli-smoke-doctor:
+      strength: MUST
+      statement: dspec doctor --json MUST exit with code 0 or 1 and produce valid JSON output
+      scenarios:
+        doctor-json:
+          - GIVEN: the built binary exists
+          - WHEN: dspec doctor --json is executed
+          - THEN: exit code is 0 or 1 and stdout is valid JSON
+  MODIFIED: {}
+  REMOVED: {}

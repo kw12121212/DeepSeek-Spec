@@ -1,0 +1,16 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: cli-smoke
+open: []
+resolved:
+  - id: timeout-values
+    question: >-
+      What timeout values should be used for CLI smoke tests? run-command.test.ts needs a longer
+      timeout (60s?) for real LLM responses.
+    context: >-
+      The planned change mentions 60s timeout for run-command.test.ts. Other tests should be fast
+      (<10s).
+    answer: Default 10s for offline tests, 60s for run-command.test.ts (real LLM response).
+    status: resolved

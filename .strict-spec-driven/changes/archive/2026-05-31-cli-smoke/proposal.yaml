@@ -1,0 +1,29 @@
+schema: strict-spec-driven/change-proposal/v1
+schema_version: 1
+artifact_type: change_proposal
+schema_file: templates/strict-spec-driven/schemas/change-proposal.yaml
+change:
+  id: cli-smoke
+  status: proposed
+summary:
+  what:
+    - >-
+      CLI smoke tests that run the built binary with various subcommands and flags, asserting exit
+      codes, stdout, and stderr.
+  why:
+    - >-
+      M14 requires black-box binary validation. CLI smoke tests are the foundation — they verify all
+      non-interactive commands work against the built artifact without requiring a PTY or real LLM
+      (except run-command).
+scope:
+  in:
+    - >-
+      tests/e2e/cli/ directory with helper, help, version, doctor, run-command, and error-paths test
+      files
+  out:
+    - Six vitest test files under tests/e2e/cli/ that can be run via bun run test:e2e
+unchanged_behavior:
+  - All src/ code, existing tests, and dashboard functionality
+roadmap:
+  milestone: 0014-binary-e2e-testing
+  planned_change: cli-smoke

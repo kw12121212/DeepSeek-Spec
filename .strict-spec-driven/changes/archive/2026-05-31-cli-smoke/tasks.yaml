@@ -1,0 +1,53 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: cli-smoke
+sections:
+  Implementation:
+    create-helper:
+      text: >-
+        Create tests/e2e/cli/helper.ts with spawnBinary(), getBinaryPath(), hasE2eConfig(), and
+        requireLlmConfig() helpers.
+      status: complete
+    write-help-test:
+      text: Create tests/e2e/cli/help.test.ts — assert dspec --help exits 0 and lists subcommands.
+      status: complete
+    write-version-test:
+      text: Create tests/e2e/cli/version.test.ts — assert dspec version exits 0 with semver output.
+      status: complete
+    write-doctor-test:
+      text: >-
+        Create tests/e2e/cli/doctor.test.ts — assert dspec doctor --json exits 0 or 1 with valid
+        JSON.
+      status: complete
+    write-run-command-test:
+      text: >-
+        Create tests/e2e/cli/run-command.test.ts — assert dspec run 'What is 2+2?' exits 0 with
+        response. Requires real LLM — errors if missing.
+      status: complete
+    write-error-paths-test:
+      text: >-
+        Create tests/e2e/cli/error-paths.test.ts — assert invalid subcommand exits non-zero with
+        error message.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run unit tests.
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

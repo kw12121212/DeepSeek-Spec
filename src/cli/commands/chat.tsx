@@ -3,8 +3,8 @@ import React, { useMemo, useState } from "react";
 import {
   type ReasoningEffort,
   bridgeEndpointEnv,
-  loadKeyForActiveProvider,
   loadHistoryScrollMode,
+  loadKeyForActiveProvider,
   loadToolRateLimit,
   readConfig,
   searchEnabled,

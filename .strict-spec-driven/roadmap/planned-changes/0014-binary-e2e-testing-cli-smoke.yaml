@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: cli-smoke
   milestone: 0014-binary-e2e-testing
-status: planned
+status: complete
 summary: |
   CLI smoke tests that run the built binary with various subcommands and flags,
   asserting exit codes, stdout, and stderr. Uses child_process.spawn (no PTY
