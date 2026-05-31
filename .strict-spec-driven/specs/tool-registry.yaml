@@ -8,8 +8,8 @@ requirements:
   register-and-list:
     strength: MUST
     statement: >-
-      ToolRegistry MUST register tools with schemas and dispatch handlers, and
-      list() MUST return all registered tools.
+      ToolRegistry MUST register tools with schemas and dispatch handlers, and list() MUST return
+      all registered tools.
     scenarios:
       register-then-list:
         - GIVEN: a ToolRegistry with 5 registered tools
@@ -18,8 +18,8 @@ requirements:
   schema-validation:
     strength: MUST
     statement: >-
-      Tool dispatch MUST validate input against the tool's JSON schema and
-      reject invalid calls before invoking the handler.
+      Tool dispatch MUST validate input against the tool's JSON schema and reject invalid calls
+      before invoking the handler.
     scenarios:
       invalid-input:
         - GIVEN: a tool requiring a string parameter
@@ -28,13 +28,13 @@ requirements:
   dispatch-execution:
     strength: MUST
     statement: >-
-      dispatch MUST execute the registered handler for the matching tool name
-      and return the handler result.
+      dispatch MUST execute the registered handler for the matching tool name and return the handler
+      result.
     scenarios:
       happy-path:
         - GIVEN: a registered tool with a handler that returns "done"
         - WHEN: dispatch is called with the tool name and valid args
-        - THEN: "'done' is returned"
+        - THEN: '''done'' is returned'
   unknown-tool-rejection:
     strength: MUST
     statement: dispatch MUST throw when called with an unregistered tool name.
@@ -46,9 +46,8 @@ requirements:
   rate-limiting:
     strength: MUST
     statement: >-
-      Rate limiting MUST enforce sliding-window limits on tool dispatch, with
-      aggregate and per-tool buckets, returning a structured error when limits
-      are exceeded.
+      Rate limiting MUST enforce sliding-window limits on tool dispatch, with aggregate and per-tool
+      buckets, returning a structured error when limits are exceeded.
     scenarios:
       limit-exceeded:
         - GIVEN: a per-tool limit of 5 calls per minute and 5 calls have been made
@@ -57,8 +56,8 @@ requirements:
   result-truncation:
     strength: MUST
     statement: >-
-      Tool results exceeding maxResultChars MUST be truncated with a marker and
-      the full result saved to .dspec/truncated-results/ for later retrieval.
+      Tool results exceeding maxResultChars MUST be truncated with a marker and the full result
+      saved to .dspec/truncated-results/ for later retrieval.
     scenarios:
       long-result:
         - GIVEN: a tool handler returning 50000 chars and maxResultChars is 8000
@@ -66,8 +65,7 @@ requirements:
         - THEN: the returned text is truncated to 8000 chars with a marker and a file is saved
   truncated-result-cleanup:
     strength: MUST
-    statement: >-
-      Truncated result files older than 30 days MUST be cleaned up automatically.
+    statement: Truncated result files older than 30 days MUST be cleaned up automatically.
     scenarios:
       old-file-pruned:
         - GIVEN: a truncated-results directory with a file 31 days old
@@ -76,8 +74,8 @@ requirements:
   read-before-edit-gate:
     strength: MUST
     statement: >-
-      Edit and write operations MUST be rejected if the target file has not been
-      read in the current session (tracked by ReadTracker).
+      Edit and write operations MUST be rejected if the target file has not been read in the current
+      session (tracked by ReadTracker).
     scenarios:
       unread-file-rejected:
         - GIVEN: a file /foo/bar.ts that has not been read this session
@@ -86,8 +84,8 @@ requirements:
   read-tracking:
     strength: MUST
     statement: >-
-      ReadTracker MUST record file paths read via the read tool and report
-      whether a path has been read.
+      ReadTracker MUST record file paths read via the read tool and report whether a path has been
+      read.
     scenarios:
       track-and-query:
         - GIVEN: a file is read via the read tool
@@ -95,9 +93,7 @@ requirements:
         - THEN: true is returned
   plan-mode-gating:
     strength: MUST
-    statement: >-
-      When plan mode is active, mutation tools MUST be blocked until the plan is
-      approved.
+    statement: When plan mode is active, mutation tools MUST be blocked until the plan is approved.
     scenarios:
       plan-blocks-edit:
         - GIVEN: plan mode is active and no plan has been approved
@@ -106,8 +102,8 @@ requirements:
   interceptor-hooks:
     strength: MUST
     statement: >-
-      Tool dispatch MUST call interceptor hooks before and after handler
-      execution, allowing hooks to modify or block the call.
+      Tool dispatch MUST call interceptor hooks before and after handler execution, allowing hooks
+      to modify or block the call.
     scenarios:
       hook-blocks:
         - GIVEN: a pre-dispatch hook that returns a block signal
@@ -116,8 +112,8 @@ requirements:
   scaffold-tool:
     strength: MUST
     statement: >-
-      The scaffold tool MUST create a new skill file with frontmatter
-      configuration in the project skills directory.
+      The scaffold tool MUST create a new skill file with frontmatter configuration in the project
+      skills directory.
     scenarios:
       create-skill:
         - GIVEN: a skill name and description
@@ -126,8 +122,8 @@ requirements:
   skill-tool-run:
     strength: MUST
     statement: >-
-      The skill tool MUST execute user-defined skill playbooks, supporting both
-      inline and subagent execution modes.
+      The skill tool MUST execute user-defined skill playbooks, supporting both inline and subagent
+      execution modes.
     scenarios:
       run-inline:
         - GIVEN: a skill with inline mode and a valid playbook
@@ -136,9 +132,8 @@ requirements:
   todo-tracking:
     strength: MUST
     statement: >-
-      The todo tool MUST track in-session tasks with status (pending,
-      in_progress, completed), enforcing that exactly one task can be
-      in_progress at a time.
+      The todo tool MUST track in-session tasks with status (pending, in_progress, completed),
+      enforcing that exactly one task can be in_progress at a time.
     scenarios:
       single-in-progress:
         - GIVEN: a task is in_progress and another task is pending
@@ -147,8 +142,8 @@ requirements:
   choice-tool:
     strength: MUST
     statement: >-
-      The choice tool MUST present 2-6 options to the user and return the
-      selected option, supporting optional custom free-form responses.
+      The choice tool MUST present 2-6 options to the user and return the selected option,
+      supporting optional custom free-form responses.
     scenarios:
       user-selects:
         - GIVEN: a choice with 3 options
@@ -157,8 +152,8 @@ requirements:
   memory-tool-save:
     strength: MUST
     statement: >-
-      The memory tool MUST save typed memories (user/feedback/project/reference)
-      with scope (global/project) and return confirmation.
+      The memory tool MUST save typed memories (user/feedback/project/reference) with scope
+      (global/project) and return confirmation.
     scenarios:
       save-feedback:
         - GIVEN: a feedback memory with project scope
@@ -167,9 +162,8 @@ requirements:
   jobs-tool:
     strength: MUST
     statement: >-
-      The jobs tool MUST spawn background processes, track output with
-      incremental streaming, detect ready signals, and support graceful
-      termination with process tree cleanup.
+      The jobs tool MUST spawn background processes, track output with incremental streaming, detect
+      ready signals, and support graceful termination with process tree cleanup.
     scenarios:
       spawn-and-read:
         - GIVEN: a background command "npm run dev"
@@ -179,6 +173,16 @@ requirements:
         - GIVEN: a running background job with child processes
         - WHEN: stop is called
         - THEN: SIGTERM is sent to the process tree and the job is removed
+  e2e-terminal-tools:
+    strength: SHOULD
+    statement: >-
+      Terminal E2E tests SHOULD validate that code mode tool execution works through the Ink TUI
+      when spawned via node-pty
+    scenarios:
+      e2e-tool-file-read:
+        - GIVEN: Built binary available, LLM config present, and fixture worktree with package.json
+        - WHEN: User sends a prompt requesting file read via PTY
+        - THEN: Tool output containing the fixture project name appears in TUI output within timeout
 mapping:
   implementation:
     - src/tools.ts

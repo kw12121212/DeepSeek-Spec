@@ -71,7 +71,7 @@ risks:
   - 'node-pty native addon may have build issues on some platforms: pin to a well-tested version'
   - 'Playwright browser install adds ~200MB: use npx playwright install chromium only'
   - 'Dashboard URL is printed inside Ink TUI (PTY output): parsing must strip ANSI codes reliably'
-status: proposed
+status: complete
 notes:
   - All three suites are black-box — no src/ modifications
   - Default binaryPath is node dist/cli/index.js (available after bun run build)

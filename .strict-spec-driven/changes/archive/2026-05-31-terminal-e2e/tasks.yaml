@@ -1,0 +1,50 @@
+schema: strict-spec-driven/task-list/v2
+schema_version: 2
+artifact_type: task_list
+schema_file: templates/strict-spec-driven/schemas/task-list.yaml
+change: terminal-e2e
+sections:
+  Implementation:
+    create-pty-helper:
+      text: >-
+        Create tests/e2e/terminal/helper.ts with spawnPty(), waitUntil(), stripAnsi(), and kill()
+        utilities.
+      status: complete
+    create-chat-response-test:
+      text: >-
+        Create tests/e2e/terminal/chat-response.test.ts — spawn chat mode, send prompt, assert LLM
+        response.
+      status: complete
+    create-tool-execution-test:
+      text: >-
+        Create tests/e2e/terminal/tool-execution.test.ts — spawn code mode, request file read,
+        assert tool output.
+      status: complete
+    create-exit-handling-test:
+      text: >-
+        Create tests/e2e/terminal/exit-handling.test.ts — spawn chat mode, send /exit, assert clean
+        exit.
+      status: complete
+    add-node-pty-dep:
+      text: Add node-pty as a devDependency in package.json.
+      status: complete
+  Testing:
+    run-build:
+      text: Run build validation.
+      status: complete
+      command: bun run build
+    run-lint:
+      text: Run lint checks.
+      status: complete
+      command: bun run lint
+    run-tests:
+      text: Run default test suite (e2e tests excluded).
+      status: complete
+      command: bun run test
+  Verification:
+    verify-scope:
+      text: Verify implementation matches proposal scope — no src/ changes, black-box only.
+      status: complete
+testing_gates:
+  validation_task: run-build
+  unit_test_task: run-tests

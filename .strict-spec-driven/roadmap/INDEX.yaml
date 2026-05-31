@@ -58,4 +58,4 @@ milestones:
   0014-binary-e2e-testing:
     title: 'M14: Binary E2E Testing — Real Terminal, Real LLM, Real Dashboard'
     path: roadmap/milestones/0014-binary-e2e-testing.yaml
-    status: proposed
+    status: complete

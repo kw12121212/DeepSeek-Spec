@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: tool-registry
+mapping:
+  implementation:
+    - tests/e2e/terminal/tool-execution.test.ts
+  tests:
+    - tests/e2e/terminal/tool-execution.test.ts
+operations:
+  ADDED:
+    e2e-terminal-tools:
+      strength: SHOULD
+      statement: >-
+        Terminal E2E tests SHOULD validate that code mode tool execution works through the Ink TUI
+        when spawned via node-pty
+      scenarios:
+        e2e-tool-file-read:
+          - GIVEN: Built binary available, LLM config present, and fixture worktree with package.json
+          - WHEN: User sends a prompt requesting file read via PTY
+          - THEN: Tool output containing the fixture project name appears in TUI output within timeout
+  MODIFIED: {}
+  REMOVED: {}

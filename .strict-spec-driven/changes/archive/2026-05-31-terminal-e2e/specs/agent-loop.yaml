@@ -1,0 +1,24 @@
+schema: strict-spec-driven/delta-spec/v1
+schema_version: 1
+artifact_type: delta_spec
+schema_file: templates/strict-spec-driven/schemas/delta-spec.yaml
+target_spec: agent-loop
+mapping:
+  implementation:
+    - tests/e2e/terminal/helper.ts
+  tests:
+    - tests/e2e/terminal/chat-response.test.ts
+operations:
+  ADDED:
+    e2e-terminal-chat:
+      strength: SHOULD
+      statement: >-
+        Terminal E2E tests SHOULD validate that interactive chat mode renders TUI and returns LLM
+        responses when spawned via node-pty
+      scenarios:
+        e2e-chat-prompt:
+          - GIVEN: Built binary available and LLM config present
+          - WHEN: User sends a simple math prompt via PTY
+          - THEN: LLM response containing the expected answer appears in TUI output within timeout
+  MODIFIED: {}
+  REMOVED: {}

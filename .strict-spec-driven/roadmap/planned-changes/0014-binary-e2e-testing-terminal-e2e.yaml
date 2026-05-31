@@ -5,7 +5,7 @@ schema_file: ../schemas/planned-change.yaml
 planned_change:
   id: terminal-e2e
   milestone: 0014-binary-e2e-testing
-status: planned
+status: complete
 summary: |
   Terminal E2E tests that spawn the built binary in a node-pty pseudo-terminal
   to test interactive chat mode with a real LLM. Validates that prompts get

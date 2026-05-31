@@ -1,0 +1,29 @@
+schema: strict-spec-driven/question-list/v1
+schema_version: 1
+artifact_type: question_list
+schema_file: templates/strict-spec-driven/schemas/question-list.yaml
+change: terminal-e2e
+open: []
+resolved:
+  - id: q-timeout
+    question: >-
+      What timeout values should be used for LLM response waits? The planned change suggests 60s
+      default — is this sufficient for the target LLM provider?
+    context: >-
+      Tests will run against a real LLM. Latency varies by provider and model. Too short = flaky
+      tests; too long = slow CI.
+    answer: >-
+      60s default is sufficient. Real-LLM tests are opt-in and not in CI. Users with slower
+      providers can override via e2e.config.json timeout field.
+    status: resolved
+  - id: q-skip-strategy
+    question: >-
+      Should tests skip individually when config is missing, or should a top-level describe.skip
+      wrap all terminal E2E tests?
+    context: >-
+      The shared-config change already provides auto-skip logic. Terminal tests should align with
+      that pattern.
+    answer: >-
+      Tests skip individually using the shared skipIfNoConfig() helper from the shared-config
+      change, consistent with existing real-LLM test patterns.
+    status: resolved
